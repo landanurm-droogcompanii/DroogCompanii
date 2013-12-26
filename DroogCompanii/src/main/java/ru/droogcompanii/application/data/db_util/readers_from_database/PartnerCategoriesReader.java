@@ -14,6 +14,9 @@ import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerC
  */
 public class PartnerCategoriesReader extends BaseReaderFromDatabase {
 
+    private int idColumnIndex;
+    private int titleColumnIndex;
+
     public PartnerCategoriesReader(Context context) {
         super(context);
     }
@@ -35,15 +38,24 @@ public class PartnerCategoriesReader extends BaseReaderFromDatabase {
 
     private List<PartnerCategory> getPartnerCategoriesFromCursor(Cursor cursor) {
         List<PartnerCategory> partnerCategories = new ArrayList<PartnerCategory>();
-        int idColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_ID);
-        int titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_TITLE);
+        calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            int id = cursor.getInt(idColumnIndex);
-            String title = cursor.getString(titleColumnIndex);
-            partnerCategories.add(new PartnerCategory(id, title));
+            PartnerCategory partnerCategory = getPartnerCategoryFromCursor(cursor);
+            partnerCategories.add(partnerCategory);
             cursor.moveToNext();
         }
         return partnerCategories;
+    }
+
+    private void calculateColumnIndices(Cursor cursor) {
+        idColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_ID);
+        titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_TITLE);
+    }
+
+    private PartnerCategory getPartnerCategoryFromCursor(Cursor cursor) {
+        int id = cursor.getInt(idColumnIndex);
+        String title = cursor.getString(titleColumnIndex);
+        return new PartnerCategory(id, title);
     }
 }

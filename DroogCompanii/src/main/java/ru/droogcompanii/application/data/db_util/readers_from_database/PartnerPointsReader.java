@@ -17,6 +17,15 @@ import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerP
  */
 public class PartnerPointsReader extends BaseReaderFromDatabase {
 
+    private int titleColumnIndex;
+    private int addressColumnIndex;
+    private int longitudeColumnIndex;
+    private int latitudeColumnIndex;
+    private int paymentMethodsColumnIndex;
+    private int phonesColumnIndex;
+    private int workingHoursColumnIndex;
+    private int partnerIdColumnIndex;
+
     public PartnerPointsReader(Context context) {
         super(context);
     }
@@ -40,6 +49,7 @@ public class PartnerPointsReader extends BaseReaderFromDatabase {
 
     private List<PartnerPoint> getPartnerPointsFromCursor(Cursor cursor) {
         List<PartnerPoint> partnerPoints = new ArrayList<PartnerPoint>();
+        calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             partnerPoints.add(getPartnerPointFromCursor(cursor));
@@ -48,16 +58,18 @@ public class PartnerPointsReader extends BaseReaderFromDatabase {
         return partnerPoints;
     }
 
-    private PartnerPoint getPartnerPointFromCursor(Cursor cursor) {
-        int titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_TITLE);
-        int addressColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_ADDRESS);
-        int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LONGITUDE);
-        int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LATITUDE);
-        int paymentMethodsColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PAYMENT_METHODS);
-        int phonesColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PHONES);
-        int workingHoursColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_WORKING_HOURS);
-        int partnerIdColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PARTNER_ID);
+    private void calculateColumnIndices(Cursor cursor) {
+        titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_TITLE);
+        addressColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_ADDRESS);
+        longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LONGITUDE);
+        latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LATITUDE);
+        paymentMethodsColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PAYMENT_METHODS);
+        phonesColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PHONES);
+        workingHoursColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_WORKING_HOURS);
+        partnerIdColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PARTNER_ID);
+    }
 
+    private PartnerPoint getPartnerPointFromCursor(Cursor cursor) {
         String title = cursor.getString(titleColumnIndex);
         String address = cursor.getString(addressColumnIndex);
         double longitude = cursor.getDouble(longitudeColumnIndex);
@@ -69,7 +81,6 @@ public class PartnerPointsReader extends BaseReaderFromDatabase {
         WeekWorkingHours weekWorkingHours =
                 (WeekWorkingHours) SerializationUtils.deserialize(weekWorkingHoursBlob);
         int partnerId = cursor.getInt(partnerIdColumnIndex);
-
         return new PartnerPoint(title, address, phones, weekWorkingHours,
                                 paymentMethods, longitude, latitude, partnerId);
     }
