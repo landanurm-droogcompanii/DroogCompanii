@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.activities.helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;

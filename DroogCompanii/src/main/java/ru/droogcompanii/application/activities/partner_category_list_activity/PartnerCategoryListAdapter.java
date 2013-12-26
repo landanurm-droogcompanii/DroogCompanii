@@ -1,14 +1,13 @@
 package ru.droogcompanii.application.activities.partner_category_list_activity;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerCategoriesReader;
-import ru.droogcompanii.application.util.SimpleArrayAdapter;
+import ru.droogcompanii.application.activities.helpers.SimpleArrayAdapter;
 
 /**
  * Created by Leonid on 17.12.13.

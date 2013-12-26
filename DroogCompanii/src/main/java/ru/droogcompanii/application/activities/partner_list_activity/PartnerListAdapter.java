@@ -7,7 +7,7 @@ import java.util.List;
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
-import ru.droogcompanii.application.util.SimpleArrayAdapter;
+import ru.droogcompanii.application.activities.helpers.SimpleArrayAdapter;
 
 /**
  * Created by Leonid on 03.12.13.

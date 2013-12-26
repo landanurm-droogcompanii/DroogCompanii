@@ -29,12 +29,17 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="ru.droogcompanii.application.activities.partner_category_list_activity.PartnerCategoryListActivity"
+            android:name="ru.droogcompanii.application.activities.data_downloader_activity.DataDownloaderActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name="ru.droogcompanii.application.activities.partner_category_list_activity.PartnerCategoryListActivity"
+            android:label="@string/app_name" >
         </activity>
 
         <activity

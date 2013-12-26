@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.activities.helpers;
 
 import android.content.Context;
 import android.view.LayoutInflater;

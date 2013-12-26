@@ -9,16 +9,17 @@ import android.widget.AdapterView;
 
 import java.io.Serializable;
 
+import ru.droogcompanii.application.activities.helpers.ActionBarListActivity;
 import ru.droogcompanii.application.activities.partner_list_activity.PartnerListActivity;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.ProgressDialogProvider;
-import ru.droogcompanii.application.activities.helpers.ActionBarListActivity;
+import ru.droogcompanii.application.activities.helpers.ProgressDialogProvider;
 
 public class PartnerCategoryListActivity extends ActionBarListActivity
-        implements OnDataUpdatingProgressListener, AdapterView.OnItemClickListener {
+                                      implements OnDataUpdatingProgressListener,
+                                                 AdapterView.OnItemClickListener {
 
-    private boolean updatedData;
+    //private boolean updatedData;
     private PartnerCategoryListAdapter adapter;
     private ProgressDialog progressDialog;
 
@@ -30,10 +31,12 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
 
+        /*
         updatedData = updatedData(savedInstanceState);
         if (!updatedData) {
             startUpdate();
         }
+        */
     }
 
     private PartnerCategoryListAdapter prepareAdapter(Bundle savedInstanceState) {
@@ -65,19 +68,19 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(Keys.updatedData, updatedData);
+        //outState.putBoolean(Keys.updatedData, updatedData);
         outState.putSerializable(Keys.partnerCategoryListAdapterState, adapter.getState());
     }
 
     @Override
     public void onPreDataUpdating() {
-        updatedData = false;
+        //updatedData = false;
         progressDialog.show();
     }
 
     @Override
     public void onPostDataUpdating() {
-        updatedData = true;
+        //updatedData = true;
         adapter.updateListFromDatabase();
         progressDialog.dismiss();
     }
