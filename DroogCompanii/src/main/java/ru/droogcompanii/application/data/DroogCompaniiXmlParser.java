@@ -36,7 +36,6 @@ public class DroogCompaniiXmlParser {
         }
     }
 
-
     private static class Tags {
         public static final String partnerCategories = "partner-categories";
         public static final String partnerCategory = "partner-category";
@@ -67,19 +66,22 @@ public class DroogCompaniiXmlParser {
         }
     }
 
-
     private static final String NAMESPACE = null;
 
     public ParsedData parse(InputStream in) throws Exception {
         try {
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, null);
-            parser.nextTag();
-            return parse(parser);
+            return parse(prepareParser(in));
         } finally {
             tryClose(in);
         }
+    }
+
+    private XmlPullParser prepareParser(InputStream in) throws Exception {
+        XmlPullParser parser = Xml.newPullParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+        parser.setInput(in, null);
+        parser.nextTag();
+        return parser;
     }
 
     private void tryClose(InputStream inputStream) {
@@ -92,19 +94,21 @@ public class DroogCompaniiXmlParser {
         }
     }
 
+
+    private List<PartnerCategory> outPartnerCategories;
+    private List<Partner> outPartners;
+    private List<PartnerPoint> outPartnerPoints;
+
+
     private ParsedData parse(XmlPullParser parser) throws Exception {
-        List<PartnerCategory> outPartnerCategories = new ArrayList<PartnerCategory>();
-        List<Partner> outPartners = new ArrayList<Partner>();
-        List<PartnerPoint> outPartnerPoints = new ArrayList<PartnerPoint>();
-        parsePartnerCategories(parser, outPartnerCategories, outPartners, outPartnerPoints);
+        outPartnerCategories = new ArrayList<PartnerCategory>();
+        outPartners = new ArrayList<Partner>();
+        outPartnerPoints = new ArrayList<PartnerPoint>();
+        parsePartnerCategories(parser);
         return new ParsedData(outPartnerCategories, outPartners, outPartnerPoints);
     }
 
-    private void parsePartnerCategories(XmlPullParser parser,
-                                        List<PartnerCategory> outPartnerCategories,
-                                        List<Partner> outPartners,
-                                        List<PartnerPoint> outPartnerPoints) throws Exception {
-
+    private void parsePartnerCategories(XmlPullParser parser) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, Tags.partnerCategories);
 
         int partnerCategoryId = 0;
@@ -115,9 +119,7 @@ public class DroogCompaniiXmlParser {
             String name = parser.getName();
             if (name.equals(Tags.partnerCategory)) {
                 ++partnerCategoryId;
-                PartnerCategory partnerCategory = parsePartnerCategory(
-                        parser, outPartners, outPartnerPoints, partnerCategoryId
-                );
+                PartnerCategory partnerCategory = parsePartnerCategory(parser, partnerCategoryId);
                 outPartnerCategories.add(partnerCategory);
             } else {
                 skip(parser);
@@ -125,10 +127,7 @@ public class DroogCompaniiXmlParser {
         }
     }
 
-    private PartnerCategory parsePartnerCategory(XmlPullParser parser,
-                                                 List<Partner> outPartners,
-                                                 List<PartnerPoint> outPartnerPoints,
-                                                 int partnerCategoryId) throws Exception {
+    private PartnerCategory parsePartnerCategory(XmlPullParser parser, int partnerCategoryId) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, Tags.partnerCategory);
 
         String title = null;
@@ -140,7 +139,7 @@ public class DroogCompaniiXmlParser {
             if (name.equals(Tags.title)) {
                 title = parseTitle(parser);
             } else if (name.equals(Tags.partners)) {
-                parsePartners(parser, outPartners, outPartnerPoints, partnerCategoryId);
+                parsePartners(parser, partnerCategoryId);
             } else {
                 skip(parser);
             }
@@ -168,10 +167,7 @@ public class DroogCompaniiXmlParser {
         return result;
     }
 
-    private void parsePartners(XmlPullParser parser,
-                               List<Partner> outPartners,
-                               List<PartnerPoint> outPartnerPoints,
-                               int partnerCategoryId) throws Exception {
+    private void parsePartners(XmlPullParser parser, int partnerCategoryId) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, Tags.partners);
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -180,7 +176,7 @@ public class DroogCompaniiXmlParser {
             }
             String name = parser.getName();
             if (name.equals(Tags.partner)) {
-                Partner partner = parsePartner(parser, outPartnerPoints, partnerCategoryId);
+                Partner partner = parsePartner(parser, partnerCategoryId);
                 outPartners.add(partner);
             } else {
                 skip(parser);
@@ -188,9 +184,7 @@ public class DroogCompaniiXmlParser {
         }
     }
 
-    private Partner parsePartner(XmlPullParser parser,
-                                 List<PartnerPoint> outPartnerPoints,
-                                 int partnerCategoryId) throws Exception {
+    private Partner parsePartner(XmlPullParser parser, int partnerCategoryId) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, Tags.partner);
 
         int id = 0;
@@ -212,7 +206,7 @@ public class DroogCompaniiXmlParser {
             } else if (name.equals(Tags.saleType)) {
                 saleType = parseSaleType(parser);
             } else if (name.equals(Tags.partnerPoints)) {
-                parsePartnerPoints(parser, outPartnerPoints, id);
+                parsePartnerPoints(parser, id);
             } else {
                 skip(parser);
             }
@@ -239,9 +233,7 @@ public class DroogCompaniiXmlParser {
         return parseTextByTag(parser, Tags.saleType);
     }
 
-    private void parsePartnerPoints(XmlPullParser parser,
-                                    List<PartnerPoint> outPartnerPoints,
-                                    int partnerId)  throws Exception {
+    private void parsePartnerPoints(XmlPullParser parser, int partnerId) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, Tags.partnerPoints);
 
         while (parser.next() != XmlPullParser.END_TAG) {
