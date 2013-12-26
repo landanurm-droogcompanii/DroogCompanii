@@ -1,7 +1,6 @@
 package ru.droogcompanii.application.data.data_structure.working_hours;
 
 import java.io.Serializable;
-import java.security.DomainCombiner;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -17,6 +16,7 @@ import ru.droogcompanii.application.util.LinesCombiner;
  */
 public class WeekWorkingHours implements Serializable {
     private final Map<Integer, WorkingHours> workingHoursForDaysOfWeek;
+    private final DayOfWeekToStringConvertor dayOfWeekToStringConvertor;
 
     public WeekWorkingHours(WorkingHoursForEachDayOfWeek workingHours) {
         workingHoursForDaysOfWeek = new HashMap<Integer, WorkingHours>();
@@ -27,6 +27,7 @@ public class WeekWorkingHours implements Serializable {
         workingHoursForDaysOfWeek.put(Calendar.FRIDAY, workingHours.onFriday);
         workingHoursForDaysOfWeek.put(Calendar.SATURDAY, workingHours.onSaturday);
         workingHoursForDaysOfWeek.put(Calendar.SUNDAY, workingHours.onSunday);
+        dayOfWeekToStringConvertor = DayOfWeekToStringConvertorProvider.getCurrentConvertor();
     }
 
     public boolean includes(Calendar someDay) {
@@ -64,11 +65,8 @@ public class WeekWorkingHours implements Serializable {
 
     @Override
     public String toString() {
-        int[] daysOfWeek = DateTimeConstants.getDaysOfWeek();
-        DayOfWeekToStringConvertor dayOfWeekToStringConvertor =
-                DayOfWeekToStringConvertorProvider.getCurrentConvertor();
         List<String> lines = new ArrayList<String>();
-        for (int dayOfWeek : daysOfWeek) {
+        for (int dayOfWeek : DateTimeConstants.getDaysOfWeek()) {
             String nameOfDay = dayOfWeekToStringConvertor.dayOfWeekToString(dayOfWeek);
             WorkingHours workingHoursOfDay = workingHoursForDaysOfWeek.get(dayOfWeek);
             String line = nameOfDay + ":  " + workingHoursOfDay;
