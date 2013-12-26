@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.Marker;
 
-import java.util.Map;
+import java.util.List;
 
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 
@@ -20,9 +20,11 @@ class SearchPartnerPointsTask extends AsyncTask<String, Void, VisibilityOfMarker
     private final CalculatorOfVisibilityOfMarkers calculatorOfVisibilityOfMarkers;
     private final OnTaskIsDoneListener onTaskIsDoneListener;
 
-    public SearchPartnerPointsTask(Map<Marker, PartnerPoint> markersAndPartnerPoints,
+
+    public SearchPartnerPointsTask(List<Marker> markers,
+                                   List<PartnerPoint> partnerPoints,
                                    OnTaskIsDoneListener onTaskIsDoneListener) {
-        this.calculatorOfVisibilityOfMarkers = new CalculatorOfVisibilityOfMarkers(markersAndPartnerPoints);
+        this.calculatorOfVisibilityOfMarkers = new CalculatorOfVisibilityOfMarkers(markers, partnerPoints);
         this.onTaskIsDoneListener = onTaskIsDoneListener;
     }
 

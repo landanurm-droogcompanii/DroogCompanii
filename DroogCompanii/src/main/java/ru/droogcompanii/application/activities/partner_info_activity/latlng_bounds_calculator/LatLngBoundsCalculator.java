@@ -2,12 +2,9 @@ package ru.droogcompanii.application.activities.partner_info_activity.latlng_bou
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
-
-import ru.droogcompanii.application.activities.partner_info_activity.geo_coordinates_calculators.LatitudeCalculator;
-import ru.droogcompanii.application.activities.partner_info_activity.geo_coordinates_calculators.LongitudeCalculator;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 
 public class LatLngBoundsCalculator {
     private static final double rightUpperLatitude = 55.800361;
@@ -23,33 +20,38 @@ public class LatLngBoundsCalculator {
     private static final double halfOfMinLongitudeLength = minLongitudeLength / 2.0;
 
     private final LatLngBounds.Builder builder;
-    private final List<PartnerPoint> partnerPoints;
+    private final List<Marker> markers;
     private final MinMax latitudeMinMax;
     private final MinMax longitudeMinMax;
 
     private LatLng center;
 
 
-    public static LatLngBounds calculate(List<PartnerPoint> partnerPoints) {
-        return new LatLngBoundsCalculator(partnerPoints).calculate();
+    public static LatLngBounds calculate(List<Marker> markers) {
+        return new LatLngBoundsCalculator(markers).calculate();
     }
 
-    private LatLngBoundsCalculator(List<PartnerPoint> partnerPoints) {
-        this.partnerPoints = partnerPoints;
+    private LatLngBoundsCalculator(List<Marker> markers) {
+        this.markers = markers;
         this.latitudeMinMax = new MinMax();
         this.longitudeMinMax = new MinMax();
         this.builder = new LatLngBounds.Builder();
     }
 
     private LatLngBounds calculate() {
-        for (PartnerPoint each : partnerPoints) {
-            latitudeMinMax.add(each.latitude);
-            longitudeMinMax.add(each.longitude);
-            LatLng position = new LatLng(each.latitude, each.longitude);
-            builder.include(position);
+        for (Marker each : markers) {
+            if (each.isVisible()) {
+                includePosition(each.getPosition());
+            }
         }
         includeMinBounds();
         return builder.build();
+    }
+
+    private void includePosition(LatLng position) {
+        builder.include(position);
+        latitudeMinMax.add(position.latitude);
+        longitudeMinMax.add(position.longitude);
     }
 
     private void includeMinBounds() {
@@ -85,5 +87,4 @@ public class LatLngBoundsCalculator {
         longitude.add(maxLongitude);
         return longitude;
     }
-
 }

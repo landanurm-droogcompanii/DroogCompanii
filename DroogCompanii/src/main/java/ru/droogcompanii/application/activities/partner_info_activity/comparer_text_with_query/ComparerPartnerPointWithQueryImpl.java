@@ -1,12 +1,18 @@
 package ru.droogcompanii.application.activities.partner_info_activity.comparer_text_with_query;
 
+import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+
 /**
  * Created by ls on 25.12.13.
  */
-class ComparerTextWithQueryImpl implements ComparerTextWithQuery {
+class ComparerPartnerPointWithQueryImpl implements ComparerPartnerPointWithQuery {
 
     @Override
-    public boolean textMatchQuery(String text, String query) {
+    public boolean partnerPointMatchQuery(PartnerPoint partnerPoint, String query) {
+        return textMatchQuery(partnerPoint.title, query);
+    }
+
+    private static boolean textMatchQuery(String text, String query) {
         return textMatchQueryInsensitive(text, query);
     }
 

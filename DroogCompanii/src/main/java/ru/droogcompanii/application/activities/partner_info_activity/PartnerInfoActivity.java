@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
@@ -33,6 +33,7 @@ import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.LinesCombiner;
 import ru.droogcompanii.application.util.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 
@@ -42,7 +43,7 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
 
     private GoogleMap googleMap;
     private List<PartnerPoint> partnerPoints;
-    private java.util.Map<Marker, PartnerPoint> markersAndPartnerPoints;
+    private List<Marker> markers;
     private Partner partner;
     private SearchPartnerPointsTask searchTask;
 
@@ -51,7 +52,7 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_partner_info);
 
-        markersAndPartnerPoints = new HashMap<Marker, PartnerPoint>();
+        markers = new ArrayList<Marker>();
         searchTask = createSearchPartnerPointsTask();
         googleMap = getMap();
         googleMap.setOnInfoWindowClickListener(this);
@@ -63,7 +64,7 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
     }
 
     private SearchPartnerPointsTask createSearchPartnerPointsTask() {
-        return new SearchPartnerPointsTask(markersAndPartnerPoints, this);
+        return new SearchPartnerPointsTask(markers, partnerPoints, this);
     }
 
     private void preparePartnerData(Bundle savedInstanceState) {
@@ -107,31 +108,46 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
     }
 
     private void initMarkers() {
-        markersAndPartnerPoints.clear();
+        markers.clear();
         for (PartnerPoint partnerPoint : partnerPoints) {
             Marker marker = googleMap.addMarker(prepareMarkerOptions(partnerPoint));
-            markersAndPartnerPoints.put(marker, partnerPoint);
+            markers.add(marker);
         }
-        fitAllPartnerPointsOnScreenAfterMapViewIsPlacedOnLayout();
+        fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout();
     }
 
     private MarkerOptions prepareMarkerOptions(PartnerPoint partnerPoint) {
+        String title = partnerPoint.title;
         LatLng position = new LatLng(partnerPoint.latitude, partnerPoint.longitude);
-        return new MarkerOptions()
-                       .title(partnerPoint.title)
-                       .snippet(prepareSnippet(partnerPoint))
-                       .position(position);
+        MarkerOptions markerOptions = new MarkerOptions().title(title).position(position);
+        includeSnippet(markerOptions, partnerPoint);
+        return markerOptions;
     }
 
-    private String prepareSnippet(PartnerPoint partnerPoint) {
-        return partnerPoint.address;
+    private void includeSnippet(MarkerOptions markerOptions, PartnerPoint partnerPoint) {
+        if (partnerPointHasAddress(partnerPoint)) {
+            markerOptions.snippet(partnerPoint.address);
+        } else if (partnerPointHasPhone(partnerPoint)) {
+            String phones = LinesCombiner.combine(partnerPoint.phones, ", ");
+            markerOptions.snippet(phones);
+        }
     }
 
-    private void fitAllPartnerPointsOnScreenAfterMapViewIsPlacedOnLayout() {
+    private boolean partnerPointHasAddress(PartnerPoint partnerPoint) {
+        String address = partnerPoint.address.trim();
+        return !address.isEmpty();
+    }
+
+    private boolean partnerPointHasPhone(PartnerPoint partnerPoint) {
+        int numberOfPhones = partnerPoint.phones.size();
+        return numberOfPhones > 0;
+    }
+
+    private void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
         ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
             @Override
             public void run() {
-                fitAllPartnerPointsOnScreen();
+                fitVisibleMarkersOnScreen();
             }
         });
     }
@@ -140,25 +156,26 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
         return getSupportMapFragment().getView();
     }
 
-    private void fitAllPartnerPointsOnScreen() {
-        if (noPartnerPoints()) {
+    private void fitVisibleMarkersOnScreen() {
+        if (noVisiblePartnerPoints()) {
             return;
         }
-        LatLngBounds bounds = LatLngBoundsCalculator.calculate(partnerPoints);
+        LatLngBounds bounds = LatLngBoundsCalculator.calculate(markers);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, getMapPadding());
         googleMap.moveCamera(cameraUpdate);
     }
 
-    private boolean noPartnerPoints() {
-        return partnerPoints.isEmpty();
+    private boolean noVisiblePartnerPoints() {
+        for (Marker each : markers) {
+            if (each.isVisible()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getMapPadding() {
         return getResources().getInteger(R.integer.map_markers_padding);
-    }
-
-    public PartnerPoint getPartnerPointFromMarker(Marker marker) {
-        return markersAndPartnerPoints.get(marker);
     }
     
     @Override
@@ -189,6 +206,7 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
     @Override
     public void onTaskIsDone() {
         cancelSearchTaskIfItIsRunning();
+        fitVisibleMarkersOnScreen();
     }
 
     @Override
@@ -217,6 +235,15 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
     @Override
     public void onInfoWindowClick(Marker marker) {
         PartnerPoint partnerPoint = getPartnerPointFromMarker(marker);
+        showPartnerPointInfo(partner, partnerPoint);
+    }
+
+    public PartnerPoint getPartnerPointFromMarker(Marker marker) {
+        int index = markers.indexOf(marker);
+        return partnerPoints.get(index);
+    }
+
+    private void showPartnerPointInfo(Partner partner, PartnerPoint partnerPoint) {
         Intent intent = new Intent(this, PartnerPointInfoActivity.class);
         intent.putExtra(Keys.partnerPoint, partnerPoint);
         intent.putExtra(Keys.partner, partner);
