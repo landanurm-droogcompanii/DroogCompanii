@@ -61,7 +61,7 @@ public class DroogCompaniiDbHelper extends SQLiteOpenHelper {
             "DROP TABLE IF EXISTS " + PartnerPointsContract.TABLE_NAME;
 
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "DroogCompanii.db";
 
     public DroogCompaniiDbHelper(Context context) {

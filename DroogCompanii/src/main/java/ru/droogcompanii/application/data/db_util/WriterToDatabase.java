@@ -31,9 +31,9 @@ public class WriterToDatabase {
         DroogCompaniiDbHelper dbHelper = new DroogCompaniiDbHelper(context);
         db = dbHelper.getWritableDatabase();
         clearOldData();
-        savePartnerCategories(parsedData.partnerCategories);
-        savePartners(parsedData.partners);
-        savePartnerPoints(parsedData.partnerPoints);
+        writePartnerCategories(parsedData.partnerCategories);
+        writePartners(parsedData.partners);
+        writePartnerPoints(parsedData.partnerPoints);
         db.close();
         db = null;
         dbHelper.close();
@@ -45,13 +45,13 @@ public class WriterToDatabase {
         db.delete(PartnerPointsContract.TABLE_NAME, null, null);
     }
 
-    private void savePartnerCategories(List<PartnerCategory> partnerCategories) {
+    private void writePartnerCategories(List<PartnerCategory> partnerCategories) {
         for (PartnerCategory each : partnerCategories) {
-            savePartnerCategory(each);
+            writePartnerCategory(each);
         }
     }
 
-    private void savePartnerCategory(PartnerCategory partnerCategory) {
+    private void writePartnerCategory(PartnerCategory partnerCategory) {
         String sql = "INSERT INTO " + PartnerCategoriesContract.TABLE_NAME + " (" +
                          PartnerCategoriesContract.COLUMN_NAME_ID + ", " +
                          PartnerCategoriesContract.COLUMN_NAME_TITLE +
@@ -63,13 +63,13 @@ public class WriterToDatabase {
         insertStatement.executeInsert();
     }
 
-    private void savePartners(List<Partner> partners) {
+    private void writePartners(List<Partner> partners) {
         for (Partner each : partners) {
-            savePartner(each);
+            writePartner(each);
         }
     }
 
-    private void savePartner(Partner partner) {
+    private void writePartner(Partner partner) {
         String sql = "INSERT INTO " + PartnersContract.TABLE_NAME + " (" +
                          PartnersContract.COLUMN_NAME_ID + ", " +
                          PartnersContract.COLUMN_NAME_TITLE + ", " +
@@ -87,13 +87,13 @@ public class WriterToDatabase {
         insertStatement.executeInsert();
     }
 
-    private void savePartnerPoints(List<PartnerPoint> partnerPoints) {
+    private void writePartnerPoints(List<PartnerPoint> partnerPoints) {
         for (PartnerPoint each : partnerPoints) {
-            savePartnerPoint(each);
+            writePartnerPoint(each);
         }
     }
 
-    private void savePartnerPoint(PartnerPoint partnerPoint) {
+    private void writePartnerPoint(PartnerPoint partnerPoint) {
         String sql = "INSERT INTO " + PartnerPointsContract.TABLE_NAME + " (" +
                          PartnerPointsContract.COLUMN_NAME_TITLE + ", " +
                          PartnerPointsContract.COLUMN_NAME_ADDRESS + ", " +

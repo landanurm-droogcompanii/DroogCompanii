@@ -116,8 +116,8 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.partnerCategory)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.partnerCategory)) {
                 ++partnerCategoryId;
                 PartnerCategory partnerCategory = parsePartnerCategory(parser, partnerCategoryId);
                 outPartnerCategories.add(partnerCategory);
@@ -135,10 +135,10 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.title)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.title)) {
                 title = parseTitle(parser);
-            } else if (name.equals(Tags.partners)) {
+            } else if (tag.equals(Tags.partners)) {
                 parsePartners(parser, partnerCategoryId);
             } else {
                 skip(parser);
@@ -174,8 +174,8 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.partner)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.partner)) {
                 Partner partner = parsePartner(parser, partnerCategoryId);
                 outPartners.add(partner);
             } else {
@@ -196,16 +196,16 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.id)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.id)) {
                 id = parseId(parser);
-            } else if (name.equals(Tags.title)) {
+            } else if (tag.equals(Tags.title)) {
                 title = parseTitle(parser);
-            } else if (name.equals(Tags.fullTitle)) {
+            } else if (tag.equals(Tags.fullTitle)) {
                 fullTitle = parseFullTitle(parser);
-            } else if (name.equals(Tags.saleType)) {
+            } else if (tag.equals(Tags.saleType)) {
                 saleType = parseSaleType(parser);
-            } else if (name.equals(Tags.partnerPoints)) {
+            } else if (tag.equals(Tags.partnerPoints)) {
                 parsePartnerPoints(parser, id);
             } else {
                 skip(parser);
@@ -240,8 +240,8 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.partnerPoint)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.partnerPoint)) {
                 outPartnerPoints.add(parsePartnerPoint(parser, partnerId));
             } else {
                 skip(parser);
@@ -264,20 +264,20 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.title)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.title)) {
                 title = parseTitle(parser);
-            } else if (name.equals(Tags.address)) {
+            } else if (tag.equals(Tags.address)) {
                 address = parseAddress(parser);
-            } else if (name.equals(Tags.longitude)) {
+            } else if (tag.equals(Tags.longitude)) {
                 longitude = parseLongitude(parser);
-            } else if (name.equals(Tags.latitude)) {
+            } else if (tag.equals(Tags.latitude)) {
                 latitude = parseLatitude(parser);
-            } else if (name.equals(Tags.phones)) {
+            } else if (tag.equals(Tags.phones)) {
                 phones = parsePhones(parser);
-            } else if (name.equals(Tags.paymentMethods)) {
+            } else if (tag.equals(Tags.paymentMethods)) {
                 paymentMethods = parsePaymentMethods(parser);
-            } else if (name.equals(Tags.workinghours)) {
+            } else if (tag.equals(Tags.workinghours)) {
                 weekWorkingHours = parseWeekWorkingHours(parser);
             } else {
                 skip(parser);
@@ -319,8 +319,8 @@ public class DroogCompaniiXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-            String name = parser.getName();
-            if (name.equals(Tags.phone)) {
+            String tag = parser.getName();
+            if (tag.equals(Tags.phone)) {
                 phones.add(parsePhone(parser));
             } else {
                 skip(parser);

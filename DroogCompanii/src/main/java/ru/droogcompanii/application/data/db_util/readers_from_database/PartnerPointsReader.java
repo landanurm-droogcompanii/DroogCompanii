@@ -24,7 +24,7 @@ public class PartnerPointsReader extends BaseReaderFromDatabase {
     public List<PartnerPoint> getPartnerPointsOf(Partner partner) {
         initDatabase();
         List<PartnerPoint> partnerPoints = getPartnerPointsFromDatabase(partner.id);
-        releaseDatabase();
+        closeDatabase();
         return partnerPoints;
     }
 

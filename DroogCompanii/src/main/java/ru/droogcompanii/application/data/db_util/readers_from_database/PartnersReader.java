@@ -23,7 +23,7 @@ public class PartnersReader extends BaseReaderFromDatabase {
     public List<Partner> getPartners(PartnerCategory category) {
         initDatabase();
         List<Partner> partners = getPartnersByCategoryIdFromDatabase(category.id);
-        releaseDatabase();
+        closeDatabase();
         return partners;
     }
 

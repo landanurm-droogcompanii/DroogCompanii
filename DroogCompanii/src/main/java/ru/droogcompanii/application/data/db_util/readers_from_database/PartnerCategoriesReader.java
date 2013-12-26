@@ -3,11 +3,11 @@ package ru.droogcompanii.application.data.db_util.readers_from_database;
 import android.content.Context;
 import android.database.Cursor;
 
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
 
 /**
  * Created by Leonid on 17.12.13.
@@ -21,7 +21,7 @@ public class PartnerCategoriesReader extends BaseReaderFromDatabase {
     public List<PartnerCategory> getPartnerCategories() {
         initDatabase();
         List<PartnerCategory> partnerCategories = getPartnerCategoriesFromDatabase();
-        releaseDatabase();
+        closeDatabase();
         return partnerCategories;
     }
 

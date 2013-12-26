@@ -22,7 +22,7 @@ class BaseReaderFromDatabase {
         db = dbHelper.getReadableDatabase();
     }
 
-    protected final void releaseDatabase() {
+    protected final void closeDatabase() {
         db.close();
         db = null;
         dbHelper.close();
