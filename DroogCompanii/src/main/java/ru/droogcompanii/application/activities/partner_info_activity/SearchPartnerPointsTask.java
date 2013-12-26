@@ -1,0 +1,41 @@
+package ru.droogcompanii.application.activities.partner_info_activity;
+
+import android.os.AsyncTask;
+
+import com.google.android.gms.maps.model.Marker;
+
+import java.util.Map;
+
+import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+
+/**
+ * Created by ls on 24.12.13.
+ */
+class SearchPartnerPointsTask extends AsyncTask<String, Void, VisibilityOfMarkers> {
+
+    public static interface OnTaskIsDoneListener {
+        void onTaskIsDone();
+    }
+
+    private final CalculatorOfVisibilityOfMarkers calculatorOfVisibilityOfMarkers;
+    private final OnTaskIsDoneListener onTaskIsDoneListener;
+
+    public SearchPartnerPointsTask(Map<Marker, PartnerPoint> markersAndPartnerPoints,
+                                   OnTaskIsDoneListener onTaskIsDoneListener) {
+        this.calculatorOfVisibilityOfMarkers = new CalculatorOfVisibilityOfMarkers(markersAndPartnerPoints);
+        this.onTaskIsDoneListener = onTaskIsDoneListener;
+    }
+
+    @Override
+    protected VisibilityOfMarkers doInBackground(String... args) {
+        String query = args[0];
+        return calculatorOfVisibilityOfMarkers.calculate(query);
+    }
+
+    @Override
+    protected void onPostExecute(VisibilityOfMarkers visibilityOfMarkers) {
+        super.onPostExecute(visibilityOfMarkers);
+        visibilityOfMarkers.update();
+        onTaskIsDoneListener.onTaskIsDone();
+    }
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DroogCompanii</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">type partner point name</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_global_description">Search Global Description</string>
+
+</resources>

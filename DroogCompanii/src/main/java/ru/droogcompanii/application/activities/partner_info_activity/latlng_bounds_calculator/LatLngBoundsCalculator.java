@@ -1,0 +1,89 @@
+package ru.droogcompanii.application.activities.partner_info_activity.latlng_bounds_calculator;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
+import java.util.List;
+
+import ru.droogcompanii.application.activities.partner_info_activity.geo_coordinates_calculators.LatitudeCalculator;
+import ru.droogcompanii.application.activities.partner_info_activity.geo_coordinates_calculators.LongitudeCalculator;
+import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+
+public class LatLngBoundsCalculator {
+    private static final double rightUpperLatitude = 55.800361;
+    private static final double rightUpperLongitude = 49.192142;
+
+    private static final double leftDownLatitude = 55.738413;
+    private static final double leftDownLongitude = 49.122963;
+
+    private static final double minLatitudeLength = Math.abs(rightUpperLatitude - leftDownLatitude);
+    private static final double minLongitudeLength = Math.abs(rightUpperLongitude - leftDownLongitude);
+
+    private static final double halfOfMinLatitudeLength = minLatitudeLength / 2.0;
+    private static final double halfOfMinLongitudeLength = minLongitudeLength / 2.0;
+
+    private final LatLngBounds.Builder builder;
+    private final List<PartnerPoint> partnerPoints;
+    private final MinMax latitudeMinMax;
+    private final MinMax longitudeMinMax;
+
+    private LatLng center;
+
+
+    public static LatLngBounds calculate(List<PartnerPoint> partnerPoints) {
+        return new LatLngBoundsCalculator(partnerPoints).calculate();
+    }
+
+    private LatLngBoundsCalculator(List<PartnerPoint> partnerPoints) {
+        this.partnerPoints = partnerPoints;
+        this.latitudeMinMax = new MinMax();
+        this.longitudeMinMax = new MinMax();
+        this.builder = new LatLngBounds.Builder();
+    }
+
+    private LatLngBounds calculate() {
+        for (PartnerPoint each : partnerPoints) {
+            latitudeMinMax.add(each.latitude);
+            longitudeMinMax.add(each.longitude);
+            LatLng position = new LatLng(each.latitude, each.longitude);
+            builder.include(position);
+        }
+        includeMinBounds();
+        return builder.build();
+    }
+
+    private void includeMinBounds() {
+        center = calculateCenter();
+        MinMax latitude = getMinBoundsLatitude();
+        MinMax longitude = getMinBoundsLongitude();
+        builder.include(new LatLng(latitude.min(), longitude.min()));
+        builder.include(new LatLng(latitude.min(), longitude.max()));
+        builder.include(new LatLng(latitude.max(), longitude.min()));
+        builder.include(new LatLng(latitude.max(), longitude.max()));
+    }
+
+    private LatLng calculateCenter() {
+        double centerLatitude = (latitudeMinMax.min() + latitudeMinMax.max()) / 2;
+        double centerLongitude = (longitudeMinMax.min() + longitudeMinMax.max()) / 2;
+        return new LatLng(centerLatitude, centerLongitude);
+    }
+
+    private MinMax getMinBoundsLatitude() {
+        MinMax latitude = new MinMax();
+        double minLatitude = LatitudeCalculator.subtract(center.latitude, halfOfMinLatitudeLength);
+        double maxLatitude = LatitudeCalculator.add(center.latitude, halfOfMinLatitudeLength);
+        latitude.add(minLatitude);
+        latitude.add(maxLatitude);
+        return latitude;
+    }
+
+    private MinMax getMinBoundsLongitude() {
+        MinMax longitude = new MinMax();
+        double minLongitude = LongitudeCalculator.subtract(center.longitude, halfOfMinLongitudeLength);
+        double maxLongitude = LongitudeCalculator.add(center.longitude, halfOfMinLongitudeLength);
+        longitude.add(minLongitude);
+        longitude.add(maxLongitude);
+        return longitude;
+    }
+
+}

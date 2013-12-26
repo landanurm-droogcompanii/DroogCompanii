@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="@dimen/partner_point_info_title_size"
+        android:id="@+id/title" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vertical_separator_height"
+        android:background="@color/separator_color" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vertical_separator_height"
+        android:background="@color/separator_color" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/partner_point_info_address_size"
+        android:layout_gravity="center"
+        android:id="@+id/address" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vertical_separator_height"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/phones" >
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vertical_separator_height"
+        android:background="@color/separator_color" />
+
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/horizontal_margin" />
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/mondayIndicator"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/tuesdayIndicator"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/wednesdayIndicator"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/thursdayIndicator"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/fridayIndicator"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/saturdayIndicator"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:width="@dimen/working_hours_indicator_width"
+                android:id="@+id/sundayIndicator"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/horizontal_margin" />
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/monday"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/tuesday"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/wednesday"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/thursday"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/friday"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/saturday"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/sunday"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/horizontal_margin" />
+
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/horizontal_separator_width"
+            android:background="@color/separator_color" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/horizontal_margin" />
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/mondayWorkingHours"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/tuesdayWorkingHours"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/wednesdayWorkingHours"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/thursdayWorkingHours"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/fridayWorkingHours"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/saturdayWorkingHours"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:singleLine="true"
+                android:textSize="@dimen/working_hours_text_size"
+                android:id="@+id/sundayWorkingHours"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/vertical_separator_height"
+        android:background="@color/separator_color" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@drawable/payment_methods"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/horizontal_margin" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:id="@+id/paymentMethods"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
+</LinearLayout>

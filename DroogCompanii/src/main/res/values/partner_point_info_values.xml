@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="separator_color">@android:color/darker_gray</color>
+    <dimen name="horizontal_margin">3dp</dimen>
+    <dimen name="horizontal_separator_width">1dp</dimen>
+    <dimen name="vertical_separator_height">1dp</dimen>
+    <dimen name="partner_point_info_title_size">34sp</dimen>
+    <dimen name="partner_point_info_address_size">22sp</dimen>
+    <dimen name="working_hours_text_size">18sp</dimen>
+    <dimen name="working_hours_indicator_width">4dp</dimen>
+    <color name="opened_indicator_color">@color/green</color>
+    <color name="closed_indicator_color">@color/red</color>
+    <color name="green">#31B20A</color>
+    <color name="red">#EE1017</color>
+
+</resources>
