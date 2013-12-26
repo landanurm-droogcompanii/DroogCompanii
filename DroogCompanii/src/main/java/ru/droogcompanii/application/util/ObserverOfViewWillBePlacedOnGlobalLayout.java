@@ -10,25 +10,34 @@ import android.view.ViewTreeObserver;
 public class ObserverOfViewWillBePlacedOnGlobalLayout {
 
     public static void runAfterViewWillBePlacedOnLayout(final View view, final Runnable runnable) {
-        if (!view.getViewTreeObserver().isAlive()) {
+        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        if (viewTreeObserver == null) {
             return;
         }
-        view.getViewTreeObserver().addOnGlobalLayoutListener(
+        if (!viewTreeObserver.isAlive()) {
+            return;
+        }
+        viewTreeObserver.addOnGlobalLayoutListener(
             new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
                     removeOnGlobalLayoutListener(view, this);
                     runnable.run();
                 }
-        });
+            }
+        );
     }
 
     @SuppressWarnings("deprecation")
     private static void removeOnGlobalLayoutListener(View view, ViewTreeObserver.OnGlobalLayoutListener listener) {
+        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        if (viewTreeObserver == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT < 16) {
-            view.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
+            viewTreeObserver.removeGlobalOnLayoutListener(listener);
         } else {
-            view.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
+            viewTreeObserver.removeOnGlobalLayoutListener(listener);
         }
     }
 }

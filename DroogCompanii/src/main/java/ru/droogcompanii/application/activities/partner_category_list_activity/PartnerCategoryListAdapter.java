@@ -26,7 +26,6 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
         PartnerCategoriesReader partnerCategoriesLoader = new PartnerCategoriesReader(context);
         List<PartnerCategory> partnerCategories = (List<PartnerCategory>) savedState;
         return new PartnerCategoryListAdapter(context, partnerCategoriesLoader, partnerCategories);
-
     }
 
     private PartnerCategoryListAdapter(Context context,

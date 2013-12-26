@@ -14,11 +14,18 @@ import ru.droogcompanii.application.activities.partner_category_list_activity.Pa
 public class DataDownloaderActivity extends ActionBarActivity implements TaskActivityMainFragment.Callbacks {
 
     private static final int REQUEST_CODE = 2;
+    private boolean screenRotated;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        screenRotated = (savedInstanceState != null);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_downloader_activity);
+    }
+
+    public boolean screenRotated() {
+        return screenRotated;
     }
 
     @Override

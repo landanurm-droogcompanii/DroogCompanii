@@ -42,9 +42,9 @@ public class SerializationUtils {
     }
 
     public static Object deserialize(byte[] bytes) {
-        Object result;
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         ObjectInput in = null;
+        Object result;
         try {
             in = new ObjectInputStream(bis);
             result = in.readObject();

@@ -1,7 +1,5 @@
 package ru.droogcompanii.application.activities.partner_category_list_activity;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,15 +11,11 @@ import ru.droogcompanii.application.activities.helpers.ActionBarListActivity;
 import ru.droogcompanii.application.activities.partner_list_activity.PartnerListActivity;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.activities.helpers.ProgressDialogProvider;
 
 public class PartnerCategoryListActivity extends ActionBarListActivity
-                                      implements OnDataUpdatingProgressListener,
-                                                 AdapterView.OnItemClickListener {
+                                      implements AdapterView.OnItemClickListener {
 
-    //private boolean updatedData;
     private PartnerCategoryListAdapter adapter;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +24,6 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
         adapter = prepareAdapter(savedInstanceState);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
-
-        /*
-        updatedData = updatedData(savedInstanceState);
-        if (!updatedData) {
-            startUpdate();
-        }
-        */
     }
 
     private PartnerCategoryListAdapter prepareAdapter(Bundle savedInstanceState) {
@@ -48,41 +35,10 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
         }
     }
 
-    private boolean updatedData(Bundle savedInstanceState) {
-        //noinspection SimplifiableConditionalExpression
-        return (savedInstanceState == null) ? false : savedInstanceState.getBoolean(Keys.updatedData);
-    }
-
-    private void startUpdate() {
-        final PartnerCategoriesUpdatingTask task = new PartnerCategoriesUpdatingTask(this, this);
-        progressDialog = ProgressDialogProvider.prepareProgressDialog(this);
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                task.cancel(true);
-            }
-        });
-        task.execute();
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putBoolean(Keys.updatedData, updatedData);
         outState.putSerializable(Keys.partnerCategoryListAdapterState, adapter.getState());
-    }
-
-    @Override
-    public void onPreDataUpdating() {
-        //updatedData = false;
-        progressDialog.show();
-    }
-
-    @Override
-    public void onPostDataUpdating() {
-        //updatedData = true;
-        adapter.updateListFromDatabase();
-        progressDialog.dismiss();
     }
 
     @Override

@@ -49,8 +49,6 @@ public class DataDownloaderTask extends Task {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.d(LogTagProvider.get(), "Task is started");
-
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wakeLock.acquire();
