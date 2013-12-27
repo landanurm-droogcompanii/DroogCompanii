@@ -16,7 +16,6 @@ import ru.droogcompanii.application.util.LinesCombiner;
  */
 public class WeekWorkingHours implements Serializable {
     private final Map<Integer, WorkingHours> workingHoursForDaysOfWeek;
-    private final DayOfWeekToStringConvertor dayOfWeekToStringConvertor;
 
     public WeekWorkingHours(WorkingHoursForEachDayOfWeek workingHours) {
         workingHoursForDaysOfWeek = new HashMap<Integer, WorkingHours>();
@@ -27,7 +26,6 @@ public class WeekWorkingHours implements Serializable {
         workingHoursForDaysOfWeek.put(Calendar.FRIDAY, workingHours.onFriday);
         workingHoursForDaysOfWeek.put(Calendar.SATURDAY, workingHours.onSaturday);
         workingHoursForDaysOfWeek.put(Calendar.SUNDAY, workingHours.onSunday);
-        dayOfWeekToStringConvertor = DayOfWeekToStringConvertorProvider.getCurrentConvertor();
     }
 
     public boolean includes(Calendar someDay) {
@@ -65,6 +63,8 @@ public class WeekWorkingHours implements Serializable {
 
     @Override
     public String toString() {
+        DayOfWeekToStringConvertor dayOfWeekToStringConvertor =
+                DayOfWeekToStringConvertorProvider.getCurrentConvertor();
         List<String> lines = new ArrayList<String>();
         for (int dayOfWeek : DateTimeConstants.getDaysOfWeek()) {
             String nameOfDay = dayOfWeekToStringConvertor.dayOfWeekToString(dayOfWeek);

@@ -6,12 +6,14 @@ import ru.droogcompanii.application.data.data_structure.working_hours.working_ho
  * Created by Leonid on 19.12.13.
  */
 public class WorkingHoursParser {
+
+    private static final int NUMBER_OF_WORKING_HOURS_COMPONENTS = 2;
+    private static final int NUMBER_OF_TIME_COMPONENTS = 2;
     private static final String SEPARATOR_OF_WORKING_HOURS_COMPONENTS = "-";
     private static final String SEPARATOR_OF_TIME_COMPONENTS = ":";
 
     private WorkingHoursBuilder workingHoursBuilder;
 
-    private static final int NUMBER_OF_TIME_COMPONENTS = 2;
 
     public WorkingHoursParser() {
         workingHoursBuilder = new WorkingHoursBuilder();
@@ -28,50 +30,56 @@ public class WorkingHoursParser {
     private WorkingHours tryParseWorkingHoursOnBusinessDay(String workingHoursText) {
         workingHoursText = workingHoursText.trim();
         String[] workingHoursComponents = workingHoursText.split(SEPARATOR_OF_WORKING_HOURS_COMPONENTS);
-        String fromText = workingHoursComponents[0];
-        String toText = workingHoursComponents[1];
-        Time from = timeFromText(fromText);
-        Time to = timeFromText(toText);
+        if (workingHoursComponents.length != NUMBER_OF_WORKING_HOURS_COMPONENTS) {
+            throw new IllegalArgumentException();
+        }
+        Time from = timeFromText(workingHoursComponents[0]);
+        Time to = timeFromText(workingHoursComponents[1]);
         return workingHoursBuilder.onBusinessDay(from, to);
     }
 
     private Time timeFromText(String timeText) {
         timeText = timeText.trim();
         String[] timeComponents = timeText.split(SEPARATOR_OF_TIME_COMPONENTS);
-        if (!allowableTimeTextIn24HoursFormat(timeComponents)) {
-            throw new IllegalArgumentException("Illegal time: " + timeText);
-        }
-        String hours = timeComponents[0];
-        String minutes = timeComponents[1];
-        return new Time(Integer.parseInt(hours), Integer.parseInt(minutes));
+        return timeFromTimeComponents(timeComponents);
     }
 
-    private boolean allowableTimeTextIn24HoursFormat(String[] timeComponents) {
+    private Time timeFromTimeComponents(String[] timeComponents) {
         if (timeComponents.length != NUMBER_OF_TIME_COMPONENTS) {
-            return false;
+            throw new IllegalArgumentException();
         }
-        return allowableHoursTextIn24HoursFormat(timeComponents[0]) &&
-                allowableMinutesTextIn24HoursFormat(timeComponents[1]);
+        int hours = parseHours(timeComponents[0]);
+        int minutes = parseMinutes(timeComponents[1]);
+        return new Time(hours, minutes);
     }
 
-    private boolean allowableHoursTextIn24HoursFormat(String hoursText) {
-        return twoDigitNumberTextAtRange(hoursText, 0, 23);
+    private int parseHours(String hoursText) {
+        return parseTwoDigitNumberTextAtRange(hoursText, 0, 23);
     }
 
-    private boolean allowableMinutesTextIn24HoursFormat(String minutesText) {
-        return twoDigitNumberTextAtRange(minutesText, 0, 59);
+    private int parseMinutes(String minutesText) {
+        return parseTwoDigitNumberTextAtRange(minutesText, 0, 59);
     }
 
-    private boolean twoDigitNumberTextAtRange(String numberText, int fromIncluded, int toIncluded) {
+    private int parseTwoDigitNumberTextAtRange(String numberText, int fromIncluded, int toIncluded) {
         numberText = numberText.trim();
-        if (numberText.length() != 2) {
-            return false;
+        checkWhetherTextIsTwoDigitNumber(numberText);
+        int number = Integer.parseInt(numberText);
+        boolean numberAtRange = (fromIncluded <= number) && (number <= toIncluded);
+        if (!numberAtRange) {
+            throw new IllegalArgumentException();
         }
-        try {
-            int number = Integer.parseInt(numberText);
-            return (fromIncluded <= number) && (number <= toIncluded);
-        } catch (Exception e) {
-            return false;
+        return number;
+    }
+
+    private void checkWhetherTextIsTwoDigitNumber(String numberText) {
+        if (numberText.length() != 2) {
+            throw new IllegalArgumentException();
+        }
+        char firstChar = numberText.charAt(0);
+        char secondChar = numberText.charAt(1);
+        if (!Character.isDigit(firstChar) || !Character.isDigit(secondChar)) {
+            throw new IllegalArgumentException();
         }
     }
 }
