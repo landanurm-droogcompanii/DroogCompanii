@@ -25,7 +25,6 @@ public class PartnerCategory implements Serializable {
         if (!(obj instanceof PartnerCategory)) {
             return false;
         }
-
         PartnerCategory other = (PartnerCategory) obj;
         return (id == other.id) && title.equals(other.title);
     }

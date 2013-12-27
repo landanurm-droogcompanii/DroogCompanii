@@ -8,6 +8,6 @@ import ru.droogcompanii.application.activities.helpers.task.TaskFragment;
 public class DataDownloaderTaskFragment extends TaskFragment {
     @Override
     protected String getDialogTitle() {
-        return "Please, wait...";
+        return "Data is updated...";
     }
 }

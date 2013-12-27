@@ -63,7 +63,7 @@ public abstract class TaskActivityMainFragment extends Fragment {
         return inflater.inflate(fragmentLayoutId, container, false);
     }
 
-    public void startTask() {
+    protected void startTask() {
         TaskFragment taskFragment = prepareTaskFragment();
         taskFragment.setTask(prepareTask());
         taskFragment.setTargetFragment(this, TASK_FRAGMENT);

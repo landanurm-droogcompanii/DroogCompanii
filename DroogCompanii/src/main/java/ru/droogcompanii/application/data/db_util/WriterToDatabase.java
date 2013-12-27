@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import java.io.Serializable;
 import java.util.List;
 
-import ru.droogcompanii.application.util.SerializationUtils;
 import ru.droogcompanii.application.data.DroogCompaniiXmlParser;
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
@@ -15,6 +14,7 @@ import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnersContract;
+import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
  * Created by Leonid on 09.12.13.
@@ -30,13 +30,23 @@ public class WriterToDatabase {
     public void write(DroogCompaniiXmlParser.ParsedData parsedData) {
         DroogCompaniiDbHelper dbHelper = new DroogCompaniiDbHelper(context);
         db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            tryExecuteTransaction(parsedData);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        db.close();
+        db = null;
+        dbHelper.close();
+    }
+
+    private void tryExecuteTransaction(DroogCompaniiXmlParser.ParsedData parsedData) {
         clearOldData();
         writePartnerCategories(parsedData.partnerCategories);
         writePartners(parsedData.partners);
         writePartnerPoints(parsedData.partnerPoints);
-        db.close();
-        db = null;
-        dbHelper.close();
     }
 
     private void clearOldData() {

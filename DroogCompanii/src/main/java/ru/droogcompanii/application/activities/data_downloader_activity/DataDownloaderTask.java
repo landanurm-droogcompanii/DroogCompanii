@@ -23,10 +23,10 @@ public class DataDownloaderTask extends Task {
 
     public DataDownloaderTask(Context context) {
         this.context = context;
-        this.dataUpdater = new DataUpdater(context, prepareXmlDownloaderFromResources());
+        this.dataUpdater = new DataUpdater(context, prepareXmlProviderFromResources());
     }
 
-    private DataUpdater.XmlProvider prepareXmlDownloaderFromResources() {
+    private DataUpdater.XmlProvider prepareXmlProviderFromResources() {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {
@@ -36,7 +36,7 @@ public class DataDownloaderTask extends Task {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    private DataUpdater.XmlProvider prepareXmlDownloaderFromInternet() {
+    private DataUpdater.XmlProvider prepareXmlProviderFromInternet() {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {

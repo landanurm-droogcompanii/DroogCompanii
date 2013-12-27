@@ -15,14 +15,14 @@ public class DataDownloaderMainFragment extends TaskActivityMainFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!screenRotated()) {
+        if (activityFirstLaunched()) {
             startTask();
         }
     }
 
-    private boolean screenRotated() {
+    private boolean activityFirstLaunched() {
         DataDownloaderActivity activity = (DataDownloaderActivity) getActivity();
-        return activity.screenRotated();
+        return !activity.screenRotated();
     }
 
     @Override
@@ -39,4 +39,5 @@ public class DataDownloaderMainFragment extends TaskActivityMainFragment {
     protected Task prepareTask() {
         return new DataDownloaderTask(getActivity());
     }
+
 }
