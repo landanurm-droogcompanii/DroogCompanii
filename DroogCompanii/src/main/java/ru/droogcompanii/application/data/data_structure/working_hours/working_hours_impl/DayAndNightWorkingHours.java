@@ -16,22 +16,32 @@ class DayAndNightWorkingHours implements WorkingHours, Serializable {
     }
 
     @Override
+    public boolean includes(Time time) {
+        return true;
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        return (obj != null) && (obj instanceof DayAndNightWorkingHours);
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof DayAndNightWorkingHours)) {
+            return false;
+        }
+        DayAndNightWorkingHours other = (DayAndNightWorkingHours) obj;
+        return messageToShow.equals(other.messageToShow);
     }
 
     @Override
     public int hashCode() {
-        return messageToShow.hashCode() * 2;
+        return messageToShow.hashCode();
     }
 
     @Override
     public String toString() {
         return messageToShow;
-    }
-
-    @Override
-    public boolean includes(Time time) {
-        return true;
     }
 }

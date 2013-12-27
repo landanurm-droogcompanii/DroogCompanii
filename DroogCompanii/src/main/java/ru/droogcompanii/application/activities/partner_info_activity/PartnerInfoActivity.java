@@ -33,7 +33,7 @@ import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.LinesCombiner;
+import ru.droogcompanii.application.util.StringsCombiner;
 import ru.droogcompanii.application.util.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 
@@ -67,15 +67,24 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
         return new SearchPartnerPointsTask(markers, partnerPoints, this);
     }
 
+    private GoogleMap getMap() {
+        return getSupportMapFragment().getMap();
+    }
+
+    private SupportMapFragment getSupportMapFragment() {
+        return (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    }
+
     private void preparePartnerData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            preparePartnerData(getIntent());
+            preparePartnerData();
         } else {
             restorePartnerData(savedInstanceState);
         }
     }
 
-    private void preparePartnerData(Intent intent) {
+    private void preparePartnerData() {
+        Intent intent = getIntent();
         partner = (Partner) intent.getSerializableExtra(Keys.partner);
         PartnerPointsReader partnerPointsReader = new PartnerPointsReader(this);
         partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
@@ -92,14 +101,6 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.partner, partner);
         outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
-    }
-
-    private GoogleMap getMap() {
-        return getSupportMapFragment().getMap();
-    }
-
-    private SupportMapFragment getSupportMapFragment() {
-        return (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
     private void showPartnerData() {
@@ -128,7 +129,7 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
         if (partnerPointHasAddress(partnerPoint)) {
             markerOptions.snippet(partnerPoint.address);
         } else if (partnerPointHasPhone(partnerPoint)) {
-            String phones = LinesCombiner.combine(partnerPoint.phones, ", ");
+            String phones = StringsCombiner.combine(partnerPoint.phones, ", ");
             markerOptions.snippet(phones);
         }
     }
@@ -157,15 +158,15 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
     }
 
     private void fitVisibleMarkersOnScreen() {
-        if (noVisiblePartnerPoints()) {
+        if (noVisibleMarkers()) {
             return;
         }
-        LatLngBounds bounds = LatLngBoundsCalculator.calculate(markers);
+        LatLngBounds bounds = LatLngBoundsCalculator.calculateBoundsOfVisibleMarkers(markers);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, getMapPadding());
         googleMap.moveCamera(cameraUpdate);
     }
 
-    private boolean noVisiblePartnerPoints() {
+    private boolean noVisibleMarkers() {
         for (Marker each : markers) {
             if (each.isVisible()) {
                 return false;

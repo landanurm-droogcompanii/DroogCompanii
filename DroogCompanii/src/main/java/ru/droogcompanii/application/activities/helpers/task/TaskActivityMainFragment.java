@@ -15,8 +15,11 @@ import android.view.ViewGroup;
 public abstract class TaskActivityMainFragment extends Fragment {
 
     public interface Callbacks {
-        public void onTaskFinished();
+        void onTaskFinished();
     }
+
+    protected static final int TASK_FRAGMENT = 0;
+    protected static final String TASK_FRAGMENT_TAG = "task";
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         public void onTaskFinished() {
@@ -24,6 +27,7 @@ public abstract class TaskActivityMainFragment extends Fragment {
         }
     };
 
+    private FragmentManager fragmentManager;
     private Callbacks callbacks = DUMMY_CALLBACKS;
 
     @Override
@@ -41,12 +45,6 @@ public abstract class TaskActivityMainFragment extends Fragment {
         callbacks = DUMMY_CALLBACKS;
     }
 
-
-    protected static final int TASK_FRAGMENT = 0;
-    protected static final String TASK_FRAGMENT_TAG = "task";
-
-    private FragmentManager fragmentManager;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +59,7 @@ public abstract class TaskActivityMainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int fragmentLayoutId = getMainFragmentLayoutIdOfTaskActivity();
+        int fragmentLayoutId = getIdOfMainFragmentLayout();
         return inflater.inflate(fragmentLayoutId, container, false);
     }
 
@@ -72,7 +70,7 @@ public abstract class TaskActivityMainFragment extends Fragment {
         showFragment(taskFragment);
     }
 
-    protected abstract int getMainFragmentLayoutIdOfTaskActivity();
+    protected abstract int getIdOfMainFragmentLayout();
     protected abstract TaskFragment prepareTaskFragment();
     protected abstract Task prepareTask();
 

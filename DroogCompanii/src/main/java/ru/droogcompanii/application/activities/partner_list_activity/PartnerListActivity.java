@@ -22,22 +22,21 @@ public class PartnerListActivity extends ActionBarListActivityWithBackButton
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        partnerCategory = getPartnerCategory(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            partnerCategory = getPartnerCategory();
+        } else {
+            partnerCategory = restorePartnerCategory(savedInstanceState);
+        }
+
         setTitle(partnerCategory.title);
         adapter = new PartnerListAdapter(this, partnerCategory);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
-    private PartnerCategory getPartnerCategory(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            return getPartnerCategory(getIntent());
-        } else {
-            return restorePartnerCategory(savedInstanceState);
-        }
-    }
-
-    private PartnerCategory getPartnerCategory(Intent intent) {
+    private PartnerCategory getPartnerCategory() {
+        Intent intent = getIntent();
         return (PartnerCategory) intent.getSerializableExtra(Keys.partnerCategory);
     }
 
@@ -53,9 +52,13 @@ public class PartnerListActivity extends ActionBarListActivityWithBackButton
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Partner partnerToShow = adapter.getItem(position);
+        Partner selectedPartner = adapter.getItem(position);
+        showPartner(selectedPartner);
+    }
+
+    private void showPartner(Partner partner) {
         Intent intent = new Intent(this, PartnerInfoActivity.class);
-        intent.putExtra(Keys.partner, partnerToShow);
+        intent.putExtra(Keys.partner, partner);
         startActivity(intent);
     }
 }

@@ -21,18 +21,15 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = prepareAdapter(savedInstanceState);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
-    }
-
-    private PartnerCategoryListAdapter prepareAdapter(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            return PartnerCategoryListAdapter.newInstance(this);
+            adapter = PartnerCategoryListAdapter.newInstance(this);
         } else {
             Serializable state = savedInstanceState.getSerializable(Keys.partnerCategoryListAdapterState);
-            return PartnerCategoryListAdapter.newInstance(this, state);
+            adapter = PartnerCategoryListAdapter.newInstance(this, state);
         }
+
+        setListAdapter(adapter);
+        getListView().setOnItemClickListener(this);
     }
 
     @Override
@@ -44,8 +41,12 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         PartnerCategory selectedCategory = adapter.getItem(position);
+        showPartnerCategory(selectedCategory);
+    }
+
+    private void showPartnerCategory(PartnerCategory partnerCategory) {
         Intent intent = new Intent(this, PartnerListActivity.class);
-        intent.putExtra(Keys.partnerCategory, selectedCategory);
+        intent.putExtra(Keys.partnerCategory, partnerCategory);
         startActivity(intent);
     }
 }

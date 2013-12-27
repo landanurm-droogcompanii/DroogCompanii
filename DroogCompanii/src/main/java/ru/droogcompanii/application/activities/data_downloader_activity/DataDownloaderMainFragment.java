@@ -26,7 +26,7 @@ public class DataDownloaderMainFragment extends TaskActivityMainFragment {
     }
 
     @Override
-    protected int getMainFragmentLayoutIdOfTaskActivity() {
+    protected int getIdOfMainFragmentLayout() {
         return R.layout.data_downloader_fragment;
     }
 

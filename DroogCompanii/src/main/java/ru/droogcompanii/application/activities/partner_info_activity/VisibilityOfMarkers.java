@@ -11,12 +11,16 @@ import java.util.Collection;
 class VisibilityOfMarkers {
 
     private static class VisibilityOfMarker {
-        public final Marker marker;
-        public final Boolean visible;
+        final Marker marker;
+        final boolean visible;
 
-        public VisibilityOfMarker(Marker marker, Boolean visible) {
+        VisibilityOfMarker(Marker marker, boolean visible) {
             this.marker = marker;
             this.visible = visible;
+        }
+
+        void update() {
+            marker.setVisible(visible);
         }
 
         @Override
@@ -31,12 +35,12 @@ class VisibilityOfMarkers {
                 return false;
             }
             VisibilityOfMarker other = (VisibilityOfMarker) obj;
-            return marker.equals(other.marker) && visible.equals(other.visible);
+            return marker.equals(other.marker) && (visible == other.visible);
         }
 
         @Override
         public int hashCode() {
-            return marker.hashCode() + visible.hashCode();
+            return marker.hashCode() + ((Boolean) visible).hashCode();
         }
     }
 
@@ -50,14 +54,14 @@ class VisibilityOfMarkers {
         visibilityOfMarkers = new ArrayList<VisibilityOfMarker>(capacity);
     }
 
-    public void add(Marker marker, Boolean visible) {
+    public void add(Marker marker, boolean visible) {
         VisibilityOfMarker visibilityOfMarker = new VisibilityOfMarker(marker, visible);
         visibilityOfMarkers.add(visibilityOfMarker);
     }
 
     public void update() {
         for (VisibilityOfMarker each : visibilityOfMarkers) {
-            each.marker.setVisible(each.visible);
+            each.update();
         }
     }
 }

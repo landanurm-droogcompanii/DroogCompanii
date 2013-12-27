@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * Created by ls on 23.12.13.
  */
-public class LinesCombiner {
+public class StringsCombiner {
 
     public static String combine(List<String> lines) {
         return combine(lines, "\n");
     }
 
     public static String combine(List<String> lines, String separator) {
-        return new LinesCombiner(lines, separator).combine();
+        return new StringsCombiner(lines, separator).combine();
     }
 
     private final List<String> lines;
@@ -20,7 +20,7 @@ public class LinesCombiner {
     private int lineNumber;
     private StringBuilder builder;
 
-    private LinesCombiner(List<String> lines, String separator) {
+    private StringsCombiner(List<String> lines, String separator) {
         this.lines = lines;
         this.separator = separator;
     }

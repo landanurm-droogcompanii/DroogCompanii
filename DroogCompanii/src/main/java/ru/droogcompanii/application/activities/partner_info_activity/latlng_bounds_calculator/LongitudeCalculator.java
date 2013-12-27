@@ -3,7 +3,7 @@ package ru.droogcompanii.application.activities.partner_info_activity.latlng_bou
 /**
  * Created by ls on 26.12.13.
  */
-public class LongitudeCalculator {
+class LongitudeCalculator {
 
     public static double add(double to, double what) {
         return to + what;

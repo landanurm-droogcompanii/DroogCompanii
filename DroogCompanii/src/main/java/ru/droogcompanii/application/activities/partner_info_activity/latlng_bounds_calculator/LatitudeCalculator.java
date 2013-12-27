@@ -3,7 +3,7 @@ package ru.droogcompanii.application.activities.partner_info_activity.latlng_bou
 /**
  * Created by ls on 26.12.13.
  */
-public class LatitudeCalculator {
+class LatitudeCalculator {
 
     private static final double MIN_LATITUDE = -90.0;
     private static final double MAX_LATITUDE = 90.0;

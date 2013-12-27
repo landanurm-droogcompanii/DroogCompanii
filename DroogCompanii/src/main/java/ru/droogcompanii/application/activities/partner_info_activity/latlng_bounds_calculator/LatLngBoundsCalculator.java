@@ -27,8 +27,8 @@ public class LatLngBoundsCalculator {
     private LatLng center;
 
 
-    public static LatLngBounds calculate(List<Marker> markers) {
-        return new LatLngBoundsCalculator(markers).calculate();
+    public static LatLngBounds calculateBoundsOfVisibleMarkers(List<Marker> markers) {
+        return new LatLngBoundsCalculator(markers).calculateBoundsOfVisibleMarkers();
     }
 
     private LatLngBoundsCalculator(List<Marker> markers) {
@@ -38,7 +38,7 @@ public class LatLngBoundsCalculator {
         this.builder = new LatLngBounds.Builder();
     }
 
-    private LatLngBounds calculate() {
+    private LatLngBounds calculateBoundsOfVisibleMarkers() {
         for (Marker each : markers) {
             if (each.isVisible()) {
                 includePosition(each.getPosition());

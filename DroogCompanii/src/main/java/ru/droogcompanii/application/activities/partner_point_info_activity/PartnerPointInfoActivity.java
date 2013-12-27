@@ -114,7 +114,6 @@ public class PartnerPointInfoActivity extends ActionBarActivityWithBackButton {
         final int daysPerWeek = 7;
         for (int indexOfDayOfWeek = 0; indexOfDayOfWeek < daysPerWeek; ++indexOfDayOfWeek) {
             showWorkingHoursRow(indexOfDayOfWeek);
-            unselectWorkingHoursRow(indexOfDayOfWeek);
         }
         selectWorkingHoursRow(getIndexOfCurrentDayRow());
     }
@@ -123,6 +122,7 @@ public class PartnerPointInfoActivity extends ActionBarActivityWithBackButton {
         int dayOfWeek = daysOfWeek[indexOfRow];
         initDayTextView(indexOfRow, dayOfWeek);
         initWorkingHoursTextView(indexOfRow, dayOfWeek);
+        unselectWorkingHoursRow(indexOfRow);
     }
 
     private void initDayTextView(int indexOfRow, int dayOfWeek) {
@@ -157,10 +157,10 @@ public class PartnerPointInfoActivity extends ActionBarActivityWithBackButton {
     }
 
     private void selectWorkingHoursRow(int indexOfRow) {
-        setRowColor(indexOfRow, getCurrentDayRowColorId());
+        setRowColor(indexOfRow, getColorIdOfCurrentDayIndicator());
     }
 
-    private int getCurrentDayRowColorId() {
+    private int getColorIdOfCurrentDayIndicator() {
         return partnerPointIsOpened()
                 ? R.color.opened_indicator_color
                 : R.color.closed_indicator_color;

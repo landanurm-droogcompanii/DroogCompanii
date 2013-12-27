@@ -8,11 +8,11 @@ import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHou
 /**
  * Created by Leonid on 19.12.13.
  */
-class WorkingHoursOnWeekday implements WorkingHours, Serializable {
+class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
     private final Time from;
     private final Time to;
 
-    public WorkingHoursOnWeekday(Time from, Time to) {
+    public WorkingHoursOnBusinessDay(Time from, Time to) {
         this.from = from;
         this.to = to;
     }
@@ -30,10 +30,10 @@ class WorkingHoursOnWeekday implements WorkingHours, Serializable {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof WorkingHoursOnWeekday)) {
+        if (!(obj instanceof WorkingHoursOnBusinessDay)) {
             return false;
         }
-        WorkingHoursOnWeekday other = (WorkingHoursOnWeekday) obj;
+        WorkingHoursOnBusinessDay other = (WorkingHoursOnBusinessDay) obj;
         return (from.equals(other.from)) &&
                (to.equals(other.to));
     }

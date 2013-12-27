@@ -13,23 +13,26 @@ import ru.droogcompanii.application.activities.helpers.SimpleArrayAdapter;
  * Created by Leonid on 17.12.13.
  */
 class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
-    private final List<PartnerCategory> partnerCategories;
-    private final PartnerCategoriesReader partnerCategoriesLoader;
 
     public static PartnerCategoryListAdapter newInstance(Context context) {
-        PartnerCategoriesReader partnerCategoriesLoader = new PartnerCategoriesReader(context);
-        List<PartnerCategory> partnerCategories = partnerCategoriesLoader.getPartnerCategories();
-        return new PartnerCategoryListAdapter(context, partnerCategoriesLoader, partnerCategories);
+        PartnerCategoriesReader partnerCategoriesReader = new PartnerCategoriesReader(context);
+        List<PartnerCategory> partnerCategories = partnerCategoriesReader.getPartnerCategories();
+        return new PartnerCategoryListAdapter(context, partnerCategoriesReader, partnerCategories);
     }
 
     public static PartnerCategoryListAdapter newInstance(Context context, Serializable savedState) {
         PartnerCategoriesReader partnerCategoriesLoader = new PartnerCategoriesReader(context);
+        @SuppressWarnings("unchecked")
         List<PartnerCategory> partnerCategories = (List<PartnerCategory>) savedState;
         return new PartnerCategoryListAdapter(context, partnerCategoriesLoader, partnerCategories);
     }
 
+
+    private final List<PartnerCategory> partnerCategories;
+    private final PartnerCategoriesReader partnerCategoriesReader;
+
     private PartnerCategoryListAdapter(Context context,
-                                       PartnerCategoriesReader partnerCategoriesLoader,
+                                       PartnerCategoriesReader partnerCategoriesReader,
                                        List<PartnerCategory> partnerCategories) {
         super(context, partnerCategories,
               new ItemToTitleConvertor<PartnerCategory>() {
@@ -38,13 +41,13 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
                       return item.title;
                   }
               });
-        this.partnerCategoriesLoader = partnerCategoriesLoader;
+        this.partnerCategoriesReader = partnerCategoriesReader;
         this.partnerCategories = partnerCategories;
     }
 
     public void updateListFromDatabase() {
         partnerCategories.clear();
-        partnerCategories.addAll(partnerCategoriesLoader.getPartnerCategories());
+        partnerCategories.addAll(partnerCategoriesReader.getPartnerCategories());
         notifyDataSetChanged();
     }
 

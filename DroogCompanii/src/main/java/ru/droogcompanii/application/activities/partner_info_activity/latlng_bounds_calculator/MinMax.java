@@ -25,7 +25,7 @@ class MinMax {
         return max;
     }
 
-    public double difference() {
+    public double diff() {
         return Math.abs(max - min);
     }
 }

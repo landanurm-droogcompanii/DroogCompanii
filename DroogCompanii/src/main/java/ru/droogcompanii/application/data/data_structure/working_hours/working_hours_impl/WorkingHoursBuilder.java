@@ -7,21 +7,19 @@ import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHou
  * Created by Leonid on 19.12.13.
  */
 public class WorkingHoursBuilder {
-    private static final Time time_00_00 = new Time(0, 0);
+    private static final String MESSAGE_FOR_DAY_AND_NIGHT_WORKING_HOURS = "Круглосуточно";
+
+    private static final Time TIME_00_00 = new Time(0, 0);
 
     public WorkingHours onBusinessDay(Time from, Time to) {
         if (dayAndNightWorkingHours(from, to)) {
-            return new DayAndNightWorkingHours(getMessageForDayAndNightWorkingHours());
+            return new DayAndNightWorkingHours(MESSAGE_FOR_DAY_AND_NIGHT_WORKING_HOURS);
         }
-        return new WorkingHoursOnWeekday(from, to);
+        return new WorkingHoursOnBusinessDay(from, to);
     }
 
     private boolean dayAndNightWorkingHours(Time from, Time to) {
-        return from.equals(time_00_00) && to.equals(time_00_00);
-    }
-
-    private String getMessageForDayAndNightWorkingHours() {
-        return "Круглосуточно";
+        return from.equals(TIME_00_00) && to.equals(TIME_00_00);
     }
 
     public WorkingHours onHoliday(String messageToShowInHoliday) {

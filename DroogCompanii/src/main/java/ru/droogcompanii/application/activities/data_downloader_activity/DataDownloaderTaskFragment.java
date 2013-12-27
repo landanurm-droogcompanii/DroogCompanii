@@ -7,7 +7,7 @@ import ru.droogcompanii.application.activities.helpers.task.TaskFragment;
  */
 public class DataDownloaderTaskFragment extends TaskFragment {
     @Override
-    protected String getTitle() {
+    protected String getDialogTitle() {
         return "Please, wait...";
     }
 }

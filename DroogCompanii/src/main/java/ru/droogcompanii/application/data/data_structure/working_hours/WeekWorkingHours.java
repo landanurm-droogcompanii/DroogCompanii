@@ -9,7 +9,7 @@ import java.util.Map;
 
 import ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertor;
 import ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertorProvider;
-import ru.droogcompanii.application.util.LinesCombiner;
+import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
  * Created by Leonid on 19.12.13.
@@ -72,6 +72,6 @@ public class WeekWorkingHours implements Serializable {
             String line = nameOfDay + ":  " + workingHoursOfDay;
             lines.add(line);
         }
-        return LinesCombiner.combine(lines);
+        return StringsCombiner.combine(lines);
     }
 }

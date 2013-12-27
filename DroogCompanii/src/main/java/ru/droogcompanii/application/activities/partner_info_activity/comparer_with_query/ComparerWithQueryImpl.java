@@ -1,11 +1,11 @@
-package ru.droogcompanii.application.activities.partner_info_activity.comparer_text_with_query;
+package ru.droogcompanii.application.activities.partner_info_activity.comparer_with_query;
 
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 
 /**
  * Created by ls on 25.12.13.
  */
-class ComparerPartnerPointWithQueryImpl implements ComparerPartnerPointWithQuery {
+class ComparerWithQueryImpl implements ComparerWithQuery {
 
     @Override
     public boolean partnerPointMatchQuery(PartnerPoint partnerPoint, String query) {
@@ -23,14 +23,14 @@ class ComparerPartnerPointWithQueryImpl implements ComparerPartnerPointWithQuery
     }
 
     private static boolean textMatchQuerySensitive(String text, String query) {
-        String[] splittedQuery = splitStringOnMultipleWhitespacesIntoWords(query);
+        String[] splittedQuery = splitIntoWords(query);
         if (queryContainsOnlyWhitespaces(splittedQuery)) {
             return true;
         }
         return textContainsWords(text, splittedQuery);
     }
 
-    private static String[] splitStringOnMultipleWhitespacesIntoWords(String str) {
+    private static String[] splitIntoWords(String str) {
         return str.split("\\s+");
     }
 

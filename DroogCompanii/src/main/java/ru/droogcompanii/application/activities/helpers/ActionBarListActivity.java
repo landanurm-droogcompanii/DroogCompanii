@@ -13,7 +13,7 @@ import ru.droogcompanii.application.R;
  */
 public class ActionBarListActivity extends ActionBarActivity {
 
-    private ListView mListView;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +22,10 @@ public class ActionBarListActivity extends ActionBarActivity {
     }
 
     protected ListView getListView() {
-        if (mListView == null) {
-            mListView = (ListView) findViewById(android.R.id.list);
+        if (listView == null) {
+            listView = (ListView) findViewById(android.R.id.list);
         }
-        return mListView;
+        return listView;
     }
 
     protected void setListAdapter(ListAdapter adapter) {
