@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.InputStream;
 
 import ru.droogcompanii.application.data.db_util.WriterToDatabase;
+import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
 
 /**
  * Created by Leonid on 18.12.13.

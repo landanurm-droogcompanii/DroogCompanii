@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteStatement;
 import java.io.Serializable;
 import java.util.List;
 
-import ru.droogcompanii.application.data.DroogCompaniiXmlParser;
+import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
