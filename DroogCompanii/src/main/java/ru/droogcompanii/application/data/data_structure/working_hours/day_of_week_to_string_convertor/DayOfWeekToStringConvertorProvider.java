@@ -1,5 +1,7 @@
 package ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor;
 
+import android.app.Application;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;

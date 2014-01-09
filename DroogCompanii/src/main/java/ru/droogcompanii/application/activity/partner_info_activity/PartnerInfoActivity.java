@@ -34,7 +34,7 @@ import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.StringsCombiner;
-import ru.droogcompanii.application.util.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.activity.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 
 public class PartnerInfoActivity extends ActionBarActivityWithBackButton

@@ -8,7 +8,7 @@ import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHou
 /**
  * Created by Leonid on 19.12.13.
  */
-class DayAndNightWorkingHours implements WorkingHours, Serializable {
+public class DayAndNightWorkingHours implements WorkingHours, Serializable {
     private final String messageToShow;
 
     public DayAndNightWorkingHours(String messageToShow) {

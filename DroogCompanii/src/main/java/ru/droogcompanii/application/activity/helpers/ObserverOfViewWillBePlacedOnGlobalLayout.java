@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.activity.helpers;
 
 import android.os.Build;
 import android.view.View;

@@ -15,6 +15,8 @@ import ru.droogcompanii.application.util.StringsCombiner;
  * Created by Leonid on 19.12.13.
  */
 public class WeekWorkingHours implements Serializable {
+    public static final String SEPARATOR_BETWEEN_DAY_AND_WORKING_HOURS = ":  ";
+
     private final Map<Integer, WorkingHours> workingHoursForDaysOfWeek;
 
     public WeekWorkingHours(WorkingHoursForEachDayOfWeek workingHours) {
@@ -29,12 +31,12 @@ public class WeekWorkingHours implements Serializable {
     }
 
     public boolean includes(Calendar someDay) {
-        WorkingHours workingHours = workingHoursOfDay(someDay);
+        WorkingHours workingHours = workingHoursOfCalendar(someDay);
         return workingHours.includes(Time.from(someDay));
     }
 
-    private WorkingHours workingHoursOfDay(Calendar someDay) {
-        return workingHoursOfDay(someDay.get(Calendar.DAY_OF_WEEK));
+    private WorkingHours workingHoursOfCalendar(Calendar calendar) {
+        return workingHoursOfDay(calendar.get(Calendar.DAY_OF_WEEK));
     }
 
     public WorkingHours workingHoursOfDay(int dayOfWeek) {
@@ -69,7 +71,7 @@ public class WeekWorkingHours implements Serializable {
         for (int dayOfWeek : DateTimeConstants.getDaysOfWeek()) {
             String nameOfDay = dayOfWeekToStringConvertor.dayOfWeekToString(dayOfWeek);
             WorkingHours workingHoursOfDay = workingHoursForDaysOfWeek.get(dayOfWeek);
-            String line = nameOfDay + ":  " + workingHoursOfDay;
+            String line = nameOfDay + SEPARATOR_BETWEEN_DAY_AND_WORKING_HOURS + workingHoursOfDay;
             lines.add(line);
         }
         return StringsCombiner.combine(lines);

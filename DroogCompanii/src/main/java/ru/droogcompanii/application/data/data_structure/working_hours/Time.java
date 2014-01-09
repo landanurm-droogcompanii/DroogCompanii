@@ -64,4 +64,8 @@ public class Time implements Serializable {
     public boolean after(Time time) {
         return toMinutesOfDay() > time.toMinutesOfDay();
     }
+
+    public boolean within(Time fromIncluded, Time toIncluded) {
+        return (!fromIncluded.after(this)) && (!this.after(toIncluded));
+    }
 }

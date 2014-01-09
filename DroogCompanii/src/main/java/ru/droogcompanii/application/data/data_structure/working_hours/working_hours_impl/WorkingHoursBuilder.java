@@ -13,13 +13,17 @@ public class WorkingHoursBuilder {
 
     public WorkingHours onBusinessDay(Time from, Time to) {
         if (dayAndNightWorkingHours(from, to)) {
-            return new DayAndNightWorkingHours(MESSAGE_FOR_DAY_AND_NIGHT_WORKING_HOURS);
+            return buildDayAndNightWorkingHours();
         }
         return new WorkingHoursOnBusinessDay(from, to);
     }
 
     private boolean dayAndNightWorkingHours(Time from, Time to) {
         return from.equals(TIME_00_00) && to.equals(TIME_00_00);
+    }
+
+    public WorkingHours buildDayAndNightWorkingHours() {
+        return new DayAndNightWorkingHours(MESSAGE_FOR_DAY_AND_NIGHT_WORKING_HOURS);
     }
 
     public WorkingHours onHoliday(String messageToShowInHoliday) {

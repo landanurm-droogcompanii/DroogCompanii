@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
     private InputStream stringToInputStream(String str) {
         try {
             return new ByteArrayInputStream(str.getBytes("UTF-8"));
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
             return new ByteArrayInputStream(str.getBytes());
         }
     }
@@ -173,9 +174,9 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         DroogCompaniiXmlParser testedXmlParser = new DroogCompaniiXmlParser();
         DroogCompaniiXmlParser.ParsedData parsedData = testedXmlParser.parse(xml);
 
-        assertTrue(parsedData.partnerCategories.size() == 1);
-        assertTrue(parsedData.partners.size() == 1);
-        assertTrue(parsedData.partnerPoints.size() == 1);
+        assertEquals(1, numberOf(parsedData.partnerCategories));
+        assertEquals(1, numberOf(parsedData.partners));
+        assertEquals(1, numberOf(parsedData.partnerPoints));
 
         parsedPartnerCategory = parsedData.partnerCategories.get(0);
         parsedPartner = parsedData.partners.get(0);
@@ -184,6 +185,10 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         assertParsedPartnerCategoryIsCorrect();
         assertParsedPartnerIsCorrect();
         assertParsedPartnerPointIsCorrect();
+    }
+
+    private static <T> int numberOf(List<T> elements) {
+        return elements.size();
     }
 
     private void assertParsedPartnerCategoryIsCorrect() {

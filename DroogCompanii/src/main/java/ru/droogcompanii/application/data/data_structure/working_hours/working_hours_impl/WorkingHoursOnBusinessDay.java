@@ -8,7 +8,9 @@ import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHou
 /**
  * Created by Leonid on 19.12.13.
  */
-class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
+public class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
+    public static final String SEPARATOR_BETWEEN_TIMES = "-";
+
     private final Time from;
     private final Time to;
 
@@ -19,7 +21,7 @@ class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
 
     @Override
     public boolean includes(Time time) {
-        return (!from.after(time)) && (!to.before(time));
+        return time.within(from, to);
     }
 
     @Override
@@ -45,6 +47,6 @@ class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
 
     @Override
     public String toString() {
-        return from + "-" + to;
+        return from + SEPARATOR_BETWEEN_TIMES + to;
     }
 }
