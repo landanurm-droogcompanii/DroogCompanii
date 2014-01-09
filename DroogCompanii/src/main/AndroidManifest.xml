@@ -19,7 +19,6 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
@@ -27,33 +26,31 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
-            android:name=".activity.data_downloader_activity.DataDownloaderActivity"
+            android:name="ru.droogcompanii.application.activity.data_downloader_activity.DataDownloaderActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".activity.partner_category_list_activity.PartnerCategoryListActivity"
+            android:name="ru.droogcompanii.application.activity.partner_category_list_activity.PartnerCategoryListActivity"
             android:label="@string/app_name" >
         </activity>
-
         <activity
-            android:name=".activity.partner_list_activity.PartnerListActivity"
+            android:name="ru.droogcompanii.application.activity.partner_list_activity.PartnerListActivity"
             android:label="@string/app_name" >
         </activity>
-
         <activity
-            android:name=".activity.partner_info_activity.PartnerInfoActivity"
+            android:name="ru.droogcompanii.application.activity.partner_info_activity.PartnerInfoActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="ru.droogcompanii.application.activities.partner_activity.PartnerInfoActivity" />
@@ -61,9 +58,8 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
         <activity
-            android:name=".activity.partner_point_info_activity.PartnerPointInfoActivity"
+            android:name="ru.droogcompanii.application.activity.partner_point_info_activity.PartnerPointInfoActivity"
             android:label="@string/app_name" >
         </activity>
 
@@ -74,6 +70,10 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_v2_api_key" />
 
+        <activity
+            android:name="ru.droogcompanii.application.MainActivity2"
+            android:label="@string/title_activity_main_activity2" >
+        </activity>
     </application>
 
 </manifest>
