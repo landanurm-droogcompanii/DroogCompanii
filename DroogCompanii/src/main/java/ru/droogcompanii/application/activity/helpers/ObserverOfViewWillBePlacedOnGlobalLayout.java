@@ -18,13 +18,13 @@ public class ObserverOfViewWillBePlacedOnGlobalLayout {
             return;
         }
         viewTreeObserver.addOnGlobalLayoutListener(
-            new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    removeOnGlobalLayoutListener(view, this);
-                    runnable.run();
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        removeOnGlobalLayoutListener(view, this);
+                        runnable.run();
+                    }
                 }
-            }
         );
     }
 

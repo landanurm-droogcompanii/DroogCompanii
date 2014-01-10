@@ -12,7 +12,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.activity.helpers.task.Task;
 import ru.droogcompanii.application.data.DataUpdater;
 import ru.droogcompanii.application.util.DataUrlProvider;
-import ru.droogcompanii.application.util.LogTagProvider;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 26.12.13.
@@ -65,7 +65,7 @@ public class DataDownloaderTask extends Task {
     private void processExceptionDuringUpdate(Exception e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
         for (StackTraceElement each : stackTrace) {
-            Log.d(LogTagProvider.get(), each.toString());
+            LogUtils.debug(each.toString());
         }
     }
 }

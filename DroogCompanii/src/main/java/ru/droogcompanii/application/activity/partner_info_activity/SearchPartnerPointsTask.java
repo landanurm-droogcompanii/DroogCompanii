@@ -11,7 +11,7 @@ import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 /**
  * Created by ls on 24.12.13.
  */
-class SearchPartnerPointsTask extends AsyncTask<String, Void, VisibilityOfMarkers> {
+public class SearchPartnerPointsTask extends AsyncTask<String, Void, VisibilityOfMarkers> {
 
     public static interface OnTaskIsDoneListener {
         void onTaskIsDone();

@@ -1,38 +1,225 @@
 package ru.droogcompanii.application.activity_2.fragments.partner_category_map_fragment;
 
+import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.activity.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.activity.partner_info_activity.latlng_bounds_calculator.LatLngBoundsCalculator;
+import ru.droogcompanii.application.data.data_structure.Partner;
+import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
+import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.LogUtils;
+import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
  * Created by ls on 10.01.14.
  */
-public class PartnerCategoryMapFragment extends android.support.v4.app.Fragment {
+public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements GoogleMap.OnInfoWindowClickListener {
 
-    private GoogleMap map;
+    public static interface OnPartnerPointInfoWindowClickListener {
+        void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);
+    }
+
+
+    private List<PartnerPoint> partnerPoints;
+    private List<Marker> markers;
+    private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
+
+
+    public static PartnerCategoryMapFragment newInstance(PartnerCategory partnerCategory) {
+        Bundle args = new Bundle();
+        args.putSerializable(Keys.partnerCategory, partnerCategory);
+        PartnerCategoryMapFragment fragment = new PartnerCategoryMapFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_partner_category_map, container, false);
+    public void onActivityCreated(final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        onPartnerPointInfoWindowClickListener = getOnPartnerPointInfoWindowClickListener();
+
+        markers = new ArrayList<Marker>();
+        getGoogleMap().setOnInfoWindowClickListener(this);
+
+        new AsyncTask<Void,Void,Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                preparePartnerPoints(savedInstanceState);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                showPartnerPoints();
+            }
+        }.execute();
     }
 
-    private GoogleMap getGoogleMap() {
-        android.support.v4.app.FragmentActivity activity = getActivity();
-        if ((map == null) && (activity != null) && (activity.getSupportFragmentManager() != null)) {
-            android.support.v4.app.FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.mapView);
-            if (mapFragment != null) {
-                map = mapFragment.getMap();
+    private OnPartnerPointInfoWindowClickListener getOnPartnerPointInfoWindowClickListener() {
+        Activity activity = getActivity();
+        try {
+            return (OnPartnerPointInfoWindowClickListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(
+                activity.toString() + " must implement " + OnPartnerPointInfoWindowClickListener.class.getName()
+            );
+        }
+    }
+
+    private void preparePartnerPoints(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            preparePartnerPoints();
+        } else {
+            restoreInstanceState(savedInstanceState);
+        }
+    }
+
+    private void preparePartnerPoints() {
+        Bundle args = getArguments();
+        PartnerCategory partnerCategory = (PartnerCategory) args.getSerializable(Keys.partnerCategory);
+        if (partnerCategory != null) {
+            partnerPoints = partnerPointsOf(partnerCategory);
+        } else {
+            partnerPoints = withoutPartnerPoints();
+        }
+    }
+
+    private List<PartnerPoint> withoutPartnerPoints() {
+        return new ArrayList<PartnerPoint>();
+    }
+
+    private List<PartnerPoint> partnerPointsOf(PartnerCategory partnerCategory) {
+        PartnersReader partnersReader = new PartnersReader(getActivity());
+        List<Partner> partners = partnersReader.getPartners(partnerCategory);
+        PartnerPointsReader partnerPointsReader = new PartnerPointsReader(getActivity());
+        List<PartnerPoint> result = withoutPartnerPoints();
+        for (Partner partner : partners) {
+            result.addAll(partnerPointsReader.getPartnerPointsOf(partner));
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void restoreInstanceState(Bundle savedInstanceState) {
+        partnerPoints = (List<PartnerPoint>) savedInstanceState.getSerializable(Keys.partnerPoints);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
+    }
+
+    public void update(PartnerCategory partnerCategory) {
+        partnerPoints = partnerPointsOf(partnerCategory);
+        showPartnerPoints();
+    }
+
+    private void showPartnerPoints() {
+        markers.clear();
+        int numberOfMarkers = 0;
+        for (PartnerPoint partnerPoint : partnerPoints) {
+            Marker marker = getGoogleMap().addMarker(prepareMarkerOptions(partnerPoint));
+            markers.add(marker);
+            ++numberOfMarkers;
+        }
+        LogUtils.debug("Number of markers: " + numberOfMarkers);
+        fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout();
+    }
+
+    private MarkerOptions prepareMarkerOptions(PartnerPoint partnerPoint) {
+        LatLng position = new LatLng(partnerPoint.latitude, partnerPoint.longitude);
+        MarkerOptions markerOptions = new MarkerOptions().title(partnerPoint.title).position(position);
+        includeSnippet(markerOptions, partnerPoint);
+        return markerOptions;
+    }
+
+    private void includeSnippet(MarkerOptions markerOptions, PartnerPoint partnerPoint) {
+        if (partnerPointHasAddress(partnerPoint)) {
+            markerOptions.snippet(partnerPoint.address);
+        } else if (partnerPointHasPhone(partnerPoint)) {
+            String phones = StringsCombiner.combine(partnerPoint.phones, ", ");
+            markerOptions.snippet(phones);
+        }
+    }
+
+    private boolean partnerPointHasAddress(PartnerPoint partnerPoint) {
+        String address = partnerPoint.address.trim();
+        return !address.isEmpty();
+    }
+
+    private boolean partnerPointHasPhone(PartnerPoint partnerPoint) {
+        int numberOfPhones = partnerPoint.phones.size();
+        return numberOfPhones > 0;
+    }
+
+    private void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
+        ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
+            @Override
+            public void run() {
+                fitVisibleMarkersOnScreen();
+            }
+        });
+    }
+
+    private View getMapView() {
+        return getSupportMapFragment().getView();
+    }
+
+    private void fitVisibleMarkersOnScreen() {
+        if (noVisibleMarkers()) {
+            return;
+        }
+        LatLngBounds bounds = LatLngBoundsCalculator.calculateBoundsOfVisibleMarkers(markers);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, getMapPadding());
+        getGoogleMap().moveCamera(cameraUpdate);
+    }
+
+    private boolean noVisibleMarkers() {
+        for (Marker each : markers) {
+            if (each.isVisible()) {
+                return false;
             }
         }
-        return map;
+        return true;
     }
 
+    private int getMapPadding() {
+        return getResources().getInteger(R.integer.map_markers_padding);
+    }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        PartnerPoint partnerPoint = partnerPointFromMarker(marker);
+        onPartnerPointInfoWindowClickListener.onPartnerPointInfoWindowClick(partnerPoint);
+    }
+
+    private PartnerPoint partnerPointFromMarker(Marker marker) {
+        int index = markers.indexOf(marker);
+        return partnerPoints.get(index);
+    }
 }

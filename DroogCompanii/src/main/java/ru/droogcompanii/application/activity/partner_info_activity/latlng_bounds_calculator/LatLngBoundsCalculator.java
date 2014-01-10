@@ -4,6 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.Collection;
 import java.util.List;
 
 public class LatLngBoundsCalculator {
@@ -19,19 +20,19 @@ public class LatLngBoundsCalculator {
     private static final double halfOfMinLatitudeLength = minLatitudeLength / 2.0;
     private static final double halfOfMinLongitudeLength = minLongitudeLength / 2.0;
 
+    private final Collection<Marker> markers;
     private final LatLngBounds.Builder builder;
-    private final List<Marker> markers;
     private final MinMax latitudeMinMax;
     private final MinMax longitudeMinMax;
 
     private LatLng center;
 
 
-    public static LatLngBounds calculateBoundsOfVisibleMarkers(List<Marker> markers) {
+    public static LatLngBounds calculateBoundsOfVisibleMarkers(Collection<Marker> markers) {
         return new LatLngBoundsCalculator(markers).calculateBoundsOfVisibleMarkers();
     }
 
-    private LatLngBoundsCalculator(List<Marker> markers) {
+    private LatLngBoundsCalculator(Collection<Marker> markers) {
         this.markers = markers;
         this.latitudeMinMax = new MinMax();
         this.longitudeMinMax = new MinMax();
