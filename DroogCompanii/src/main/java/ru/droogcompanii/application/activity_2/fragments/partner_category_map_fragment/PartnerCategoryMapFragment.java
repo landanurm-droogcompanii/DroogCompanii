@@ -1,9 +1,7 @@
 package ru.droogcompanii.application.activity_2.fragments.partner_category_map_fragment;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -16,8 +14,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
@@ -29,7 +25,6 @@ import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
@@ -41,7 +36,7 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);
     }
 
-
+    private boolean markersAreDisplayed;
     private List<PartnerPoint> partnerPoints;
     private List<Marker> markers;
     private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
@@ -64,19 +59,12 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         markers = new ArrayList<Marker>();
         getGoogleMap().setOnInfoWindowClickListener(this);
 
-        new AsyncTask<Void,Void,Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                preparePartnerPoints(savedInstanceState);
-                return null;
-            }
+        if (partnerPoints == null) {
+            preparePartnerPoints(savedInstanceState);
+        }
+        showPartnerPoints();
 
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-                showPartnerPoints();
-            }
-        }.execute();
+        markersAreDisplayed = true;
     }
 
     private OnPartnerPointInfoWindowClickListener getOnPartnerPointInfoWindowClickListener() {
@@ -102,7 +90,7 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         Bundle args = getArguments();
         PartnerCategory partnerCategory = (PartnerCategory) args.getSerializable(Keys.partnerCategory);
         if (partnerCategory != null) {
-            partnerPoints = partnerPointsOf(partnerCategory);
+            partnerPoints = partnerPointsFrom(partnerCategory);
         } else {
             partnerPoints = withoutPartnerPoints();
         }
@@ -112,7 +100,7 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         return new ArrayList<PartnerPoint>();
     }
 
-    private List<PartnerPoint> partnerPointsOf(PartnerCategory partnerCategory) {
+    private List<PartnerPoint> partnerPointsFrom(PartnerCategory partnerCategory) {
         PartnersReader partnersReader = new PartnersReader(getActivity());
         List<Partner> partners = partnersReader.getPartners(partnerCategory);
         PartnerPointsReader partnerPointsReader = new PartnerPointsReader(getActivity());
@@ -134,36 +122,38 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
     }
 
-    public void update(PartnerCategory partnerCategory) {
-        partnerPoints = partnerPointsOf(partnerCategory);
-        showPartnerPoints();
+    public void setPartnerCategory(PartnerCategory partnerCategory) {
+        partnerPoints = partnerPointsFrom(partnerCategory);
+        if (markersAreDisplayed) {
+            showPartnerPoints();
+        }
     }
 
     private void showPartnerPoints() {
         markers.clear();
-        int numberOfMarkers = 0;
         for (PartnerPoint partnerPoint : partnerPoints) {
-            Marker marker = getGoogleMap().addMarker(prepareMarkerOptions(partnerPoint));
+            MarkerOptions markerOptions = prepareMarkerOptions(partnerPoint);
+            Marker marker = getGoogleMap().addMarker(markerOptions);
             markers.add(marker);
-            ++numberOfMarkers;
         }
-        LogUtils.debug("Number of markers: " + numberOfMarkers);
         fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout();
     }
 
     private MarkerOptions prepareMarkerOptions(PartnerPoint partnerPoint) {
         LatLng position = new LatLng(partnerPoint.latitude, partnerPoint.longitude);
-        MarkerOptions markerOptions = new MarkerOptions().title(partnerPoint.title).position(position);
-        includeSnippet(markerOptions, partnerPoint);
-        return markerOptions;
+        return new MarkerOptions()
+                .title(partnerPoint.title)
+                .position(position)
+                .snippet(prepareSnippet(partnerPoint));
     }
 
-    private void includeSnippet(MarkerOptions markerOptions, PartnerPoint partnerPoint) {
+    private String prepareSnippet(PartnerPoint partnerPoint) {
         if (partnerPointHasAddress(partnerPoint)) {
-            markerOptions.snippet(partnerPoint.address);
+            return partnerPoint.address;
         } else if (partnerPointHasPhone(partnerPoint)) {
-            String phones = StringsCombiner.combine(partnerPoint.phones, ", ");
-            markerOptions.snippet(phones);
+            return StringsCombiner.combine(partnerPoint.phones, ", ");
+        } else {
+            return "";
         }
     }
 
@@ -214,11 +204,11 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        PartnerPoint partnerPoint = partnerPointFromMarker(marker);
+        PartnerPoint partnerPoint = partnerPointOf(marker);
         onPartnerPointInfoWindowClickListener.onPartnerPointInfoWindowClick(partnerPoint);
     }
 
-    private PartnerPoint partnerPointFromMarker(Marker marker) {
+    private PartnerPoint partnerPointOf(Marker marker) {
         int index = markers.indexOf(marker);
         return partnerPoints.get(index);
     }

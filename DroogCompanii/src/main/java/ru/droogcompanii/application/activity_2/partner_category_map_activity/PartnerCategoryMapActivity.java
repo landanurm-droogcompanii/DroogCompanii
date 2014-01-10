@@ -20,16 +20,14 @@ public class PartnerCategoryMapActivity extends android.support.v4.app.FragmentA
         setContentView(R.layout.activity_partner_category_map);
         if (savedInstanceState == null) {
             PartnerCategory partnerCategory = (PartnerCategory) getIntent().getSerializableExtra(Keys.partnerCategory);
-            createPartnerCategoryMapFragment(partnerCategory);
+            preparePartnerCategoryMapFragment(partnerCategory);
         }
     }
 
-    private void createPartnerCategoryMapFragment(PartnerCategory partnerCategory) {
-        android.support.v4.app.Fragment fragment = PartnerCategoryMapFragment.newInstance(partnerCategory);
+    private void preparePartnerCategoryMapFragment(PartnerCategory partnerCategory) {
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.rootLayout, fragment);
-        fragmentTransaction.commit();
+        PartnerCategoryMapFragment fragment = (PartnerCategoryMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+        fragment.setPartnerCategory(partnerCategory);
     }
 
     @Override
