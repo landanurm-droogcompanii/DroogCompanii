@@ -5,16 +5,19 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.activity_2.partner_category_list_activity.PartnerCategoryListActivity2;
 import ru.droogcompanii.application.activity.helpers.task.TaskActivityMainFragment;
-import ru.droogcompanii.application.activity.partner_category_list_activity.PartnerCategoryListActivity;
 
 /**
  * Created by ls on 26.12.13.
  */
 public class DataDownloaderActivity extends ActionBarActivity implements TaskActivityMainFragment.Callbacks {
 
+    private static final Class<?> ACTIVITY_TO_START = PartnerCategoryListActivity2.class;
     private static final int REQUEST_CODE = 23;
+
     private boolean screenRotated;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class DataDownloaderActivity extends ActionBarActivity implements TaskAct
 
     @Override
     public void onTaskFinished() {
-        Intent intent = new Intent(this, PartnerCategoryListActivity.class);
+        Intent intent = new Intent(this, ACTIVITY_TO_START);
         startActivityForResult(intent, REQUEST_CODE);
     }
 

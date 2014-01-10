@@ -4,4 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity2"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+
+
+    <fragment android:name="ru.droogcompanii.application.activity_2.fragments.partner_category_list_fragment.PartnerCategoryListFragment"
+        android:id="@+id/partnerCategoryList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

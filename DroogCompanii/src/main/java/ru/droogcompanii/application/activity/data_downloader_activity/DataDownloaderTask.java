@@ -55,14 +55,14 @@ public class DataDownloaderTask extends Task {
         try {
             dataUpdater.update();
         } catch (Exception e) {
-            processUpdatingException(e);
+            processExceptionDuringUpdate(e);
         } finally {
             wakeLock.release();
         }
         return null;
     }
 
-    private void processUpdatingException(Exception e) {
+    private void processExceptionDuringUpdate(Exception e) {
         StackTraceElement[] stackTrace = e.getStackTrace();
         for (StackTraceElement each : stackTrace) {
             Log.d(LogTagProvider.get(), each.toString());

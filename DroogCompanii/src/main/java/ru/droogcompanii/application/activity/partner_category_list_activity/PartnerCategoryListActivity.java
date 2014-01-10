@@ -21,12 +21,7 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState == null) {
-            adapter = PartnerCategoryListAdapter.newInstance(this);
-        } else {
-            Serializable state = savedInstanceState.getSerializable(Keys.partnerCategoryListAdapterState);
-            adapter = PartnerCategoryListAdapter.newInstance(this, state);
-        }
+        adapter = PartnerCategoryListAdapter.newInstance(this, savedInstanceState);
 
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
@@ -35,7 +30,7 @@ public class PartnerCategoryListActivity extends ActionBarListActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partnerCategoryListAdapterState, adapter.getState());
+        adapter.saveStateInto(outState);
     }
 
     @Override
