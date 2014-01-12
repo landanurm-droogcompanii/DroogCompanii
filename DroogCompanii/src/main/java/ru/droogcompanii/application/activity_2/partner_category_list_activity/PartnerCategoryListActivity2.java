@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.activity_2.fragments.partner_category_list_fragment.PartnerCategoryListFragment;
-import ru.droogcompanii.application.activity.partner_list_activity.PartnerListActivity;
-import ru.droogcompanii.application.activity_2.fragments.partner_category_map_fragment.PartnerCategoryMapFragment;
 import ru.droogcompanii.application.activity_2.partner_category_map_activity.PartnerCategoryMapActivity;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
@@ -17,7 +15,7 @@ public class PartnerCategoryListActivity2 extends ActionBarActivity implements P
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_2);
+        setContentView(R.layout.activity2_partner_category_list);
     }
 
     @Override

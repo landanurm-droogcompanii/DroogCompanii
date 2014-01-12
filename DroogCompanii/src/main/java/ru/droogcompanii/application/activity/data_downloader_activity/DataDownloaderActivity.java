@@ -24,7 +24,7 @@ public class DataDownloaderActivity extends ActionBarActivity implements TaskAct
         screenRotated = (savedInstanceState != null);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.data_downloader_activity);
+        setContentView(R.layout.activity_data_downloader);
     }
 
     public boolean screenRotated() {

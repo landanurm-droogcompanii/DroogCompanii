@@ -23,9 +23,8 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment {
     }
 
     protected GoogleMap getGoogleMap() {
-        android.support.v4.app.FragmentActivity activity = getActivity();
-        if ((map == null) && (activity != null) && (activity.getSupportFragmentManager() != null)) {
-            SupportMapFragment mapFragment = getSupportMapFragment();
+        if ((map == null) && (getActivity() != null) && (getActivity().getSupportFragmentManager() != null)) {
+            SupportMapFragment mapFragment = getNestedSupportMapFragment();
             if (mapFragment != null) {
                 map = mapFragment.getMap();
             }
@@ -33,8 +32,12 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment {
         return map;
     }
 
-    protected SupportMapFragment getSupportMapFragment() {
+    private SupportMapFragment getNestedSupportMapFragment() {
         return (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
+    }
+
+    protected View getMapView() {
+        return getNestedSupportMapFragment().getView();
     }
 
 }

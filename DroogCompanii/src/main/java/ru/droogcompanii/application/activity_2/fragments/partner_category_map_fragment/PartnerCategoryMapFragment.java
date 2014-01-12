@@ -2,12 +2,10 @@ package ru.droogcompanii.application.activity_2.fragments.partner_category_map_f
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -19,13 +17,9 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.activity.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 import ru.droogcompanii.application.activity.partner_info_activity.latlng_bounds_calculator.LatLngBoundsCalculator;
-import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
  * Created by ls on 10.01.14.
@@ -36,79 +30,32 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);
     }
 
-    private boolean markersAreDisplayed;
     private List<PartnerPoint> partnerPoints;
     private List<Marker> markers;
     private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
 
 
-    public static PartnerCategoryMapFragment newInstance(PartnerCategory partnerCategory) {
-        Bundle args = new Bundle();
-        args.putSerializable(Keys.partnerCategory, partnerCategory);
-        PartnerCategoryMapFragment fragment = new PartnerCategoryMapFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public PartnerCategoryMapFragment() {
+        super();
+        partnerPoints = new ArrayList<PartnerPoint>();
     }
 
     @Override
-    public void onActivityCreated(final Bundle savedInstanceState) {
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onPartnerPointInfoWindowClickListener = (OnPartnerPointInfoWindowClickListener) activity;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        onPartnerPointInfoWindowClickListener = getOnPartnerPointInfoWindowClickListener();
-
-        markers = new ArrayList<Marker>();
         getGoogleMap().setOnInfoWindowClickListener(this);
 
-        if (partnerPoints == null) {
-            preparePartnerPoints(savedInstanceState);
-        }
-        showPartnerPoints();
-
-        markersAreDisplayed = true;
-    }
-
-    private OnPartnerPointInfoWindowClickListener getOnPartnerPointInfoWindowClickListener() {
-        Activity activity = getActivity();
-        try {
-            return (OnPartnerPointInfoWindowClickListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(
-                activity.toString() + " must implement " + OnPartnerPointInfoWindowClickListener.class.getName()
-            );
-        }
-    }
-
-    private void preparePartnerPoints(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            preparePartnerPoints();
-        } else {
+        if (savedInstanceState != null) {
             restoreInstanceState(savedInstanceState);
         }
-    }
-
-    private void preparePartnerPoints() {
-        Bundle args = getArguments();
-        PartnerCategory partnerCategory = (PartnerCategory) args.getSerializable(Keys.partnerCategory);
-        if (partnerCategory != null) {
-            partnerPoints = partnerPointsFrom(partnerCategory);
-        } else {
-            partnerPoints = withoutPartnerPoints();
-        }
-    }
-
-    private List<PartnerPoint> withoutPartnerPoints() {
-        return new ArrayList<PartnerPoint>();
-    }
-
-    private List<PartnerPoint> partnerPointsFrom(PartnerCategory partnerCategory) {
-        PartnersReader partnersReader = new PartnersReader(getActivity());
-        List<Partner> partners = partnersReader.getPartners(partnerCategory);
-        PartnerPointsReader partnerPointsReader = new PartnerPointsReader(getActivity());
-        List<PartnerPoint> result = withoutPartnerPoints();
-        for (Partner partner : partners) {
-            result.addAll(partnerPointsReader.getPartnerPointsOf(partner));
-        }
-        return result;
+        updateMap();
     }
 
     @SuppressWarnings("unchecked")
@@ -122,49 +69,31 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
         outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
     }
 
-    public void setPartnerCategory(PartnerCategory partnerCategory) {
-        partnerPoints = partnerPointsFrom(partnerCategory);
-        if (markersAreDisplayed) {
-            showPartnerPoints();
-        }
+    public void update(PartnerCategory partnerCategory) {
+        setPartnerCategory(partnerCategory);
+        updateMap();
     }
 
-    private void showPartnerPoints() {
-        markers.clear();
-        for (PartnerPoint partnerPoint : partnerPoints) {
-            MarkerOptions markerOptions = prepareMarkerOptions(partnerPoint);
-            Marker marker = getGoogleMap().addMarker(markerOptions);
-            markers.add(marker);
-        }
+    public void setPartnerCategory(PartnerCategory partnerCategory) {
+        PartnerPointsProvider partnerPointsProvider = new PartnerPointsProvider(getActivity());
+        partnerPoints = partnerPointsProvider.getPartnerPointsOf(partnerCategory);
+    }
+
+    private void updateMap() {
+        getGoogleMap().clear();
+        updateMarkers();
         fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout();
     }
 
-    private MarkerOptions prepareMarkerOptions(PartnerPoint partnerPoint) {
-        LatLng position = new LatLng(partnerPoint.latitude, partnerPoint.longitude);
-        return new MarkerOptions()
-                .title(partnerPoint.title)
-                .position(position)
-                .snippet(prepareSnippet(partnerPoint));
-    }
-
-    private String prepareSnippet(PartnerPoint partnerPoint) {
-        if (partnerPointHasAddress(partnerPoint)) {
-            return partnerPoint.address;
-        } else if (partnerPointHasPhone(partnerPoint)) {
-            return StringsCombiner.combine(partnerPoint.phones, ", ");
-        } else {
-            return "";
+    private void updateMarkers() {
+        markers = new ArrayList<Marker>();
+        MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
+        GoogleMap googleMap = getGoogleMap();
+        for (PartnerPoint partnerPoint : partnerPoints) {
+            MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(partnerPoint);
+            Marker marker = googleMap.addMarker(markerOptions);
+            markers.add(marker);
         }
-    }
-
-    private boolean partnerPointHasAddress(PartnerPoint partnerPoint) {
-        String address = partnerPoint.address.trim();
-        return !address.isEmpty();
-    }
-
-    private boolean partnerPointHasPhone(PartnerPoint partnerPoint) {
-        int numberOfPhones = partnerPoint.phones.size();
-        return numberOfPhones > 0;
     }
 
     private void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
@@ -174,10 +103,6 @@ public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements
                 fitVisibleMarkersOnScreen();
             }
         });
-    }
-
-    private View getMapView() {
-        return getSupportMapFragment().getView();
     }
 
     private void fitVisibleMarkersOnScreen() {

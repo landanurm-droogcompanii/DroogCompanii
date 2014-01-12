@@ -18,7 +18,7 @@ public class ActionBarListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.action_bar_list_activity_layout);
+        setContentView(R.layout.activity_with_list_view);
     }
 
     protected ListView getListView() {

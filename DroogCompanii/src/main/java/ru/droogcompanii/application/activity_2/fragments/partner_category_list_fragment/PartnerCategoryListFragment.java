@@ -21,25 +21,20 @@ public class PartnerCategoryListFragment extends ListFragment implements Adapter
     private PartnerCategoryListAdapter adapter;
     private OnPartnerCategoryClickListener onPartnerCategoryClickListener;
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onPartnerCategoryClickListener = (OnPartnerCategoryClickListener) activity;
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        onPartnerCategoryClickListener = getOnPartnerCategoryClickListener();
 
         adapter = PartnerCategoryListAdapter.newInstance(getActivity(), savedInstanceState);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
-    }
-
-    private OnPartnerCategoryClickListener getOnPartnerCategoryClickListener() {
-        Activity activity = getActivity();
-        try {
-            return (OnPartnerCategoryClickListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(
-                    activity.toString() + " must implement " + OnPartnerCategoryClickListener.class.getName()
-            );
-        }
     }
 
     @Override

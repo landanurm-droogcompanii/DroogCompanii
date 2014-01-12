@@ -17,7 +17,7 @@ public class PartnerCategoryMapActivity extends android.support.v4.app.FragmentA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_partner_category_map);
+        setContentView(R.layout.activity2_partner_category_map);
         if (savedInstanceState == null) {
             PartnerCategory partnerCategory = (PartnerCategory) getIntent().getSerializableExtra(Keys.partnerCategory);
             preparePartnerCategoryMapFragment(partnerCategory);

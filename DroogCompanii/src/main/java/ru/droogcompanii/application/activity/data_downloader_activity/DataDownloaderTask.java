@@ -2,7 +2,6 @@ package ru.droogcompanii.application.activity.data_downloader_activity;
 
 import android.content.Context;
 import android.os.PowerManager;
-import android.util.Log;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -30,7 +29,7 @@ public class DataDownloaderTask extends Task {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {
-                return context.getResources().openRawResource(R.raw.test_data);
+                return context.getResources().openRawResource(R.raw.test_data_2);
             }
         };
     }
