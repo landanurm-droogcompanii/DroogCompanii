@@ -10,7 +10,11 @@ public class Partner implements Serializable {
     public final String title;
     public final String fullTitle;
     public final String saleType;
+
+    // При проверке эквивалентности это поле не учитывается,
+    // т.к. один партнер может входить в несколько категорий.
     public final int categoryId;
+
 
     public Partner(int id,
                    String title,
@@ -39,13 +43,12 @@ public class Partner implements Serializable {
         return (id == other.id) &&
                (title.equals(other.title)) &&
                (fullTitle.equals(other.fullTitle)) &&
-               (saleType.equals(other.saleType)) &&
-               (categoryId == other.categoryId);
+               (saleType.equals(other.saleType));
     }
 
     @Override
     public int hashCode() {
-        return id + title.hashCode() + fullTitle.hashCode() + saleType.hashCode() + categoryId;
+        return id + title.hashCode() + fullTitle.hashCode() + saleType.hashCode();
     }
 
 

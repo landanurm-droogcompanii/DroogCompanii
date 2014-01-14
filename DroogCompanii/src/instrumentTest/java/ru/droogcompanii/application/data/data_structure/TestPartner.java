@@ -45,6 +45,13 @@ public class TestPartner extends TestCase {
     }
 
 
+    public void testEqualsWithDifferentCategoryId() {
+        Object one = new Partner(id, title, fullTitle, saleType, categoryId);
+        Object two = new Partner(id, title, fullTitle, saleType, categoryId + 1);
+        assertEquals(one, two);
+    }
+
+
     public void testNotEqualsWithDifferent_Id() {
         Object one = new Partner(id, title, fullTitle, saleType, categoryId);
         Object two = new Partner(id + 1, title, fullTitle, saleType, categoryId);
@@ -69,13 +76,6 @@ public class TestPartner extends TestCase {
     public void testNotEqualsWithDifferent_SaleType() {
         Object one = new Partner(id, title, fullTitle, saleType, categoryId);
         Object two = new Partner(id, title, fullTitle, saleType + "b", categoryId);
-        assertFalse(one.equals(two));
-    }
-
-
-    public void testNotEqualsWithDifferent_CategoryId() {
-        Object one = new Partner(id, title, fullTitle, saleType, categoryId);
-        Object two = new Partner(id, title, fullTitle, saleType, categoryId + 1);
         assertFalse(one.equals(two));
     }
 

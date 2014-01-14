@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.data.data_structure.Partner;
@@ -178,16 +179,23 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         assertEquals(1, numberOf(parsedData.partners));
         assertEquals(1, numberOf(parsedData.partnerPoints));
 
-        parsedPartnerCategory = parsedData.partnerCategories.get(0);
-        parsedPartner = parsedData.partners.get(0);
-        parsedPartnerPoint = parsedData.partnerPoints.get(0);
+        parsedPartnerCategory = getFirstElementOf(parsedData.partnerCategories);
+        parsedPartner = getFirstElementOf(parsedData.partners);
+        parsedPartnerPoint = getFirstElementOf(parsedData.partnerPoints);
 
         assertParsedPartnerCategoryIsCorrect();
         assertParsedPartnerIsCorrect();
         assertParsedPartnerPointIsCorrect();
     }
 
-    private static <T> int numberOf(List<T> elements) {
+    private static <T> T getFirstElementOf(Collection<T> elements) {
+        for (T element : elements) {
+            return element;
+        }
+        return null;
+    }
+
+    private static <T> int numberOf(Collection<T> elements) {
         return elements.size();
     }
 

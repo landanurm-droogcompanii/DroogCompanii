@@ -7,6 +7,8 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import ru.droogcompanii.application.data.data_structure.Partner;
@@ -23,13 +25,13 @@ import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHou
 public class DroogCompaniiXmlParser {
 
     public static class ParsedData {
-        public final List<PartnerCategory> partnerCategories;
-        public final List<Partner> partners;
-        public final List<PartnerPoint> partnerPoints;
+        public final Collection<PartnerCategory> partnerCategories;
+        public final Collection<Partner> partners;
+        public final Collection<PartnerPoint> partnerPoints;
 
-        public ParsedData(List<PartnerCategory> partnerCategories,
-                          List<Partner> partners,
-                          List<PartnerPoint> partnerPoints) {
+        public ParsedData(Collection<PartnerCategory> partnerCategories,
+                          Collection<Partner> partners,
+                          Collection<PartnerPoint> partnerPoints) {
             this.partnerCategories = partnerCategories;
             this.partners = partners;
             this.partnerPoints = partnerPoints;
@@ -65,17 +67,39 @@ public class DroogCompaniiXmlParser {
     }
 
 
-    private List<PartnerCategory> outPartnerCategories;
-    private List<Partner> outPartners;
-    private List<PartnerPoint> outPartnerPoints;
+    private Collection<PartnerCategory> outPartnerCategories;
+    private Collection<Partner> outPartners;
+    private Collection<PartnerPoint> outPartnerPoints;
 
 
     private ParsedData parse(XmlPullParser parser) throws Exception {
-        outPartnerCategories = new ArrayList<PartnerCategory>();
-        outPartners = new ArrayList<Partner>();
-        outPartnerPoints = new ArrayList<PartnerPoint>();
+        init();
         parsePartnerCategories(parser);
         return new ParsedData(outPartnerCategories, outPartners, outPartnerPoints);
+    }
+
+    private void init() {
+        outPartnerCategories = new ArrayList<PartnerCategory>();
+
+        // Несмотря на то, что возможно дублирование партнеров, входящих в несколько категорий,
+        // необходимо сохранять всех партнеров, так как в каждом из них хранится ссылка
+        // на категорию, а один партнер может одновременно входить в несколько категорий.
+        // Поэтому используется тип данных список (List).
+        // Если не сохранять копии партнера, то мы потеряем ссылки от партнера к категориям,
+        // в которые он входит. В итоге получится, что те партнеры, которые входят в несколько
+        // категорий, после парсинга будут относится только к одной категории.
+        // С другой стороны, если понадобится выводить всех партнеров, нужно будет избежать
+        // дублирования партнера, который входит в несколько категорий.
+        // Поэтому при выводе всех партнеров нужно будет использовать коллекцию типа множество (Set).
+        outPartners = new ArrayList<Partner>();
+
+        // Тип коллекции партнерских точек должен быть Множеством (Set),
+        // для того, чтобы избежать дублирование точек тех партнеров,
+        // которые одновременно входят в несколько категорий.
+        // Сохранив однажды партнерскую точку, мы можем не сохранять больше
+        // ее копии, так как партнерская точка всегда относится к одному и
+        // тому же партнеру, она не может относиться к нескольким партнерам.
+        outPartnerPoints = new HashSet<PartnerPoint>();
     }
 
     private void parsePartnerCategories(XmlPullParser parser) throws Exception {

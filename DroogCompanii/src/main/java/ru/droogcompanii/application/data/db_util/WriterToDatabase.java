@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
@@ -55,7 +56,7 @@ public class WriterToDatabase {
         db.delete(PartnerPointsContract.TABLE_NAME, null, null);
     }
 
-    private void writePartnerCategories(List<PartnerCategory> partnerCategories) {
+    private void writePartnerCategories(Collection<PartnerCategory> partnerCategories) {
         for (PartnerCategory each : partnerCategories) {
             writePartnerCategory(each);
         }
@@ -73,7 +74,7 @@ public class WriterToDatabase {
         insertStatement.executeInsert();
     }
 
-    private void writePartners(List<Partner> partners) {
+    private void writePartners(Collection<Partner> partners) {
         for (Partner each : partners) {
             writePartner(each);
         }
@@ -97,7 +98,7 @@ public class WriterToDatabase {
         insertStatement.executeInsert();
     }
 
-    private void writePartnerPoints(List<PartnerPoint> partnerPoints) {
+    private void writePartnerPoints(Collection<PartnerPoint> partnerPoints) {
         for (PartnerPoint each : partnerPoints) {
             writePartnerPoint(each);
         }

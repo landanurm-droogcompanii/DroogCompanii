@@ -6,6 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.util.SerializationUtils;
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
@@ -17,6 +18,8 @@ import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerP
  */
 public class PartnerPointsReader extends BaseReaderFromDatabase {
 
+    private final Context context;
+
     private int titleColumnIndex;
     private int addressColumnIndex;
     private int longitudeColumnIndex;
@@ -26,24 +29,41 @@ public class PartnerPointsReader extends BaseReaderFromDatabase {
     private int workingHoursColumnIndex;
     private int partnerIdColumnIndex;
 
+
     public PartnerPointsReader(Context context) {
         super(context);
+        this.context = context;
+    }
+
+    public List<PartnerPoint> getPartnerPointsOf(PartnerCategory partnerCategory) {
+        PartnersReader partnersReader = new PartnersReader(context);
+        List<Partner> partners = partnersReader.getPartnersOf(partnerCategory);
+        List<PartnerPoint> result = new ArrayList<PartnerPoint>();
+        for (Partner partner : partners) {
+            result.addAll(getPartnerPointsOf(partner));
+        }
+        return result;
     }
 
     public List<PartnerPoint> getPartnerPointsOf(Partner partner) {
-        initDatabase();
-        List<PartnerPoint> partnerPoints = getPartnerPointsFromDatabase(partner.id);
-        closeDatabase();
-        return partnerPoints;
+        return getPartnerPointsFromDatabase(
+                " WHERE " + PartnerPointsContract.COLUMN_NAME_PARTNER_ID + " = " + partner.id
+        );
     }
 
-    private List<PartnerPoint> getPartnerPointsFromDatabase(int partnerId) {
-        String sql = "SELECT * FROM " + PartnerPointsContract.TABLE_NAME +
-                     " WHERE " + PartnerPointsContract.COLUMN_NAME_PARTNER_ID + " = ? ;";
-        String[] selectionArgs = { String.valueOf(partnerId) };
-        Cursor cursor = db.rawQuery(sql, selectionArgs);
+    public List<PartnerPoint> getAllPartnerPoints() {
+        return getPartnerPointsFromDatabase("");
+    }
+
+    private List<PartnerPoint> getPartnerPointsFromDatabase(String where) {
+        initDatabase();
+
+        String sql = "SELECT * FROM " + PartnerPointsContract.TABLE_NAME + where + " ;";
+        Cursor cursor = db.rawQuery(sql, null);
         List<PartnerPoint> partnerPoints = getPartnerPointsFromCursor(cursor);
         cursor.close();
+
+        closeDatabase();
         return partnerPoints;
     }
 

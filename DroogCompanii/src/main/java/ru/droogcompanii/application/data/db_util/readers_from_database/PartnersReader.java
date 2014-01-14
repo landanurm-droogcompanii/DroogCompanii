@@ -25,7 +25,7 @@ public class PartnersReader extends BaseReaderFromDatabase {
         super(context);
     }
 
-    public List<Partner> getPartners(PartnerCategory category) {
+    public List<Partner> getPartnersOf(PartnerCategory category) {
         initDatabase();
         List<Partner> partners = getPartnersByCategoryIdFromDatabase(category.id);
         closeDatabase();

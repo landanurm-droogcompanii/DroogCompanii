@@ -9,7 +9,7 @@
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="ru.droogcompanii.application.activity.data_downloader_activity.DataDownloaderMainFragment"
+        class="ru.droogcompanii.application.view.activity.data_downloader_activity.DataDownloaderMainFragment"
         tools:layout="@layout/data_downloader_fragment"/>
 
 </FrameLayout>
