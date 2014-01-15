@@ -64,8 +64,23 @@ public class SearchableSortable<T> {
     // В Java версиях 6 и 7 метод Collections.sort(List<T>, Comparator<T>)
     // гарантированно является устойчивым.
     public void sort() {
+        sort(elements);
+    }
+
+    private void sort(List<T> list) {
         for (Comparator<T> comparator : comparators) {
-            Collections.sort(elements, comparator);
+            Collections.sort(list, comparator);
         }
+    }
+
+    public List<T> toList() {
+        List<T> list = new ArrayList<T>();
+        for (T each : elements) {
+            if (meetCriteria(each)) {
+                list.add(each);
+            }
+        }
+        sort(list);
+        return list;
     }
 }

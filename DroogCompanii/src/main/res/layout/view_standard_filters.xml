@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/textSizeOfFilterGroupTitle"
+        android:text="@string/titleOfSortingGroup" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfSortByDistanceCheckBox"
+        android:id="@+id/sortByDistanceCheckBox" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfSortBySaleTypeValueCheckBox"
+        android:id="@+id/sortBySaleTypeValueCheckBox" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeBetweenFilterGroups" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/textSizeOfFilterGroupTitle"
+        android:text="@string/titleOfPaymentMethodGroup"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfCashlessPaymentsCheckBox"
+        android:id="@+id/cashlessPaymentsCheckBox" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeBetweenFilterGroups" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/textSizeOfFilterGroupTitle"
+        android:text="@string/titleOfWorkingHoursGroup"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfWorksNowCheckBox"
+        android:id="@+id/worksNowCheckBox" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sizeBetweenFilterGroups" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/textSizeOfFilterGroupTitle"
+        android:text="@string/titleOfSaleTypeGroup" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfBonusCheckBox"
+        android:id="@+id/bonusCheckBox" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfDiscountCheckBox"
+        android:id="@+id/discountCheckBox" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfCashBackCheckBox"
+        android:id="@+id/cashBackCheckBox" />
+
+</LinearLayout>

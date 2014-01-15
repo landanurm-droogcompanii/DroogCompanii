@@ -3,8 +3,11 @@ package ru.droogcompanii.application.data.data_structure.working_hours;
 import junit.framework.TestCase;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursBuilder;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 
 /**
  * Created by ls on 09.01.14.
@@ -57,6 +60,35 @@ public class TestWeekWorkingHours extends TestCase {
                 }
             }
         });
+    }
+
+    public void testDoesNotIncludeHoliday() {
+        int dayOfWeek = findDayOfWeekOfHoliday();
+        Calendar calendar = prepareCalendar(dayOfWeek, new Time(10, 0));
+        assertFalse(weekWorkingHours.includes(calendar));
+    }
+
+    private int findDayOfWeekOfHoliday() {
+        Map<Integer,WorkingHours> pairs_DayOfWeek_WorkingHours = new HashMap<Integer, WorkingHours>();
+        pairs_DayOfWeek_WorkingHours.put(Calendar.MONDAY, workingHoursForEachDayOfWeek.onMonday);
+        pairs_DayOfWeek_WorkingHours.put(Calendar.TUESDAY, workingHoursForEachDayOfWeek.onTuesday);
+        pairs_DayOfWeek_WorkingHours.put(Calendar.WEDNESDAY, workingHoursForEachDayOfWeek.onWednesday);
+        pairs_DayOfWeek_WorkingHours.put(Calendar.THURSDAY, workingHoursForEachDayOfWeek.onThursday);
+        pairs_DayOfWeek_WorkingHours.put(Calendar.FRIDAY, workingHoursForEachDayOfWeek.onFriday);
+        pairs_DayOfWeek_WorkingHours.put(Calendar.SATURDAY, workingHoursForEachDayOfWeek.onSaturday);
+        pairs_DayOfWeek_WorkingHours.put(Calendar.SUNDAY, workingHoursForEachDayOfWeek.onSunday);
+        for (Map.Entry<Integer,WorkingHours> each : pairs_DayOfWeek_WorkingHours.entrySet()) {
+            int dayOfWeek = each.getKey();
+            WorkingHours workingHours = each.getValue();
+            if (holiday(workingHours)) {
+                return dayOfWeek;
+            }
+        }
+        throw new IllegalStateException("No holidays in tested WeekWorkingHours instance");
+    }
+
+    private boolean holiday(WorkingHours workingHours) {
+        return workingHours instanceof WorkingHoursOnHoliday;
     }
 
     private Calendar prepareCalendar(int dayOfWeek, Time time) {

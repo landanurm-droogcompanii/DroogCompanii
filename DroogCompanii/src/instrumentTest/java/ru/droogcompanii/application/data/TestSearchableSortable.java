@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import junit.framework.TestCase;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -14,19 +15,20 @@ import java.util.List;
  */
 public class TestSearchableSortable extends TestCase {
     private final Integer[] array = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    private final Collection<Integer> collection = Arrays.asList(array);
 
+    private List<Integer> collection;
     private SearchableSortable<Integer> searchableSortable;
     private int index;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        collection = Arrays.asList(array);
         searchableSortable = SearchableSortable.newInstance(collection);
     }
 
 
-    public void testWithoutSearchFilterAndComparator() {
+    public void testForEachWithoutSearchFilterAndComparator() {
         checkForEach(new SearchableSortable.OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
@@ -37,7 +39,7 @@ public class TestSearchableSortable extends TestCase {
     }
 
 
-    public void testWithSearchFilter() {
+    public void testForEachWithSearchFilter() {
         searchableSortable.addSearchFilter(new OnlyEvenNumbersSearchFilter());
         checkForEach(new SearchableSortable.OnEachHandler<Integer>() {
             @Override
@@ -71,9 +73,9 @@ public class TestSearchableSortable extends TestCase {
         assertEquals(array.length, index);
     }
 
-    public void testWithSeveralSearchFilters() {
+    public void testForEachWithSeveralSearchFilters() {
         searchableSortable.addSearchFilter(new OnlyEvenNumbersSearchFilter());
-        final Integer[] numbers = { 1, 3 };
+        final Integer[] numbers = { 2, 8, 120, 133, 1 };
         searchableSortable.addSearchFilter(new OnlyTheseNumbersSearchFilter(numbers));
         checkForEach(new SearchableSortable.OnEachHandler<Integer>() {
             @Override
@@ -108,7 +110,7 @@ public class TestSearchableSortable extends TestCase {
     }
 
 
-    public void testWithComparator() {
+    public void testForEachWithComparator() {
         searchableSortable.addComparator(new ReverseOrderComparator());
         searchableSortable.sort();
         checkForEach(new SearchableSortable.OnEachHandler<Integer>() {
@@ -138,14 +140,16 @@ public class TestSearchableSortable extends TestCase {
         }
     }
 
-    public void testWithSeveralComparators() {
+    public void testForEachWithSeveralComparators() {
         final List<PairOfNumbers> pairs = Arrays.asList(
                 new PairOfNumbers(2, 4),
                 new PairOfNumbers(6, 3),
-                new PairOfNumbers(1, 4)
+                new PairOfNumbers(1, 4),
+                new PairOfNumbers(2, 3)
         );
         final List<PairOfNumbers> expectedPairsAfterSorting = Arrays.asList(
                 new PairOfNumbers(1, 4),
+                new PairOfNumbers(2, 3),
                 new PairOfNumbers(2, 4),
                 new PairOfNumbers(6, 3)
         );
@@ -181,6 +185,84 @@ public class TestSearchableSortable extends TestCase {
                 return pair1.first - pair2.first;
             }
         };
+    }
+
+
+    public void testToListWithoutSearchFilterAndComparator() {
+        assertEquals(collection, searchableSortable.toList());
+    }
+
+    public void testToListWithSearchFilter() {
+        SearchableSortable.SearchFilter<Integer> searchFilter = new OnlyEvenNumbersSearchFilter();
+        searchableSortable.addSearchFilter(searchFilter);
+        Collection<Integer> numbersWhichMeetCriteria = getNumbersWhichMeetCriteria(collection, searchFilter);
+        assertEquals(numbersWhichMeetCriteria, searchableSortable.toList());
+    }
+
+    private Collection<Integer> getNumbersWhichMeetCriteria(Collection<Integer> numbers,
+                                        SearchableSortable.SearchFilter<Integer>... searchFilters) {
+        Collection<Integer> numbersWhichMeetCriteria = new ArrayList<Integer>();
+        for (Integer each : numbers) {
+            if (meetCriteria(each, searchFilters)) {
+                numbersWhichMeetCriteria.add(each);
+            }
+        }
+        return numbersWhichMeetCriteria;
+    }
+
+    private boolean meetCriteria(Integer each, SearchableSortable.SearchFilter<Integer>... searchFilters) {
+        for (SearchableSortable.SearchFilter<Integer> searchFilter : searchFilters) {
+            if (!searchFilter.meetCriteria(each)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public void testToListWithSeveralSearchFilters() {
+        SearchableSortable.SearchFilter<Integer> onlyEvenNumbersSearchFilter = new OnlyEvenNumbersSearchFilter();
+        SearchableSortable.SearchFilter<Integer> onlyTheseNumbersSearchFilter = new OnlyTheseNumbersSearchFilter(2, 4, 6);
+        searchableSortable.addSearchFilter(onlyEvenNumbersSearchFilter);
+        searchableSortable.addSearchFilter(onlyTheseNumbersSearchFilter);
+        Collection<Integer> numbersWhichMeetCriteria = getNumbersWhichMeetCriteria(collection,
+                onlyEvenNumbersSearchFilter, onlyTheseNumbersSearchFilter);
+        assertEquals(numbersWhichMeetCriteria, searchableSortable.toList());
+    }
+
+
+    public void testToListWithComparator() {
+        searchableSortable.addComparator(new ReverseOrderComparator());
+        assertEquals(reversed(collection), searchableSortable.toList());
+    }
+
+    private List<Integer> reversed(List<Integer> list) {
+        List<Integer> reversedList = new ArrayList(list.size());
+        for (int i = list.size() - 1; i >= 0; --i) {
+            reversedList.add(list.get(i));
+        }
+        return reversedList;
+    }
+
+
+    public void testToListWithSeveralComparators() {
+        final List<PairOfNumbers> pairs = Arrays.asList(
+                new PairOfNumbers(2, 4),
+                new PairOfNumbers(6, 3),
+                new PairOfNumbers(1, 4),
+                new PairOfNumbers(2, 3)
+        );
+        final List<PairOfNumbers> expectedPairs = Arrays.asList(
+                new PairOfNumbers(1, 4),
+                new PairOfNumbers(2, 3),
+                new PairOfNumbers(2, 4),
+                new PairOfNumbers(6, 3)
+        );
+        SearchableSortable<PairOfNumbers> searchableSortablePairs = SearchableSortable.newInstance(pairs);
+        searchableSortablePairs.addComparator(createComparatorBySecondComponent());
+        searchableSortablePairs.addComparator(createComparatorByFirstComponent());
+
+        assertEquals(expectedPairs, searchableSortablePairs.toList());
     }
 
 }

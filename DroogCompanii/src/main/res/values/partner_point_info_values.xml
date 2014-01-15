@@ -8,7 +8,7 @@
     <dimen name="partner_point_info_title_size">34sp</dimen>
     <dimen name="partner_point_info_address_size">22sp</dimen>
     <dimen name="working_hours_text_size">18sp</dimen>
-    <dimen name="working_hours_indicator_width">4dp</dimen>
+    <dimen name="working_hours_indicator_side_length">4dp</dimen>
     <color name="opened_indicator_color">@color/green</color>
     <color name="closed_indicator_color">@color/red</color>
     <color name="green">#31B20A</color>

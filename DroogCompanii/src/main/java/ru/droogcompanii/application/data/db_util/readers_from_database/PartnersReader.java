@@ -8,6 +8,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts;
 
 /**
@@ -26,17 +27,17 @@ public class PartnersReader extends BaseReaderFromDatabase {
     }
 
     public List<Partner> getPartnersOf(PartnerCategory category) {
+        String where = " WHERE " +
+                DroogCompaniiContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.id;
         initDatabase();
-        List<Partner> partners = getPartnersByCategoryIdFromDatabase(category.id);
+        List<Partner> partners = getPartners(where);
         closeDatabase();
         return partners;
     }
 
-    private List<Partner> getPartnersByCategoryIdFromDatabase(int categoryId) {
-        String sql = "SELECT * FROM " + DroogCompaniiContracts.PartnersContract.TABLE_NAME +
-                " WHERE " + DroogCompaniiContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = ? ;";
-        String[] selectionArgs = { String.valueOf(categoryId) };
-        Cursor cursor = db.rawQuery(sql, selectionArgs);
+    private List<Partner> getPartners(String where) {
+        String sql = "SELECT * FROM " + DroogCompaniiContracts.PartnersContract.TABLE_NAME + where + " ;";
+        Cursor cursor = db.rawQuery(sql, null);
         List<Partner> partners = getPartnersFromCursor(cursor);
         cursor.close();
         return partners;
@@ -69,5 +70,18 @@ public class PartnersReader extends BaseReaderFromDatabase {
         String saleType = cursor.getString(saleTypeColumnIndex);
         int categoryId = cursor.getInt(categoryIdColumnIndex);
         return new Partner(id, title, fullTitle, saleType, categoryId);
+    }
+
+    public Partner getPartnerOf(PartnerPoint partnerPoint) {
+        String where = " WHERE " +
+                DroogCompaniiContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerPoint.partnerId;
+        initDatabase();
+        List<Partner> partner = getPartners(where);
+        closeDatabase();
+        if (partner.isEmpty()) {
+            throw new IllegalArgumentException("No partners for partner point: " + partnerPoint);
+        } else {
+            return partner.get(0);
+        }
     }
 }

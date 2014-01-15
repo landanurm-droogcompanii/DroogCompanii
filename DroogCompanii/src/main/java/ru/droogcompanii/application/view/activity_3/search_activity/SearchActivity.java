@@ -18,7 +18,6 @@ import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPo
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.search_result_activity.SearchResultActivity;
-import ru.droogcompanii.application.view.activity_3.search_result_map_activity.SearchResultMapActivity;
 import ru.droogcompanii.application.view.fragment.partner_category_list_fragment.PartnerCategoryListFragment;
 
 /**
@@ -27,8 +26,8 @@ import ru.droogcompanii.application.view.fragment.partner_category_list_fragment
 public class SearchActivity extends android.support.v4.app.FragmentActivity
                 implements PartnerCategoryListFragment.OnPartnerCategoryClickListener {
 
-    private View buttonSearchByQuery;
-    private EditText editTextSearchQueryInput;
+    private View searchByQueryButton;
+    private EditText searchQueryInputEditText;
 
 
     @Override
@@ -36,10 +35,10 @@ public class SearchActivity extends android.support.v4.app.FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_3_search);
 
-        buttonSearchByQuery = findViewById(R.id.buttonSearchByQuery);
-        editTextSearchQueryInput = (EditText) findViewById(R.id.editTextSearchQueryInput);
+        searchByQueryButton = findViewById(R.id.searchByQueryButton);
+        searchQueryInputEditText = (EditText) findViewById(R.id.searchQueryInputEditText);
 
-        buttonSearchByQuery.setOnClickListener(new View.OnClickListener() {
+        searchByQueryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onSearch();
@@ -48,9 +47,9 @@ public class SearchActivity extends android.support.v4.app.FragmentActivity
     }
 
     private void onSearch() {
-        String searchQuery = editTextSearchQueryInput.getText().toString().trim();
+        String searchQuery = searchQueryInputEditText.getText().toString().trim();
         if (searchQuery.isEmpty()) {
-            editTextSearchQueryInput.requestFocus();
+            searchQueryInputEditText.requestFocus();
         } else {
             onSearch(searchQuery);
         }

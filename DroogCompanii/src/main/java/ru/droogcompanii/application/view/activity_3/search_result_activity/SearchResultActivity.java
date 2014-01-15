@@ -16,6 +16,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchResultProvider;
 import ru.droogcompanii.application.view.activity_3.search_result_map_activity.SearchResultMapActivity;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
@@ -41,7 +42,7 @@ public class SearchResultActivity extends Activity implements AdapterView.OnItem
 
         adapter = new PartnerListAdapter(this, partners);
 
-        ListView listView = (ListView) findViewById(R.id.listView);
+        ListView listView = (ListView) findViewById(R.id.partnerPointListView);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
@@ -74,7 +75,12 @@ public class SearchResultActivity extends Activity implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Partner partner = adapter.getItem(position);
-        Serializable partnerPointsProvider = new PartnerPointsFromPartnerProvider(partner, searchResultProvider);
+        List<PartnerPoint> partnerPoints = searchResultProvider.getPartnerPoints(this, partner);
+        PartnerActivity.start(this, partner, partnerPoints);
+    }
+
+    private void onNeedToShowSearchResultOnMap() {
+        Serializable partnerPointsProvider = new AllPartnerPointsFromSearchResultProvider(searchResultProvider);
         showResultOnMap(partnerPointsProvider);
     }
 
@@ -82,26 +88,6 @@ public class SearchResultActivity extends Activity implements AdapterView.OnItem
         Intent intent = new Intent(this, SearchResultMapActivity.class);
         intent.putExtra(Keys.partnerPointsProvider, partnerPointsProvider);
         startActivity(intent);
-    }
-
-    private static class PartnerPointsFromPartnerProvider implements PartnerPointsProvider, Serializable {
-        private final Partner partner;
-        private final SearchResultProvider searchResultProvider;
-
-        PartnerPointsFromPartnerProvider(Partner partner, SearchResultProvider searchResultProvider) {
-            this.partner = partner;
-            this.searchResultProvider = searchResultProvider;
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            return searchResultProvider.getPartnerPoints(context, partner);
-        }
-    }
-
-    private void onNeedToShowSearchResultOnMap() {
-        Serializable partnerPointsProvider = new AllPartnerPointsFromSearchResultProvider(searchResultProvider);
-        showResultOnMap(partnerPointsProvider);
     }
 
     private static class AllPartnerPointsFromSearchResultProvider implements PartnerPointsProvider, Serializable {

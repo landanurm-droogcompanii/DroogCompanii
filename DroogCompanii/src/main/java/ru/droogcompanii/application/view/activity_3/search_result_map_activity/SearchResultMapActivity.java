@@ -37,21 +37,23 @@ public class SearchResultMapActivity extends android.support.v4.app.FragmentActi
     }
 
     private void initPartnerPointsMapFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        PartnerPointsMapFragment fragment = (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
         Bundle args = getIntent().getExtras();
-        PartnerPointsProvider partnerPointsProvider = (PartnerPointsProvider) args.getSerializable(Keys.partnerPointsProvider);
+        PartnerPointsProvider partnerPointsProvider =
+                (PartnerPointsProvider) args.getSerializable(Keys.partnerPointsProvider);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        PartnerPointsMapFragment fragment =
+                (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
         fragment.setPartnerPointsProvider(partnerPointsProvider);
+    }
+
+    private void onFilter() {
+        // TODO:
+        Toast.makeText(this, "Need to open Filter", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint) {
         // TODO:
         Toast.makeText(this, partnerPoint.title, Toast.LENGTH_SHORT).show();
-    }
-
-    private void onFilter() {
-        // TODO:
-        Toast.makeText(this, "Need to open Filter", Toast.LENGTH_SHORT).show();
     }
 }

@@ -16,4 +16,5 @@ public class Keys {
 
     public static final String searchResultProvider = "searchResultProvider";
     public static final String partnerPointsProvider = "partnerPointsProvider";
+    public static final String filters = "filters";
 }

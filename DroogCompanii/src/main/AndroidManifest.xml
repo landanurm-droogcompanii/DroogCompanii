@@ -56,6 +56,16 @@
             android:theme="@style/Theme.Base">
         </activity>
         <activity
+            android:name=".view.activity_3.partner_activity.PartnerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Base">
+        </activity>
+        <activity
+            android:name=".view.activity_3.filter_activity.FilterActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Base">
+        </activity>
+        <activity
             android:name=".view.activity_2.partner_category_list_activity.PartnerCategoryListActivity2"
             android:label="@string/app_name" >
         </activity>
