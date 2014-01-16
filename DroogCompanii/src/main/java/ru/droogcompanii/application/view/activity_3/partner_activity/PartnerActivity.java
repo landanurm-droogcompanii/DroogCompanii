@@ -105,6 +105,12 @@ public class PartnerActivity extends Activity {
     private void onPartnerHasPoints() {
         initSinglePartnerPointListItemView();
         initAbilityToExpandPartnerPointList();
+        goOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goOnMap();
+            }
+        });
     }
 
     private void initSinglePartnerPointListItemView() {
@@ -145,12 +151,6 @@ public class PartnerActivity extends Activity {
             @Override
             public void onClick(View view) {
                 expandList();
-            }
-        });
-        goOnMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goOnMap();
             }
         });
     }

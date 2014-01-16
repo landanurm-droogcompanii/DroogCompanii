@@ -27,11 +27,11 @@ public class WorkerWithStandardPartnerPointFilters implements WorkerWithFilters<
     public View prepareViewOfFilters(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewOfFilters = inflater.inflate(R.layout.view_standard_filters, null, false);
-        fill(context, viewOfFilters);
+        init(context, viewOfFilters);
         return viewOfFilters;
     }
 
-    private void fill(Context context, View viewOfFilters) {
+    private void init(Context context, View viewOfFilters) {
         // TODO: may be need to read data from DB and init widgets on view
     }
 
@@ -42,53 +42,63 @@ public class WorkerWithStandardPartnerPointFilters implements WorkerWithFilters<
     }
 }
 
-class StandardFiltersReader implements Serializable {
+class StandardFiltersReader {
 
-    private final CheckBox sortByDistanceCheckBox;
-    private final CheckBox sortBySaleTypeValueCheckBox;
+    private final View viewOfFilters;
 
-    private final CheckBox cashlessPaymentsCheckBox;
+    private final boolean sortByDistance;
+    private final boolean sortBySaleTypeValue;
 
-    private final CheckBox worksNowCheckBox;
+    private final boolean cashlessPayments;
 
-    private final CheckBox bonusCheckBox;
-    private final CheckBox discountCheckBox;
-    private final CheckBox cashBackCheckBox;
+    private final boolean worksNow;
+
+    private final boolean saleTypeBonus;
+    private final boolean saleTypeDiscount;
+    private final boolean saleTypeCashBack;
 
 
     StandardFiltersReader(View viewOfFilters) {
-        sortByDistanceCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.sortByDistanceCheckBox);
-        sortBySaleTypeValueCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.sortBySaleTypeValueCheckBox);
+        this.viewOfFilters = viewOfFilters;
 
-        cashlessPaymentsCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.cashlessPaymentsCheckBox);
+        sortByDistance = checkBoxIsMarked(R.id.sortByDistanceCheckBox);
+        sortBySaleTypeValue = checkBoxIsMarked(R.id.sortBySaleTypeValueCheckBox);
 
-        worksNowCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.worksNowCheckBox);
+        cashlessPayments = checkBoxIsMarked(R.id.cashlessPaymentsCheckBox);
 
-        bonusCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.bonusCheckBox);
-        discountCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.discountCheckBox);
-        cashBackCheckBox = (CheckBox) viewOfFilters.findViewById(R.id.cashBackCheckBox);
+        worksNow = checkBoxIsMarked(R.id.worksNowCheckBox);
+
+        saleTypeBonus = checkBoxIsMarked(R.id.bonusCheckBox);
+        saleTypeDiscount = checkBoxIsMarked(R.id.discountCheckBox);
+        saleTypeCashBack = checkBoxIsMarked(R.id.cashBackCheckBox);
+    }
+
+    private boolean checkBoxIsMarked(int idOfCheckBox) {
+        CheckBox checkBox = (CheckBox) viewOfFilters.findViewById(idOfCheckBox);
+        return checkBox.isChecked();
     }
 
     public List<Filter<PartnerPoint>> read() {
         List<Filter<PartnerPoint>> filters = new ArrayList<Filter<PartnerPoint>>();
-        if (sortByDistanceCheckBox.isChecked()) {
+        if (sortByDistance) {
             filters.add(new SortByDistanceFilter());
         }
-        if (sortBySaleTypeValueCheckBox.isChecked()) {
+        if (sortBySaleTypeValue) {
             filters.add(new SortBySaleTypeValueFilter());
         }
-        if (cashlessPaymentsCheckBox.isChecked()) {
+        if (cashlessPayments) {
             filters.add(new CashlessPaymentsFilter());
         }
-        if (worksNowCheckBox.isChecked()) {
+        if (worksNow) {
             filters.add(new WorksNowFilter());
         }
-        filters.add(new SaleTypeFilter());
+        SaleTypeFilter saleTypeFilter = new SaleTypeFilter(saleTypeBonus, saleTypeDiscount, saleTypeCashBack);
+        filters.add(saleTypeFilter);
         return filters;
     }
 
 
-    private class SortByDistanceFilter implements Serializable,
+    private static class SortByDistanceFilter implements Serializable,
             Filter<PartnerPoint>, Comparator<PartnerPoint> {
         @Override
         public void includeIn(SearchableSortable<PartnerPoint> searchableSortable) {
@@ -103,7 +113,7 @@ class StandardFiltersReader implements Serializable {
     }
 
 
-    private class SortBySaleTypeValueFilter implements Serializable,
+    private static class SortBySaleTypeValueFilter implements Serializable,
             Filter<PartnerPoint>, Comparator<PartnerPoint> {
         @Override
         public void includeIn(SearchableSortable<PartnerPoint> searchableSortable) {
@@ -118,7 +128,7 @@ class StandardFiltersReader implements Serializable {
     }
 
 
-    private class CashlessPaymentsFilter implements Serializable,
+    private static class CashlessPaymentsFilter implements Serializable,
             Filter<PartnerPoint>, SearchableSortable.SearchFilter<PartnerPoint> {
         @Override
         public void includeIn(SearchableSortable<PartnerPoint> searchableSortable) {
@@ -132,8 +142,15 @@ class StandardFiltersReader implements Serializable {
     }
 
 
-    private class WorksNowFilter implements Serializable,
+    private static class WorksForSomeTimeFilter implements Serializable,
             Filter<PartnerPoint>, SearchableSortable.SearchFilter<PartnerPoint> {
+
+        private Calendar time;
+
+        public WorksForSomeTimeFilter(Calendar time) {
+            this.time = time;
+        }
+
         @Override
         public void includeIn(SearchableSortable<PartnerPoint> searchableSortable) {
             searchableSortable.addSearchFilter(this);
@@ -141,25 +158,30 @@ class StandardFiltersReader implements Serializable {
 
         @Override
         public boolean meetCriteria(PartnerPoint partnerPoint) {
-            Calendar now = Calendar.getInstance();
-            return partnerPoint.workingHours.includes(now);
+            return partnerPoint.workingHours.includes(time);
+        }
+    }
+
+    private static class WorksNowFilter extends WorksForSomeTimeFilter {
+        public WorksNowFilter() {
+            super(Calendar.getInstance());
         }
     }
 
 
-    private class SaleTypeFilter implements Serializable,
+    private static class SaleTypeFilter implements Serializable,
             Filter<PartnerPoint>, SearchableSortable.SearchFilter<PartnerPoint> {
         private List<String> saleTypes;
 
-        SaleTypeFilter() {
+        SaleTypeFilter(boolean saleTypeBonus, boolean saleTypeDiscount, boolean saleTypeCashBack) {
             saleTypes = new ArrayList<String>();
-            if (bonusCheckBox.isChecked()) {
+            if (saleTypeBonus) {
                 saleTypes.add(DroogCompaniiStringConstants.saleType_Bonus);
             }
-            if (discountCheckBox.isChecked()) {
+            if (saleTypeDiscount) {
                 saleTypes.add(DroogCompaniiStringConstants.saleType_Discount);
             }
-            if (cashBackCheckBox.isChecked()) {
+            if (saleTypeCashBack) {
                 saleTypes.add(DroogCompaniiStringConstants.saleType_CashBack);
             }
         }
@@ -171,31 +193,31 @@ class StandardFiltersReader implements Serializable {
 
         @Override
         public boolean meetCriteria(PartnerPoint partnerPoint) {
+            MoreComparableString partnerPointSaleTypes = new MoreComparableString(saleTypesOf(partnerPoint));
             for (String saleType : saleTypes) {
-                StringComparator discountType = new StringComparator(getSaleTypes(partnerPoint));
-                if (discountType.containsIngnoreCase(saleType)) {
+                if (partnerPointSaleTypes.containsIgnoreCase(saleType)) {
                     return true;
                 }
             }
             return false;
         }
 
-        private String getSaleTypes(PartnerPoint partnerPoint) {
+        private String saleTypesOf(PartnerPoint partnerPoint) {
             // TODO:
             return "";
         }
     }
 }
 
-class StringComparator {
+class MoreComparableString implements Serializable {
 
     private final String str;
 
-    public StringComparator(String str) {
+    public MoreComparableString(String str) {
         this.str = str;
     }
 
-    public boolean containsIngnoreCase(String other) {
+    public boolean containsIgnoreCase(String other) {
         return str.toLowerCase().contains(other.toLowerCase());
     }
 }
