@@ -14,7 +14,10 @@ import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.view.activity_3.filter_activity.FilterActivity;
+import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
 import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchActivity;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
@@ -26,13 +29,8 @@ import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.Pa
 public class MainScreen extends android.support.v4.app.FragmentActivity
         implements PartnerPointsMapFragment.OnPartnerPointInfoWindowClickListener {
 
-    private static final PartnerPointsProvider ALL_PARTNER_POINTS_PROVIDER = new PartnerPointsProvider() {
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            PartnerPointsReader reader = new PartnerPointsReader(context);
-            return reader.getAllPartnerPoints();
-        }
-    };
+
+    private PartnerPointsMapFragment partnerPointsMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +39,24 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
         if (savedInstanceState == null) {
             initPartnerPointsMapFragment();
         }
+        initListeners();
+    }
+
+    private void initPartnerPointsMapFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        partnerPointsMapFragment =
+                (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+        final PartnerPointsProvider allPartnerPointsProvider = new PartnerPointsProvider() {
+            @Override
+            public List<PartnerPoint> getPartnerPoints(Context context) {
+                PartnerPointsReader reader = new PartnerPointsReader(context);
+                return reader.getAllPartnerPoints();
+            }
+        };
+        partnerPointsMapFragment.setPartnerPointsProvider(allPartnerPointsProvider);
+    }
+
+    private void initListeners() {
         findViewById(R.id.searchButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,26 +77,36 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
         });
     }
 
-    private void initPartnerPointsMapFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        PartnerPointsMapFragment partnerPointsMapFragment =
-                (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
-        partnerPointsMapFragment.setPartnerPointsProvider(ALL_PARTNER_POINTS_PROVIDER);
-    }
-
     private void onSearch() {
-        startActivity(SearchActivity.class);
-    }
-
-    private void startActivity(Class<?> activityClass) {
-        Intent intent = new Intent(this, activityClass);
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
 
     private void onFilter() {
-        // TODO:
         Intent intent = new Intent(this, FilterActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, FilterActivity.REQUEST_CODE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
+            List<Filter<PartnerPoint>> returnedFilters = extractReturnedFilters(data);
+            applyFilters(returnedFilters);
+        }
+    }
+
+    private List<Filter<PartnerPoint>> extractReturnedFilters(Intent data) {
+        List<Filter<PartnerPoint>> filters = null;
+        if (data != null) {
+            filters = (List<Filter<PartnerPoint>>) data.getSerializableExtra(Keys.filters);
+        }
+        if (filters == null) {
+            throw new RuntimeException(FilterActivity.class.getName() + " doesn't return filters");
+        }
+        return filters;
+    }
+
+    private void applyFilters(List<Filter<PartnerPoint>> filters) {
+        partnerPointsMapFragment.resetFilters(filters);
     }
 
     private void onMenu() {
@@ -92,30 +118,19 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
     public void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint) {
         PartnersReader partnersReader = new PartnersReader(this);
         Partner partner = partnersReader.getPartnerOf(partnerPoint);
+
         PartnerPointsReader partnerPointsReader = new PartnerPointsReader(this);
         List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
+
         movePartnerPointAtFirstPosition(partnerPoint, partnerPoints);
         PartnerActivity.start(this, partner, partnerPoints);
     }
 
     private void movePartnerPointAtFirstPosition(PartnerPoint partnerPoint, List<PartnerPoint> partnerPoints) {
-        if (partnerPoints.size() < 1) {
-            return;
-        }
         int index = partnerPoints.indexOf(partnerPoint);
         if (index == -1) {
             throw new IllegalArgumentException("Partner points doesn't have this point");
         }
-        swap(partnerPoints, 0, index);
-    }
-
-    private static <T> void swap(List<T> list, int index1, int index2) {
-        if (index1 == index2) {
-            return;
-        }
-        T obj1 = list.get(index1);
-        T obj2 = list.get(index2);
-        list.set(index1, obj2);
-        list.set(index2, obj1);
+        ListUtils.swap(partnerPoints, 0, index);
     }
 }

@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.data.data_structure.working_hours;
 
-import ru.droogcompanii.application.data.data_structure.working_hours.Time;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
 
 /**
  * Created by ls on 09.01.14.

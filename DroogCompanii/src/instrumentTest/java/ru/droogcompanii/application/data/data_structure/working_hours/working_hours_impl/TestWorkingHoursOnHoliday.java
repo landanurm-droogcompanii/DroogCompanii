@@ -3,7 +3,7 @@ package ru.droogcompanii.application.data.data_structure.working_hours.working_h
 import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.data_structure.working_hours.IteratorOverTimes;
-import ru.droogcompanii.application.data.data_structure.working_hours.Time;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
 
 /**

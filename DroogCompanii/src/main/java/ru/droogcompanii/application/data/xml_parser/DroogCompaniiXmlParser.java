@@ -7,9 +7,12 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
@@ -18,6 +21,7 @@ import ru.droogcompanii.application.data.data_structure.working_hours.WeekWorkin
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHoursForEachDayOfWeek;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHoursParser;
+import ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants;
 
 /**
  * Created by Leonid on 02.12.13.
@@ -89,7 +93,7 @@ public class DroogCompaniiXmlParser {
         // в которые он входит. В итоге получится, что те партнеры, которые входят в несколько
         // категорий, после парсинга будут относится только к одной категории.
         // С другой стороны, если понадобится выводить всех партнеров, нужно будет избежать
-        // дублирования партнера, который входит в несколько категорий.
+        // дублирования партнеров, которые входит в несколько категорий.
         // Поэтому при выводе всех партнеров нужно будет использовать коллекцию типа множество (Set).
         outPartners = new ArrayList<Partner>();
 
@@ -103,7 +107,7 @@ public class DroogCompaniiXmlParser {
     }
 
     private void parsePartnerCategories(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.partnerCategories);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.partnerCategories);
 
         int partnerCategoryId = 0;
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -111,7 +115,7 @@ public class DroogCompaniiXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.partnerCategory)) {
+            if (tag.equals(XmlConstants.Tags.partnerCategory)) {
                 ++partnerCategoryId;
                 PartnerCategory partnerCategory = parsePartnerCategory(parser, partnerCategoryId);
                 outPartnerCategories.add(partnerCategory);
@@ -122,7 +126,7 @@ public class DroogCompaniiXmlParser {
     }
 
     private PartnerCategory parsePartnerCategory(XmlPullParser parser, int partnerCategoryId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.partnerCategory);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.partnerCategory);
 
         String title = null;
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -130,9 +134,9 @@ public class DroogCompaniiXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.title)) {
+            if (tag.equals(XmlConstants.Tags.title)) {
                 title = parseTitle(parser);
-            } else if (tag.equals(XmlTags.partners)) {
+            } else if (tag.equals(XmlConstants.Tags.partners)) {
                 parsePartners(parser, partnerCategoryId);
             } else {
                 skip(parser);
@@ -142,7 +146,7 @@ public class DroogCompaniiXmlParser {
     }
 
     private String parseTitle(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlTags.title);
+        return parseTextByTag(parser, XmlConstants.Tags.title);
     }
 
     private String parseTextByTag(XmlPullParser parser, String tag) throws Exception {
@@ -162,14 +166,14 @@ public class DroogCompaniiXmlParser {
     }
 
     private void parsePartners(XmlPullParser parser, int partnerCategoryId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.partners);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.partners);
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.partner)) {
+            if (tag.equals(XmlConstants.Tags.partner)) {
                 Partner partner = parsePartner(parser, partnerCategoryId);
                 outPartners.add(partner);
             } else {
@@ -179,7 +183,7 @@ public class DroogCompaniiXmlParser {
     }
 
     private Partner parsePartner(XmlPullParser parser, int partnerCategoryId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.partner);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.partner);
 
         int id = 0;
         String title = null;
@@ -191,15 +195,15 @@ public class DroogCompaniiXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.id)) {
+            if (tag.equals(XmlConstants.Tags.id)) {
                 id = parseId(parser);
-            } else if (tag.equals(XmlTags.title)) {
+            } else if (tag.equals(XmlConstants.Tags.title)) {
                 title = parseTitle(parser);
-            } else if (tag.equals(XmlTags.fullTitle)) {
+            } else if (tag.equals(XmlConstants.Tags.fullTitle)) {
                 fullTitle = parseFullTitle(parser);
-            } else if (tag.equals(XmlTags.saleType)) {
+            } else if (tag.equals(XmlConstants.Tags.saleType)) {
                 saleType = parseSaleType(parser);
-            } else if (tag.equals(XmlTags.partnerPoints)) {
+            } else if (tag.equals(XmlConstants.Tags.partnerPoints)) {
                 parsePartnerPoints(parser, id);
             } else {
                 skip(parser);
@@ -209,9 +213,9 @@ public class DroogCompaniiXmlParser {
     }
 
     private Integer parseId(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.id);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.id);
         int id = parseInteger(parser);
-        parser.require(XmlPullParser.END_TAG, NAMESPACE, XmlTags.id);
+        parser.require(XmlPullParser.END_TAG, NAMESPACE, XmlConstants.Tags.id);
         return id;
     }
 
@@ -220,22 +224,22 @@ public class DroogCompaniiXmlParser {
     }
 
     private String parseFullTitle(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlTags.fullTitle);
+        return parseTextByTag(parser, XmlConstants.Tags.fullTitle);
     }
 
     private String parseSaleType(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlTags.saleType);
+        return parseTextByTag(parser, XmlConstants.Tags.saleType);
     }
 
     private void parsePartnerPoints(XmlPullParser parser, int partnerId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.partnerPoints);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.partnerPoints);
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.partnerPoint)) {
+            if (tag.equals(XmlConstants.Tags.partnerPoint)) {
                 outPartnerPoints.add(parsePartnerPoint(parser, partnerId));
             } else {
                 skip(parser);
@@ -244,7 +248,7 @@ public class DroogCompaniiXmlParser {
     }
 
     private PartnerPoint parsePartnerPoint(XmlPullParser parser, int partnerId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.partnerPoint);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.partnerPoint);
 
         String title = null;
         String address = null;
@@ -259,19 +263,19 @@ public class DroogCompaniiXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.title)) {
+            if (tag.equals(XmlConstants.Tags.title)) {
                 title = parseTitle(parser);
-            } else if (tag.equals(XmlTags.address)) {
+            } else if (tag.equals(XmlConstants.Tags.address)) {
                 address = parseAddress(parser);
-            } else if (tag.equals(XmlTags.longitude)) {
+            } else if (tag.equals(XmlConstants.Tags.longitude)) {
                 longitude = parseLongitude(parser);
-            } else if (tag.equals(XmlTags.latitude)) {
+            } else if (tag.equals(XmlConstants.Tags.latitude)) {
                 latitude = parseLatitude(parser);
-            } else if (tag.equals(XmlTags.phones)) {
+            } else if (tag.equals(XmlConstants.Tags.phones)) {
                 phones = parsePhones(parser);
-            } else if (tag.equals(XmlTags.paymentMethods)) {
+            } else if (tag.equals(XmlConstants.Tags.paymentMethods)) {
                 paymentMethods = parsePaymentMethods(parser);
-            } else if (tag.equals(XmlTags.workinghours)) {
+            } else if (tag.equals(XmlConstants.Tags.workinghours)) {
                 weekWorkingHours = parseWeekWorkingHours(parser);
             } else {
                 skip(parser);
@@ -283,15 +287,15 @@ public class DroogCompaniiXmlParser {
     }
 
     private String parseAddress(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlTags.address);
+        return parseTextByTag(parser, XmlConstants.Tags.address);
     }
 
     private double parseLongitude(XmlPullParser parser) throws Exception {
-        return parseDoubleByTag(parser, XmlTags.longitude);
+        return parseDoubleByTag(parser, XmlConstants.Tags.longitude);
     }
 
     private double parseLatitude(XmlPullParser parser) throws Exception {
-        return parseDoubleByTag(parser, XmlTags.latitude);
+        return parseDoubleByTag(parser, XmlConstants.Tags.latitude);
     }
 
     private double parseDoubleByTag(XmlPullParser parser, String tag) throws Exception {
@@ -306,7 +310,7 @@ public class DroogCompaniiXmlParser {
     }
 
     private List<String> parsePhones(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.phones);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.phones);
 
         List<String> phones = new ArrayList<String>();
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -314,7 +318,7 @@ public class DroogCompaniiXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(XmlTags.phone)) {
+            if (tag.equals(XmlConstants.Tags.phone)) {
                 phones.add(parsePhone(parser));
             } else {
                 skip(parser);
@@ -324,15 +328,15 @@ public class DroogCompaniiXmlParser {
     }
 
     private String parsePhone(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlTags.phone);
+        return parseTextByTag(parser, XmlConstants.Tags.phone);
     }
 
     private String parsePaymentMethods(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlTags.paymentMethods);
+        return parseTextByTag(parser, XmlConstants.Tags.paymentMethods);
     }
 
     private WeekWorkingHours parseWeekWorkingHours(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlTags.workinghours);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.workinghours);
 
         WorkingHoursForEachDayOfWeek workingHoursForEachDayOfWeek = new WorkingHoursForEachDayOfWeek();
 
@@ -341,27 +345,28 @@ public class DroogCompaniiXmlParser {
                 continue;
             }
             String dayOfWeekTagName = parser.getName();
+            String typeOfDay = parseTypeOfDayAttribute(parser);
 
-            if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.monday)) {
-                workingHoursForEachDayOfWeek.onMonday = parseWorkingHours(parser, dayOfWeekTagName);
+            if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.monday)) {
+                workingHoursForEachDayOfWeek.onMonday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
-            } else if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.tuesday)) {
-                workingHoursForEachDayOfWeek.onTuesday = parseWorkingHours(parser, dayOfWeekTagName);
+            } else if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.tuesday)) {
+                workingHoursForEachDayOfWeek.onTuesday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
-            } else if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.wednesday)) {
-                workingHoursForEachDayOfWeek.onWednesday = parseWorkingHours(parser, dayOfWeekTagName);
+            } else if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.wednesday)) {
+                workingHoursForEachDayOfWeek.onWednesday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
-            } else if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.thursday)) {
-                workingHoursForEachDayOfWeek.onThursday = parseWorkingHours(parser, dayOfWeekTagName);
+            } else if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.thursday)) {
+                workingHoursForEachDayOfWeek.onThursday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
-            } else if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.friday)) {
-                workingHoursForEachDayOfWeek.onFriday = parseWorkingHours(parser, dayOfWeekTagName);
+            } else if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.friday)) {
+                workingHoursForEachDayOfWeek.onFriday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
-            } else if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.saturday)) {
-                workingHoursForEachDayOfWeek.onSaturday = parseWorkingHours(parser, dayOfWeekTagName);
+            } else if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.saturday)) {
+                workingHoursForEachDayOfWeek.onSaturday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
-            } else if (dayOfWeekTagName.equals(XmlTags.DayOfWeek.sunday)) {
-                workingHoursForEachDayOfWeek.onSunday = parseWorkingHours(parser, dayOfWeekTagName);
+            } else if (dayOfWeekTagName.equals(XmlConstants.DayOfWeek.sunday)) {
+                workingHoursForEachDayOfWeek.onSunday = parseWorkingHours(parser, dayOfWeekTagName, typeOfDay);
 
             } else {
                 skip(parser);
@@ -370,10 +375,50 @@ public class DroogCompaniiXmlParser {
         return new WeekWorkingHours(workingHoursForEachDayOfWeek);
     }
 
-    private WorkingHours parseWorkingHours(XmlPullParser parser, String dayOfWeekTagName) throws Exception {
+    private String parseTypeOfDayAttribute(XmlPullParser parser) throws Exception {
+        requireAttributes(parser, XmlConstants.Attributes.typeOfDay);
+        Map<String, String> attributes = parseAttributes(parser);
+        return attributes.get(XmlConstants.Attributes.typeOfDay);
+    }
+
+    private void requireAttributes(XmlPullParser parser, String... requiredAttributes) {
+        int attributeCount = parser.getAttributeCount();
+        if (attributeCount == -1) {
+            throw new IllegalArgumentException("Current event type is not START_TAG");
+        }
+        String[] actualAttributes = new String[attributeCount];
+        for (int i = 0; i < attributeCount; ++i) {
+            String attribute = parser.getAttributeName(i);
+            actualAttributes[i] = attribute;
+        }
+        Arrays.sort(requiredAttributes);
+        Arrays.sort(actualAttributes);
+        boolean allRight = Arrays.equals(requiredAttributes, actualAttributes);
+        if (!allRight) {
+            StringBuilder illegalArgumentExceptionMessage = new StringBuilder(
+                "For working hours of day need " + requiredAttributes.length + " attribute(s): "
+            );
+            for (String attribute : requiredAttributes) {
+                illegalArgumentExceptionMessage.append(attribute);
+            }
+            throw new IllegalArgumentException(illegalArgumentExceptionMessage.toString());
+        }
+    }
+
+    private Map<String, String> parseAttributes(XmlPullParser parser) {
+        int attributeCount = parser.getAttributeCount();
+        Map<String, String> attributes = new HashMap<String, String>(attributeCount);
+        for(int i = 0; i < attributeCount; i++) {
+            attributes.put(parser.getAttributeName(i), parser.getAttributeValue(i));
+        }
+        return attributes;
+    }
+
+    private WorkingHours parseWorkingHours(XmlPullParser parser,
+                    String dayOfWeekTagName, String typeOfDay) throws Exception {
         String workingHoursText = parseTextByTag(parser, dayOfWeekTagName);
         WorkingHoursParser workingHoursParser = new WorkingHoursParser();
-        return workingHoursParser.parse(workingHoursText);
+        return workingHoursParser.parse(typeOfDay, workingHoursText);
     }
 
     private void skip(XmlPullParser parser) throws Exception {

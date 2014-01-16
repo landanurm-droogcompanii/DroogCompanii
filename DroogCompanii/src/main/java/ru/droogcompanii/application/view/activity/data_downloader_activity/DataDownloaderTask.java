@@ -29,7 +29,7 @@ public class DataDownloaderTask extends Task {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {
-                return context.getResources().openRawResource(R.raw.test_data);
+                return context.getResources().openRawResource(R.raw.test_data_2);
             }
         };
     }

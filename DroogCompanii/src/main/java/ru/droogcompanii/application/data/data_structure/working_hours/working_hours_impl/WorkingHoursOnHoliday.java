@@ -2,7 +2,7 @@ package ru.droogcompanii.application.data.data_structure.working_hours.working_h
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.data.data_structure.working_hours.Time;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
 
 /**

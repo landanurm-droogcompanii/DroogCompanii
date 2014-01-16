@@ -1,10 +1,10 @@
-package ru.droogcompanii.application.data.data_structure.working_hours;
-
-import com.google.android.gms.internal.be;
+package ru.droogcompanii.application.data.data_structure.working_hours.time;
 
 import junit.framework.TestCase;
 
 import java.util.Calendar;
+
+import ru.droogcompanii.application.data.data_structure.working_hours.IteratorOverTimes;
 
 /**
  * Created by ls on 09.01.14.
@@ -18,6 +18,7 @@ public class TestTime extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
         hours = 3;
         minutes = 40;
         time = new Time(hours, minutes);

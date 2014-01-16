@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,18 +10,18 @@ import java.util.List;
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchableSortable<T> {
+public class SearchableSortable<T> implements Serializable {
 
     public static interface OnEachHandler<T> {
         void onEach(T each, boolean meetsCriteria);
     }
 
-    public static interface SearchFilter<T> {
+    public static interface SearchCriteria<T> {
         boolean meetCriteria(T obj);
     }
 
     private final List<T> elements;
-    private final List<SearchFilter<T>> searchFilters;
+    private final List<SearchCriteria<T>> searchCriterias;
     private final List<Comparator<T>> comparators;
 
 
@@ -30,16 +31,21 @@ public class SearchableSortable<T> {
 
     private SearchableSortable(Collection<T> elements) {
         this.elements = new ArrayList<T>(elements);
-        this.searchFilters = new ArrayList<SearchFilter<T>>();
+        this.searchCriterias = new ArrayList<SearchCriteria<T>>();
         this.comparators = new ArrayList<Comparator<T>>();
     }
 
-    public void addSearchFilter(SearchFilter<T> searchFilter) {
-        searchFilters.add(searchFilter);
+    public void addSearchCriteria(SearchCriteria<T> searchCriteria) {
+        searchCriterias.add(searchCriteria);
     }
 
     public void addComparator(Comparator<T> comparator) {
         comparators.add(comparator);
+    }
+
+    public void clear() {
+        searchCriterias.clear();
+        comparators.clear();
     }
 
     public void forEach(OnEachHandler<T> onEachHandler) {
@@ -49,8 +55,8 @@ public class SearchableSortable<T> {
     }
 
     private boolean meetCriteria(T element) {
-        for (SearchFilter<T> searchFilter : searchFilters) {
-            if (!searchFilter.meetCriteria(element)) {
+        for (SearchCriteria<T> searchCriteria : searchCriterias) {
+            if (!searchCriteria.meetCriteria(element)) {
                 return false;
             }
         }

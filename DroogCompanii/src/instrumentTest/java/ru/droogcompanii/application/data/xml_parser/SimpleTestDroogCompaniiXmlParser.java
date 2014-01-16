@@ -12,11 +12,18 @@ import java.util.List;
 import ru.droogcompanii.application.data.data_structure.Partner;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-import ru.droogcompanii.application.data.data_structure.working_hours.Time;
 import ru.droogcompanii.application.data.data_structure.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHoursForEachDayOfWeek;
-import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursBuilder;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.DayAndNightWorkingHours;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnHoliday;
+
+import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.Attributes;
+import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.DayOfWeek;
+import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.Tags;
+import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.TypesOfDay;
 
 /**
  * Created by ls on 08.01.14.
@@ -66,20 +73,20 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         phonesOfPartnerPoint = Arrays.asList("79196763351", "79105352235");
 
         workingHoursOfPartnerPoint = new WorkingHoursForEachDayOfWeek();
-        WorkingHoursBuilder workingHoursBuilder = new WorkingHoursBuilder();
-        workingHoursOfPartnerPoint.onMonday = workingHoursBuilder.onBusinessDay(new Time(9, 0), new Time(18, 0));
-        workingHoursOfPartnerPoint.onTuesday = workingHoursBuilder.onBusinessDay(new Time(10, 0), new Time(19, 0));
-        workingHoursOfPartnerPoint.onWednesday = workingHoursBuilder.onBusinessDay(new Time(9, 0), new Time(19, 0));
-        workingHoursOfPartnerPoint.onThursday = workingHoursBuilder.onBusinessDay(new Time(8, 0), new Time(17, 0));
-        workingHoursOfPartnerPoint.onFriday = workingHoursBuilder.onBusinessDay(new Time(10, 0), new Time(17, 0));
-        workingHoursOfPartnerPoint.onSaturday = workingHoursBuilder.onHoliday("Holiday");
-        workingHoursOfPartnerPoint.onSunday = workingHoursBuilder.onHoliday("Holiday");
+        workingHoursOfPartnerPoint.onMonday = new WorkingHoursOnBusinessDay(new Time(9, 0), new Time(18, 0));
+        workingHoursOfPartnerPoint.onTuesday = new WorkingHoursOnBusinessDay(new Time(10, 0), new Time(19, 0));
+        workingHoursOfPartnerPoint.onWednesday = new WorkingHoursOnBusinessDay(new Time(9, 0), new Time(19, 0));
+        workingHoursOfPartnerPoint.onThursday = new DayAndNightWorkingHours("Day Night");
+        workingHoursOfPartnerPoint.onFriday = new WorkingHoursOnBusinessDay(new Time(10, 0), new Time(17, 0));
+        workingHoursOfPartnerPoint.onSaturday = new WorkingHoursOnHoliday("Holiday 1");
+        workingHoursOfPartnerPoint.onSunday = new WorkingHoursOnHoliday("Holiday 2");
         weekWorkingHoursOfPartnerPoint = new WeekWorkingHours(workingHoursOfPartnerPoint);
 
-        xml = stringToInputStream(prepareXml());
+        String xmlText = prepareXml();
+        xml = stringToInputStream(xmlText);
     }
 
-    private InputStream stringToInputStream(String str) {
+    private static InputStream stringToInputStream(String str) {
         try {
             return new ByteArrayInputStream(str.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -91,70 +98,95 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         StringBuilder xmlBuilder = new StringBuilder();
 
         xmlBuilder
-            .append(openArrayTag(XmlTags.partnerCategories) + "\n")
-            .append("\t" + openTag(XmlTags.partnerCategory) + "\n")
-            .append("\t\t" + openTag(XmlTags.title) + titleOfPartnerCategory + closeTag(XmlTags.title) + "\n")
-            .append("\t\t" + openArrayTag(XmlTags.partners) + "\n")
-            .append("\t\t\t" + openTag(XmlTags.partner) + "\n")
-            .append("\t\t\t\t" + openTag(XmlTags.id + TYPE_INTEGER) + idOfPartner + closeTag(XmlTags.id) + "\n")
-            .append("\t\t\t\t" + openTag(XmlTags.title) + titleOfPartner + closeTag(XmlTags.title) + "\n")
-            .append("\t\t\t\t" + openTag(XmlTags.fullTitle) + fullTitleOfPartner + closeTag(XmlTags.fullTitle) + "\n")
-            .append("\t\t\t\t" + openTag(XmlTags.saleType) + saleTypeOfPartner + closeTag(XmlTags.saleType) + "\n")
-            .append("\t\t\t\t" + openArrayTag(XmlTags.partnerPoints) + "\n")
-            .append("\t\t\t\t\t" + openTag(XmlTags.partnerPoint) + "\n")
-            .append("\t\t\t\t\t\t" + openTag(XmlTags.title) + titleOfPartnerPoint + closeTag(XmlTags.title) + "\n")
-            .append("\t\t\t\t\t\t" + openTag(XmlTags.address) + addressOfPartnerPoint + closeTag(XmlTags.address) + "\n")
-            .append("\t\t\t\t\t\t" + openTag(XmlTags.longitude + TYPE_DECIMAL) + longitudeOfPartnerPoint + closeTag(XmlTags.longitude) + "\n")
-            .append("\t\t\t\t\t\t" + openTag(XmlTags.latitude + TYPE_DECIMAL) + latitudeOfPartnerPoint + closeTag(XmlTags.latitude) + "\n")
-            .append("\t\t\t\t\t\t" + openTag(XmlTags.paymentMethods) + paymentMethodsOfPartnerPoint + closeTag(XmlTags.paymentMethods) + "\n")
+            .append(openArrayTag(Tags.partnerCategories) + "\n")
+            .append("\t" + openTag(Tags.partnerCategory) + "\n")
+            .append("\t\t" + openTag(Tags.title) + titleOfPartnerCategory + closeTag(Tags.title) + "\n")
+            .append("\t\t" + openArrayTag(Tags.partners) + "\n")
+            .append("\t\t\t" + openTag(Tags.partner) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.id + TYPE_INTEGER) + idOfPartner + closeTag(Tags.id) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.title) + titleOfPartner + closeTag(Tags.title) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.fullTitle) + fullTitleOfPartner + closeTag(Tags.fullTitle) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.saleType) + saleTypeOfPartner + closeTag(Tags.saleType) + "\n")
+            .append("\t\t\t\t" + openArrayTag(Tags.partnerPoints) + "\n")
+            .append("\t\t\t\t\t" + openTag(Tags.partnerPoint) + "\n")
+            .append("\t\t\t\t\t\t" + openTag(Tags.title) + titleOfPartnerPoint + closeTag(Tags.title) + "\n")
+            .append("\t\t\t\t\t\t" + openTag(Tags.address) + addressOfPartnerPoint + closeTag(Tags.address) + "\n")
+            .append("\t\t\t\t\t\t" + openTag(Tags.longitude + TYPE_DECIMAL) + longitudeOfPartnerPoint + closeTag(Tags.longitude) + "\n")
+            .append("\t\t\t\t\t\t" + openTag(Tags.latitude + TYPE_DECIMAL) + latitudeOfPartnerPoint + closeTag(Tags.latitude) + "\n")
+            .append("\t\t\t\t\t\t" + openTag(Tags.paymentMethods) + paymentMethodsOfPartnerPoint + closeTag(Tags.paymentMethods) + "\n")
             .append(preparePhonesXml("\t\t\t\t\t\t", phonesOfPartnerPoint) + "\n")
             .append(prepareWorkingHoursXml("\t\t\t\t\t\t", workingHoursOfPartnerPoint) + "\n")
-            .append("\t\t\t\t\t" + closeTag(XmlTags.partnerPoint) + "\n")
-            .append("\t\t\t\t" + closeTag(XmlTags.partnerPoints) + "\n")
-            .append("\t\t\t" + closeTag(XmlTags.partner) + "\n")
-            .append("\t\t" + closeTag(XmlTags.partners) + "\n")
-            .append("\t" + closeTag(XmlTags.partnerCategory) + "\n")
-            .append(closeTag(XmlTags.partnerCategories));
+            .append("\t\t\t\t\t" + closeTag(Tags.partnerPoint) + "\n")
+            .append("\t\t\t\t" + closeTag(Tags.partnerPoints) + "\n")
+            .append("\t\t\t" + closeTag(Tags.partner) + "\n")
+            .append("\t\t" + closeTag(Tags.partners) + "\n")
+            .append("\t" + closeTag(Tags.partnerCategory) + "\n")
+            .append(closeTag(Tags.partnerCategories));
 
         return xmlBuilder.toString();
     }
 
     private String preparePhonesXml(String indent, List<String> phones) {
         StringBuilder phonesBuilder = new StringBuilder();
-        phonesBuilder.append(indent).append(openArrayTag(XmlTags.phones) + "\n");
+        phonesBuilder.append(indent).append(openArrayTag(Tags.phones) + "\n");
         for (String phone : phones) {
-            phonesBuilder.append(indent).append("\t").append(prepareTextWithinTags(XmlTags.phone, phone)).append("\n");
+            phonesBuilder.append(indent).append("\t").append(prepareTextWithTags(Tags.phone, phone)).append("\n");
         }
-        phonesBuilder.append(indent).append(closeTag(XmlTags.phones));
+        phonesBuilder.append(indent).append(closeTag(Tags.phones));
         return phonesBuilder.toString();
     }
 
-    private String prepareTextWithinTags(String tagName, String value) {
+    private String prepareTextWithTags(String tagName, String value) {
         return openTag(tagName) + value + closeTag(tagName);
     }
 
     private String prepareWorkingHoursXml(String indent, WorkingHoursForEachDayOfWeek workingHours) {
-        StringBuilder workingHoursBuilder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        workingHoursBuilder.append(indent).append(openArrayTag(XmlTags.workinghours) + "\n");
+        builder.append(indent).append(openArrayTag(Tags.workinghours) + "\n");
 
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.monday, workingHours.onMonday);
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.tuesday, workingHours.onTuesday);
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.wednesday, workingHours.onWednesday);
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.thursday, workingHours.onThursday);
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.friday, workingHours.onFriday);
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.saturday, workingHours.onSaturday);
-        appendWorkingHoursOnDay(workingHoursBuilder, indent + "\t", XmlTags.DayOfWeek.sunday, workingHours.onSunday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.monday, workingHours.onMonday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.tuesday, workingHours.onTuesday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.wednesday, workingHours.onWednesday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.thursday, workingHours.onThursday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.friday, workingHours.onFriday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.saturday, workingHours.onSaturday);
+        appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.sunday, workingHours.onSunday);
 
-        workingHoursBuilder.append(indent).append(closeTag(XmlTags.workinghours));
+        builder.append(indent).append(closeTag(Tags.workinghours));
 
-        return workingHoursBuilder.toString();
+        return builder.toString();
     }
 
     private void appendWorkingHoursOnDay(StringBuilder workingHoursBuilder,
                            String indent, String tagOfDay, WorkingHours workingHoursOnDay) {
-        String workingHoursOnDayWithinTags = prepareTextWithinTags(tagOfDay, workingHoursOnDay.toString());
+        String workingHoursOnDayWithinTags = prepareWorkingHoursRow(tagOfDay, workingHoursOnDay);
         workingHoursBuilder.append(indent).append(workingHoursOnDayWithinTags).append("\n");
+    }
+
+    private String prepareWorkingHoursRow(String tagOfDay, WorkingHours workingHours) {
+        return openTag(tagOfDay + " " + dayTypeAttributeOf(workingHours)) + workingHours + closeTag(tagOfDay);
+    }
+
+    private String dayTypeAttributeOf(WorkingHours workingHours) {
+        return Attributes.typeOfDay + "=" + quote(dayTypeOf(workingHours));
+    }
+
+    private static String quote(String s) {
+        return "\"" + s + "\"";
+    }
+
+    private String dayTypeOf(WorkingHours workingHours) {
+        if (workingHours instanceof WorkingHoursOnHoliday) {
+            return TypesOfDay.holiday;
+        }
+        if (workingHours instanceof WorkingHoursOnBusinessDay) {
+            return TypesOfDay.usualDay;
+        }
+        if (workingHours instanceof DayAndNightWorkingHours) {
+            return TypesOfDay.dayAndNight;
+        }
+        throw new IllegalArgumentException("Unknown type of working hours: " + workingHours);
     }
 
     private String openArrayTag(String tagName) {

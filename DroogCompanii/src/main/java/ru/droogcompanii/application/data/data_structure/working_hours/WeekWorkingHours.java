@@ -9,6 +9,7 @@ import java.util.Map;
 
 import ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertor;
 import ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertorProvider;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
 import ru.droogcompanii.application.util.StringsCombiner;
 
 /**

@@ -10,14 +10,15 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.SearchableSortable;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 import ru.droogcompanii.application.view.activity.partner_info_activity.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
@@ -28,19 +29,19 @@ import ru.droogcompanii.application.view.fragment.MarkerOptionsBuilder;
  */
 public class PartnerPointsMapFragment extends BaseCustomMapFragment implements GoogleMap.OnInfoWindowClickListener {
 
-
     public static interface OnPartnerPointInfoWindowClickListener {
         void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);
     }
 
-    private List<PartnerPoint> partnerPoints;
     private List<Marker> markers;
+    private List<PartnerPoint> partnerPoints;
     private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
     private PartnerPointsProvider partnerPointsProvider;
+    private SearchableSortable<PartnerPoint> searchableSortablePartnerPoints;
 
     public PartnerPointsMapFragment() {
         super();
-        partnerPoints = new ArrayList<PartnerPoint>();
+        searchableSortablePartnerPoints = SearchableSortable.newInstance(new ArrayList<PartnerPoint>());
     }
 
     @Override
@@ -60,22 +61,28 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         getGoogleMap().setOnInfoWindowClickListener(this);
 
         if (savedInstanceState == null) {
-            partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
+            init();
         } else {
             restoreInstanceState(savedInstanceState);
         }
         updateMap();
     }
 
+    private void init() {
+        List<PartnerPoint> partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
+        searchableSortablePartnerPoints = SearchableSortable.newInstance(partnerPoints);
+    }
+
     @SuppressWarnings("unchecked")
     private void restoreInstanceState(Bundle savedInstanceState) {
-        partnerPoints = (List<PartnerPoint>) savedInstanceState.getSerializable(Keys.partnerPoints);
+        searchableSortablePartnerPoints = (SearchableSortable<PartnerPoint>)
+                savedInstanceState.getSerializable(Keys.searchableSortablePartnerPoints);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
+        outState.putSerializable(Keys.searchableSortablePartnerPoints, searchableSortablePartnerPoints);
     }
 
     private void updateMap() {
@@ -84,22 +91,20 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     private void updateMarkers() {
-        final GoogleMap googleMap = getGoogleMap();
-        googleMap.clear();
+        getGoogleMap().clear();
+        placeMarkersOnMap();
+    }
+
+    private void placeMarkersOnMap() {
+        GoogleMap googleMap = getGoogleMap();
+        MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
         markers = new ArrayList<Marker>();
-        SearchableSortable<PartnerPoint> searchableSortablePartnerPoints = SearchableSortable.newInstance(partnerPoints);
-        final MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
-        searchableSortablePartnerPoints.forEach(new SearchableSortable.OnEachHandler<PartnerPoint>() {
-            @Override
-            public void onEach(PartnerPoint each, boolean meetsCriteria) {
-                if (!meetsCriteria) {
-                    return;
-                }
-                MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(each);
-                Marker marker = googleMap.addMarker(markerOptions);
-                markers.add(marker);
-            }
-        });
+        partnerPoints = searchableSortablePartnerPoints.toList();
+        for (PartnerPoint each : partnerPoints) {
+            MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(each);
+            Marker marker = googleMap.addMarker(markerOptions);
+            markers.add(marker);
+        }
     }
 
     private void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
@@ -131,6 +136,22 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
 
     private int getMapPadding() {
         return getResources().getInteger(R.integer.map_markers_padding);
+    }
+
+    public void resetFilters(Collection<Filter<PartnerPoint>> filters) {
+        searchableSortablePartnerPoints.clear();
+        addFilters(filters);
+    }
+
+    public void addFilters(Collection<Filter<PartnerPoint>> filters) {
+        for (Filter<PartnerPoint> filter : filters) {
+            addFilter(filter);
+        }
+        updateMap();
+    }
+
+    private void addFilter(Filter<PartnerPoint> filter) {
+        filter.includeIn(searchableSortablePartnerPoints);
     }
 
     @Override

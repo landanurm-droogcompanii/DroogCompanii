@@ -6,7 +6,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursBuilder;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.DayAndNightWorkingHours;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 
 /**
@@ -22,15 +24,14 @@ public class TestWeekWorkingHours extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        WorkingHoursBuilder workingHoursBuilder = new WorkingHoursBuilder();
         workingHoursForEachDayOfWeek = new WorkingHoursForEachDayOfWeek();
-        workingHoursForEachDayOfWeek.onMonday = workingHoursBuilder.onHoliday("Monday");
-        workingHoursForEachDayOfWeek.onTuesday = workingHoursBuilder.buildDayAndNightWorkingHours();
-        workingHoursForEachDayOfWeek.onWednesday = workingHoursBuilder.onBusinessDay(new Time(9, 0), new Time(20, 0));
-        workingHoursForEachDayOfWeek.onThursday = workingHoursBuilder.onBusinessDay(new Time(9, 0), new Time(19, 0));
-        workingHoursForEachDayOfWeek.onFriday = workingHoursBuilder.buildDayAndNightWorkingHours();
-        workingHoursForEachDayOfWeek.onSaturday = workingHoursBuilder.onBusinessDay(new Time(8, 0), new Time(19, 30));
-        workingHoursForEachDayOfWeek.onSunday = workingHoursBuilder.onHoliday("Holiday");
+        workingHoursForEachDayOfWeek.onMonday = new WorkingHoursOnHoliday("Monday - Holiday");
+        workingHoursForEachDayOfWeek.onTuesday = new DayAndNightWorkingHours("Day&Night");
+        workingHoursForEachDayOfWeek.onWednesday = new WorkingHoursOnBusinessDay(new Time(9, 0), new Time(20, 0));
+        workingHoursForEachDayOfWeek.onThursday = new WorkingHoursOnBusinessDay(new Time(9, 0), new Time(19, 0));
+        workingHoursForEachDayOfWeek.onFriday = new DayAndNightWorkingHours("All day");
+        workingHoursForEachDayOfWeek.onSaturday = new WorkingHoursOnBusinessDay(new Time(8, 0), new Time(19, 30));
+        workingHoursForEachDayOfWeek.onSunday = new WorkingHoursOnHoliday("Holiday");
 
         weekWorkingHours = new WeekWorkingHours(workingHoursForEachDayOfWeek);
         copy = new WeekWorkingHours(workingHoursForEachDayOfWeek);

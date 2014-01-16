@@ -1,9 +1,6 @@
 package ru.droogcompanii.application.view.activity_3.filter_activity.filter;
 
 import android.content.Context;
-import android.view.View;
-
-import java.util.List;
 
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
@@ -21,6 +18,6 @@ public class WorkerWithPartnerPointFiltersBuilder implements WorkerWithFiltersBu
     @Override
     public WorkerWithFilters<PartnerPoint> build(Context context) {
         // TODO:
-        return null;
+        throw new RuntimeException("Not implemented yet");
     }
 }

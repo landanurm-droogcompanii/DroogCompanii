@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
@@ -19,13 +18,16 @@ import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filte
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithFilters;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithFiltersBuilder;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithPartnerPointFiltersBuilder;
+import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.WorkerWithStandardPartnerPointFilters;
 
 /**
  * Created by ls on 15.01.14.
  */
 
-// This activity returns to previous activity list of filters
+// This activity returns <List of Filters> to previous activity
 public class FilterActivity extends Activity {
+
+    public static final int REQUEST_CODE = 14235;
 
     private PartnerCategory partnerCategory;
     private WorkerWithFilters<PartnerPoint> workerWithStandardFilters;
@@ -70,14 +72,17 @@ public class FilterActivity extends Activity {
     }
 
     private void initMoreFilters(PartnerCategory partnerCategory) {
-        WorkerWithFiltersBuilder<PartnerPoint> builder;
-        if (partnerCategory == null) {
-            builder = new DummyWorkerWithPartnerPointFiltersBuilder();
-        } else {
-            builder = new WorkerWithPartnerPointFiltersBuilder(partnerCategory);
-        }
+        WorkerWithFiltersBuilder<PartnerPoint> builder = prepareBuilder(partnerCategory);
         workerWithMoreFilters = builder.build(this);
         fillContainerWithFilters(R.id.containerOfMoreFilters, workerWithMoreFilters);
+    }
+
+    private WorkerWithFiltersBuilder<PartnerPoint> prepareBuilder(PartnerCategory partnerCategory) {
+        if (partnerCategory == null) {
+            return new DummyWorkerWithPartnerPointFiltersBuilder();
+        } else {
+            return new WorkerWithPartnerPointFiltersBuilder(partnerCategory);
+        }
     }
 
     @Override
@@ -89,15 +94,15 @@ public class FilterActivity extends Activity {
     @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(Keys.filters, getFilters());
+        returnIntent.putExtra(Keys.filters, (Serializable) getFilters());
         setResult(RESULT_OK, returnIntent);
         super.onBackPressed();
     }
 
-    private Serializable getFilters() {
+    private List<Filter<PartnerPoint>> getFilters() {
         List<Filter<PartnerPoint>> filters = getStandardFilters();
         filters.addAll(getMoreFilters());
-        return (Serializable) filters;
+        return filters;
     }
 
     private List<Filter<PartnerPoint>> getStandardFilters() {

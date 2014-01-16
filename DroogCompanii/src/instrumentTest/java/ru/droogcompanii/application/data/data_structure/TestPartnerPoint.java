@@ -5,11 +5,12 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-import ru.droogcompanii.application.data.data_structure.working_hours.Time;
+import ru.droogcompanii.application.data.data_structure.working_hours.time.Time;
 import ru.droogcompanii.application.data.data_structure.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHoursForEachDayOfWeek;
-import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursBuilder;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
+import ru.droogcompanii.application.data.data_structure.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 
 /**
  * Created by ls on 08.01.14.
@@ -25,17 +26,16 @@ public class TestPartnerPoint extends TestCase {
     private static final WeekWorkingHours workingHours = new WeekWorkingHours(prepareWorkingHoursOnEachDayOfWeek());
 
     private static WorkingHoursForEachDayOfWeek prepareWorkingHoursOnEachDayOfWeek() {
-        WorkingHoursBuilder workingHoursBuilder = new WorkingHoursBuilder();
         Time fromOfUsualDay = new Time(9, 0);
         Time toOfUsualDay = new Time(19, 0);
-        WorkingHours workingHoursOfUsualDay = workingHoursBuilder.onBusinessDay(fromOfUsualDay, toOfUsualDay);
-        WorkingHours workingHoursOfHoliday = workingHoursBuilder.onHoliday("Holiday");
+        WorkingHours workingHoursOfUsualDay = new WorkingHoursOnBusinessDay(fromOfUsualDay, toOfUsualDay);
+        WorkingHours workingHoursOfHoliday = new WorkingHoursOnHoliday("Holiday");
         WorkingHoursForEachDayOfWeek workingHours = new WorkingHoursForEachDayOfWeek();
         workingHours.onMonday = workingHoursOfUsualDay;
         workingHours.onTuesday = workingHoursOfUsualDay;
         workingHours.onWednesday = workingHoursOfUsualDay;
         workingHours.onThursday = workingHoursOfUsualDay;
-        workingHours.onFriday = workingHoursBuilder.onBusinessDay(new Time(10, 0), new Time(18, 0));
+        workingHours.onFriday = new WorkingHoursOnBusinessDay(new Time(10, 0), new Time(18, 0));
         workingHours.onSaturday = workingHoursOfHoliday;
         workingHours.onSunday = workingHoursOfHoliday;
         return workingHours;
@@ -121,7 +121,7 @@ public class TestPartnerPoint extends TestCase {
 
     public void testNotEqualsWithDifferent_WorkingHours() {
         WorkingHoursForEachDayOfWeek workingHoursForEachDayOfWeek = prepareWorkingHoursOnEachDayOfWeek();
-        workingHoursForEachDayOfWeek.onMonday = new WorkingHoursBuilder().onHoliday("Monday as Holiday");
+        workingHoursForEachDayOfWeek.onMonday = new WorkingHoursOnHoliday("Monday - Holiday");
         WeekWorkingHours otherWorkingHours = new WeekWorkingHours(workingHoursForEachDayOfWeek);
 
         assertNotEquals(
