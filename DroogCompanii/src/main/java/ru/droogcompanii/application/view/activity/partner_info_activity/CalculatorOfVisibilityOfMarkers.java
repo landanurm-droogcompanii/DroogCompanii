@@ -6,7 +6,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.view.activity.partner_info_activity.comparer_with_query.ComparerWithQuery;
 import ru.droogcompanii.application.view.activity.partner_info_activity.comparer_with_query.ComparerWithQueryProvider;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 25.12.13.

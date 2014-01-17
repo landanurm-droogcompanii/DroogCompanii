@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import ru.droogcompanii.application.view.activity.partner_category_list_activity.PartnerCategoryListAdapter;
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 
 /**
  * Created by ls on 10.01.14.

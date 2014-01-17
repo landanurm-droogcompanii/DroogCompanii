@@ -4,8 +4,8 @@ import android.os.Bundle;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.fragment.partner_category_map_fragment.PartnerCategoryMapFragment;
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
 
 /**

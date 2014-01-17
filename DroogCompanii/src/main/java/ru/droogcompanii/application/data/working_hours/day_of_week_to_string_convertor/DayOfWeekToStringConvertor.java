@@ -1,0 +1,9 @@
+package ru.droogcompanii.application.data.working_hours.day_of_week_to_string_convertor;
+
+/**
+ * Created by Leonid on 19.12.13.
+ */
+public interface DayOfWeekToStringConvertor {
+    // dayOfWeek - some of the Calendar's constants for week days (such as Calendar.MONDAY, Calendar.TUESDAY etc).
+    String dayOfWeekToString(int dayOfWeek);
+}

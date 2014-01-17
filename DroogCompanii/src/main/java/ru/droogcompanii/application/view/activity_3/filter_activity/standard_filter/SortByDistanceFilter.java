@@ -4,7 +4,7 @@ import android.location.Location;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.SortingFilter;
 
 /**
@@ -25,6 +25,9 @@ class SortByDistanceFilter extends SortingFilter<PartnerPoint> implements Serial
     @Override
     public int compare(PartnerPoint partnerPoint1, PartnerPoint partnerPoint2) {
         Location baseLocation = baseLocationProvider.getBaseLocation();
+        if (baseLocation == null) {
+            return 0;
+        }
         Location location1 = locationFrom(partnerPoint1);
         Location location2 = locationFrom(partnerPoint2);
         float d1 = baseLocation.distanceTo(location1);

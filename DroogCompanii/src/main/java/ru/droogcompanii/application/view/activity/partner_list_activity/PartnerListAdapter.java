@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.view.helpers.SimpleArrayAdapter;
 

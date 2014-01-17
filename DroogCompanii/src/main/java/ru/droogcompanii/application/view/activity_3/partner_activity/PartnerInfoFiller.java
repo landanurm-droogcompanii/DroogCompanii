@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.data_structure.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 
 /**
  * Created by ls on 15.01.14.

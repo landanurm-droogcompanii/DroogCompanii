@@ -6,11 +6,11 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.util.SerializationUtils;
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-import ru.droogcompanii.application.data.data_structure.working_hours.WeekWorkingHours;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
 
 /**

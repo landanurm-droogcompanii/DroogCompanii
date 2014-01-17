@@ -14,12 +14,12 @@ import java.util.Calendar;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.helpers.ActionBarActivityWithBackButton;
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-import ru.droogcompanii.application.data.data_structure.working_hours.DateTimeConstants;
-import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
-import ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertor;
-import ru.droogcompanii.application.data.data_structure.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertorProvider;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.working_hours.DateTimeConstants;
+import ru.droogcompanii.application.data.working_hours.WorkingHours;
+import ru.droogcompanii.application.data.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertor;
+import ru.droogcompanii.application.data.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertorProvider;
 import ru.droogcompanii.application.util.Keys;
 
 /**

@@ -79,13 +79,18 @@ public class SearchableSortable<T> implements Serializable {
         }
     }
 
-    public List<T> toList() {
+    public List<T> toUnsortedList() {
         List<T> list = new ArrayList<T>();
         for (T each : elements) {
             if (meetCriteria(each)) {
                 list.add(each);
             }
         }
+        return list;
+    }
+
+    public List<T> toSortedList() {
+        List<T> list = toUnsortedList();
         sort(list);
         return list;
     }

@@ -3,7 +3,7 @@ package ru.droogcompanii.application.view.activity_3.filter_activity.standard_fi
 import java.io.Serializable;
 import java.util.Calendar;
 
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.SearchFilter;
 
 /**

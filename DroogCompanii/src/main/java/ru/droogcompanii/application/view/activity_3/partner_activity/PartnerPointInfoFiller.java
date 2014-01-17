@@ -6,7 +6,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 15.01.14.

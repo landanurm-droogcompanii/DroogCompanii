@@ -8,8 +8,8 @@ import android.widget.AdapterView;
 
 import ru.droogcompanii.application.view.helpers.ActionBarListActivityWithBackButton;
 import ru.droogcompanii.application.view.activity.partner_info_activity.PartnerInfoActivity;
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
 
 public class PartnerListActivity extends ActionBarListActivityWithBackButton

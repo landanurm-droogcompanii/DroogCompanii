@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.util.List;
 
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 24.12.13.

@@ -2,8 +2,6 @@ package ru.droogcompanii.application.util;
 
 import java.util.List;
 
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-
 /**
  * Created by ls on 16.01.14.
  */

@@ -14,13 +14,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-import ru.droogcompanii.application.data.data_structure.working_hours.WeekWorkingHours;
-import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHours;
-import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHoursForEachDayOfWeek;
-import ru.droogcompanii.application.data.data_structure.working_hours.WorkingHoursParser;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
+import ru.droogcompanii.application.data.working_hours.WorkingHours;
+import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
+import ru.droogcompanii.application.data.working_hours.WorkingHoursParser;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants;
 
 /**
@@ -396,7 +396,7 @@ public class DroogCompaniiXmlParser {
         boolean allRight = Arrays.equals(requiredAttributes, actualAttributes);
         if (!allRight) {
             StringBuilder illegalArgumentExceptionMessage = new StringBuilder(
-                "For working hours of day need " + requiredAttributes.length + " attribute(s): "
+                "For WorkingHours of day need " + requiredAttributes.length + " attribute(s): "
             );
             for (String attribute : requiredAttributes) {
                 illegalArgumentExceptionMessage.append(attribute);

@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 15.01.14.

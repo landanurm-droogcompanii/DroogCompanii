@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;

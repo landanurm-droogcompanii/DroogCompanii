@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import ru.droogcompanii.application.data.data_structure.Partner;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 14.01.14.

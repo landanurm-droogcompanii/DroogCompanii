@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.view.activity.partner_info_activity.comparer_with_query;
 
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 25.12.13.

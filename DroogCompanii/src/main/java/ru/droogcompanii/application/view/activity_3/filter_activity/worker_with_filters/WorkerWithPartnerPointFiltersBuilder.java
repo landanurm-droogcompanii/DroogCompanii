@@ -2,8 +2,8 @@ package ru.droogcompanii.application.view.activity_3.filter_activity.worker_with
 
 import android.content.Context;
 
-import ru.droogcompanii.application.data.data_structure.PartnerCategory;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
 /**
  * Created by ls on 15.01.14.

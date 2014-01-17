@@ -16,7 +16,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.SearchableSortable;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
@@ -99,7 +99,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         GoogleMap googleMap = getGoogleMap();
         MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
         markers = new ArrayList<Marker>();
-        partnerPoints = searchableSortablePartnerPoints.toList();
+        partnerPoints = searchableSortablePartnerPoints.toSortedList();
         for (PartnerPoint each : partnerPoints) {
             MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(each);
             Marker marker = googleMap.addMarker(markerOptions);

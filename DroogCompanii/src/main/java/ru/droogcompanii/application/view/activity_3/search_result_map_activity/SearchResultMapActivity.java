@@ -1,16 +1,12 @@
 package ru.droogcompanii.application.view.activity_3.search_result_map_activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.List;
-
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.data_structure.PartnerPoint;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
