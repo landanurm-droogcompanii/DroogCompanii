@@ -10,7 +10,7 @@ import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Sorti
  * Created by ls on 16.01.14.
  */
 
-class SortBySaleTypeValueFilter extends SortingFilter<PartnerPoint> implements Serializable {
+class SortBySaleValueFilter extends SortingFilter<PartnerPoint> implements Serializable {
     @Override
     public int compare(PartnerPoint partnerPoint, PartnerPoint partnerPoint2) {
         // TODO: Сервер должен передавать размер скидки

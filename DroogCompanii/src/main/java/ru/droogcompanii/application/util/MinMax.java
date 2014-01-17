@@ -9,6 +9,9 @@ public class MinMax<T extends Comparable<T>> {
     private T max;
 
     public void add(T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot add <null>");
+        }
         if (min == null) {
             min = value;
             max = value;

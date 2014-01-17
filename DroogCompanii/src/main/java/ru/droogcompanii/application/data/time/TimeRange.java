@@ -13,9 +13,6 @@ public class TimeRange implements Serializable {
     private final TimeOfDay from;
     private final TimeOfDay to;
 
-    public static TimeRange newIncludedIncluded(TimeOfDay from, TimeOfDay to) {
-        return new TimeRange(from, to);
-    }
 
     public static TimeRange newIncludedExcluded(TimeOfDay from, TimeOfDay to) {
         return new TimeRange(

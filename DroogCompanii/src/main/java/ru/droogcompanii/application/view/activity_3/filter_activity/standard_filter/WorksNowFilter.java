@@ -11,11 +11,11 @@ class WorksNowFilter extends WorksAtSomeTimeFilter {
     public WorksNowFilter() {
         super(new NowCalendarProvider());
     }
-}
 
-class NowCalendarProvider implements WorksAtSomeTimeFilter.CalendarProvider, Serializable {
-    @Override
-    public Calendar getCalendar() {
-        return Calendar.getInstance();
+    static class NowCalendarProvider implements WorksAtSomeTimeFilter.CalendarProvider, Serializable {
+        @Override
+        public Calendar getCalendar() {
+            return Calendar.getInstance();
+        }
     }
 }

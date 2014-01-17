@@ -7,6 +7,9 @@ import java.util.Calendar;
  * Created by Leonid on 19.12.13.
  */
 public class TimeOfDay implements Time, Serializable {
+    private static final int HOURS_PER_DAY = 24;
+    private static final int MINUTES_PER_HOUR = 60;
+
     private final int hours;
     private final int minutes;
 
@@ -17,6 +20,9 @@ public class TimeOfDay implements Time, Serializable {
     }
 
     public TimeOfDay(int hours, int minutes) {
+        if (hours < 0 || hours >= HOURS_PER_DAY || minutes < 0 || minutes >= MINUTES_PER_HOUR) {
+            throw new IllegalArgumentException("Illegal time: <" + hours + ":" + minutes + ">");
+        }
         this.hours = hours;
         this.minutes = minutes;
     }

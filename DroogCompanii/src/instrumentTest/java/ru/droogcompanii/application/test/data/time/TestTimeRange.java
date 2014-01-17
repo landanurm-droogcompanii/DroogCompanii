@@ -106,7 +106,6 @@ public class TestTimeRange extends TestCase {
         });
     }
 
-
     public void testNewExcludedIncluded() {
         final TimeRange excludedIncluded = TimeRange.newExcludedIncluded(from, to);
         IteratorOverTimes.iterateAllTimesIn24Hours(new IteratorOverTimes.OnEachHandler() {
@@ -117,7 +116,6 @@ public class TestTimeRange extends TestCase {
             }
         });
     }
-
 
     public void testNewExcludedExcluded() {
         final TimeRange excludedExcluded = TimeRange.newExcludedExcluded(from, to);

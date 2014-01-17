@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSortingGroupItems"
         android:text="@string/labelOfSortBySaleTypeValueCheckBox"
-        android:id="@+id/sortBySaleTypeValueCheckBox" />
+        android:id="@+id/sortBySaleValueCheckBox" />
 
     <TextView
         android:layout_width="match_parent"

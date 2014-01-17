@@ -18,7 +18,7 @@ class StandardFiltersReader {
     private final View viewOfFilters;
 
     private final boolean sortByDistance;
-    private final boolean sortBySaleTypeValue;
+    private final boolean sortBySaleValue;
 
     private final boolean cashlessPayments;
 
@@ -33,7 +33,7 @@ class StandardFiltersReader {
         this.viewOfFilters = viewOfFilters;
 
         sortByDistance = checkBoxIsMarked(R.id.sortByDistanceCheckBox);
-        sortBySaleTypeValue = checkBoxIsMarked(R.id.sortBySaleTypeValueCheckBox);
+        sortBySaleValue = checkBoxIsMarked(R.id.sortBySaleValueCheckBox);
 
         cashlessPayments = checkBoxIsMarked(R.id.cashlessPaymentsCheckBox);
 
@@ -54,8 +54,8 @@ class StandardFiltersReader {
         if (sortByDistance) {
             filters.add(new SortByDistanceBasedOnCurrentLocationFilter());
         }
-        if (sortBySaleTypeValue) {
-            filters.add(new SortBySaleTypeValueFilter());
+        if (sortBySaleValue) {
+            filters.add(new SortBySaleValueFilter());
         }
         if (cashlessPayments) {
             filters.add(new CashlessPaymentsFilter());

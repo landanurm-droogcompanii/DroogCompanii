@@ -7,6 +7,7 @@ import java.util.Calendar;
 import ru.droogcompanii.application.data.time.Time;
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeRange;
+import ru.droogcompanii.application.test.UtilsForTest;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 
 /**
@@ -31,6 +32,26 @@ public class TestTimeOfDay extends TestCase {
         assertTrue(time instanceof Time);
         assertEquals(hours, time.getHours());
         assertEquals(minutes, time.getMinutes());
+    }
+
+    public void testIllegalMinutesCausesException() {
+        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+            @Override
+            public void run() {
+                final int MINUTES_PER_HOUR = 60;
+                new TimeOfDay(3, MINUTES_PER_HOUR + 1);
+            }
+        });
+    }
+
+    public void testIllegalHoursCausesException() {
+        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+            @Override
+            public void run() {
+                final int HOURS_PER_DAY = 24;
+                new TimeOfDay(HOURS_PER_DAY + 1, 0);
+            }
+        });
     }
 
     public void testEquals() {
