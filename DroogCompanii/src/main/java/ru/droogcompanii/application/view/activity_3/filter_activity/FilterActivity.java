@@ -13,11 +13,11 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.data_structure.PartnerCategory;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.DummyWorkerWithPartnerPointFiltersBuilder;
+import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.DummyWorkerWithPartnerPointFiltersBuilder;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithFilters;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithFiltersBuilder;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithPartnerPointFiltersBuilder;
+import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithFilters;
+import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithFiltersBuilder;
+import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithPartnerPointFiltersBuilder;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.WorkerWithStandardPartnerPointFilters;
 
 /**

@@ -1,9 +1,11 @@
-package ru.droogcompanii.application.view.activity_3.filter_activity.filter;
+package ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters;
 
 import android.content.Context;
 import android.view.View;
 
 import java.util.List;
+
+import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
 
 /**
  * Created by ls on 15.01.14.

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.activity_3.filter_activity.filter;
+package ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters;
 
 import android.content.Context;
 

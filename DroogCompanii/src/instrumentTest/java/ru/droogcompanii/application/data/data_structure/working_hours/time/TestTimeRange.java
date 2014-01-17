@@ -1,11 +1,10 @@
 package ru.droogcompanii.application.data.data_structure.working_hours.time;
 
-import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
-import java.io.Serializable;
-
+import ru.droogcompanii.application.UtilsForTest;
 import ru.droogcompanii.application.data.data_structure.working_hours.IteratorOverTimes;
+import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
  * Created by ls on 16.01.14.
@@ -28,7 +27,9 @@ public class TestTimeRange extends TestCase {
     }
 
     public void testTimeRangeIsSerializable() {
-        assertTrue(timeRange instanceof Serializable);
+        byte[] bytes = SerializationUtils.serialize(timeRange);
+        TimeRange deserialized = (TimeRange) SerializationUtils.deserialize(bytes);
+        assertEquals(timeRange, deserialized);
     }
 
     public void testConstructor() {
@@ -37,15 +38,12 @@ public class TestTimeRange extends TestCase {
     }
 
     public void testConstructorThrowsExceptionIfFromTimeIsBeforeToTime() {
-        try {
-            timeRange = new TimeRange(to, from);
-
-            throw new AssertionFailedError(TimeRange.class.getName() +
-                " constructor should throw IllegalArgumentException, if <from> time is before <to> time"
-            );
-        } catch (IllegalArgumentException e) {
-            // all right
-        }
+        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+            @Override
+            public void run() {
+                new TimeRange(to, from);
+            }
+        });
     }
 
     public void testIncludes() {

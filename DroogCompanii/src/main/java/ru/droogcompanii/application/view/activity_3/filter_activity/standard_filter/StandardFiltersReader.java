@@ -52,7 +52,7 @@ class StandardFiltersReader {
     public List<Filter<PartnerPoint>> read() {
         List<Filter<PartnerPoint>> filters = new ArrayList<Filter<PartnerPoint>>();
         if (sortByDistance) {
-            filters.add(new SortByDistanceFilter());
+            filters.add(new SortByDistanceBasedOnCurrentLocationFilter());
         }
         if (sortBySaleTypeValue) {
             filters.add(new SortBySaleTypeValueFilter());

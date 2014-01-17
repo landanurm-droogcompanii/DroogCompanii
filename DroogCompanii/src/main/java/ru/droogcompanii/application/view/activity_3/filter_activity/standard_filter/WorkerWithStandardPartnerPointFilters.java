@@ -10,7 +10,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.data_structure.PartnerPoint;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.WorkerWithFilters;
+import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithFilters;
 
 /**
  * Created by ls on 15.01.14.
