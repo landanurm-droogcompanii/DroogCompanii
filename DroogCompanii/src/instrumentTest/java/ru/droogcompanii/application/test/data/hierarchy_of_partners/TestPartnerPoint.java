@@ -7,6 +7,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.time.TimeOfDay;
+import ru.droogcompanii.application.data.time.TimeRange;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
@@ -29,14 +30,16 @@ public class TestPartnerPoint extends TestCase {
     private static WorkingHoursForEachDayOfWeek prepareWorkingHoursOnEachDayOfWeek() {
         TimeOfDay fromOfUsualDay = new TimeOfDay(9, 0);
         TimeOfDay toOfUsualDay = new TimeOfDay(19, 0);
-        WorkingHours workingHoursOfUsualDay = new WorkingHoursOnBusinessDay(fromOfUsualDay, toOfUsualDay);
+        WorkingHours workingHoursOfUsualDay = new WorkingHoursOnBusinessDay()
+                .include(new TimeRange(fromOfUsualDay, toOfUsualDay));
         WorkingHours workingHoursOfHoliday = new WorkingHoursOnHoliday("Holiday");
         WorkingHoursForEachDayOfWeek workingHours = new WorkingHoursForEachDayOfWeek();
         workingHours.onMonday = workingHoursOfUsualDay;
         workingHours.onTuesday = workingHoursOfUsualDay;
         workingHours.onWednesday = workingHoursOfUsualDay;
         workingHours.onThursday = workingHoursOfUsualDay;
-        workingHours.onFriday = new WorkingHoursOnBusinessDay(new TimeOfDay(10, 0), new TimeOfDay(18, 0));
+        workingHours.onFriday = new WorkingHoursOnBusinessDay()
+                .include(new TimeRange(new TimeOfDay(10, 0), new TimeOfDay(18, 0)));
         workingHours.onSaturday = workingHoursOfHoliday;
         workingHours.onSunday = workingHoursOfHoliday;
         return workingHours;

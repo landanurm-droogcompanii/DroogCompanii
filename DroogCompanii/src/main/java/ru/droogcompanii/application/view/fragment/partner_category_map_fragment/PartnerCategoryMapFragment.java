@@ -17,7 +17,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
-import ru.droogcompanii.application.view.activity.partner_info_activity.latlng_bounds_calculator.LatLngBoundsCalculator;
+import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;

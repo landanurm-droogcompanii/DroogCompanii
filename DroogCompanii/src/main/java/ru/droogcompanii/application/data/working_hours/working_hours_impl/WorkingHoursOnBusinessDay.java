@@ -1,30 +1,60 @@
 package ru.droogcompanii.application.data.working_hours.working_hours_impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
-import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.time.TimeRange;
+import ru.droogcompanii.application.data.working_hours.WorkingHours;
+import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
- * Created by Leonid on 19.12.13.
+ * Created by ls on 17.01.14.
  */
 public class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
-    public static final String SEPARATOR_BETWEEN_TIMES = "-";
 
-    private final TimeRange workingTimeRange;
+    private final List<TimeRange> includedRanges;
+    private final List<TimeRange> excludedRanges;
 
-    public WorkingHoursOnBusinessDay(TimeRange timeRange) {
-        this(timeRange.from(), timeRange.to());
-    }
-
-    public WorkingHoursOnBusinessDay(TimeOfDay from, TimeOfDay to) {
-        workingTimeRange = new TimeRange(from, to);
+    public WorkingHoursOnBusinessDay() {
+        includedRanges = new ArrayList<TimeRange>();
+        excludedRanges = new ArrayList<TimeRange>();
     }
 
     @Override
     public boolean includes(TimeOfDay time) {
-        return workingTimeRange.includes(time);
+        for (TimeRange excludedRange : excludedRanges) {
+            if (excludedRange.includes(time)) {
+                return false;
+            }
+        }
+        for (TimeRange includedRange : includedRanges) {
+            if (includedRange.includes(time)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public WorkingHoursOnBusinessDay include(TimeRange timeRange) {
+        includedRanges.add(timeRange);
+        return this;
+    }
+
+    public WorkingHoursOnBusinessDay exclude(TimeRange timeRange) {
+        excludedRanges.add(timeRange);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        String includedComponent = StringsCombiner.combine(includedRanges, ", ");
+        if (excludedRanges.isEmpty()) {
+            return includedComponent;
+        } else {
+            return includedComponent + " (" + StringsCombiner.combine(excludedRanges, ", ") + ")";
+        }
     }
 
     @Override
@@ -39,16 +69,20 @@ public class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
             return false;
         }
         WorkingHoursOnBusinessDay other = (WorkingHoursOnBusinessDay) obj;
-        return workingTimeRange.equals(other.workingTimeRange);
+        return (includedRanges.equals(other.includedRanges) &&
+                excludedRanges.equals(other.excludedRanges));
     }
 
     @Override
     public int hashCode() {
-        return workingTimeRange.hashCode();
+        return includedRanges.hashCode() + excludedRanges.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return workingTimeRange.toString();
+    public List<TimeRange> getIncludedRanges() {
+        return new ArrayList<TimeRange>(includedRanges);
+    }
+
+    public List<TimeRange> getExcludedRanges() {
+        return new ArrayList<TimeRange>(excludedRanges);
     }
 }

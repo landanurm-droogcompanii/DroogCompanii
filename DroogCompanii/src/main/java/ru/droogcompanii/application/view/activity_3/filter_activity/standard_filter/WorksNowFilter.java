@@ -6,14 +6,14 @@ import java.util.Calendar;
 /**
  * Created by ls on 16.01.14.
  */
-class WorksNowFilter extends WorksForSomeTimeFilter {
+class WorksNowFilter extends WorksAtSomeTimeFilter {
 
     public WorksNowFilter() {
         super(new NowCalendarProvider());
     }
 }
 
-class NowCalendarProvider implements WorksForSomeTimeFilter.CalendarProvider, Serializable {
+class NowCalendarProvider implements WorksAtSomeTimeFilter.CalendarProvider, Serializable {
     @Override
     public Calendar getCalendar() {
         return Calendar.getInstance();

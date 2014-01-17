@@ -9,7 +9,7 @@ import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Searc
 /**
  * Created by ls on 16.01.14.
  */
-class WorksForSomeTimeFilter extends SearchFilter<PartnerPoint> implements Serializable {
+class WorksAtSomeTimeFilter extends SearchFilter<PartnerPoint> implements Serializable {
 
     static interface CalendarProvider {
         Calendar getCalendar();
@@ -17,7 +17,7 @@ class WorksForSomeTimeFilter extends SearchFilter<PartnerPoint> implements Seria
 
     private CalendarProvider calendarProvider;
 
-    public WorksForSomeTimeFilter(CalendarProvider calendarProvider) {
+    public WorksAtSomeTimeFilter(CalendarProvider calendarProvider) {
         this.calendarProvider = calendarProvider;
     }
 

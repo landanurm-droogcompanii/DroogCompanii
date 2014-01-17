@@ -13,6 +13,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.time.TimeOfDay;
+import ru.droogcompanii.application.data.time.TimeRange;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
@@ -49,7 +50,7 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
     private String titleOfPartnerCategory;
     private String titleOfPartnerPoint;
     private WeekWorkingHours weekWorkingHoursOfPartnerPoint;
-    private WorkingHoursForEachDayOfWeek workingHoursOfPartnerPoint;
+    private WorkingHoursForEachDayOfWeek workingHoursForEachDayOfWeek;
 
 
     private PartnerCategory parsedPartnerCategory;
@@ -73,15 +74,24 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         paymentMethodsOfPartnerPoint = "Visa, MasterCard";
         phonesOfPartnerPoint = Arrays.asList("79196763351", "79105352235");
 
-        workingHoursOfPartnerPoint = new WorkingHoursForEachDayOfWeek();
-        workingHoursOfPartnerPoint.onMonday = new WorkingHoursOnBusinessDay(new TimeOfDay(9, 0), new TimeOfDay(18, 0));
-        workingHoursOfPartnerPoint.onTuesday = new WorkingHoursOnBusinessDay(new TimeOfDay(10, 0), new TimeOfDay(19, 0));
-        workingHoursOfPartnerPoint.onWednesday = new WorkingHoursOnBusinessDay(new TimeOfDay(9, 0), new TimeOfDay(19, 0));
-        workingHoursOfPartnerPoint.onThursday = new DayAndNightWorkingHours("Day Night");
-        workingHoursOfPartnerPoint.onFriday = new WorkingHoursOnBusinessDay(new TimeOfDay(10, 0), new TimeOfDay(17, 0));
-        workingHoursOfPartnerPoint.onSaturday = new WorkingHoursOnHoliday("Holiday 1");
-        workingHoursOfPartnerPoint.onSunday = new WorkingHoursOnHoliday("Holiday 2");
-        weekWorkingHoursOfPartnerPoint = new WeekWorkingHours(workingHoursOfPartnerPoint);
+        workingHoursForEachDayOfWeek = new WorkingHoursForEachDayOfWeek();
+        WorkingHoursOnBusinessDay onBusinessDay1 = new WorkingHoursOnBusinessDay()
+                .include(new TimeRange(new TimeOfDay(0, 0), new TimeOfDay(9, 0)))
+                .include(new TimeRange(new TimeOfDay(21, 0), new TimeOfDay(23, 59)))
+                .exclude(new TimeRange(new TimeOfDay(23, 0), new TimeOfDay(23, 59)));
+        workingHoursForEachDayOfWeek.onMonday = onBusinessDay1;
+        WorkingHoursOnBusinessDay onBusinessDay2 = new WorkingHoursOnBusinessDay()
+                .include(new TimeRange(new TimeOfDay(9, 0), new TimeOfDay(17, 59)))
+                .exclude(new TimeRange(new TimeOfDay(12, 0), new TimeOfDay(12, 59)));
+        workingHoursForEachDayOfWeek.onTuesday = onBusinessDay2;
+        workingHoursForEachDayOfWeek.onWednesday = onBusinessDay2;
+        workingHoursForEachDayOfWeek.onThursday = new DayAndNightWorkingHours("Day Night");
+        WorkingHoursOnBusinessDay onBusinessDay3 = new WorkingHoursOnBusinessDay()
+                .include(new TimeRange(new TimeOfDay(9, 0), new TimeOfDay(17, 59)));
+        workingHoursForEachDayOfWeek.onFriday = onBusinessDay3;
+        workingHoursForEachDayOfWeek.onSaturday = new WorkingHoursOnHoliday("Holiday 1");
+        workingHoursForEachDayOfWeek.onSunday = new WorkingHoursOnHoliday("Holiday 2");
+        weekWorkingHoursOfPartnerPoint = new WeekWorkingHours(workingHoursForEachDayOfWeek);
 
         String xmlText = prepareXml();
         xml = stringToInputStream(xmlText);
@@ -116,7 +126,7 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
             .append("\t\t\t\t\t\t" + openTag(Tags.latitude + TYPE_DECIMAL) + latitudeOfPartnerPoint + closeTag(Tags.latitude) + "\n")
             .append("\t\t\t\t\t\t" + openTag(Tags.paymentMethods) + paymentMethodsOfPartnerPoint + closeTag(Tags.paymentMethods) + "\n")
             .append(preparePhonesXml("\t\t\t\t\t\t", phonesOfPartnerPoint) + "\n")
-            .append(prepareWorkingHoursXml("\t\t\t\t\t\t", workingHoursOfPartnerPoint) + "\n")
+            .append(prepareWorkingHoursXml("\t\t\t\t\t\t", workingHoursForEachDayOfWeek) + "\n")
             .append("\t\t\t\t\t" + closeTag(Tags.partnerPoint) + "\n")
             .append("\t\t\t\t" + closeTag(Tags.partnerPoints) + "\n")
             .append("\t\t\t" + closeTag(Tags.partner) + "\n")
@@ -166,10 +176,10 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
     }
 
     private String prepareWorkingHoursRow(String tagOfDay, WorkingHours workingHours) {
-        return openTag(tagOfDay + " " + dayTypeAttributeOf(workingHours)) + workingHours + closeTag(tagOfDay);
+        return openTag(tagOfDay + " " + attributeDayTypeOf(workingHours)) + workingHours + closeTag(tagOfDay);
     }
 
-    private String dayTypeAttributeOf(WorkingHours workingHours) {
+    private String attributeDayTypeOf(WorkingHours workingHours) {
         return Attributes.typeOfDay + "=" + quote(dayTypeOf(workingHours));
     }
 

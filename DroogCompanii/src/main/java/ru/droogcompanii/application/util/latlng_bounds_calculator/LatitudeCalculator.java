@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.activity.partner_info_activity.latlng_bounds_calculator;
+package ru.droogcompanii.application.util.latlng_bounds_calculator;
 
 /**
  * Created by ls on 26.12.13.

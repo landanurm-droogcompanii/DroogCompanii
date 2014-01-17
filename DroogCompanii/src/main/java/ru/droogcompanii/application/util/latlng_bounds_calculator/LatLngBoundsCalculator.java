@@ -1,10 +1,12 @@
-package ru.droogcompanii.application.view.activity.partner_info_activity.latlng_bounds_calculator;
+package ru.droogcompanii.application.util.latlng_bounds_calculator;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.Collection;
+
+import ru.droogcompanii.application.util.MinMax;
 
 public class LatLngBoundsCalculator {
     private static final double rightUpperLatitude = 55.800361;
@@ -21,8 +23,8 @@ public class LatLngBoundsCalculator {
 
     private final Collection<Marker> markers;
     private final LatLngBounds.Builder builder;
-    private final MinMax latitudeMinMax;
-    private final MinMax longitudeMinMax;
+    private final MinMax<Double> latitudeMinMax;
+    private final MinMax<Double> longitudeMinMax;
 
     private LatLng center;
 
@@ -33,8 +35,8 @@ public class LatLngBoundsCalculator {
 
     private LatLngBoundsCalculator(Collection<Marker> markers) {
         this.markers = markers;
-        this.latitudeMinMax = new MinMax();
-        this.longitudeMinMax = new MinMax();
+        this.latitudeMinMax = new MinMax<Double>();
+        this.longitudeMinMax = new MinMax<Double>();
         this.builder = new LatLngBounds.Builder();
     }
 
@@ -56,8 +58,8 @@ public class LatLngBoundsCalculator {
 
     private void includeMinBounds() {
         center = calculateCenter();
-        MinMax latitude = getMinBoundsLatitude();
-        MinMax longitude = getMinBoundsLongitude();
+        MinMax<Double> latitude = getMinBoundsLatitude();
+        MinMax<Double> longitude = getMinBoundsLongitude();
         builder.include(new LatLng(latitude.min(), longitude.min()));
         builder.include(new LatLng(latitude.min(), longitude.max()));
         builder.include(new LatLng(latitude.max(), longitude.min()));
@@ -70,8 +72,8 @@ public class LatLngBoundsCalculator {
         return new LatLng(centerLatitude, centerLongitude);
     }
 
-    private MinMax getMinBoundsLatitude() {
-        MinMax latitude = new MinMax();
+    private MinMax<Double> getMinBoundsLatitude() {
+        MinMax<Double> latitude = new MinMax<Double>();
         double minLatitude = LatitudeCalculator.subtract(center.latitude, halfOfMinLatitudeLength);
         double maxLatitude = LatitudeCalculator.add(center.latitude, halfOfMinLatitudeLength);
         latitude.add(minLatitude);
@@ -79,8 +81,8 @@ public class LatLngBoundsCalculator {
         return latitude;
     }
 
-    private MinMax getMinBoundsLongitude() {
-        MinMax longitude = new MinMax();
+    private MinMax<Double> getMinBoundsLongitude() {
+        MinMax<Double> longitude = new MinMax<Double>();
         double minLongitude = LongitudeCalculator.subtract(center.longitude, halfOfMinLongitudeLength);
         double maxLongitude = LongitudeCalculator.add(center.longitude, halfOfMinLongitudeLength);
         longitude.add(minLongitude);

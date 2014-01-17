@@ -1,13 +1,15 @@
-package ru.droogcompanii.application.test.data.working_hours;
+package ru.droogcompanii.application.test.data.working_hours.parser;
 
 import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
+import ru.droogcompanii.application.data.time.TimeRange;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
-import ru.droogcompanii.application.data.working_hours.WorkingHoursParser;
+import ru.droogcompanii.application.data.working_hours.parser.WorkingHoursParser;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
+
 import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.TypesOfDay;
 
 /**
@@ -33,8 +35,8 @@ public class TestWorkingHoursParser extends TestCase {
     public void testParseWorkingHoursOnUsualDay() {
         TimeOfDay from = new TimeOfDay(9, 0);
         TimeOfDay to = new TimeOfDay(18, 30);
-        String text = from + WorkingHoursOnBusinessDay.SEPARATOR_BETWEEN_TIMES + to;
-        WorkingHours expectedWorkingHours = new WorkingHoursOnBusinessDay(from, to);
+        String text = from + TimeRange.SEPARATOR + to;
+        WorkingHours expectedWorkingHours = new WorkingHoursOnBusinessDay().include(new TimeRange(from, to));
         assertEquals(expectedWorkingHours, parser.parse(TypesOfDay.usualDay, text));
     }
 

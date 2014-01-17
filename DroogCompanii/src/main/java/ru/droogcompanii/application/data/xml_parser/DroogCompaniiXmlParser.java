@@ -20,7 +20,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
-import ru.droogcompanii.application.data.working_hours.WorkingHoursParser;
+import ru.droogcompanii.application.data.working_hours.parser.WorkingHoursParser;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants;
 
 /**

@@ -27,7 +27,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.helpers.ActionBarActivityWithBackButton;
-import ru.droogcompanii.application.view.activity.partner_info_activity.latlng_bounds_calculator.LatLngBoundsCalculator;
+import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.activity.partner_point_info_activity.PartnerPointInfoActivity;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;

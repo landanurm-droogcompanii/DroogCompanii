@@ -6,42 +6,6 @@ import java.io.Serializable;
  * Created by ls on 16.01.14.
  */
 
-class TimeOfDayCalculator {
-    private static final int MINUTES_PER_HOUR = 60;
-
-    private static final TimeOfDay MIDNIGHT = new TimeOfDay(0, 0);
-    private static final TimeOfDay ONE_MINUTE_BEFORE_MIDNIGHT = new TimeOfDay(23, 59);
-
-    private final TimeOfDay timeOfDay;
-
-    TimeOfDayCalculator(TimeOfDay timeOfDay) {
-        this.timeOfDay = timeOfDay;
-    }
-
-    public TimeOfDay increasedByOneMinute() {
-        if (timeOfDay.equals(ONE_MINUTE_BEFORE_MIDNIGHT)) {
-            return MIDNIGHT;
-        }
-        int hours = timeOfDay.getHours();
-        int minutes = timeOfDay.getMinutes() + 1;
-        if (minutes < MINUTES_PER_HOUR) {
-            return new TimeOfDay(hours, minutes);
-        }
-        return new TimeOfDay(hours + 1, 0);
-    }
-
-    public TimeOfDay decreasedByOneMinute() {
-        if (timeOfDay.equals(MIDNIGHT)) {
-            return ONE_MINUTE_BEFORE_MIDNIGHT;
-        }
-        int hours = timeOfDay.getHours();
-        int minutes = timeOfDay.getMinutes() - 1;
-        if (minutes >= 0) {
-            return new TimeOfDay(hours, minutes);
-        }
-        return new TimeOfDay(hours - 1, 59);
-    }
-}
 
 public class TimeRange implements Serializable {
     public static final String SEPARATOR = "-";
@@ -117,5 +81,42 @@ public class TimeRange implements Serializable {
     @Override
     public String toString() {
         return from + SEPARATOR + to;
+    }
+
+
+    private static class TimeOfDayCalculator {
+        private static final int MINUTES_PER_HOUR = 60;
+        private static final TimeOfDay MIDNIGHT = new TimeOfDay(0, 0);
+        private static final TimeOfDay ONE_MINUTE_BEFORE_MIDNIGHT = new TimeOfDay(23, 59);
+
+        private final TimeOfDay timeOfDay;
+
+        TimeOfDayCalculator(TimeOfDay timeOfDay) {
+            this.timeOfDay = timeOfDay;
+        }
+
+        public TimeOfDay increasedByOneMinute() {
+            if (timeOfDay.equals(ONE_MINUTE_BEFORE_MIDNIGHT)) {
+                return MIDNIGHT;
+            }
+            int hours = timeOfDay.getHours();
+            int minutes = timeOfDay.getMinutes() + 1;
+            if (minutes < MINUTES_PER_HOUR) {
+                return new TimeOfDay(hours, minutes);
+            }
+            return new TimeOfDay(hours + 1, 0);
+        }
+
+        public TimeOfDay decreasedByOneMinute() {
+            if (timeOfDay.equals(MIDNIGHT)) {
+                return ONE_MINUTE_BEFORE_MIDNIGHT;
+            }
+            int hours = timeOfDay.getHours();
+            int minutes = timeOfDay.getMinutes() - 1;
+            if (minutes >= 0) {
+                return new TimeOfDay(hours, minutes);
+            }
+            return new TimeOfDay(hours - 1, 59);
+        }
     }
 }

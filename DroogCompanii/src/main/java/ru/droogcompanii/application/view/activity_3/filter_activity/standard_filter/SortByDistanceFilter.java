@@ -28,10 +28,8 @@ class SortByDistanceFilter extends SortingFilter<PartnerPoint> implements Serial
         if (baseLocation == null) {
             return 0;
         }
-        Location location1 = locationFrom(partnerPoint1);
-        Location location2 = locationFrom(partnerPoint2);
-        float d1 = baseLocation.distanceTo(location1);
-        float d2 = baseLocation.distanceTo(location2);
+        float d1 = baseLocation.distanceTo(locationFrom(partnerPoint1));
+        float d2 = baseLocation.distanceTo(locationFrom(partnerPoint2));
         return Float.compare(d1, d2);
     }
 

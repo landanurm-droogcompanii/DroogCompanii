@@ -20,7 +20,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
-import ru.droogcompanii.application.view.activity.partner_info_activity.latlng_bounds_calculator.LatLngBoundsCalculator;
+import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
 import ru.droogcompanii.application.view.fragment.MarkerOptionsBuilder;
 
