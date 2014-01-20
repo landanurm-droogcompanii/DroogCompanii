@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeParser;
-import ru.droogcompanii.application.test.UtilsForTest;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 
 /**
@@ -36,7 +36,7 @@ public class TestTimeParser extends TestCase {
     }
 
     public void testParseIllegalText() {
-        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
                 TimeOfDay time = new TimeOfDay(15, 45);

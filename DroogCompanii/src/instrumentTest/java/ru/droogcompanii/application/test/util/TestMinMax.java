@@ -2,7 +2,7 @@ package ru.droogcompanii.application.test.util;
 
 import junit.framework.TestCase;
 
-import ru.droogcompanii.application.test.UtilsForTest;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.MinMax;
 
 /**
@@ -42,7 +42,7 @@ public class TestMinMax extends TestCase {
     }
 
     public void testAdditionNullCausesException() {
-        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
                 minMax.add(null);

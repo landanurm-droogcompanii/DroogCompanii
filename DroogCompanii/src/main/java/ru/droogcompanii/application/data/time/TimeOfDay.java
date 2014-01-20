@@ -81,11 +81,7 @@ public class TimeOfDay implements Time, Serializable {
         return this.toMinutesOfDay() > time.toMinutesOfDay();
     }
 
-    public boolean within(TimeRange timeRange) {
-        return within(timeRange.from(), timeRange.to());
-    }
-
-    private boolean within(TimeOfDay fromIncluded, TimeOfDay toIncluded) {
-        return (!fromIncluded.after(this)) && (!this.after(toIncluded));
+    public boolean within(TimeRangeIncludedExcluded timeRange) {
+        return timeRange.includes(this);
     }
 }

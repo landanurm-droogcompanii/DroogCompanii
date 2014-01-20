@@ -5,7 +5,7 @@ import junit.framework.AssertionFailedError;
 /**
  * Created by ls on 16.01.14.
  */
-public class UtilsForTest {
+public class TestingUtils {
     public static void assertExpectedException(Class<? extends Exception> exceptionClass, Runnable runnable) {
         try {
             runnable.run();

@@ -22,7 +22,8 @@ public final class DroogCompaniiContracts {
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_FULL_TITLE = "full_title";
-        public static final String COLUMN_NAME_SALE_TYPE = "sale_type";
+        public static final String COLUMN_NAME_DISCOUNT_TYPE = "discount_type";
+        public static final String COLUMN_NAME_DISCOUNT = "discount";
         public static final String COLUMN_NAME_CATEGORY_ID = "category_id";
     }
 

@@ -2,6 +2,7 @@ package ru.droogcompanii.application.view.activity_3.main_screen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -9,15 +10,18 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ru.droogcompanii.application.DroogCompaniiSharedPreferences;
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.view.activity_3.filter_activity.FilterActivity;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
+import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.StandardFiltersReader;
+import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.state.StandardFiltersState;
 import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchActivity;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
@@ -36,16 +40,31 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_3_main_screen);
-        if (savedInstanceState == null) {
-            initPartnerPointsMapFragment();
-        }
-        initListeners();
-    }
 
-    private void initPartnerPointsMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         partnerPointsMapFragment =
                 (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+
+        if (savedInstanceState == null) {
+            setDefaultFilterState();
+            initPartnerPointsMapFragment();
+        }
+
+        initListeners();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    private void setDefaultFilterState() {
+        SharedPreferences.Editor editor = DroogCompaniiSharedPreferences.get(this).edit();
+        StandardFiltersState.DEFAULT.saveInto(editor);
+        editor.commit();
+    }
+
+    private void initPartnerPointsMapFragment() {
         final PartnerPointsProvider allPartnerPointsProvider = new PartnerPointsProvider() {
             @Override
             public List<PartnerPoint> getPartnerPoints(Context context) {
@@ -54,6 +73,13 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
             }
         };
         partnerPointsMapFragment.setPartnerPointsProvider(allPartnerPointsProvider);
+        partnerPointsMapFragment.setFilters(readSavedFilters());
+    }
+
+    private List<Filter<PartnerPoint>> readSavedFilters() {
+        SharedPreferences sharedPreferences = DroogCompaniiSharedPreferences.get(this);
+        StandardFiltersReader filtersReader = new StandardFiltersReader(sharedPreferences);
+        return filtersReader.read();
     }
 
     private void initListeners() {
@@ -106,7 +132,7 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
     }
 
     private void applyFilters(List<Filter<PartnerPoint>> filters) {
-        partnerPointsMapFragment.resetFilters(filters);
+        partnerPointsMapFragment.setFilters(filters);
     }
 
     private void onMenu() {

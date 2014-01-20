@@ -84,16 +84,18 @@ public class WriterToDatabase {
                          PartnersContract.COLUMN_NAME_ID + ", " +
                          PartnersContract.COLUMN_NAME_TITLE + ", " +
                          PartnersContract.COLUMN_NAME_FULL_TITLE + ", " +
-                         PartnersContract.COLUMN_NAME_SALE_TYPE + ", " +
+                         PartnersContract.COLUMN_NAME_DISCOUNT_TYPE + ", " +
+                         PartnersContract.COLUMN_NAME_DISCOUNT + ", " +
                          PartnersContract.COLUMN_NAME_CATEGORY_ID +
-                     ") VALUES(?,?,?,?,?)";
+                     ") VALUES(?,?,?,?,?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();
         insertStatement.bindLong(1, partner.id);
         insertStatement.bindString(2, partner.title);
         insertStatement.bindString(3, partner.fullTitle);
-        insertStatement.bindString(4, partner.saleType);
-        insertStatement.bindLong(5, partner.categoryId);
+        insertStatement.bindString(4, partner.discountType);
+        insertStatement.bindLong(5, partner.discount);
+        insertStatement.bindLong(6, partner.categoryId);
         insertStatement.executeInsert();
     }
 

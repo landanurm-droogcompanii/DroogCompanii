@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="titleOfSortingGroup">Сортировка</string>
+    <string name="labelOfSortByDistanceCheckBox">По расстоянию</string>
+    <string name="labelOfSortByDiscountCheckBox">По размеру скидки</string>
+    <string name="titleOfPaymentMethodGroup">Способ оплаты</string>
+    <string name="labelOfCashlessPaymentsCheckBox">Безналичный расчет</string>
+    <string name="titleOfWorkingHoursGroup">Рабочее время</string>
+    <string name="labelOfWorksNowCheckBox">Работает сейчас</string>
+    <string name="titleOfDiscountTypeGroup">Тип скидки</string>
+    <string name="labelOfBonusCheckBox">Бонус</string>
+    <string name="labelOfDiscountCheckBox">Скидка</string>
+    <string name="labelOfCashBackCheckBox">Cash back</string>
+    
+</resources>

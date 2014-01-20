@@ -23,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfSortBySaleTypeValueCheckBox"
-        android:id="@+id/sortBySaleValueCheckBox" />
+        android:text="@string/labelOfSortByDiscountCheckBox"
+        android:id="@+id/sortByDiscountCheckBox" />
 
     <TextView
         android:layout_width="match_parent"
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="@dimen/textSizeOfFilterGroupTitle"
-        android:text="@string/titleOfSaleTypeGroup" />
+        android:text="@string/titleOfDiscountTypeGroup" />
 
     <CheckBox
         android:layout_width="wrap_content"

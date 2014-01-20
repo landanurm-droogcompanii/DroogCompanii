@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data;
+package ru.droogcompanii.application.data.searchable_sortable;
 
 import java.io.Serializable;
 import java.util.ArrayList;

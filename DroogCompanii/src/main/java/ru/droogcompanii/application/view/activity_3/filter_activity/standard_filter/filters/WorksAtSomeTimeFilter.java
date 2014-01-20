@@ -1,17 +1,17 @@
-package ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter;
+package ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.filters;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.SearchFilter;
+import ru.droogcompanii.application.data.searchable_sortable.filter.SearchFilter;
 
 /**
  * Created by ls on 16.01.14.
  */
-class WorksAtSomeTimeFilter extends SearchFilter<PartnerPoint> implements Serializable {
+public class WorksAtSomeTimeFilter extends SearchFilter<PartnerPoint> implements Serializable {
 
-    static interface CalendarProvider {
+    public static interface CalendarProvider {
         Calendar getCalendar();
     }
 

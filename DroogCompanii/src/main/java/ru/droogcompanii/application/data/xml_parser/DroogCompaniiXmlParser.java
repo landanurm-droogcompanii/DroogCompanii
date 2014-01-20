@@ -188,7 +188,8 @@ public class DroogCompaniiXmlParser {
         int id = 0;
         String title = null;
         String fullTitle = null;
-        String saleType = null;
+        String discountType = null;
+        int discount = 0;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -201,22 +202,28 @@ public class DroogCompaniiXmlParser {
                 title = parseTitle(parser);
             } else if (tag.equals(XmlConstants.Tags.fullTitle)) {
                 fullTitle = parseFullTitle(parser);
-            } else if (tag.equals(XmlConstants.Tags.saleType)) {
-                saleType = parseSaleType(parser);
+            } else if (tag.equals(XmlConstants.Tags.discountType)) {
+                discountType = parseDiscountType(parser);
+            } else if (tag.equals(XmlConstants.Tags.discount)) {
+                discount = parseDiscount(parser);
             } else if (tag.equals(XmlConstants.Tags.partnerPoints)) {
                 parsePartnerPoints(parser, id);
             } else {
                 skip(parser);
             }
         }
-        return new Partner(id, title, fullTitle, saleType, partnerCategoryId);
+        return new Partner(id, title, fullTitle, discountType, discount, partnerCategoryId);
     }
 
     private Integer parseId(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, XmlConstants.Tags.id);
-        int id = parseInteger(parser);
-        parser.require(XmlPullParser.END_TAG, NAMESPACE, XmlConstants.Tags.id);
-        return id;
+        return parseIntegerByTag(parser, XmlConstants.Tags.id);
+    }
+
+    private int parseIntegerByTag(XmlPullParser parser, String tag) throws Exception {
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, tag);
+        int value = parseInteger(parser);
+        parser.require(XmlPullParser.END_TAG, NAMESPACE, tag);
+        return value;
     }
 
     private int parseInteger(XmlPullParser parser) throws Exception {
@@ -227,8 +234,12 @@ public class DroogCompaniiXmlParser {
         return parseTextByTag(parser, XmlConstants.Tags.fullTitle);
     }
 
-    private String parseSaleType(XmlPullParser parser) throws Exception {
-        return parseTextByTag(parser, XmlConstants.Tags.saleType);
+    private String parseDiscountType(XmlPullParser parser) throws Exception {
+        return parseTextByTag(parser, XmlConstants.Tags.discountType);
+    }
+
+    private int parseDiscount(XmlPullParser parser) throws Exception {
+        return parseIntegerByTag(parser, XmlConstants.Tags.discount);
     }
 
     private void parsePartnerPoints(XmlPullParser parser, int partnerId) throws Exception {

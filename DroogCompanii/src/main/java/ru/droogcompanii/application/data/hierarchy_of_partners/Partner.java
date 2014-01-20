@@ -9,7 +9,8 @@ public class Partner implements Serializable {
     public final int id;
     public final String title;
     public final String fullTitle;
-    public final String saleType;
+    public final String discountType;
+    public final int discount;
 
     // При проверке эквивалентности это поле не учитывается,
     // т.к. один партнер может входить в несколько категорий.
@@ -19,12 +20,14 @@ public class Partner implements Serializable {
     public Partner(int id,
                    String title,
                    String fullTitle,
-                   String saleType,
+                   String discountType,
+                   int discount,
                    int categoryId) {
         this.id = id;
         this.title = title;
         this.fullTitle = fullTitle;
-        this.saleType = saleType;
+        this.discountType = discountType;
+        this.discount = discount;
         this.categoryId = categoryId;
     }
 
@@ -41,14 +44,15 @@ public class Partner implements Serializable {
         }
         Partner other = (Partner) obj;
         return (id == other.id) &&
+               (discount == other.discount) &&
                (title.equals(other.title)) &&
                (fullTitle.equals(other.fullTitle)) &&
-               (saleType.equals(other.saleType));
+               (discountType.equals(other.discountType));
     }
 
     @Override
     public int hashCode() {
-        return id + title.hashCode() + fullTitle.hashCode() + saleType.hashCode();
+        return id + discount + title.hashCode() + fullTitle.hashCode() + discountType.hashCode();
     }
 
 

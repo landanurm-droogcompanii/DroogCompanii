@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
-import ru.droogcompanii.application.data.time.TimeRange;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.DateTimeConstants;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
@@ -34,12 +34,12 @@ public class TestWeekWorkingHours extends TestCase {
         workingHoursForEachDayOfWeek.onMonday = new WorkingHoursOnHoliday("Monday - Holiday");
         workingHoursForEachDayOfWeek.onTuesday = new DayAndNightWorkingHours("Day&Night");
         workingHoursForEachDayOfWeek.onWednesday = new WorkingHoursOnBusinessDay()
-                .include(new TimeRange(new TimeOfDay(9, 0), new TimeOfDay(20, 0)));
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(9, 0), new TimeOfDay(20, 0)));
         workingHoursForEachDayOfWeek.onThursday = new WorkingHoursOnBusinessDay()
-                .include(new TimeRange(new TimeOfDay(9, 0), new TimeOfDay(19, 0)));
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(9, 0), new TimeOfDay(19, 0)));
         workingHoursForEachDayOfWeek.onFriday = new DayAndNightWorkingHours("All day");
         workingHoursForEachDayOfWeek.onSaturday = new WorkingHoursOnBusinessDay()
-                .include(new TimeRange(new TimeOfDay(8, 0), new TimeOfDay(19, 30)));
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(8, 0), new TimeOfDay(19, 30)));
         workingHoursForEachDayOfWeek.onSunday = new WorkingHoursOnHoliday("Holiday");
 
         weekWorkingHours = new WeekWorkingHours(workingHoursForEachDayOfWeek);

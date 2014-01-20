@@ -19,6 +19,6 @@ public class PartnerInfoFiller {
     }
 
     private static String preparePartnerDetailsText(Partner partner) {
-        return partner.fullTitle + "\n" + partner.saleType;
+        return partner.fullTitle + "\n" + partner.discountType;
     }
 }

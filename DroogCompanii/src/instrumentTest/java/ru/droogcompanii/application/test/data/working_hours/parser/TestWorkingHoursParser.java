@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeRange;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.parser.WorkingHoursParser;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
@@ -36,7 +37,7 @@ public class TestWorkingHoursParser extends TestCase {
         TimeOfDay from = new TimeOfDay(9, 0);
         TimeOfDay to = new TimeOfDay(18, 30);
         String text = from + TimeRange.SEPARATOR + to;
-        WorkingHours expectedWorkingHours = new WorkingHoursOnBusinessDay().include(new TimeRange(from, to));
+        WorkingHours expectedWorkingHours = new WorkingHoursOnBusinessDay().include(new TimeRangeIncludedExcluded(from, to));
         assertEquals(expectedWorkingHours, parser.parse(TypesOfDay.usualDay, text));
     }
 

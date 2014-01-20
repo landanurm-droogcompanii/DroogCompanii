@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
-import ru.droogcompanii.application.data.time.TimeRange;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.util.IteratorOverTimes;
@@ -30,12 +30,12 @@ public class TestWorkingHoursOnBusinessDay extends TestCase {
             21:00 - not within range
     */
 
-    private static final TimeRange[] includedRanges = {
-        new TimeRange(new TimeOfDay(10, 0), new TimeOfDay(20, 59))
+    private static final TimeRangeIncludedExcluded[] includedRanges = {
+        new TimeRangeIncludedExcluded(new TimeOfDay(10, 0), new TimeOfDay(20, 59))
     };
-    private static final TimeRange[] excludedRanges = {
-            new TimeRange(new TimeOfDay(12, 0), new TimeOfDay(12, 59)),
-            new TimeRange(new TimeOfDay(17, 0), new TimeOfDay(17, 59))
+    private static final TimeRangeIncludedExcluded[] excludedRanges = {
+            new TimeRangeIncludedExcluded(new TimeOfDay(12, 0), new TimeOfDay(12, 59)),
+            new TimeRangeIncludedExcluded(new TimeOfDay(17, 0), new TimeOfDay(17, 59))
     };
 
     private WorkingHoursOnBusinessDay workingHours;
@@ -50,10 +50,10 @@ public class TestWorkingHoursOnBusinessDay extends TestCase {
 
     private WorkingHoursOnBusinessDay prepareTestedInstance() {
         WorkingHoursOnBusinessDay testedInstance = new WorkingHoursOnBusinessDay();
-        for (TimeRange timeRange : includedRanges) {
+        for (TimeRangeIncludedExcluded timeRange : includedRanges) {
             testedInstance.include(timeRange);
         }
-        for (TimeRange timeRange : excludedRanges) {
+        for (TimeRangeIncludedExcluded timeRange : excludedRanges) {
             testedInstance.exclude(timeRange);
         }
         return testedInstance;
@@ -70,12 +70,12 @@ public class TestWorkingHoursOnBusinessDay extends TestCase {
     }
 
     private boolean isBusinessTime(TimeOfDay time) {
-        for (TimeRange range : excludedRanges) {
+        for (TimeRangeIncludedExcluded range : excludedRanges) {
             if (range.includes(time)) {
                 return false;
             }
         }
-        for (TimeRange range : includedRanges) {
+        for (TimeRangeIncludedExcluded range : includedRanges) {
             if (range.includes(time)) {
                 return true;
             }

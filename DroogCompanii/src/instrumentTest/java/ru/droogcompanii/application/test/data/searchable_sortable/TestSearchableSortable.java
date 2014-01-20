@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.test.data;
+package ru.droogcompanii.application.test.data.searchable_sortable;
 
 import android.util.Pair;
 
@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import ru.droogcompanii.application.data.SearchableSortable;
+import ru.droogcompanii.application.data.searchable_sortable.SearchableSortable;
 
 /**
  * Created by ls on 14.01.14.

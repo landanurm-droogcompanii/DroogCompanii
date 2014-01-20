@@ -13,7 +13,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.time.TimeOfDay;
-import ru.droogcompanii.application.data.time.TimeRange;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
@@ -41,11 +41,12 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
     private double latitudeOfPartnerPoint;
     private InputStream xml;
     private int idOfPartner;
+    private int discountOfPartner;
     private List<String> phonesOfPartnerPoint;
     private String addressOfPartnerPoint;
     private String fullTitleOfPartner;
     private String paymentMethodsOfPartnerPoint;
-    private String saleTypeOfPartner;
+    private String discountTypeOfPartner;
     private String titleOfPartner;
     private String titleOfPartnerCategory;
     private String titleOfPartnerPoint;
@@ -66,7 +67,8 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         idOfPartner = 12;
         titleOfPartner = "Title of Partner 1";
         fullTitleOfPartner = "Full Title of Partner 1";
-        saleTypeOfPartner = "Sale Type of Partner 1";
+        discountTypeOfPartner = "Discount Type of Partner 1";
+        discountOfPartner = 4;
         titleOfPartnerPoint = "Title of Partner Point of Partner 1";
         addressOfPartnerPoint = "Address of Partner Point of Partner 1";
         longitudeOfPartnerPoint = 12.214535;
@@ -76,18 +78,18 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
 
         workingHoursForEachDayOfWeek = new WorkingHoursForEachDayOfWeek();
         WorkingHoursOnBusinessDay onBusinessDay1 = new WorkingHoursOnBusinessDay()
-                .include(new TimeRange(new TimeOfDay(0, 0), new TimeOfDay(9, 0)))
-                .include(new TimeRange(new TimeOfDay(21, 0), new TimeOfDay(23, 59)))
-                .exclude(new TimeRange(new TimeOfDay(23, 0), new TimeOfDay(23, 59)));
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(0, 0), new TimeOfDay(9, 0)))
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(21, 0), new TimeOfDay(23, 59)))
+                .exclude(new TimeRangeIncludedExcluded(new TimeOfDay(23, 0), new TimeOfDay(23, 59)));
         workingHoursForEachDayOfWeek.onMonday = onBusinessDay1;
         WorkingHoursOnBusinessDay onBusinessDay2 = new WorkingHoursOnBusinessDay()
-                .include(new TimeRange(new TimeOfDay(9, 0), new TimeOfDay(17, 59)))
-                .exclude(new TimeRange(new TimeOfDay(12, 0), new TimeOfDay(12, 59)));
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(9, 0), new TimeOfDay(17, 59)))
+                .exclude(new TimeRangeIncludedExcluded(new TimeOfDay(12, 0), new TimeOfDay(12, 59)));
         workingHoursForEachDayOfWeek.onTuesday = onBusinessDay2;
         workingHoursForEachDayOfWeek.onWednesday = onBusinessDay2;
         workingHoursForEachDayOfWeek.onThursday = new DayAndNightWorkingHours("Day Night");
         WorkingHoursOnBusinessDay onBusinessDay3 = new WorkingHoursOnBusinessDay()
-                .include(new TimeRange(new TimeOfDay(9, 0), new TimeOfDay(17, 59)));
+                .include(new TimeRangeIncludedExcluded(new TimeOfDay(9, 0), new TimeOfDay(17, 59)));
         workingHoursForEachDayOfWeek.onFriday = onBusinessDay3;
         workingHoursForEachDayOfWeek.onSaturday = new WorkingHoursOnHoliday("Holiday 1");
         workingHoursForEachDayOfWeek.onSunday = new WorkingHoursOnHoliday("Holiday 2");
@@ -117,7 +119,8 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
             .append("\t\t\t\t" + openTag(Tags.id + TYPE_INTEGER) + idOfPartner + closeTag(Tags.id) + "\n")
             .append("\t\t\t\t" + openTag(Tags.title) + titleOfPartner + closeTag(Tags.title) + "\n")
             .append("\t\t\t\t" + openTag(Tags.fullTitle) + fullTitleOfPartner + closeTag(Tags.fullTitle) + "\n")
-            .append("\t\t\t\t" + openTag(Tags.saleType) + saleTypeOfPartner + closeTag(Tags.saleType) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.discountType) + discountTypeOfPartner + closeTag(Tags.discountType) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.discount + TYPE_INTEGER) + discountOfPartner + closeTag(Tags.discount) + "\n")
             .append("\t\t\t\t" + openArrayTag(Tags.partnerPoints) + "\n")
             .append("\t\t\t\t\t" + openTag(Tags.partnerPoint) + "\n")
             .append("\t\t\t\t\t\t" + openTag(Tags.title) + titleOfPartnerPoint + closeTag(Tags.title) + "\n")
@@ -250,7 +253,7 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         assertEquals(idOfPartner, parsedPartner.id);
         assertEquals(titleOfPartner, parsedPartner.title);
         assertEquals(fullTitleOfPartner, parsedPartner.fullTitle);
-        assertEquals(saleTypeOfPartner, parsedPartner.saleType);
+        assertEquals(discountTypeOfPartner, parsedPartner.discountType);
         assertEquals(parsedPartnerCategory.id, parsedPartner.categoryId);
     }
 

@@ -1,18 +1,18 @@
-package ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter;
+package ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.filters;
 
 import android.location.Location;
 
 import java.io.Serializable;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.SortingFilter;
+import ru.droogcompanii.application.data.searchable_sortable.filter.SortingFilter;
 
 /**
  * Created by ls on 16.01.14.
  */
-class SortByDistanceFilter extends SortingFilter<PartnerPoint> implements Serializable {
+public class SortByDistanceFilter extends SortingFilter<PartnerPoint> implements Serializable {
 
-    static interface BaseLocationProvider {
+    public static interface BaseLocationProvider {
         Location getBaseLocation();
     }
 

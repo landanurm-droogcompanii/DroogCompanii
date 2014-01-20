@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter;
+package ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.filters;
 
 import android.location.Location;
 

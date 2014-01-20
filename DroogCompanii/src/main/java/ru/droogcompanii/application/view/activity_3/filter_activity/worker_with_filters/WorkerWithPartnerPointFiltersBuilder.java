@@ -17,6 +17,9 @@ public class WorkerWithPartnerPointFiltersBuilder implements WorkerWithFiltersBu
 
     @Override
     public WorkerWithFilters<PartnerPoint> build(Context context) {
+        if (partnerCategory == null) {
+            return DummyWorkerWithPartnerPointFilters.get();
+        }
         // TODO:
         throw new RuntimeException("Not implemented yet");
     }

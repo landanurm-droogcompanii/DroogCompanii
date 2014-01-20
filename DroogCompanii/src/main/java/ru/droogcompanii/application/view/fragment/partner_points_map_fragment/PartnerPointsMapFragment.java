@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.SearchableSortable;
+import ru.droogcompanii.application.data.searchable_sortable.SearchableSortable;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
+import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
@@ -52,6 +52,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
 
     public void setPartnerPointsProvider(PartnerPointsProvider partnerPointsProvider) {
         this.partnerPointsProvider = partnerPointsProvider;
+        List<PartnerPoint> partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
+        searchableSortablePartnerPoints = SearchableSortable.newInstance(partnerPoints);
     }
 
     @Override
@@ -60,17 +62,10 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
 
         getGoogleMap().setOnInfoWindowClickListener(this);
 
-        if (savedInstanceState == null) {
-            init();
-        } else {
+        if (savedInstanceState != null) {
             restoreInstanceState(savedInstanceState);
         }
         updateMap();
-    }
-
-    private void init() {
-        List<PartnerPoint> partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
-        searchableSortablePartnerPoints = SearchableSortable.newInstance(partnerPoints);
     }
 
     @SuppressWarnings("unchecked")
@@ -138,7 +133,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         return getResources().getInteger(R.integer.map_markers_padding);
     }
 
-    public void resetFilters(Collection<Filter<PartnerPoint>> filters) {
+    public void setFilters(Collection<Filter<PartnerPoint>> filters) {
         searchableSortablePartnerPoints.clear();
         addFilters(filters);
     }

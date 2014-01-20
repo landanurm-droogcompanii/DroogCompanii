@@ -4,10 +4,19 @@ package ru.droogcompanii.application.util;
  * Created by ls on 15.01.14.
  */
 public class DroogCompaniiStringConstants {
-    public static final String cashlessPayments = "безналичный расчет";
-    public static final String saleType_Bonus = "Бонус";
-    public static final String saleType_Discount = "Скидка";
-    public static final String saleType_CashBack = "Cash back";
+
+    public static class PaymentMethods {
+        public static final String visa = "Visa";
+        public static final String masterCard = "MasterCard";
+    }
+
+    public static final String[] cashlessPaymentMethods = {
+            PaymentMethods.visa, PaymentMethods.masterCard
+    };
+
+    public static final String discountType_Bonus = "Бонус";
+    public static final String discountType_Discount = "Скидка";
+    public static final String discountType_CashBack = "Cash back";
 
     public static class XmlConstants {
 
@@ -19,7 +28,8 @@ public class DroogCompaniiStringConstants {
             public static final String partner = "partner";
             public static final String id = "id";
             public static final String fullTitle = "full-title";
-            public static final String saleType = "sale-type";
+            public static final String discountType = "discount-type";
+            public static final String discount = "discount";
             public static final String partnerPoints = "partner-points";
             public static final String partnerPoint = "partner-point";
             public static final String address = "address";

@@ -1,6 +1,6 @@
-package ru.droogcompanii.application.view.activity_3.filter_activity.filter;
+package ru.droogcompanii.application.data.searchable_sortable.filter;
 
-import ru.droogcompanii.application.data.SearchableSortable;
+import ru.droogcompanii.application.data.searchable_sortable.SearchableSortable;
 
 /**
  * Created by ls on 16.01.14.

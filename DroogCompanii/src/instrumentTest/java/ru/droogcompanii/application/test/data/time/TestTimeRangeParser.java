@@ -4,8 +4,9 @@ import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeRange;
-import ru.droogcompanii.application.data.time.TimeRangeParser;
-import ru.droogcompanii.application.test.UtilsForTest;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcludedParser;
+import ru.droogcompanii.application.test.TestingUtils;
 
 /**
  * Created by ls on 16.01.14.
@@ -14,16 +15,16 @@ public class TestTimeRangeParser extends TestCase {
 
     private TimeOfDay from;
     private TimeOfDay to;
-    private TimeRange expectedTimeRange;
-    private TimeRangeParser parser;
+    private TimeRangeIncludedExcluded expectedTimeRange;
+    private TimeRangeIncludedExcludedParser parser;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        parser = new TimeRangeParser();
+        parser = new TimeRangeIncludedExcludedParser();
         from = new TimeOfDay(9, 0);
         to = new TimeOfDay(18, 30);
-        expectedTimeRange = new TimeRange(from, to);
+        expectedTimeRange = new TimeRangeIncludedExcluded(from, to);
     }
 
     public void testParse() {
@@ -32,7 +33,7 @@ public class TestTimeRangeParser extends TestCase {
     }
 
     public void testParseIllegalText() {
-        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
                 String illegalText = from + "2" + TimeRange.SEPARATOR + to;

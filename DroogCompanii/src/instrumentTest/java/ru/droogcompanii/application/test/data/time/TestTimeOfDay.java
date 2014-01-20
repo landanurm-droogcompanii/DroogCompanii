@@ -6,8 +6,8 @@ import java.util.Calendar;
 
 import ru.droogcompanii.application.data.time.Time;
 import ru.droogcompanii.application.data.time.TimeOfDay;
-import ru.droogcompanii.application.data.time.TimeRange;
-import ru.droogcompanii.application.test.UtilsForTest;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 
 /**
@@ -35,7 +35,7 @@ public class TestTimeOfDay extends TestCase {
     }
 
     public void testIllegalMinutesCausesException() {
-        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
                 final int MINUTES_PER_HOUR = 60;
@@ -45,7 +45,7 @@ public class TestTimeOfDay extends TestCase {
     }
 
     public void testIllegalHoursCausesException() {
-        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
                 final int HOURS_PER_DAY = 24;
@@ -118,11 +118,11 @@ public class TestTimeOfDay extends TestCase {
     public void testWithin() {
         final TimeOfDay from = new TimeOfDay(8, 0);
         final TimeOfDay to = new TimeOfDay(19, 0);
-        final TimeRange timeRange = new TimeRange(from, to);
+        final TimeRangeIncludedExcluded timeRange = new TimeRangeIncludedExcluded(from, to);
         IteratorOverTimes.iterateAllTimesIn24Hours(new IteratorOverTimes.OnEachHandler() {
             @Override
             public void onEach(TimeOfDay time) {
-                boolean expectedWithin = (!from.after(time)) && (!time.after(to));
+                boolean expectedWithin = timeRange.includes(time);
                 assertEquals(expectedWithin, time.within(timeRange));
             }
         });

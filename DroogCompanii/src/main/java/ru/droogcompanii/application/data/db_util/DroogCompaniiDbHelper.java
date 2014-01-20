@@ -34,7 +34,8 @@ public class DroogCompaniiDbHelper extends SQLiteOpenHelper {
                     PartnersContract.COLUMN_NAME_ID + INTEGER_TYPE + COMMA +
                     PartnersContract.COLUMN_NAME_TITLE  + TEXT_TYPE + NOT_NULL + COMMA +
                     PartnersContract.COLUMN_NAME_FULL_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_SALE_TYPE + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_DISCOUNT_TYPE + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_DISCOUNT + INTEGER_TYPE + NOT_NULL + COMMA +
                     PartnersContract.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE + NOT_NULL +
             " )";
 

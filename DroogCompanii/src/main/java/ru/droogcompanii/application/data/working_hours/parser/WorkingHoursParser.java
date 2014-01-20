@@ -1,10 +1,7 @@
 package ru.droogcompanii.application.data.working_hours.parser;
 
-import ru.droogcompanii.application.data.time.TimeRange;
-import ru.droogcompanii.application.data.time.TimeRangeParser;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
-import ru.droogcompanii.application.data.working_hours.parser.WorkingHoursOnBusinessDayParser;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.TypesOfDay;
 

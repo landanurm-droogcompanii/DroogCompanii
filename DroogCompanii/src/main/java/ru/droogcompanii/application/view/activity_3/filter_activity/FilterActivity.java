@@ -2,6 +2,7 @@ package ru.droogcompanii.application.view.activity_3.filter_activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +10,16 @@ import android.view.ViewGroup;
 import java.io.Serializable;
 import java.util.List;
 
+import ru.droogcompanii.application.DroogCompaniiSharedPreferences;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.DummyWorkerWithPartnerPointFiltersBuilder;
-import ru.droogcompanii.application.view.activity_3.filter_activity.filter.Filter;
+import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.WorkerWithStandardPartnerPointFilters;
 import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithFilters;
 import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithFiltersBuilder;
 import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithPartnerPointFiltersBuilder;
-import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.WorkerWithStandardPartnerPointFilters;
 
 /**
  * Created by ls on 15.01.14.
@@ -30,6 +31,9 @@ public class FilterActivity extends Activity {
     public static final int REQUEST_CODE = 14235;
 
     private PartnerCategory partnerCategory;
+    private SharedPreferences sharedPreferences;
+    private View viewOfStandardFilters;
+    private View viewOfMoreFilters;
     private WorkerWithFilters<PartnerPoint> workerWithStandardFilters;
     private WorkerWithFilters<PartnerPoint> workerWithMoreFilters;
 
@@ -37,6 +41,8 @@ public class FilterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_3_filter);
+
+        sharedPreferences = DroogCompaniiSharedPreferences.get(this);
 
         initStandardFilters();
 
@@ -50,12 +56,15 @@ public class FilterActivity extends Activity {
 
     private void initStandardFilters() {
         workerWithStandardFilters = new WorkerWithStandardPartnerPointFilters();
-        fillContainerWithFilters(R.id.containerOfStandardFilters, workerWithStandardFilters);
+        viewOfStandardFilters = includeFiltersViewInContainer(
+                R.id.containerOfStandardFilters, workerWithStandardFilters
+        );
     }
 
-    private void fillContainerWithFilters(int idOfContainer, WorkerWithFilters<?> workerWithFilters) {
-        View viewOfFilters = workerWithFilters.prepareViewOfFilters(this);
+    private View includeFiltersViewInContainer(int idOfContainer, WorkerWithFilters<?> workerWithFilters) {
+        View viewOfFilters = workerWithFilters.prepareViewOfFilters(this, sharedPreferences);
         findViewGroupById(idOfContainer).addView(viewOfFilters);
+        return viewOfFilters;
     }
 
     private ViewGroup findViewGroupById(int idOfViewGroup) {
@@ -63,26 +72,29 @@ public class FilterActivity extends Activity {
     }
 
     private void initMoreFilters(Bundle bundle) {
-        if (bundle == null) {
-            partnerCategory = null;
-        } else {
-            partnerCategory = (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
-        }
-        initMoreFilters(partnerCategory);
-    }
-
-    private void initMoreFilters(PartnerCategory partnerCategory) {
-        WorkerWithFiltersBuilder<PartnerPoint> builder = prepareBuilder(partnerCategory);
+        partnerCategory = extractPartnerCategoryFrom(bundle);
+        WorkerWithFiltersBuilder<PartnerPoint> builder = new WorkerWithPartnerPointFiltersBuilder(partnerCategory);
         workerWithMoreFilters = builder.build(this);
-        fillContainerWithFilters(R.id.containerOfMoreFilters, workerWithMoreFilters);
+        viewOfMoreFilters = includeFiltersViewInContainer(
+                R.id.containerOfMoreFilters, workerWithMoreFilters
+        );
     }
 
-    private WorkerWithFiltersBuilder<PartnerPoint> prepareBuilder(PartnerCategory partnerCategory) {
-        if (partnerCategory == null) {
-            return new DummyWorkerWithPartnerPointFiltersBuilder();
+    private PartnerCategory extractPartnerCategoryFrom(Bundle bundle) {
+        if (bundle == null) {
+            return null;
         } else {
-            return new WorkerWithPartnerPointFiltersBuilder(partnerCategory);
+            return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        workerWithStandardFilters.saveInto(editor, viewOfStandardFilters);
+        workerWithMoreFilters.saveInto(editor, viewOfMoreFilters);
+        editor.commit();
     }
 
     @Override

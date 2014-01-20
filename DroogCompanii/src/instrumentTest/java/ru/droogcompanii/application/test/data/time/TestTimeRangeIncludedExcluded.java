@@ -4,19 +4,20 @@ import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeRange;
-import ru.droogcompanii.application.test.UtilsForTest;
+import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
  * Created by ls on 16.01.14.
  */
-public class TestTimeRange extends TestCase {
+public class TestTimeRangeIncludedExcluded extends TestCase {
 
     private TimeOfDay from;
     private TimeOfDay to;
-    private TimeRange timeRange;
-    private TimeRange copy;
+    private TimeRangeIncludedExcluded timeRange;
+    private TimeRangeIncludedExcluded copy;
 
     @Override
     public void setUp() throws Exception {
@@ -24,13 +25,13 @@ public class TestTimeRange extends TestCase {
 
         from = new TimeOfDay(10, 20);
         to = new TimeOfDay(20, 40);
-        timeRange = new TimeRange(from, to);
-        copy = new TimeRange(from, to);
+        timeRange = new TimeRangeIncludedExcluded(from, to);
+        copy = new TimeRangeIncludedExcluded(from, to);
     }
 
     public void testTimeRangeIsSerializable() {
         byte[] bytes = SerializationUtils.serialize(timeRange);
-        TimeRange deserialized = (TimeRange) SerializationUtils.deserialize(bytes);
+        TimeRangeIncludedExcluded deserialized = (TimeRangeIncludedExcluded) SerializationUtils.deserialize(bytes);
         assertEquals(timeRange, deserialized);
     }
 
@@ -40,10 +41,10 @@ public class TestTimeRange extends TestCase {
     }
 
     public void testConstructorThrowsExceptionIfFromTimeIsBeforeToTime() {
-        UtilsForTest.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
-                new TimeRange(to, from);
+                new TimeRangeIncludedExcluded(to, from);
             }
         });
     }
@@ -52,7 +53,8 @@ public class TestTimeRange extends TestCase {
         IteratorOverTimes.iterateAllTimesIn24Hours(new IteratorOverTimes.OnEachHandler() {
             @Override
             public void onEach(TimeOfDay time) {
-                assertEquals(time.within(timeRange), timeRange.includes(time));
+                boolean expectedIncludes = !from.after(time) && to.after(time);
+                assertEquals(expectedIncludes, timeRange.includes(time));
             }
         });
     }
@@ -72,13 +74,13 @@ public class TestTimeRange extends TestCase {
     public void testNotEqualsWithDifferent_From() {
         int differentHours = (from.getHours() + 1) % 24;
         TimeOfDay differentFrom = new TimeOfDay(differentHours, from.getMinutes());
-        assertFalse(timeRange.equals(new TimeRange(differentFrom, to)));
+        assertFalse(timeRange.equals(new TimeRangeIncludedExcluded(differentFrom, to)));
     }
 
     public void testNotEqualsWithDifferent_To() {
         int differentHours = Math.max((to.getHours() - 1), 0);
         TimeOfDay differentTo = new TimeOfDay(differentHours, to.getMinutes());
-        assertFalse(timeRange.equals(new TimeRange(from, differentTo)));
+        assertFalse(timeRange.equals(new TimeRangeIncludedExcluded(from, differentTo)));
     }
 
     public void testNotEqualsWithOtherTypeObject() {
@@ -92,39 +94,5 @@ public class TestTimeRange extends TestCase {
     public void testToString() {
         String expected = from + TimeRange.SEPARATOR + to;
         assertEquals(expected, timeRange.toString());
-    }
-
-
-    public void testNewIncludedExcluded() {
-        final TimeRange includedExcluded = TimeRange.newIncludedExcluded(from, to);
-        IteratorOverTimes.iterateAllTimesIn24Hours(new IteratorOverTimes.OnEachHandler() {
-            @Override
-            public void onEach(TimeOfDay time) {
-                boolean expectedIncludes = !time.equals(to) && timeRange.includes(time);
-                assertEquals(expectedIncludes, includedExcluded.includes(time));
-            }
-        });
-    }
-
-    public void testNewExcludedIncluded() {
-        final TimeRange excludedIncluded = TimeRange.newExcludedIncluded(from, to);
-        IteratorOverTimes.iterateAllTimesIn24Hours(new IteratorOverTimes.OnEachHandler() {
-            @Override
-            public void onEach(TimeOfDay time) {
-                boolean expectedIncludes = !time.equals(from) && timeRange.includes(time);
-                assertEquals(expectedIncludes, excludedIncluded.includes(time));
-            }
-        });
-    }
-
-    public void testNewExcludedExcluded() {
-        final TimeRange excludedExcluded = TimeRange.newExcludedExcluded(from, to);
-        IteratorOverTimes.iterateAllTimesIn24Hours(new IteratorOverTimes.OnEachHandler() {
-            @Override
-            public void onEach(TimeOfDay time) {
-                boolean expectedIncludes = !time.equals(from) && !time.equals(to) && timeRange.includes(time);
-                assertEquals(expectedIncludes, excludedExcluded.includes(time));
-            }
-        });
     }
 }
