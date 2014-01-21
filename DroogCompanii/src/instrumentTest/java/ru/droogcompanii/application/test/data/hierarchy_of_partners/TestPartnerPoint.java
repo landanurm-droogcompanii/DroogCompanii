@@ -13,6 +13,7 @@ import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
+import ru.droogcompanii.application.test.TestingUtils;
 
 /**
  * Created by ls on 08.01.14.
@@ -59,6 +60,11 @@ public class TestPartnerPoint extends TestCase {
         return new PartnerPoint(
             title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
         );
+    }
+
+
+    public void testIsSerializable() {
+        assertEquals(partnerPoint, TestingUtils.serializeAndDeserialize(partnerPoint));
     }
 
 

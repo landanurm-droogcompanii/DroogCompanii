@@ -3,6 +3,7 @@ package ru.droogcompanii.application.test.data.hierarchy_of_partners;
 import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.test.TestingUtils;
 
 /**
  * Created by ls on 08.01.14.
@@ -24,6 +25,10 @@ public class TestPartner extends TestCase {
         super.setUp();
 
         partner = new Partner(id, title, fullTitle, discountType, discount, categoryId);
+    }
+
+    public void testIsSerializable() {
+        assertEquals(partner, TestingUtils.serializeAndDeserialize(partner));
     }
 
     public void testConstructor() {

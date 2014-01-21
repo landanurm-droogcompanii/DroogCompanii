@@ -8,6 +8,7 @@ import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 
 /**
@@ -115,5 +116,9 @@ public class TestWorkingHoursOnBusinessDay extends TestCase {
 
     public void testGetExcludedRanges() {
         assertEquals(Arrays.asList(excludedRanges), workingHours.getExcludedRanges());
+    }
+
+    public void testIsSerializable() {
+        assertEquals(workingHours, TestingUtils.serializeAndDeserialize(workingHours));
     }
 }

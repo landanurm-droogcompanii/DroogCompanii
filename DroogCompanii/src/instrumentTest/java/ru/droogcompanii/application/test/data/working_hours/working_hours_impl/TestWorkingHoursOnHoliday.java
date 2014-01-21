@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 
@@ -64,5 +65,9 @@ public class TestWorkingHoursOnHoliday extends TestCase {
 
     public void testHashCode() {
         assertEquals(workingHours.hashCode(), copy.hashCode());
+    }
+
+    public void testIsSerializable() {
+        assertEquals(workingHours, TestingUtils.serializeAndDeserialize(workingHours));
     }
 }

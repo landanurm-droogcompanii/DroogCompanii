@@ -28,6 +28,10 @@ public class TestTimeOfDay extends TestCase {
         time = new TimeOfDay(hours, minutes);
     }
 
+    public void testIsSerializable() {
+        assertEquals(time, TestingUtils.serializeAndDeserialize(time));
+    }
+
     public void testConstructor() {
         assertTrue(time instanceof Time);
         assertEquals(hours, time.getHours());

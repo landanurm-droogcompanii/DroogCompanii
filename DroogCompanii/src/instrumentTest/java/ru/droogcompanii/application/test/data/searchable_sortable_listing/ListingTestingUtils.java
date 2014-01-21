@@ -8,7 +8,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableS
 /**
  * Created by ls on 21.01.14.
  */
-public class ListingTestingUtils {
+class ListingTestingUtils {
 
     public static Collection<Integer> getNumbersWhichMeetCriteria(Collection<Integer> numbers,
                            SearchableSortableListing.SearchCriterion<Integer>... searchCriteria) {

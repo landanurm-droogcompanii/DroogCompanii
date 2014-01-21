@@ -53,11 +53,6 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
         initListeners();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
     private void setDefaultFilterState() {
         SharedPreferences.Editor editor = DroogCompaniiSharedPreferences.get(this).edit();
         StandardFiltersState.DEFAULT.saveInto(editor);

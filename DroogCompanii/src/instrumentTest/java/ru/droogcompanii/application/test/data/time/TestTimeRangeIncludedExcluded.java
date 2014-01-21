@@ -7,7 +7,6 @@ import ru.droogcompanii.application.data.time.TimeRange;
 import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
-import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
  * Created by ls on 16.01.14.
@@ -29,10 +28,8 @@ public class TestTimeRangeIncludedExcluded extends TestCase {
         copy = new TimeRangeIncludedExcluded(from, to);
     }
 
-    public void testTimeRangeIsSerializable() {
-        byte[] bytes = SerializationUtils.serialize(timeRange);
-        TimeRangeIncludedExcluded deserialized = (TimeRangeIncludedExcluded) SerializationUtils.deserialize(bytes);
-        assertEquals(timeRange, deserialized);
+    public void testIsSerializable() {
+        assertEquals(timeRange, TestingUtils.serializeAndDeserialize(timeRange));
     }
 
     public void testConstructor() {

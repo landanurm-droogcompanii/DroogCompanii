@@ -15,6 +15,7 @@ import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfW
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
+import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
 
 /**
@@ -119,5 +120,9 @@ public class TestWeekWorkingHours extends TestCase {
 
     public void testNotEqualsToNull() {
         assertFalse(weekWorkingHours.equals(null));
+    }
+
+    public void testIsSerializable() {
+        assertEquals(weekWorkingHours, TestingUtils.serializeAndDeserialize(weekWorkingHours));
     }
 }
