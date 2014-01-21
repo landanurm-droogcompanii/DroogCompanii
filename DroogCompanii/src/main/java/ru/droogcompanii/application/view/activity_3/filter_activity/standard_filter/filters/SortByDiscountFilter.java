@@ -7,7 +7,7 @@ import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable.filter.SortingFilter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.SortingFilter;
 
 /**
  * Created by ls on 16.01.14.

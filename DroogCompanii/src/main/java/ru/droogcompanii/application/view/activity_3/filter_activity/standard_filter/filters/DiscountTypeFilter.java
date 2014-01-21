@@ -10,7 +10,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;
-import ru.droogcompanii.application.data.searchable_sortable.filter.SearchFilter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.SearchFilter;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.state.StandardFiltersState;
 
 /**
@@ -36,7 +36,7 @@ public class DiscountTypeFilter extends SearchFilter<PartnerPoint> implements Se
     }
 
     @Override
-    public boolean meetCriteria(PartnerPoint partnerPoint) {
+    public boolean meetCriterion(PartnerPoint partnerPoint) {
         MoreComparableString partnerPointDiscountType = new MoreComparableString(discountTypeOf(partnerPoint));
         for (String discountType : discountTypes) {
             if (partnerPointDiscountType.containsIgnoreCase(discountType)) {

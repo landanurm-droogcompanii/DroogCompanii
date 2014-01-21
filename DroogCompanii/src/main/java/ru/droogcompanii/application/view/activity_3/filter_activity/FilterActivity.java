@@ -14,7 +14,7 @@ import ru.droogcompanii.application.DroogCompaniiSharedPreferences;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.Filter;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.WorkerWithStandardPartnerPointFilters;
 import ru.droogcompanii.application.view.activity_3.filter_activity.worker_with_filters.WorkerWithFilters;

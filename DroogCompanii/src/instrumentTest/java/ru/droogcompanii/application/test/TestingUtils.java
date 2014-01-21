@@ -2,10 +2,15 @@ package ru.droogcompanii.application.test;
 
 import junit.framework.AssertionFailedError;
 
+import java.io.Serializable;
+
+import ru.droogcompanii.application.util.SerializationUtils;
+
 /**
  * Created by ls on 16.01.14.
  */
 public class TestingUtils {
+
     public static void assertExpectedException(Class<? extends Exception> exceptionClass, Runnable runnable) {
         try {
             runnable.run();
@@ -18,5 +23,10 @@ public class TestingUtils {
                 );
             }
         }
+    }
+
+    public static <T extends Serializable> T serializeAndDeserialize(T obj) {
+        byte[] bytes = SerializationUtils.serialize(obj);
+        return (T) SerializationUtils.deserialize(bytes);
     }
 }

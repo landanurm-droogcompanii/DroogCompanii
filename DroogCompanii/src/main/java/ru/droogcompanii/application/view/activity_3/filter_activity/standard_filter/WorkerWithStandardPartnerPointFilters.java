@@ -10,7 +10,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.Filter;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.state.StandardFiltersState;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.state.StandardFiltersStateDisplay;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.state.StandardFiltersStateReader;

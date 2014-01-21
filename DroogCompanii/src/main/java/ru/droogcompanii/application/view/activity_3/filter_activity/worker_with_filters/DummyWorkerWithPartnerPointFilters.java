@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.Filter;
 
 /**
  * Created by ls on 15.01.14.

@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.searchable_sortable.SearchableSortable;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.Filter;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
@@ -37,11 +37,11 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     private List<PartnerPoint> partnerPoints;
     private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
     private PartnerPointsProvider partnerPointsProvider;
-    private SearchableSortable<PartnerPoint> searchableSortablePartnerPoints;
+    private SearchableSortableListing<PartnerPoint> searchableSortablePartnerPoints;
 
     public PartnerPointsMapFragment() {
         super();
-        searchableSortablePartnerPoints = SearchableSortable.newInstance(new ArrayList<PartnerPoint>());
+        searchableSortablePartnerPoints = SearchableSortableListing.newInstance(new ArrayList<PartnerPoint>());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     public void setPartnerPointsProvider(PartnerPointsProvider partnerPointsProvider) {
         this.partnerPointsProvider = partnerPointsProvider;
         List<PartnerPoint> partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
-        searchableSortablePartnerPoints = SearchableSortable.newInstance(partnerPoints);
+        searchableSortablePartnerPoints = SearchableSortableListing.newInstance(partnerPoints);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
 
     @SuppressWarnings("unchecked")
     private void restoreInstanceState(Bundle savedInstanceState) {
-        searchableSortablePartnerPoints = (SearchableSortable<PartnerPoint>)
+        searchableSortablePartnerPoints = (SearchableSortableListing<PartnerPoint>)
                 savedInstanceState.getSerializable(Keys.searchableSortablePartnerPoints);
     }
 
@@ -94,7 +94,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         GoogleMap googleMap = getGoogleMap();
         MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
         markers = new ArrayList<Marker>();
-        partnerPoints = searchableSortablePartnerPoints.toSortedList();
+        partnerPoints = searchableSortablePartnerPoints.toList();
         for (PartnerPoint each : partnerPoints) {
             MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(each);
             Marker marker = googleMap.addMarker(markerOptions);
@@ -134,7 +134,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     public void setFilters(Collection<Filter<PartnerPoint>> filters) {
-        searchableSortablePartnerPoints.clear();
+        searchableSortablePartnerPoints.clearAllCriteria();
         addFilters(filters);
     }
 

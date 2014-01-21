@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable.filter.Filter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.filter.Filter;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.filters.CashlessPaymentsFilter;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.filters.DiscountTypeFilter;
 import ru.droogcompanii.application.view.activity_3.filter_activity.standard_filter.filters.SortByDiscountFilter;
