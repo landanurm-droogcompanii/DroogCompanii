@@ -16,6 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSortingGroupItems"
+        android:text="@string/labelOfSortByTitleCheckBox"
+        android:id="@+id/sortByTitleCheckBox" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSizeOfSortingGroupItems"
         android:text="@string/labelOfSortByDistanceCheckBox"
         android:id="@+id/sortByDistanceCheckBox" />
 

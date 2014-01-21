@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="titleOfSortingGroup">Sorting</string>
+    <string name="labelOfSortByTitleCheckBox">by Title</string>
+    <string name="labelOfSortByDistanceCheckBox">by Distance</string>
+    <string name="labelOfSortByDiscountCheckBox">by Discount</string>
+    <string name="titleOfPaymentMethodGroup">Payment method</string>
+    <string name="labelOfCashlessPaymentsCheckBox">Cashless Payments</string>
+    <string name="titleOfWorkingHoursGroup">Working Hours</string>
+    <string name="labelOfWorksNowCheckBox">Works Now</string>
+    <string name="titleOfDiscountTypeGroup">Discount Type</string>
+    <string name="labelOfBonusCheckBox">Bonus</string>
+    <string name="labelOfDiscountCheckBox">Discount</string>
+    <string name="labelOfCashBackCheckBox">Cash back</string>
+
+</resources>

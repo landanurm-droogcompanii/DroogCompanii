@@ -27,7 +27,8 @@ import ru.droogcompanii.application.view.fragment.MarkerOptionsBuilder;
 /**
  * Created by ls on 10.01.14.
  */
-public class PartnerCategoryMapFragment extends BaseCustomMapFragment implements GoogleMap.OnInfoWindowClickListener {
+public class PartnerCategoryMapFragment extends BaseCustomMapFragment
+        implements GoogleMap.OnInfoWindowClickListener {
 
     public static interface OnPartnerPointInfoWindowClickListener {
         void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);

@@ -2,17 +2,17 @@ package ru.droogcompanii.application.view.fragment.partner_category_list_fragmen
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.AdapterView;
 
-import ru.droogcompanii.application.view.activity.partner_category_list_activity.PartnerCategoryListAdapter;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.view.activity.partner_category_list_activity.PartnerCategoryListAdapter;
 
 /**
  * Created by ls on 10.01.14.
  */
-public class PartnerCategoryListFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class PartnerCategoryListFragment extends android.support.v4.app.ListFragment
+        implements AdapterView.OnItemClickListener {
 
     public static interface OnPartnerCategoryClickListener {
         void onPartnerCategoryClick(PartnerCategory partnerCategory);

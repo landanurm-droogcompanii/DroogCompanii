@@ -11,18 +11,18 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.data.searchable_sortable_listing.filter.Filter;
-import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
 import ru.droogcompanii.application.view.fragment.MarkerOptionsBuilder;
+import ru.droogcompanii.application.view.fragment.filter_fragment.Filters;
+import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 /**
  * Created by ls on 14.01.14.
@@ -33,15 +33,16 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);
     }
 
+    private boolean mapViewPlacedOnLayout;
     private List<Marker> markers;
     private List<PartnerPoint> partnerPoints;
     private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
-    private PartnerPointsProvider partnerPointsProvider;
-    private SearchableSortableListing<PartnerPoint> searchableSortablePartnerPoints;
+    private SearchableListing<PartnerPoint> searchablePartnerPoints;
 
     public PartnerPointsMapFragment() {
         super();
-        searchableSortablePartnerPoints = SearchableSortableListing.newInstance(new ArrayList<PartnerPoint>());
+        mapViewPlacedOnLayout = false;
+        searchablePartnerPoints = SearchableListing.newInstance(new ArrayList<PartnerPoint>());
     }
 
     @Override
@@ -51,9 +52,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     public void setPartnerPointsProvider(PartnerPointsProvider partnerPointsProvider) {
-        this.partnerPointsProvider = partnerPointsProvider;
         List<PartnerPoint> partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
-        searchableSortablePartnerPoints = SearchableSortableListing.newInstance(partnerPoints);
+        searchablePartnerPoints = SearchableSortableListing.newInstance(partnerPoints);
     }
 
     @Override
@@ -70,14 +70,14 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
 
     @SuppressWarnings("unchecked")
     private void restoreInstanceState(Bundle savedInstanceState) {
-        searchableSortablePartnerPoints = (SearchableSortableListing<PartnerPoint>)
+        searchablePartnerPoints = (SearchableSortableListing<PartnerPoint>)
                 savedInstanceState.getSerializable(Keys.searchableSortablePartnerPoints);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.searchableSortablePartnerPoints, searchableSortablePartnerPoints);
+        outState.putSerializable(Keys.searchableSortablePartnerPoints, searchablePartnerPoints);
     }
 
     private void updateMap() {
@@ -94,7 +94,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         GoogleMap googleMap = getGoogleMap();
         MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
         markers = new ArrayList<Marker>();
-        partnerPoints = searchableSortablePartnerPoints.toList();
+        partnerPoints = searchablePartnerPoints.toList();
         for (PartnerPoint each : partnerPoints) {
             MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(each);
             Marker marker = googleMap.addMarker(markerOptions);
@@ -103,12 +103,17 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     private void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
-        ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
-            @Override
-            public void run() {
-                fitVisibleMarkersOnScreen();
-            }
-        });
+        if (mapViewPlacedOnLayout) {
+            fitVisibleMarkersOnScreen();
+        } else {
+            ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
+                @Override
+                public void run() {
+                    fitVisibleMarkersOnScreen();
+                    mapViewPlacedOnLayout = true;
+                }
+            });
+        }
     }
 
     private void fitVisibleMarkersOnScreen() {
@@ -133,20 +138,17 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
         return getResources().getInteger(R.integer.map_markers_padding);
     }
 
-    public void setFilters(Collection<Filter<PartnerPoint>> filters) {
-        searchableSortablePartnerPoints.clearAllCriteria();
+    public void setFilters(Filters filters) {
+        searchablePartnerPoints.clearAllCriteria();
         addFilters(filters);
     }
 
-    public void addFilters(Collection<Filter<PartnerPoint>> filters) {
-        for (Filter<PartnerPoint> filter : filters) {
-            addFilter(filter);
+    public void addFilters(Filters filters) {
+        List<SearchableListing.SearchCriterion<PartnerPoint>> searchCriteria = filters.searchCriteria;
+        for (SearchableListing.SearchCriterion<PartnerPoint> criterion : searchCriteria) {
+            searchablePartnerPoints.addSearchCriterion(criterion);
         }
         updateMap();
-    }
-
-    private void addFilter(Filter<PartnerPoint> filter) {
-        filter.includeIn(searchableSortablePartnerPoints);
     }
 
     @Override

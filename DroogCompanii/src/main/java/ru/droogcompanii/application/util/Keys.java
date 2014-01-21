@@ -20,4 +20,5 @@ public class Keys {
     public static final String filters = "filters";
 
     public static final String searchableSortablePartnerPoints = "searchableSortablePartnerPoints";
+    public static final String args = "args";
 }
