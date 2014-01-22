@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Set;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
@@ -17,7 +19,7 @@ import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.Pa
  * Created by ls on 14.01.14.
  */
 public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmentAndFilter
-                    implements PartnerPointsMapFragment.OnPartnerPointInfoWindowClickListener {
+                    implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener {
 
     private PartnerPointsMapFragment partnerPointsMapFragment;
 
@@ -55,8 +57,8 @@ public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmen
     }
 
     @Override
-    public void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint) {
-        // TODO:
-        Toast.makeText(this, partnerPoint.title, Toast.LENGTH_SHORT).show();
+    public void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow) {
+        String message = "Need to show " + partnerPointsToShow.size() + " partner points";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

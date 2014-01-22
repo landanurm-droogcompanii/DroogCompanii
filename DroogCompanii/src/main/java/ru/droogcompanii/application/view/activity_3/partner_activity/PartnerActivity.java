@@ -1,13 +1,10 @@
 package ru.droogcompanii.application.view.activity_3.partner_activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,22 +14,15 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.search_result_map_activity.SearchResultMapActivity;
+import ru.droogcompanii.application.view.fragment.partner_fragment.PartnerFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
 
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerActivity extends Activity {
+public class PartnerActivity extends android.support.v4.app.FragmentActivity {
 
     private List<PartnerPoint> partnerPoints;
-    private Partner partner;
-
-    private ListView partnerPointListView;
-    private View expandListButton;
-    private View rollUpListButton;
-    private View layoutToHideWhenListIsExpanded;
-    private View partnerInfoContainer;
-    private View goOnMapButton;
 
 
     public static void start(Context context, Partner partner, List<PartnerPoint> partnerPoints) {
@@ -50,62 +40,17 @@ public class PartnerActivity extends Activity {
 
         if (savedInstanceState == null) {
             Bundle args = getIntent().getExtras();
-            init(args);
+            PartnerFragment partnerFragment = new PartnerFragment();
+            partnerFragment.setArguments(args);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.containerOfPartnerFragment, partnerFragment);
+            fragmentTransaction.commit();
+            restoreState(args);
         } else {
-            init(savedInstanceState);
-        }
-        initView();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partner, partner);
-        outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
-    }
-
-    private void init(Bundle bundle) {
-        partner = (Partner) bundle.getSerializable(Keys.partner);
-        partnerPoints = (List<PartnerPoint>) bundle.getSerializable(Keys.partnerPoints);
-    }
-
-    private void initView() {
-        findViewsAndInitStartState();
-
-        PartnerInfoFiller.fill(partnerInfoContainer, partner);
-
-        if (partnerHasNoPoints()) {
-            onPartnerHasNoPoints();
-        } else {
-            onPartnerHasPoints();
+            restoreState(savedInstanceState);
         }
 
-    }
-
-    private void findViewsAndInitStartState() {
-        goOnMapButton = findViewById(R.id.goOnMapButton);
-        layoutToHideWhenListIsExpanded = findViewById(R.id.layoutToHideWhenListIsExpanded);
-        partnerInfoContainer = findViewById(R.id.layoutToHideWhenListIsExpanded);
-        partnerPointListView = (ListView) findViewById(R.id.partnerPointListView);
-        rollUpListButton = findViewById(R.id.rollUpListButton);
-        expandListButton = findViewById(R.id.expandListButton);
-
-        rollUpList();
-    }
-
-    private boolean partnerHasNoPoints() {
-        return partnerPoints.isEmpty();
-    }
-
-    private void onPartnerHasNoPoints() {
-        hide(expandListButton);
-        hide(goOnMapButton);
-    }
-
-    private void onPartnerHasPoints() {
-        initSinglePartnerPointListItemView();
-        initAbilityToExpandPartnerPointList();
-        goOnMapButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.goOnMapButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goOnMap();
@@ -113,68 +58,17 @@ public class PartnerActivity extends Activity {
         });
     }
 
-    private void initSinglePartnerPointListItemView() {
-        PartnerPointListItemViewInflater inflater = new PartnerPointListItemViewInflater(this);
-        View singlePartnerPointListItemView = inflater.inflate();
-        PartnerPoint partnerPoint = getPartnerPointForSingleListItem();
-        PartnerPointInfoFiller.fill(singlePartnerPointListItemView, partnerPoint);
-        FrameLayout container = (FrameLayout) findViewById(R.id.containerOfSinglePartnerPointListItem);
-        container.addView(singlePartnerPointListItemView);
-    }
-
-    private PartnerPoint getPartnerPointForSingleListItem() {
-        return partnerPoints.get(0);
-    }
-
-    private void initAbilityToExpandPartnerPointList() {
-        if (partnerPoints.size() > 1) {
-            enableAbilityToExpandPartnerPointList();
-        } else {
-            disableAbilityToExpandPartnerPointList();
+    private void restoreState(Bundle bundle) {
+        partnerPoints = (List<PartnerPoint>) bundle.getSerializable(Keys.partnerPoints);
+        if (partnerPoints.isEmpty()) {
+            findViewById(R.id.goOnMapButton).setVisibility(View.INVISIBLE);
         }
     }
 
-    private void disableAbilityToExpandPartnerPointList() {
-        hide(expandListButton);
-    }
-
-    private void enableAbilityToExpandPartnerPointList() {
-        ListAdapter adapter = new PartnerPointListAdapter(this, partnerPoints);
-        partnerPointListView.setAdapter(adapter);
-        rollUpListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rollUpList();
-            }
-        });
-        expandListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                expandList();
-            }
-        });
-    }
-
-    private void hide(View view) {
-        view.setVisibility(View.INVISIBLE);
-    }
-
-    private void show(View view) {
-        view.setVisibility(View.VISIBLE);
-    }
-
-    private void rollUpList() {
-        show(expandListButton);
-        hide(rollUpListButton);
-        hide(partnerPointListView);
-        show(layoutToHideWhenListIsExpanded);
-    }
-
-    private void expandList() {
-        hide(expandListButton);
-        show(rollUpListButton);
-        show(partnerPointListView);
-        hide(layoutToHideWhenListIsExpanded);
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
     }
 
     private void goOnMap() {

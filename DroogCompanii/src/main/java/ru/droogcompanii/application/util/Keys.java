@@ -20,4 +20,6 @@ public class Keys {
 
     public static final String searchableSortablePartnerPoints = "searchableSortablePartnerPoints";
     public static final String args = "args";
+
+    public static final String needToExpandList = "needToExpandList";
 }

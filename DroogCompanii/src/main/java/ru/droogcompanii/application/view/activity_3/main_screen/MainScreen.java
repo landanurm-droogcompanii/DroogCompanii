@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Set;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
@@ -26,7 +27,7 @@ import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.Pa
  * Created by ls on 14.01.14.
  */
 public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
-        implements PartnerPointsMapFragment.OnPartnerPointInfoWindowClickListener {
+        implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener {
 
     private PartnerPointsMapFragment partnerPointsMapFragment;
 
@@ -85,18 +86,6 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
         });
     }
 
-    @Override
-    public void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint) {
-        PartnersReader partnersReader = new PartnersReader(this);
-        Partner partner = partnersReader.getPartnerOf(partnerPoint);
-
-        PartnerPointsReader partnerPointsReader = new PartnerPointsReader(this);
-        List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
-
-        movePartnerPointAtFirstPosition(partnerPoint, partnerPoints);
-        PartnerActivity.start(this, partner, partnerPoints);
-    }
-
     private void movePartnerPointAtFirstPosition(PartnerPoint partnerPoint, List<PartnerPoint> partnerPoints) {
         int index = partnerPoints.indexOf(partnerPoint);
         if (index == -1) {
@@ -113,5 +102,22 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
     private void onMenu() {
         // TODO:
         Toast.makeText(this, "Need to open Menu", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow) {
+        String message = "Need to show " + partnerPointsToShow.size() + " partner points";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onNeedToShowPartnerPoint(PartnerPoint partnerPoint) {
+        PartnersReader partnersReader = new PartnersReader(this);
+        Partner partner = partnersReader.getPartnerOf(partnerPoint);
+
+        PartnerPointsReader partnerPointsReader = new PartnerPointsReader(this);
+        List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
+
+        movePartnerPointAtFirstPosition(partnerPoint, partnerPoints);
+        PartnerActivity.start(this, partner, partnerPoints);
     }
 }

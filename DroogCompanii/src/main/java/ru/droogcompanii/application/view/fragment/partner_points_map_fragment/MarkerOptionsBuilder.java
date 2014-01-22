@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.fragment;
+package ru.droogcompanii.application.view.fragment.partner_points_map_fragment;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;

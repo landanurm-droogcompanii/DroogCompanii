@@ -39,6 +39,26 @@
                 <discount type="integer">5</discount>
                 <partner-points type="array">
                     <partner-point>
+                        <title>Google Казань. На Четаева 2</title>
+                        <address>г. Казань, ул. Четаева, д.13</address>
+                        <longitude type="decimal">50.0078</longitude>
+                        <latitude type="decimal">56.1053</latitude>
+                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(843) 258-58-59</phone>
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</fri>
+                            <sat type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                    <partner-point>
                         <title>Google Казань. На Четаева</title>
                         <address>г. Казань, ул. Четаева, д.13</address>
                         <longitude type="decimal">50.9812</longitude>

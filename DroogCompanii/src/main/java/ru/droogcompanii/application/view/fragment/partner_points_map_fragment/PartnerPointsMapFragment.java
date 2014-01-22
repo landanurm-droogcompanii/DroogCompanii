@@ -8,47 +8,49 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.MultiMap;
 import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
-import ru.droogcompanii.application.view.fragment.MarkerOptionsBuilder;
 import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 /**
  * Created by ls on 14.01.14.
  */
-public class PartnerPointsMapFragment extends BaseCustomMapFragment implements GoogleMap.OnInfoWindowClickListener {
+public class PartnerPointsMapFragment extends BaseCustomMapFragment implements GoogleMap.OnMarkerClickListener {
 
-    public static interface OnPartnerPointInfoWindowClickListener {
-        void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint);
+    public static interface OnNeedToShowPartnerPointsListener {
+        void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
     }
 
-    private boolean mapViewPlacedOnLayout;
-    private List<Marker> markers;
-    private List<PartnerPoint> partnerPoints;
-    private OnPartnerPointInfoWindowClickListener onPartnerPointInfoWindowClickListener;
+    private boolean mapViewIsPlacedOnLayout;
+    private MultiMap<Marker, PartnerPoint> markersAndPartnerPoints;
+    private Collection<Marker> markers;
+    private OnNeedToShowPartnerPointsListener onNeedToShowPartnerPointsListener;
     private SearchableListing<PartnerPoint> searchablePartnerPoints;
 
     public PartnerPointsMapFragment() {
         super();
-        mapViewPlacedOnLayout = false;
+        mapViewIsPlacedOnLayout = false;
         searchablePartnerPoints = SearchableListing.newInstance(new ArrayList<PartnerPoint>());
+        markersAndPartnerPoints = new MultiMap<Marker, PartnerPoint>();
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        onPartnerPointInfoWindowClickListener = (OnPartnerPointInfoWindowClickListener) activity;
+        onNeedToShowPartnerPointsListener = (OnNeedToShowPartnerPointsListener) activity;
     }
 
     public void setPartnerPointsProvider(PartnerPointsProvider partnerPointsProvider) {
@@ -60,7 +62,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getGoogleMap().setOnInfoWindowClickListener(this);
+        getGoogleMap().setOnMarkerClickListener(this);
 
         if (savedInstanceState != null) {
             restoreInstanceState(savedInstanceState);
@@ -91,26 +93,20 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     private void placeMarkersOnMap() {
-        GoogleMap googleMap = getGoogleMap();
-        MarkerOptionsBuilder markerOptionsBuilder = new MarkerOptionsBuilder();
-        markers = new ArrayList<Marker>();
-        partnerPoints = searchablePartnerPoints.toList();
-        for (PartnerPoint each : partnerPoints) {
-            MarkerOptions markerOptions = markerOptionsBuilder.buildFrom(each);
-            Marker marker = googleMap.addMarker(markerOptions);
-            markers.add(marker);
-        }
+        MarkersIncluder markersIncluder = new MarkersIncluder(searchablePartnerPoints);
+        markersAndPartnerPoints = markersIncluder.includeIn(getGoogleMap());
+        markers = markersAndPartnerPoints.keySet();
     }
 
     private void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
-        if (mapViewPlacedOnLayout) {
+        if (mapViewIsPlacedOnLayout) {
             fitVisibleMarkersOnScreen();
         } else {
             ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
                 @Override
                 public void run() {
                     fitVisibleMarkersOnScreen();
-                    mapViewPlacedOnLayout = true;
+                    mapViewIsPlacedOnLayout = true;
                 }
             });
         }
@@ -152,13 +148,9 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-        PartnerPoint partnerPoint = partnerPointOf(marker);
-        onPartnerPointInfoWindowClickListener.onPartnerPointInfoWindowClick(partnerPoint);
-    }
-
-    private PartnerPoint partnerPointOf(Marker marker) {
-        int index = markers.indexOf(marker);
-        return partnerPoints.get(index);
+    public boolean onMarkerClick(Marker marker) {
+        Set<PartnerPoint> partnerPointsToShow = markersAndPartnerPoints.get(marker);
+        onNeedToShowPartnerPointsListener.onNeedToShowPartnerPoints(partnerPointsToShow);
+        return true;
     }
 }

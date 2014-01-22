@@ -12,62 +12,10 @@
         android:src="@android:drawable/ic_dialog_map"
         android:id="@+id/goOnMapButton"/>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/goOnMapButton" >
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/arrow_up_float"
-            android:id="@+id/rollUpListButton"
-            android:layout_alignParentBottom="true" />
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/arrow_down_float"
-            android:id="@+id/expandListButton"
-            android:layout_alignParentBottom="true" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/rollUpListButton"
-            android:id="@+id/layoutToHideWhenListIsExpanded">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/containerOfSinglePartnerPointListItem" >
-
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:singleLine="true"
-                android:id="@+id/partnerTitleTextView"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/partnerTitleTextView"
-                android:layout_above="@id/containerOfSinglePartnerPointListItem"
-                android:id="@+id/partnerDetailsTextView" />
-
-        </RelativeLayout>
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/rollUpListButton"
-            android:id="@+id/partnerPointListView" />
-
-    </RelativeLayout>
+        android:layout_below="@id/goOnMapButton"
+        android:id="@+id/containerOfPartnerFragment" />
 
 </RelativeLayout>
