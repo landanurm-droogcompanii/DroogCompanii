@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.fragment.filter_fragment;
+package ru.droogcompanii.application.view.fragment.filter_fragment.filters;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +18,13 @@ public class Filters implements Serializable {
     public Filters() {
         searchCriteria = new ArrayList<SearchableListing.SearchCriterion<PartnerPoint>>();
         comparators = new ArrayList<Comparator<PartnerPoint>>();
+    }
+
+    public Filters(List<Filter> filters) {
+        this();
+        for (Filter filter : filters) {
+            filter.includeInIfNeed(this);
+        }
     }
 
     public void add(SearchableListing.SearchCriterion<PartnerPoint> searchCriterion) {

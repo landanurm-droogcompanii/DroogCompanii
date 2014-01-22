@@ -6,8 +6,8 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 
 /**
  * Created by Leonid on 17.12.13.

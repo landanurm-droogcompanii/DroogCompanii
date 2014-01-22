@@ -3,10 +3,10 @@ package ru.droogcompanii.application.view.activity_2.partner_category_map_activi
 import android.os.Bundle;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.fragment.partner_category_map_fragment.PartnerCategoryMapFragment;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.view.fragment.partner_category_map_fragment.PartnerCategoryMapFragment;
 
 /**
  * Created by ls on 10.01.14.

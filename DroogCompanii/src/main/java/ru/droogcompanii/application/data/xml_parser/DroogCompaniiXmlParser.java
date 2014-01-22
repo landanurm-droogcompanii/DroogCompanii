@@ -44,6 +44,11 @@ public class DroogCompaniiXmlParser {
 
     private static final String NAMESPACE = null;
 
+    private Collection<PartnerCategory> outPartnerCategories;
+    private Collection<Partner> outPartners;
+    private Collection<PartnerPoint> outPartnerPoints;
+
+
     public ParsedData parse(InputStream in) throws Exception {
         try {
             return parse(prepareParser(in));
@@ -69,11 +74,6 @@ public class DroogCompaniiXmlParser {
             }
         }
     }
-
-
-    private Collection<PartnerCategory> outPartnerCategories;
-    private Collection<Partner> outPartners;
-    private Collection<PartnerPoint> outPartnerPoints;
 
 
     private ParsedData parse(XmlPullParser parser) throws Exception {

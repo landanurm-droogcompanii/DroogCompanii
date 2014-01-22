@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteStatement;
 import java.io.Serializable;
 import java.util.Collection;
 
-import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
-import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnersContract;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
 import ru.droogcompanii.application.util.SerializationUtils;
 
 /**

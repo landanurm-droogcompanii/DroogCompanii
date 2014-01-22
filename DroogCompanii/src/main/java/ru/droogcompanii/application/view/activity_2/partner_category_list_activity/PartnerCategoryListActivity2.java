@@ -1,14 +1,14 @@
 package ru.droogcompanii.application.view.activity_2.partner_category_list_activity;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.fragment.partner_category_list_fragment.PartnerCategoryListFragment;
-import ru.droogcompanii.application.view.activity_2.partner_category_map_activity.PartnerCategoryMapActivity;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.view.activity_2.partner_category_map_activity.PartnerCategoryMapActivity;
+import ru.droogcompanii.application.view.fragment.partner_category_list_fragment.PartnerCategoryListFragment;
 
 public class PartnerCategoryListActivity2 extends ActionBarActivity implements PartnerCategoryListFragment.OnPartnerCategoryClickListener {
 

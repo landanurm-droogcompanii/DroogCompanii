@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.helpers.task.TaskActivityMainFragment;
 import ru.droogcompanii.application.view.activity_3.main_screen.MainScreen;
+import ru.droogcompanii.application.view.helpers.task.TaskActivityMainFragment;
 
 /**
  * Created by ls on 26.12.13.

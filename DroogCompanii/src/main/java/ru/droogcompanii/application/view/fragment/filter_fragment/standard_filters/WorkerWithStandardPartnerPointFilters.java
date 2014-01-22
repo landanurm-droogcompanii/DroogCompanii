@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import java.io.Serializable;
+import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.view.fragment.filter_fragment.Filters;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.state.StandardFiltersState;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.state.StandardFiltersStateDisplay;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.state.StandardFiltersStateReader;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl.StandardFiltersUtils;
 import ru.droogcompanii.application.view.fragment.filter_fragment.worker_with_filters.WorkerWithFilters;
 
 /**
@@ -29,22 +29,23 @@ public class WorkerWithStandardPartnerPointFilters implements WorkerWithFilters<
     }
 
     private void init(View viewOfFilters, SharedPreferences sharedPreferences) {
-        StandardFiltersState state = new StandardFiltersState();
-        state.restoreFrom(sharedPreferences);
-        StandardFiltersStateDisplay stateDisplay = new StandardFiltersStateDisplay(viewOfFilters);
-        stateDisplay.display(state);
+        List<Filter> currentFilters = StandardFiltersUtils.getFiltersRestoredFrom(sharedPreferences);
+        for (Filter filter : currentFilters) {
+            filter.displayOn(viewOfFilters);
+        }
     }
 
     @Override
     public Filters readFilters(View viewOfFilters) {
-        StandardFiltersReader filtersReader = new StandardFiltersReader(viewOfFilters);
-        return filtersReader.read();
+        List<Filter> currentFilters = StandardFiltersUtils.getFiltersReadedFrom(viewOfFilters);
+        return new Filters(currentFilters);
     }
 
     @Override
     public void saveInto(SharedPreferences.Editor editor, View viewOfFilters) {
-        StandardFiltersStateReader standardFiltersStateReader = new StandardFiltersStateReader(viewOfFilters);
-        StandardFiltersState state = standardFiltersStateReader.read();
-        state.saveInto(editor);
+        List<Filter> currentFilters = StandardFiltersUtils.getFiltersReadedFrom(viewOfFilters);
+        for (Filter filter : currentFilters) {
+            filter.saveInto(editor);
+        }
     }
 }

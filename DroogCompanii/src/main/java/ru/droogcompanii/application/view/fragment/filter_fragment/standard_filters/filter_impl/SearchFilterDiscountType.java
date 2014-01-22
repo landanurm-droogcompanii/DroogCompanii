@@ -1,17 +1,18 @@
-package ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filters;
+package ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl;
 
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CheckBox;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.fragment.filter_fragment.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.DiscountTypeSearchCriterion;
 
 /**
  * Created by ls on 21.01.14.
  */
-public class FilterSearchDiscountType implements ru.droogcompanii.application.view.fragment.filter_fragment.Filter {
+class SearchFilterDiscountType implements Filter {
 
     private static class KeysOfDiscountTypes {
         public static final String BONUS = getClassName() + "Bonus";
@@ -20,7 +21,7 @@ public class FilterSearchDiscountType implements ru.droogcompanii.application.vi
     }
 
     private static String getClassName() {
-        return FilterSearchDiscountType.class.getSimpleName();
+        return SearchFilterDiscountType.class.getSimpleName();
     }
 
     private static final boolean DEFAULT_BONUS = true;
@@ -31,7 +32,7 @@ public class FilterSearchDiscountType implements ru.droogcompanii.application.vi
     private boolean discount;
     private boolean cashBack;
 
-    public FilterSearchDiscountType() {
+    public SearchFilterDiscountType() {
         bonus = DEFAULT_BONUS;
         discount = DEFAULT_DISCOUNT;
         cashBack = DEFAULT_CASH_BACK;
@@ -70,7 +71,7 @@ public class FilterSearchDiscountType implements ru.droogcompanii.application.vi
     }
 
     @Override
-    public void includeIn(Filters filters) {
+    public void includeInIfNeed(Filters filters) {
         filters.add(new DiscountTypeSearchCriterion(bonus, discount, cashBack));
     }
 }

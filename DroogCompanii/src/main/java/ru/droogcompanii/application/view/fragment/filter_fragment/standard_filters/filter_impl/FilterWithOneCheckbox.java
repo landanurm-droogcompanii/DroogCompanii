@@ -1,16 +1,17 @@
-package ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filters;
+package ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl;
 
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CheckBox;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.fragment.filter_fragment.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 
 /**
  * Created by ls on 21.01.14.
  */
-abstract class FilterWithOneCheckbox implements ru.droogcompanii.application.view.fragment.filter_fragment.Filter {
+abstract class FilterWithOneCheckbox implements Filter {
     private static final int ID_OF_CHECKBOX = R.id.sortByTitleCheckBox;
 
     private boolean needToInclude;
@@ -21,7 +22,7 @@ abstract class FilterWithOneCheckbox implements ru.droogcompanii.application.vie
 
     protected abstract boolean isNeedToIncludeByDefault();
     protected abstract int getIdOfCheckbox();
-    protected abstract void necessarilyIncludeIn(Filters filters);
+    protected abstract void includeIn(Filters filters);
 
     @Override
     public void readFrom(View view) {
@@ -52,9 +53,9 @@ abstract class FilterWithOneCheckbox implements ru.droogcompanii.application.vie
     }
 
     @Override
-    public void includeIn(Filters filters) {
+    public void includeInIfNeed(Filters filters) {
         if (needToInclude) {
-            necessarilyIncludeIn(filters);
+            includeIn(filters);
         }
     }
 }

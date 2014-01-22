@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.droogcompanii.application.SharedPreferencesProvider;
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.SharedPreferencesProvider;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.WorkerWithStandardPartnerPointFilters;
 import ru.droogcompanii.application.view.fragment.filter_fragment.worker_with_filters.WorkerWithFilters;
 import ru.droogcompanii.application.view.fragment.filter_fragment.worker_with_filters.WorkerWithFiltersBuilder;

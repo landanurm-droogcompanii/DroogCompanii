@@ -11,7 +11,6 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.state.StandardFiltersState;
 
 /**
  * Created by ls on 16.01.14.
@@ -21,10 +20,6 @@ public class DiscountTypeSearchCriterion
         implements SearchableListing.SearchCriterion<PartnerPoint>, Serializable {
 
     private List<String> discountTypes;
-
-    public DiscountTypeSearchCriterion(StandardFiltersState state) {
-        this(state.discountTypeBonus, state.discountTypeDiscount, state.discountTypeCashBack);
-    }
 
     public DiscountTypeSearchCriterion(boolean bonus, boolean discount, boolean cashBack) {
         discountTypes = new ArrayList<String>();

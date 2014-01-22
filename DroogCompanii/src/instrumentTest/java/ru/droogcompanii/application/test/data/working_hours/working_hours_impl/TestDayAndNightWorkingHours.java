@@ -3,11 +3,11 @@ package ru.droogcompanii.application.test.data.working_hours.working_hours_impl;
 import junit.framework.TestCase;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
+import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 import ru.droogcompanii.application.test.TestingUtils;
 import ru.droogcompanii.application.util.IteratorOverTimes;
-import ru.droogcompanii.application.data.working_hours.WorkingHours;
 
 /**
  * Created by ls on 09.01.14.

@@ -8,10 +8,10 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.helpers.task.Task;
 import ru.droogcompanii.application.data.DataUpdater;
 import ru.droogcompanii.application.util.DataUrlProvider;
 import ru.droogcompanii.application.util.LogUtils;
+import ru.droogcompanii.application.view.helpers.task.Task;
 
 /**
  * Created by ls on 26.12.13.

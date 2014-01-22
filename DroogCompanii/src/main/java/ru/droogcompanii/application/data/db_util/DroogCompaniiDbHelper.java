@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnersContract;
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnersContract;
 
 /**
  * Created by Leonid on 09.12.13.

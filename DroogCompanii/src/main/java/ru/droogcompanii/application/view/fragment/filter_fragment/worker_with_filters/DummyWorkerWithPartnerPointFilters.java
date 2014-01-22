@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.view.fragment.filter_fragment.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 
 /**
  * Created by ls on 15.01.14.

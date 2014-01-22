@@ -11,11 +11,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
+import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.search_result_activity.SearchResultActivity;
 import ru.droogcompanii.application.view.fragment.partner_category_list_fragment.PartnerCategoryListFragment;

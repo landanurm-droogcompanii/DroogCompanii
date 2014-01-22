@@ -19,8 +19,8 @@ import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.view.activity_3.filter_activity.FilterActivity;
 import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchActivity;
-import ru.droogcompanii.application.view.fragment.filter_fragment.FilterUtils;
-import ru.droogcompanii.application.view.fragment.filter_fragment.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl.StandardFiltersUtils;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
 
@@ -42,7 +42,7 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
                 (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
 
         if (savedInstanceState == null) {
-            FilterUtils.restoreFiltersToDefault(this);
+            StandardFiltersUtils.setDefaultFilters(this);
             initPartnerPointsMapFragment();
         }
 
@@ -58,7 +58,7 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
             }
         };
         partnerPointsMapFragment.setPartnerPointsProvider(allPartnerPointsProvider);
-        partnerPointsMapFragment.setFilters(FilterUtils.getCurrentFilters(this));
+        partnerPointsMapFragment.setFilters(StandardFiltersUtils.getCurrentFilters(this));
     }
 
     private void initListeners() {

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application;
+package ru.droogcompanii.application.util;
 
 import android.app.Activity;
 import android.content.Context;

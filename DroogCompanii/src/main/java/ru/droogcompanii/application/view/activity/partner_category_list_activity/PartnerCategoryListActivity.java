@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-import ru.droogcompanii.application.view.helpers.ActionBarListActivity;
-import ru.droogcompanii.application.view.activity.partner_list_activity.PartnerListActivity;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.view.activity.partner_list_activity.PartnerListActivity;
+import ru.droogcompanii.application.view.helpers.ActionBarListActivity;
 
 public class PartnerCategoryListActivity extends ActionBarListActivity
                                       implements AdapterView.OnItemClickListener {
