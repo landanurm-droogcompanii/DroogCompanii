@@ -11,7 +11,7 @@ import ru.droogcompanii.application.util.MoreComparableString;
  * Created by ls on 16.01.14.
  */
 
-public class CashlessPaymentsSearchCriterion
+public class SearchCriterionByCashlessPayments
         implements SearchableListing.SearchCriterion<PartnerPoint>, Serializable {
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {

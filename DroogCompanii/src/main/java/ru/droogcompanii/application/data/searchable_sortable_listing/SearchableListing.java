@@ -42,7 +42,7 @@ public class SearchableListing<T> implements Serializable {
         searchCriteria.add(searchCriterion);
     }
 
-    public void clearAllCriteria() {
+    public void removeAllFilters() {
         searchCriteria.clear();
     }
 

@@ -34,8 +34,8 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
         sorted = false;
     }
 
-    public void clearAllCriteria() {
-        super.clearAllCriteria();
+    public void removeAllFilters() {
+        super.removeAllFilters();
         comparators.clear();
         elements = new ArrayList<T>(unsortedElements);
     }

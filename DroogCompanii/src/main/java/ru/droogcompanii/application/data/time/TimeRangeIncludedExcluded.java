@@ -12,11 +12,15 @@ public class TimeRangeIncludedExcluded implements TimeRange, Serializable {
     private final TimeOfDay to;
 
     public TimeRangeIncludedExcluded(TimeOfDay from, TimeOfDay to) {
+        checkArguments(from, to);
+        this.from = from;
+        this.to = to;
+    }
+
+    private void checkArguments(TimeOfDay from, TimeOfDay to) {
         if (to.before(from)) {
             throw new IllegalArgumentException("time <from> must be before <to> time");
         }
-        this.from = from;
-        this.to = to;
     }
 
     public TimeOfDay from() {

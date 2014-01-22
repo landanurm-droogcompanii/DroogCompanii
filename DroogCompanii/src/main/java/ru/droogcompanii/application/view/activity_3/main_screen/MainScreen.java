@@ -14,12 +14,10 @@ import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPo
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
-import ru.droogcompanii.application.view.activity_3.filter_activity.FilterActivity;
+import ru.droogcompanii.application.view.activity_3.ActivityWithPartnerPointsMapFragmentAndFilter;
 import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchActivity;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl.StandardFiltersUtils;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
@@ -27,10 +25,15 @@ import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.Pa
 /**
  * Created by ls on 14.01.14.
  */
-public class MainScreen extends android.support.v4.app.FragmentActivity
+public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
         implements PartnerPointsMapFragment.OnPartnerPointInfoWindowClickListener {
 
     private PartnerPointsMapFragment partnerPointsMapFragment;
+
+    @Override
+    protected PartnerPointsMapFragment getPartnerPointsMapFragment() {
+        return partnerPointsMapFragment;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,43 +85,6 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
         });
     }
 
-    private void onSearch() {
-        Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
-    }
-
-    private void onFilter() {
-        Intent intent = new Intent(this, FilterActivity.class);
-        startActivityForResult(intent, FilterActivity.REQUEST_CODE);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            Filters returnedFilters = extractReturnedFilters(data);
-            applyFilters(returnedFilters);
-        }
-    }
-
-    private Filters extractReturnedFilters(Intent data) {
-        Filters filters = null;
-        if (data != null) {
-            filters = (Filters) data.getSerializableExtra(Keys.filters);
-        }
-        if (filters == null) {
-            throw new RuntimeException(FilterActivity.class.getName() + " doesn't return filters");
-        }
-        return filters;
-    }
-
-    private void applyFilters(Filters filters) {
-        partnerPointsMapFragment.setFilters(filters);
-    }
-
-    private void onMenu() {
-        // TODO:
-        Toast.makeText(this, "Need to open Menu", Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onPartnerPointInfoWindowClick(PartnerPoint partnerPoint) {
         PartnersReader partnersReader = new PartnersReader(this);
@@ -137,5 +103,15 @@ public class MainScreen extends android.support.v4.app.FragmentActivity
             throw new IllegalArgumentException("Partner points doesn't have this point");
         }
         ListUtils.swap(partnerPoints, 0, index);
+    }
+
+    private void onSearch() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
+    private void onMenu() {
+        // TODO:
+        Toast.makeText(this, "Need to open Menu", Toast.LENGTH_SHORT).show();
     }
 }

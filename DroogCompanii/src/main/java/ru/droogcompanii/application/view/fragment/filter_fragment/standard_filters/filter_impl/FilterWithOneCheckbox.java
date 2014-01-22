@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CheckBox;
 
-import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
 import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 
@@ -12,8 +11,6 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter
  * Created by ls on 21.01.14.
  */
 abstract class FilterWithOneCheckbox implements Filter {
-    private static final int ID_OF_CHECKBOX = R.id.sortByTitleCheckBox;
-
     private boolean needToInclude;
 
     protected FilterWithOneCheckbox() {

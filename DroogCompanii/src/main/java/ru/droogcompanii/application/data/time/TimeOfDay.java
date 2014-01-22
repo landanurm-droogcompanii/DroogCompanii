@@ -20,11 +20,15 @@ public class TimeOfDay implements Time, Serializable {
     }
 
     public TimeOfDay(int hours, int minutes) {
+        checkArguments(hours, minutes);
+        this.hours = hours;
+        this.minutes = minutes;
+    }
+
+    private void checkArguments(int hours, int minutes) {
         if (hours < 0 || hours >= HOURS_PER_DAY || minutes < 0 || minutes >= MINUTES_PER_HOUR) {
             throw new IllegalArgumentException("Illegal time: <" + hours + ":" + minutes + ">");
         }
-        this.hours = hours;
-        this.minutes = minutes;
     }
 
     @Override

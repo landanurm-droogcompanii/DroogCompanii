@@ -38,7 +38,7 @@ public class WorkerWithStandardPartnerPointFilters implements WorkerWithFilters<
     @Override
     public Filters readFilters(View viewOfFilters) {
         List<Filter> currentFilters = StandardFiltersUtils.getFiltersReadedFrom(viewOfFilters);
-        return new Filters(currentFilters);
+        return Filters.from(currentFilters);
     }
 
     @Override

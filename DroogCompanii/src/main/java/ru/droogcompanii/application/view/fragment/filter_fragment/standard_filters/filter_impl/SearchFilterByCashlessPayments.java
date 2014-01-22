@@ -2,12 +2,12 @@ package ru.droogcompanii.application.view.fragment.filter_fragment.standard_filt
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.CashlessPaymentsSearchCriterion;
+import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.SearchCriterionByCashlessPayments;
 
 /**
  * Created by ls on 21.01.14.
  */
-class SearchFilterCashlessPayments extends FilterWithOneCheckbox {
+class SearchFilterByCashlessPayments extends FilterWithOneCheckbox {
     @Override
     protected boolean isNeedToIncludeByDefault() {
         return false;
@@ -20,6 +20,6 @@ class SearchFilterCashlessPayments extends FilterWithOneCheckbox {
 
     @Override
     protected void includeIn(Filters filters) {
-        filters.add(new CashlessPaymentsSearchCriterion());
+        filters.add(new SearchCriterionByCashlessPayments());
     }
 }

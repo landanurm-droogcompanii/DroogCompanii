@@ -7,10 +7,10 @@ import java.io.Serializable;
  */
 public class Partner implements Serializable {
     public final int id;
-    public final String title;
-    public final String fullTitle;
-    public final String discountType;
     public final int discount;
+    public final String discountType;
+    public final String fullTitle;
+    public final String title;
 
     // При проверке эквивалентности это поле не учитывается,
     // т.к. один партнер может входить в несколько категорий.

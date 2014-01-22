@@ -10,7 +10,7 @@ import ru.droogcompanii.application.data.working_hours.working_hours_impl.Workin
 /**
  * Created by ls on 17.01.14.
  */
-public class WorkingHoursOnBusinessDayParser {
+class WorkingHoursOnBusinessDayParser {
 
     private static final String FORMAT_OF_WORKING_HOURS =
             "[range1],[range2],...,[rangeN] ([rangeX1],[rangeX2],...,[rangeXM])\n" +

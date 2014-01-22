@@ -9,7 +9,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableL
 /**
  * Created by ls on 16.01.14.
  */
-public class WorksAtSomeTimeSearchCriterion
+public class SearchCriterionByWorksAtSomeTime
         implements SearchableListing.SearchCriterion<PartnerPoint>, Serializable {
 
     public static interface CalendarProvider {
@@ -18,7 +18,7 @@ public class WorksAtSomeTimeSearchCriterion
 
     private CalendarProvider calendarProvider;
 
-    public WorksAtSomeTimeSearchCriterion(CalendarProvider calendarProvider) {
+    public SearchCriterionByWorksAtSomeTime(CalendarProvider calendarProvider) {
         this.calendarProvider = calendarProvider;
     }
 

@@ -15,16 +15,17 @@ public class Filters implements Serializable {
     public final List<SearchableListing.SearchCriterion<PartnerPoint>> searchCriteria;
     public final List<Comparator<PartnerPoint>> comparators;
 
+    public static Filters from(List<Filter> filters) {
+        Filters result = new Filters();
+        for (Filter filter : filters) {
+            filter.includeInIfNeed(result);
+        }
+        return result;
+    }
+
     public Filters() {
         searchCriteria = new ArrayList<SearchableListing.SearchCriterion<PartnerPoint>>();
         comparators = new ArrayList<Comparator<PartnerPoint>>();
-    }
-
-    public Filters(List<Filter> filters) {
-        this();
-        for (Filter filter : filters) {
-            filter.includeInIfNeed(this);
-        }
     }
 
     public void add(SearchableListing.SearchCriterion<PartnerPoint> searchCriterion) {

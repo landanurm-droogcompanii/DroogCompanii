@@ -32,8 +32,8 @@ public class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCatego
     private static PartnerCategoryListAdapter createAdapter(Context context, Bundle savedInstanceState) {
         PartnerCategoriesReader partnerCategoriesReader = new PartnerCategoriesReader(context);
         @SuppressWarnings("unchecked")
-        List<PartnerCategory> partnerCategories = (List<PartnerCategory>)
-                savedInstanceState.getSerializable(Keys.partnerCategoryListAdapterState);
+        List<PartnerCategory> partnerCategories =
+                (List<PartnerCategory>) savedInstanceState.getSerializable(Keys.partnerCategories);
         return new PartnerCategoryListAdapter(context, partnerCategoriesReader, partnerCategories);
     }
 
@@ -62,6 +62,6 @@ public class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCatego
     }
 
     public void saveStateInto(Bundle outState) {
-        outState.putSerializable(Keys.partnerCategoryListAdapterState, (Serializable) partnerCategories);
+        outState.putSerializable(Keys.partnerCategories, (Serializable) partnerCategories);
     }
 }

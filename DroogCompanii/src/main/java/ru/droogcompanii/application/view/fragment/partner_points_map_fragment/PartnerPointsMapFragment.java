@@ -139,7 +139,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment implements G
     }
 
     public void setFilters(Filters filters) {
-        searchablePartnerPoints.clearAllCriteria();
+        searchablePartnerPoints.removeAllFilters();
         addFilters(filters);
     }
 

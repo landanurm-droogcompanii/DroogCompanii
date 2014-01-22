@@ -149,7 +149,7 @@ public class TestSearchableSortableListing extends TestCase {
     }
 
 
-    public void testClearAllCriteria() {
+    public void testRemoveAllFilters() {
         final List<PairOfNumbers> pairs = Arrays.asList(
                 new PairOfNumbers(2, 4),
                 new PairOfNumbers(6, 3),
@@ -177,7 +177,7 @@ public class TestSearchableSortableListing extends TestCase {
         });
         searchableSortablePairs.toList();
 
-        searchableSortablePairs.clearAllCriteria();
+        searchableSortablePairs.removeAllFilters();
 
         index = 0;
         searchableSortablePairs.forEach(new SearchableSortableListing.OnEachHandler<PairOfNumbers>() {

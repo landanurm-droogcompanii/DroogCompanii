@@ -23,13 +23,22 @@ public class BaseCustomMapFragment extends android.support.v4.app.Fragment {
     }
 
     protected GoogleMap getGoogleMap() {
-        if ((map == null) && (getActivity() != null) && (getActivity().getSupportFragmentManager() != null)) {
-            SupportMapFragment mapFragment = getNestedSupportMapFragment();
-            if (mapFragment != null) {
-                map = mapFragment.getMap();
-            }
+        if (needToInitMap()) {
+            initMap();
         }
         return map;
+    }
+
+    private boolean needToInitMap() {
+        return (map == null) && (getActivity() != null) &&
+                (getActivity().getSupportFragmentManager() != null);
+    }
+
+    private void initMap() {
+        SupportMapFragment mapFragment = getNestedSupportMapFragment();
+        if (mapFragment != null) {
+            map = mapFragment.getMap();
+        }
     }
 
     private SupportMapFragment getNestedSupportMapFragment() {

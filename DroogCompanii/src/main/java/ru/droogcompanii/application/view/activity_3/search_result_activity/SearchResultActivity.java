@@ -1,12 +1,11 @@
 package ru.droogcompanii.application.view.activity_3.search_result_activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,13 +19,14 @@ import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActi
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchResultProvider;
 import ru.droogcompanii.application.view.activity_3.search_result_map_activity.SearchResultMapActivity;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
+import ru.droogcompanii.application.view.fragment.search_result_fragment.SearchResultFragment;
 
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchResultActivity extends Activity implements AdapterView.OnItemClickListener {
-    private List<Partner> partners;
-    private PartnerListAdapter adapter;
+public class SearchResultActivity extends FragmentActivity
+                                 implements SearchResultFragment.OnPartnerClickListener {
+    private SearchResultFragment searchResultFragment;
     private SearchResultProvider searchResultProvider;
 
     @Override
@@ -34,17 +34,14 @@ public class SearchResultActivity extends Activity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_3_search_result);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        searchResultFragment = (SearchResultFragment) fragmentManager.findFragmentById(R.id.searchResultFragment);
+
         if (savedInstanceState == null) {
             init();
         } else {
             restoreState(savedInstanceState);
         }
-
-        adapter = new PartnerListAdapter(this, partners);
-
-        ListView listView = (ListView) findViewById(R.id.partnerPointListView);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
 
         findViewById(R.id.showSearchResultOnMap).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,24 +54,21 @@ public class SearchResultActivity extends Activity implements AdapterView.OnItem
     private void init() {
         Bundle args = getIntent().getExtras();
         searchResultProvider = (SearchResultProvider) args.getSerializable(Keys.searchResultProvider);
-        partners = searchResultProvider.getPartners(this);
+        searchResultFragment.setSearchResultProvider(searchResultProvider);
     }
 
     private void restoreState(Bundle savedInstanceState) {
         searchResultProvider = (SearchResultProvider) savedInstanceState.getSerializable(Keys.searchResultProvider);
-        partners = (List<Partner>) savedInstanceState.getSerializable(Keys.partners);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
-        outState.putSerializable(Keys.partners, (Serializable) partners);
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Partner partner = adapter.getItem(position);
+    public void onPartnerClick(Partner partner) {
         List<PartnerPoint> partnerPoints = searchResultProvider.getPartnerPoints(this, partner);
         PartnerActivity.start(this, partner, partnerPoints);
     }

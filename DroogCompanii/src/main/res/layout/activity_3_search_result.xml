@@ -12,10 +12,11 @@
         android:src="@android:drawable/ic_dialog_map"
         android:id="@+id/showSearchResultOnMap" />
 
-    <ListView
+    <fragment
+        android:name="ru.droogcompanii.application.view.fragment.search_result_fragment.SearchResultFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/showSearchResultOnMap"
-        android:id="@+id/partnerPointListView" />
+        android:id="@+id/searchResultFragment" />
 
 </RelativeLayout>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ru.droogcompanii.application.util.SharedPreferencesProvider;
@@ -16,20 +15,8 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter
  */
 public class StandardFiltersUtils {
 
-    public static List<Filter> getDefaultFilters() {
-        final Filter[] defaultStandardFilters = {
-                new SearchFilterCashlessPayments(),
-                new SearchFilterDiscountType(),
-                new SearchFilterWorksNow(),
-                new SortingFilterByDiscount(),
-                new SortingFilterByDistanceBasedOnCurrentLocation(),
-                new SortingFilterByTitle()
-        };
-        return Arrays.asList(defaultStandardFilters);
-    }
-
     public static List<Filter> getFiltersRestoredFrom(SharedPreferences sharedPreferences) {
-        List<Filter> standardFilters = getDefaultFilters();
+        List<Filter> standardFilters = StandardFiltersProvider.getDefaultFilters();
         for (Filter filter : standardFilters) {
             filter.restoreFrom(sharedPreferences);
         }
@@ -37,7 +24,7 @@ public class StandardFiltersUtils {
     }
 
     public static List<Filter> getFiltersReadedFrom(View viewOfFilters) {
-        List<Filter> filters = getDefaultFilters();
+        List<Filter> filters = StandardFiltersProvider.getDefaultFilters();
         for (Filter filter : filters) {
             filter.readFrom(viewOfFilters);
         }
@@ -46,8 +33,8 @@ public class StandardFiltersUtils {
 
     public static void setDefaultFilters(Context context) {
         SharedPreferences sharedPreferences = SharedPreferencesProvider.get(context);
-        List<Filter> defaultStandardFilters = getDefaultFilters();
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        List<Filter> defaultStandardFilters = StandardFiltersProvider.getDefaultFilters();
         for (Filter defaultFilter : defaultStandardFilters) {
             defaultFilter.saveInto(editor);
         }
@@ -56,7 +43,6 @@ public class StandardFiltersUtils {
 
     public static Filters getCurrentFilters(Context context) {
         SharedPreferences sharedPreferences = SharedPreferencesProvider.get(context);
-        List<Filter> filters = getFiltersRestoredFrom(sharedPreferences);
-        return new Filters(filters);
+        return Filters.from(getFiltersRestoredFrom(sharedPreferences));
     }
 }

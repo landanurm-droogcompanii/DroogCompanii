@@ -26,16 +26,12 @@ public class FilterActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_3_filter);
 
-        if (savedInstanceState == null) {
-            args = getIntent().getExtras();
-        } else {
-            args = savedInstanceState.getBundle(Keys.args);
-        }
+        filterFragment = new FilterFragment();
+        args = extractArguments(savedInstanceState);
+        filterFragment.setArguments(args);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        filterFragment = new FilterFragment();
-        filterFragment.setArguments(args);
 
         if (savedInstanceState == null) {
             fragmentTransaction.add(R.id.containerOfFilterFragment, filterFragment);
@@ -44,6 +40,14 @@ public class FilterActivity extends FragmentActivity {
         }
 
         fragmentTransaction.commit();
+    }
+
+    private Bundle extractArguments(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return getIntent().getExtras();
+        } else {
+            return savedInstanceState.getBundle(Keys.args);
+        }
     }
 
     @Override

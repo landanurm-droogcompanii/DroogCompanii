@@ -9,9 +9,7 @@ import android.view.View;
 public interface Filter {
     void readFrom(View view);
     void displayOn(View view);
-
     void restoreFrom(SharedPreferences sharedPreferences);
     void saveInto(SharedPreferences.Editor editor);
-
     void includeInIfNeed(Filters filters);
 }

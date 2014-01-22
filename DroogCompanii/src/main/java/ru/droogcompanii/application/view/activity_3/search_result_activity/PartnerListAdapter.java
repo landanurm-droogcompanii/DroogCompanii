@@ -10,7 +10,7 @@ import ru.droogcompanii.application.view.helpers.SimpleArrayAdapter;
 /**
  * Created by ls on 14.01.14.
  */
-class PartnerListAdapter extends SimpleArrayAdapter<Partner> {
+public class PartnerListAdapter extends SimpleArrayAdapter<Partner> {
     public PartnerListAdapter(Context context, List<Partner> partners) {
         super(context, partners, new ItemToTitleConvertor<Partner>() {
             @Override

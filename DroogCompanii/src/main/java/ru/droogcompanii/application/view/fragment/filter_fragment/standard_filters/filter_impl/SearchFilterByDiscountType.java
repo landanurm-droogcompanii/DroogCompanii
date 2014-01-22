@@ -7,12 +7,12 @@ import android.widget.CheckBox;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
 import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.DiscountTypeSearchCriterion;
+import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.SearchCriterionByDiscountType;
 
 /**
  * Created by ls on 21.01.14.
  */
-class SearchFilterDiscountType implements Filter {
+class SearchFilterByDiscountType implements Filter {
 
     private static class KeysOfDiscountTypes {
         public static final String BONUS = getClassName() + "Bonus";
@@ -21,7 +21,7 @@ class SearchFilterDiscountType implements Filter {
     }
 
     private static String getClassName() {
-        return SearchFilterDiscountType.class.getSimpleName();
+        return SearchFilterByDiscountType.class.getSimpleName();
     }
 
     private static final boolean DEFAULT_BONUS = true;
@@ -32,7 +32,7 @@ class SearchFilterDiscountType implements Filter {
     private boolean discount;
     private boolean cashBack;
 
-    public SearchFilterDiscountType() {
+    public SearchFilterByDiscountType() {
         bonus = DEFAULT_BONUS;
         discount = DEFAULT_DISCOUNT;
         cashBack = DEFAULT_CASH_BACK;
@@ -72,6 +72,6 @@ class SearchFilterDiscountType implements Filter {
 
     @Override
     public void includeInIfNeed(Filters filters) {
-        filters.add(new DiscountTypeSearchCriterion(bonus, discount, cashBack));
+        filters.add(new SearchCriterionByDiscountType(bonus, discount, cashBack));
     }
 }

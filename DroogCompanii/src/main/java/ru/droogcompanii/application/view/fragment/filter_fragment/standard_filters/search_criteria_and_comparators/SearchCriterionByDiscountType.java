@@ -16,12 +16,12 @@ import ru.droogcompanii.application.util.MoreComparableString;
  * Created by ls on 16.01.14.
  */
 
-public class DiscountTypeSearchCriterion
+public class SearchCriterionByDiscountType
         implements SearchableListing.SearchCriterion<PartnerPoint>, Serializable {
 
     private List<String> discountTypes;
 
-    public DiscountTypeSearchCriterion(boolean bonus, boolean discount, boolean cashBack) {
+    public SearchCriterionByDiscountType(boolean bonus, boolean discount, boolean cashBack) {
         discountTypes = new ArrayList<String>();
         if (bonus) {
             discountTypes.add(DroogCompaniiStringConstants.discountType_Bonus);

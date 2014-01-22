@@ -117,10 +117,10 @@ public class TestSearchableListing extends TestCase {
     }
 
 
-    public void testClearAllCriteria() {
+    public void testRemoveAllFilters() {
         searchableListing.addSearchCriterion(new OnlyEvenNumbersSearchCriterion());
 
-        searchableListing.clearAllCriteria();
+        searchableListing.removeAllFilters();
 
         checkForEach(new SearchableListing.OnEachHandler<Integer>() {
             @Override
