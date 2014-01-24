@@ -4,8 +4,8 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CheckBox;
 
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.Filter;
+import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 
 /**
  * Created by ls on 21.01.14.
@@ -19,7 +19,7 @@ abstract class FilterWithOneCheckbox implements Filter {
 
     protected abstract boolean isNeedToIncludeByDefault();
     protected abstract int getIdOfCheckbox();
-    protected abstract void includeIn(Filters filters);
+    protected abstract void necessarilyIncludeIn(FilterSet filterSet);
 
     @Override
     public void readFrom(View view) {
@@ -50,9 +50,9 @@ abstract class FilterWithOneCheckbox implements Filter {
     }
 
     @Override
-    public void includeInIfNeed(Filters filters) {
+    public void includeIn(FilterSet filterSet) {
         if (needToInclude) {
-            includeIn(filters);
+            necessarilyIncludeIn(filterSet);
         }
     }
 }

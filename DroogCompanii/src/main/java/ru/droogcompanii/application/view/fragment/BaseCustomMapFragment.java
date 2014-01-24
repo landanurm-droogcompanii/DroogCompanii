@@ -48,5 +48,4 @@ public class BaseCustomMapFragment extends android.support.v4.app.Fragment {
     protected View getMapView() {
         return getNestedSupportMapFragment().getView();
     }
-
 }

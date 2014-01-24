@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.filter_activity.FilterActivity;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 
 /**
@@ -20,24 +20,24 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndFilter extends andr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            Filters returnedFilters = extractReturnedFilters(data);
-            applyFilters(returnedFilters);
+            FilterSet returnedFilterSet = extractReturnedFilters(data);
+            applyFilters(returnedFilterSet);
         }
     }
 
-    private Filters extractReturnedFilters(Intent data) {
-        Filters filters = null;
+    private FilterSet extractReturnedFilters(Intent data) {
+        FilterSet filterSet = null;
         if (data != null) {
-            filters = (Filters) data.getSerializableExtra(Keys.filters);
+            filterSet = (FilterSet) data.getSerializableExtra(Keys.filters);
         }
-        if (filters == null) {
-            throw new RuntimeException(FilterActivity.class.getName() + " doesn't return filters");
+        if (filterSet == null) {
+            throw new RuntimeException(FilterActivity.class.getName() + " doesn't return filterSet");
         }
-        return filters;
+        return filterSet;
     }
 
-    private void applyFilters(Filters filters) {
-        getPartnerPointsMapFragment().setFilters(filters);
+    private void applyFilters(FilterSet filterSet) {
+        getPartnerPointsMapFragment().setFilterSet(filterSet);
     }
 
     protected abstract PartnerPointsMapFragment getPartnerPointsMapFragment();

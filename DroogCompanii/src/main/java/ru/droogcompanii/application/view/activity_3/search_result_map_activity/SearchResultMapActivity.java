@@ -11,7 +11,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.activity_3.ActivityWithPartnerPointsMapFragmentAndFilter;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl.StandardFiltersUtils;
+import ru.droogcompanii.application.view.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
 
@@ -53,12 +53,18 @@ public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmen
         PartnerPointsProvider partnerPointsProvider =
                 (PartnerPointsProvider) args.getSerializable(Keys.partnerPointsProvider);
         partnerPointsMapFragment.setPartnerPointsProvider(partnerPointsProvider);
-        partnerPointsMapFragment.setFilters(StandardFiltersUtils.getCurrentFilters(this));
+        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
     }
 
     @Override
     public void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow) {
         String message = "Need to show " + partnerPointsToShow.size() + " partner points";
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNoLongerNeedToShowPartnerPoints() {
+        // TODO: in the future
+        // what need to do depends on all features of this activity
     }
 }

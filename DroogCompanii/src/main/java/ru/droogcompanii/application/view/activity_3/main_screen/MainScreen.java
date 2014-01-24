@@ -7,19 +7,19 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 import java.util.Set;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
-import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.view.activity_3.ActivityWithPartnerPointsMapFragmentAndFilter;
-import ru.droogcompanii.application.view.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.view.activity_3.search_activity.SearchActivity;
-import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.filter_impl.StandardFiltersUtils;
+import ru.droogcompanii.application.view.fragment.filter_fragment.FilterUtils;
+import ru.droogcompanii.application.view.fragment.partner_points_info_panel_fragment.PartnerPointsInfoPanelFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsProvider;
 
@@ -27,9 +27,10 @@ import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.Pa
  * Created by ls on 14.01.14.
  */
 public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
-        implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener {
+        implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener, GoogleMap.OnMapClickListener {
 
     private PartnerPointsMapFragment partnerPointsMapFragment;
+    private PartnerPointsInfoPanelFragment partnerPointsInfoPanelFragment;
 
     @Override
     protected PartnerPointsMapFragment getPartnerPointsMapFragment() {
@@ -42,11 +43,15 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
         setContentView(R.layout.activity_3_main_screen);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        partnerPointsMapFragment =
-                (PartnerPointsMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
+        partnerPointsMapFragment = (PartnerPointsMapFragment)
+                fragmentManager.findFragmentById(R.id.mapFragment);
+        partnerPointsInfoPanelFragment = (PartnerPointsInfoPanelFragment)
+                fragmentManager.findFragmentById(R.id.partnerPointsInfoPanelFragment);
+
+        partnerPointsMapFragment.setOnMapClickListener(this);
 
         if (savedInstanceState == null) {
-            StandardFiltersUtils.setDefaultFilters(this);
+            FilterUtils.setDefaultFilters(this);
             initPartnerPointsMapFragment();
         }
 
@@ -62,7 +67,7 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
             }
         };
         partnerPointsMapFragment.setPartnerPointsProvider(allPartnerPointsProvider);
-        partnerPointsMapFragment.setFilters(StandardFiltersUtils.getCurrentFilters(this));
+        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
     }
 
     private void initListeners() {
@@ -86,14 +91,6 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
         });
     }
 
-    private void movePartnerPointAtFirstPosition(PartnerPoint partnerPoint, List<PartnerPoint> partnerPoints) {
-        int index = partnerPoints.indexOf(partnerPoint);
-        if (index == -1) {
-            throw new IllegalArgumentException("Partner points doesn't have this point");
-        }
-        ListUtils.swap(partnerPoints, 0, index);
-    }
-
     private void onSearch() {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
@@ -106,18 +103,16 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
 
     @Override
     public void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow) {
-        String message = "Need to show " + partnerPointsToShow.size() + " partner points";
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        partnerPointsInfoPanelFragment.setPartnerPoints(partnerPointsToShow);
     }
 
-    public void onNeedToShowPartnerPoint(PartnerPoint partnerPoint) {
-        PartnersReader partnersReader = new PartnersReader(this);
-        Partner partner = partnersReader.getPartnerOf(partnerPoint);
+    @Override
+    public void onNoLongerNeedToShowPartnerPoints() {
+        partnerPointsInfoPanelFragment.hide();
+    }
 
-        PartnerPointsReader partnerPointsReader = new PartnerPointsReader(this);
-        List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
-
-        movePartnerPointAtFirstPosition(partnerPoint, partnerPoints);
-        PartnerActivity.start(this, partner, partnerPoints);
+    @Override
+    public void onMapClick(LatLng position) {
+        partnerPointsInfoPanelFragment.hide();
     }
 }

@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterFragment;
@@ -59,7 +61,7 @@ public class FilterActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(Keys.filters, filterFragment.getFilters());
+        returnIntent.putExtra(Keys.filters, (Serializable) filterFragment.getFilterSet());
         setResult(RESULT_OK, returnIntent);
         super.onBackPressed();
     }

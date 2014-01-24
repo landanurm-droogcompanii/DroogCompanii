@@ -22,4 +22,14 @@ public class Keys {
     public static final String args = "args";
 
     public static final String needToExpandList = "needToExpandList";
+
+    public static final String visible = "visible";
+
+    public static final String indexOfCurrentPartnerPoint = "indexOfCurrentPartnerPoint";
+
+    public static final String positionOfClickedMarker = "positionOfClickedMarker";
+
+    public static final String longitudeOfClickedMarker = "longitudeOfClickedMarker";
+    public static final String latitudeOfClickedMarker = "latitudeOfClickedMarker";
+    public static final String clickedMarkerExist = "clickedMarkerExist";
 }

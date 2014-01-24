@@ -5,8 +5,8 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filter;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.Filter;
+import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.SearchCriterionByDiscountType;
 
 /**
@@ -71,7 +71,7 @@ class SearchFilterByDiscountType implements Filter {
     }
 
     @Override
-    public void includeInIfNeed(Filters filters) {
-        filters.add(new SearchCriterionByDiscountType(bonus, discount, cashBack));
+    public void includeIn(FilterSet filterSet) {
+        filterSet.add(new SearchCriterionByDiscountType(bonus, discount, cashBack));
     }
 }

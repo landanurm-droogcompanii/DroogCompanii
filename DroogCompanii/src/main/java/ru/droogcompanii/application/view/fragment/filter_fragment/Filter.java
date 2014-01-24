@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.fragment.filter_fragment.filters;
+package ru.droogcompanii.application.view.fragment.filter_fragment;
 
 import android.content.SharedPreferences;
 import android.view.View;
@@ -11,5 +11,5 @@ public interface Filter {
     void displayOn(View view);
     void restoreFrom(SharedPreferences sharedPreferences);
     void saveInto(SharedPreferences.Editor editor);
-    void includeInIfNeed(Filters filters);
+    void includeIn(FilterSet filterSet);
 }

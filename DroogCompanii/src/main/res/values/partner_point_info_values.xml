@@ -9,8 +9,8 @@
     <dimen name="partner_point_info_address_size">22sp</dimen>
     <dimen name="working_hours_text_size">18sp</dimen>
     <dimen name="working_hours_indicator_side_length">4dp</dimen>
-    <color name="opened_indicator_color">@color/green</color>
-    <color name="closed_indicator_color">@color/red</color>
+    <color name="opened_indicator_color">#8810ee10</color>
+    <color name="closed_indicator_color">#88ee1010</color>
     <color name="green">#31B20A</color>
     <color name="red">#EE1017</color>
 
