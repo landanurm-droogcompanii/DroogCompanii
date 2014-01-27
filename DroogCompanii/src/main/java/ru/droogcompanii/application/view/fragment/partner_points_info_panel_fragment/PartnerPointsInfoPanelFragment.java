@@ -44,12 +44,14 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        initCatchingOfTouchEvents();
+
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
             restoreStateFrom(savedInstanceState);
         }
-        initCatchingOfTouchEvents();
     }
 
     private void initCatchingOfTouchEvents() {
@@ -115,7 +117,9 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private void updateUI() {
         if (indexOutOfBounds()) {
-            throw new IllegalStateException("Index of current partner point is out of bounds");
+            throw new IllegalStateException(
+                "Index of current partner point is out of bounds: " + indexOfCurrentPartnerPoint
+            );
         }
         updateNavigationPanel();
         updatePartnerPointInfo();

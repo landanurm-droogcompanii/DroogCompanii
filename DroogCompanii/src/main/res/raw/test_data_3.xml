@@ -20,12 +20,12 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00, 16:00-17:00)</sat>
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
                             <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>

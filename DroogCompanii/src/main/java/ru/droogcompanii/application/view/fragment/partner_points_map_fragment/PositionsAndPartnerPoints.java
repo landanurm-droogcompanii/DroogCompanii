@@ -13,7 +13,7 @@ import ru.droogcompanii.application.util.MultiMap;
  * Created by ls on 22.01.14.
  */
 public class PositionsAndPartnerPoints {
-    private MultiMap<LatLng, PartnerPoint> multiMap;
+    private final MultiMap<LatLng, PartnerPoint> multiMap;
 
     public PositionsAndPartnerPoints(SearchableListing<PartnerPoint> searchableListing) {
         this(searchableListing.toList());
@@ -22,6 +22,14 @@ public class PositionsAndPartnerPoints {
     public PositionsAndPartnerPoints(Collection<PartnerPoint> partnerPoints) {
         multiMap = new MultiMap<LatLng, PartnerPoint>();
         putAll(partnerPoints);
+    }
+
+    public PositionsAndPartnerPoints() {
+        multiMap = new MultiMap<LatLng, PartnerPoint>();
+    }
+
+    public void putAll(LatLng position, Collection<PartnerPoint> partnerPoints) {
+        multiMap.putAll(position, partnerPoints);
     }
 
     public void putAll(Collection<PartnerPoint> partnerPoints) {

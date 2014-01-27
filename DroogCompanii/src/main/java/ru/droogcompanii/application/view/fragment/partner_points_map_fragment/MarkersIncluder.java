@@ -1,8 +1,5 @@
 package ru.droogcompanii.application.view.fragment.partner_points_map_fragment;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -11,42 +8,35 @@ import java.util.Set;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
-import ru.droogcompanii.application.util.MultiMap;
 
 /**
  * Created by ls on 22.01.14.
  */
+
+
+/*
+    Необходимо использовать этот класс для вставки маркеров на карту
+    и получения соответствующих пар "позиция - партнерские точки".
+ */
 public class MarkersIncluder {
-    private final MarkerIconsProvider markerIconsProvider;
-    private final PositionsAndPartnerPoints positionsAndPartnerPoints;
+    private final PositionsAndPartnerPoints grouped;
 
     public MarkersIncluder(SearchableListing<PartnerPoint> searchableListing) {
-        positionsAndPartnerPoints = new PositionsAndPartnerPoints(searchableListing);
-        markerIconsProvider = new MarkerIconsProvider();
+        grouped = new PositionsAndPartnerPoints(searchableListing);
     }
 
-    public MultiMap<Marker, PartnerPoint> includeIn(GoogleMap googleMap) {
-        MultiMap<Marker, PartnerPoint> result = new MultiMap<Marker, PartnerPoint>();
-        Set<LatLng> positions = positionsAndPartnerPoints.getAllPositions();
-        for (LatLng position : positions) {
-            Set<PartnerPoint> partnerPoints = positionsAndPartnerPoints.get(position);
-            Marker marker = includeIn(googleMap, position, partnerPoints);
-            result.putAll(marker, partnerPoints);
+    public PositionsAndPartnerPoints includeIn(PartnerPointsMapFragment fragment) {
+        PositionsAndPartnerPoints result = new PositionsAndPartnerPoints();
+        for (LatLng position : grouped.getAllPositions()) {
+            Marker marker = fragment.addMarker(prepareMarkerOptions(position));
+            Set<PartnerPoint> partnerPoints = grouped.get(position);
+            result.putAll(marker.getPosition(), partnerPoints);
         }
         return result;
     }
 
-    private Marker includeIn(GoogleMap googleMap, LatLng position, Set<PartnerPoint> partnerPoints) {
-        boolean singlePoint = partnerPoints.size() == 1;
-        BitmapDescriptor icon = markerIconsProvider.prepareIcon(singlePoint);
-        MarkerOptions markerOptions = new MarkerOptions().position(position).icon(icon);
-        return googleMap.addMarker(markerOptions);
-    }
-
-    private static class MarkerIconsProvider {
-        public BitmapDescriptor prepareIcon(boolean singlePoint) {
-            return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE);
-        }
+    private MarkerOptions prepareMarkerOptions(LatLng position) {
+        return new MarkerOptions().position(position).icon(MarkerIcons.getUnselectedIcon());
     }
 
 }
