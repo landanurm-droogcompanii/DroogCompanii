@@ -6,7 +6,8 @@
                 <id type="integer">101</id>
                 <title>IBM</title>
                 <full-title>International Business Machines</full-title>
-                <sale-type>Скидка</sale-type>
+                <discount-type>Скидка</discount-type>
+                <discount type="integer">5</discount>
                 <partner-points type="array">
                     <partner-point>
                         <title>IBM Казань. На Четаева</title>
@@ -19,13 +20,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
+                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -34,8 +35,30 @@
                 <id type="integer">102</id>
                 <title>Google</title>
                 <full-title>Google Inc.</full-title>
-                <sale-type>Cash back</sale-type>
+                <discount-type>Cash back</discount-type>
+                <discount type="integer">5</discount>
                 <partner-points type="array">
+                    <partner-point>
+                        <title>Google Казань. На Четаева 2</title>
+                        <address>г. Казань, ул. Четаева, д.13</address>
+                        <longitude type="decimal">50.0078</longitude>
+                        <latitude type="decimal">56.1053</latitude>
+                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(952) 349-17-61</phone>
+                            <phone>(843) 940-64-50</phone>
+                            <phone>(961) 019-24-17</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
                     <partner-point>
                         <title>Google Казань. На Четаева</title>
                         <address>г. Казань, ул. Четаева, д.13</address>
@@ -47,13 +70,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
+                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-16:00(11:30-12:30)</sat>
+                            <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -66,13 +89,13 @@
                             <phone>(843) 267-51-29</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>Выходной день</mon>
-                            <tue>Выходной день</tue>
-                            <wed>Выходной день</wed>
-                            <thu>Выходной день</thu>
-                            <fri>Выходной день</fri>
-                            <sat>Выходной день</sat>
-                            <sun>Выходной день</sun>
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
+                            <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -85,13 +108,13 @@
                             <phone>(919) 667-80-31</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>00:00-00:00</mon>
-                            <tue>00:00-00:00</tue>
-                            <wed>00:00-00:00</wed>
-                            <thu>00:00-00:00</thu>
-                            <fri>00:00-00:00</fri>
-                            <sat>00:00-00:00</sat>
-                            <sun>00:00-00:00</sun>
+                            <mon type="day_and_night">00:00-00:00</mon>
+                            <tue type="day_and_night">00:00-00:00</tue>
+                            <wed type="day_and_night">00:00-00:00</wed>
+                            <thu type="day_and_night">00:00-00:00</thu>
+                            <fri type="day_and_night">00:00-00:00</fri>
+                            <sat type="day_and_night">00:00-00:00</sat>
+                            <sun type="day_and_night">00:00-00:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -104,13 +127,13 @@
                             <phone>(843) 259-21-01</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>Выходной день</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-18:00</sat>
-                            <sun>Выходной день</sun>
+                            <mon type="usual_day">09:00-18:00(12:00-13:00, 15:00-16:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00, 15:00-16:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00, 15:00-16:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00, 15:00-16:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00, 15:00-16:00)</fri>
+                            <sat type="usual_day">09:00-18:00(12:00-13:00, 15:00-16:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -119,26 +142,47 @@
                 <id type="integer">103</id>
                 <title>Microsoft</title>
                 <full-title>Microsoft Corporation</full-title>
-                <sale-type>Бонусы</sale-type>
+                <discount-type>Бонус</discount-type>
+                <discount type="integer">5</discount>
                 <partner-points type="array">
                     <partner-point>
-                        <title>Microsoft Казань. На Четаева</title>
+                        <title>Microsoft. На Четаева</title>
                         <address>г. Казань, ул. Четаева, д.13</address>
-                        <longitude type="decimal">48.098</longitude>
-                        <latitude type="decimal">55.817</latitude>
+                        <longitude type="decimal">50.0078</longitude>
+                        <latitude type="decimal">56.1053</latitude>
                         <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(843) 258-58-59</phone>
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
+                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                    <partner-point>
+                        <title>Microsoft Казань. На Арбате</title>
+                        <address>г. Казань, Арбат, д.13</address>
+                        <longitude type="decimal">48.098</longitude>
+                        <latitude type="decimal">55.817</latitude>
+                        <payment-methods>наличный расчет, Visa</payment-methods>
+                        <phones type="array">
+                            <phone>(843) 258-58-59</phone>
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-18:00</mon>
+                            <tue type="usual_day">09:00-18:00</tue>
+                            <wed type="usual_day">09:00-18:00</wed>
+                            <thu type="usual_day">09:00-18:00</thu>
+                            <fri type="usual_day">10:00-18:00</fri>
+                            <sat type="usual_day">10:00-16:00</sat>
+                            <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -147,201 +191,27 @@
                 <id type="integer">104</id>
                 <title>Yota Devices</title>
                 <full-title>Yota Devices</full-title>
-                <sale-type>Cash back</sale-type>
+                <discount-type>Cash back</discount-type>
+                <discount type="integer">5</discount>
                 <partner-points type="array">
                     <partner-point>
                         <title>Yota Devices Казань</title>
                         <address>г. Казань</address>
                         <longitude type="decimal">49.1</longitude>
                         <latitude type="decimal">55.3</latitude>
-                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
+                        <payment-methods>наличный расчет</payment-methods>
                         <phones type="array">
                             <phone>(843) 258-58-59</phone>
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
-                        </workinghours>
-                    </partner-point>
-                </partner-points>
-            </partner>
-        </partners>
-    </partner-category>
-
-    <partner-category>
-        <title>Корпорации-Монстры 2</title>
-        <partners type="array">
-            <partner>
-                <id type="integer">123101</id>
-                <title>IBM</title>
-                <full-title>International Business Machines</full-title>
-                <sale-type>Скидка</sale-type>
-                <partner-points type="array">
-                    <partner-point>
-                        <title>IBM Казань. На Четаева</title>
-                        <address>г. Казань, ул. Четаева, д.13</address>
-                        <longitude type="decimal">54.0078</longitude>
-                        <latitude type="decimal">56.5053</latitude>
-                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
-                        <phones type="array">
-                            <phone>(843) 258-58-59</phone>
-                            <phone>(960) 048-58-59</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
-                        </workinghours>
-                    </partner-point>
-                </partner-points>
-            </partner>
-            <partner>
-                <id type="integer">124102</id>
-                <title>Google</title>
-                <full-title>Google Inc.</full-title>
-                <sale-type>Cash back</sale-type>
-                <partner-points type="array">
-                    <partner-point>
-                        <title>Google Казань. На Четаева</title>
-                        <address>г. Казань, ул. Четаева, д.13</address>
-                        <longitude type="decimal">51.9812</longitude>
-                        <latitude type="decimal">55.823887</latitude>
-                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
-                        <phones type="array">
-                            <phone>(843) 258-58-59</phone>
-                            <phone>(960) 048-58-59</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
-                        </workinghours>
-                    </partner-point>
-                    <partner-point>
-                        <title>Google Казань. На Восстания</title>
-                        <address>г. Казань, ул. Восстания, д.49</address>
-                        <longitude type="decimal">46.7431</longitude>
-                        <latitude type="decimal">58.9801</latitude>
-                        <payment-methods>банковский перевод, Visa, MasterCard</payment-methods>
-                        <phones type="array">
-                            <phone>(843) 267-51-29</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>Выходной день</mon>
-                            <tue>Выходной день</tue>
-                            <wed>Выходной день</wed>
-                            <thu>Выходной день</thu>
-                            <fri>Выходной день</fri>
-                            <sat>Выходной день</sat>
-                            <sun>Выходной день</sun>
-                        </workinghours>
-                    </partner-point>
-                    <partner-point>
-                        <title>Google Казань. На Островского</title>
-                        <address>г. Казань, ул. Островского, д.47</address>
-                        <longitude type="decimal">47.122</longitude>
-                        <latitude type="decimal">51.536</latitude>
-                        <payment-methods>наличный расчет, банковский перевод, Visa, MasterCard</payment-methods>
-                        <phones type="array">
-                            <phone>(919) 667-80-31</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>00:00-00:00</mon>
-                            <tue>00:00-00:00</tue>
-                            <wed>00:00-00:00</wed>
-                            <thu>00:00-00:00</thu>
-                            <fri>00:00-00:00</fri>
-                            <sat>00:00-00:00</sat>
-                            <sun>00:00-00:00</sun>
-                        </workinghours>
-                    </partner-point>
-                    <partner-point>
-                        <title>Google Казань. На Меридианной</title>
-                        <address>г. Казань, ул. Меридианная, д.26Б</address>
-                        <longitude type="decimal">56.151</longitude>
-                        <latitude type="decimal">51.112</latitude>
-                        <payment-methods>Visa</payment-methods>
-                        <phones type="array">
-                            <phone>(843) 259-21-01</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>Выходной день</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-18:00</sat>
-                            <sun>Выходной день</sun>
-                        </workinghours>
-                    </partner-point>
-                </partner-points>
-            </partner>
-            <partner>
-                <id type="integer">118103</id>
-                <title>Microsoft</title>
-                <full-title>Microsoft Corporation</full-title>
-                <sale-type>Бонусы</sale-type>
-                <partner-points type="array">
-                    <partner-point>
-                        <title>Microsoft Казань. На Четаева</title>
-                        <address>г. Казань, ул. Четаева, д.13</address>
-                        <longitude type="decimal">46.098</longitude>
-                        <latitude type="decimal">56.817</latitude>
-                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
-                        <phones type="array">
-                            <phone>(843) 258-58-59</phone>
-                            <phone>(960) 048-58-59</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
-                        </workinghours>
-                    </partner-point>
-                </partner-points>
-            </partner>
-            <partner>
-                <id type="integer">105604</id>
-                <title>Yota Devices</title>
-                <full-title>Yota Devices</full-title>
-                <sale-type>Cash back</sale-type>
-                <partner-points type="array">
-                    <partner-point>
-                        <title>Yota Devices Казань</title>
-                        <address>г. Казань</address>
-                        <longitude type="decimal">50.5521</longitude>
-                        <latitude type="decimal">52.3435</latitude>
-                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
-                        <phones type="array">
-                            <phone>(843) 258-58-59</phone>
-                            <phone>(960) 048-58-59</phone>
-                        </phones>
-                        <workinghours type="array">
-                            <mon>09:00-18:00</mon>
-                            <tue>09:00-18:00</tue>
-                            <wed>09:00-18:00</wed>
-                            <thu>09:00-18:00</thu>
-                            <fri>10:00-18:00</fri>
-                            <sat>10:00-16:00</sat>
-                            <sun>Выходной день</sun>
+                            <mon type="usual_day">09:00-18:00</mon>
+                            <tue type="usual_day">09:00-18:00</tue>
+                            <wed type="usual_day">09:00-18:00</wed>
+                            <thu type="usual_day">09:00-18:00</thu>
+                            <fri type="usual_day">10:00-18:00</fri>
+                            <sat type="usual_day">10:00-16:00</sat>
+                            <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>

@@ -2,12 +2,12 @@ package ru.droogcompanii.application.test.data.searchable_sortable_listing;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 
 /**
  * Created by ls on 21.01.14.
  */
-class OnlyTheseNumbersSearchCriterion implements SearchableSortableListing.SearchCriterion<Integer>, Serializable {
+class OnlyTheseNumbersSearchCriterion implements SearchCriterion<Integer>, Serializable {
     private final Integer[] numbers;
 
     OnlyTheseNumbersSearchCriterion(Integer... numbers) {

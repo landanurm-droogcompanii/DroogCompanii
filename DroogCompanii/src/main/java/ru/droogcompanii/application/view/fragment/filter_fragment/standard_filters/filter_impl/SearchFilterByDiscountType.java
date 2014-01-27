@@ -14,10 +14,10 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filte
  */
 class SearchFilterByDiscountType implements Filter {
 
-    private static class KeysOfDiscountTypes {
-        public static final String BONUS = getClassName() + "Bonus";
-        public static final String DISCOUNT = getClassName() + "Discount";
-        public static final String CASH_BACK = getClassName() + "Cash Back";
+    private static class KeyOfDiscountType {
+        public static final String BONUS = "Bonus" + getClassName();
+        public static final String DISCOUNT = "Discount" + getClassName();
+        public static final String CASH_BACK = "Cash Back" + getClassName();
     }
 
     private static String getClassName() {
@@ -58,16 +58,16 @@ class SearchFilterByDiscountType implements Filter {
 
     @Override
     public void restoreFrom(SharedPreferences sharedPreferences) {
-        bonus = sharedPreferences.getBoolean(KeysOfDiscountTypes.BONUS, DEFAULT_BONUS);
-        discount = sharedPreferences.getBoolean(KeysOfDiscountTypes.DISCOUNT, DEFAULT_DISCOUNT);
-        cashBack = sharedPreferences.getBoolean(KeysOfDiscountTypes.CASH_BACK, DEFAULT_CASH_BACK);
+        bonus = sharedPreferences.getBoolean(KeyOfDiscountType.BONUS, DEFAULT_BONUS);
+        discount = sharedPreferences.getBoolean(KeyOfDiscountType.DISCOUNT, DEFAULT_DISCOUNT);
+        cashBack = sharedPreferences.getBoolean(KeyOfDiscountType.CASH_BACK, DEFAULT_CASH_BACK);
     }
 
     @Override
     public void saveInto(SharedPreferences.Editor editor) {
-        editor.putBoolean(KeysOfDiscountTypes.BONUS, bonus);
-        editor.putBoolean(KeysOfDiscountTypes.DISCOUNT, discount);
-        editor.putBoolean(KeysOfDiscountTypes.CASH_BACK, cashBack);
+        editor.putBoolean(KeyOfDiscountType.BONUS, bonus);
+        editor.putBoolean(KeyOfDiscountType.DISCOUNT, discount);
+        editor.putBoolean(KeyOfDiscountType.CASH_BACK, cashBack);
     }
 
     @Override

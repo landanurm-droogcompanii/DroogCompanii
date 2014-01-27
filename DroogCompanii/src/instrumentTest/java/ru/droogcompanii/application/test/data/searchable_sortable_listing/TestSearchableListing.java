@@ -7,8 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import ru.droogcompanii.application.data.searchable_sortable_listing.OnEachHandler;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.test.TestingUtils;
 
 /**
@@ -31,7 +32,7 @@ public class TestSearchableListing extends TestCase {
     public void testClassUsesCopyOfInputCollection() {
         List<Integer> before = new ArrayList<Integer>(elements);
         searchableListing.addSearchCriterion(new OnlyEvenNumbersSearchCriterion());
-        searchableListing.forEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        searchableListing.forEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 // do nothing
@@ -41,7 +42,7 @@ public class TestSearchableListing extends TestCase {
     }
 
     public void testForEachWithoutSearchCriterion() {
-        checkForEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        checkForEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 assertEquals(array[index], each);
@@ -52,7 +53,7 @@ public class TestSearchableListing extends TestCase {
 
     public void testForEachWithSearchCriterion() {
         searchableListing.addSearchCriterion(new OnlyEvenNumbersSearchCriterion());
-        checkForEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        checkForEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 assertEquals(array[index], each);
@@ -61,9 +62,9 @@ public class TestSearchableListing extends TestCase {
         });
     }
 
-    private void checkForEach(final SearchableSortableListing.OnEachHandler<Integer> onEachHandler) {
+    private void checkForEach(final OnEachHandler<Integer> onEachHandler) {
         index = 0;
-        searchableListing.forEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        searchableListing.forEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 onEachHandler.onEach(each, meetsCriteria);
@@ -74,13 +75,13 @@ public class TestSearchableListing extends TestCase {
     }
 
     public void testForEachWithSeveralSearchCriteria() {
-        final SearchableListing.SearchCriterion<Integer> onlyEvenNumbersCriterion =
+        final SearchCriterion<Integer> onlyEvenNumbersCriterion =
                                         new OnlyEvenNumbersSearchCriterion();
-        final SearchableListing.SearchCriterion<Integer> onlyTheseNumbersCriterion =
+        final SearchCriterion<Integer> onlyTheseNumbersCriterion =
                                         new OnlyTheseNumbersSearchCriterion(2, 8, 120);
         searchableListing.addSearchCriterion(onlyEvenNumbersCriterion);
         searchableListing.addSearchCriterion(onlyTheseNumbersCriterion);
-        checkForEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        checkForEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 assertEquals(array[index], each);
@@ -96,7 +97,7 @@ public class TestSearchableListing extends TestCase {
     }
 
     public void testToListWithSearchCriterion() {
-        SearchableSortableListing.SearchCriterion<Integer> searchCriterion = new OnlyEvenNumbersSearchCriterion();
+        SearchCriterion<Integer> searchCriterion = new OnlyEvenNumbersSearchCriterion();
         searchableListing.addSearchCriterion(searchCriterion);
         Collection<Integer> numbersWhichMeetCriteria =
                 ListingTestingUtils.getNumbersWhichMeetCriteria(elements, searchCriterion);
@@ -104,9 +105,9 @@ public class TestSearchableListing extends TestCase {
     }
 
     public void testToListWithSeveralSearchCriteria() {
-        SearchableSortableListing.SearchCriterion<Integer>
+        SearchCriterion<Integer>
                 onlyEvenNumbersSearchCriterion = new OnlyEvenNumbersSearchCriterion();
-        SearchableSortableListing.SearchCriterion<Integer>
+        SearchCriterion<Integer>
                 onlyTheseNumbersSearchCriterion = new OnlyTheseNumbersSearchCriterion(2, 4, 6);
         searchableListing.addSearchCriterion(onlyEvenNumbersSearchCriterion);
         searchableListing.addSearchCriterion(onlyTheseNumbersSearchCriterion);
@@ -122,7 +123,7 @@ public class TestSearchableListing extends TestCase {
 
         searchableListing.removeAllFilters();
 
-        checkForEach(new SearchableListing.OnEachHandler<Integer>() {
+        checkForEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 assertEquals(elements.get(index), each);
@@ -132,7 +133,6 @@ public class TestSearchableListing extends TestCase {
 
         assertEquals(elements, searchableListing.toList());
     }
-
 
     public void testIsSerializable() {
         SearchableListing<Integer> notSerialized = searchableListing;

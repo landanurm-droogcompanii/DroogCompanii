@@ -11,7 +11,7 @@ import ru.droogcompanii.application.util.SharedPreferencesProvider;
  */
 public class FilterUtils {
 
-    public static void setDefaultFilters(Context context) {
+    public static void resetFilters(Context context) {
         SharedPreferences sharedPreferences = SharedPreferencesProvider.get(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();

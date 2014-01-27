@@ -6,16 +6,18 @@ import android.os.Bundle;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.view.fragment.BaseCustomMapFragment;
+import ru.droogcompanii.application.util.MultiMap;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 
 /**
@@ -24,30 +26,21 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 public class PartnerPointsMapFragment extends BaseCustomMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
-    private static final GoogleMap.OnMapClickListener DUMMY_ON_MAP_CLICK_LISTENER =
-            new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    // do nothing
-                }
-            };
-
     public static interface OnNeedToShowPartnerPointsListener {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
         void onNoLongerNeedToShowPartnerPoints();
     }
 
-    private GoogleMap.OnMapClickListener onMapClickListener;
     private OnNeedToShowPartnerPointsListener onNeedToShowPartnerPointsListener;
 
     private Marker clickedMarker;
-    private PositionsAndPartnerPoints positionsAndPartnerPoints;
+    private MultiMap<Marker, PartnerPoint> markersAndPartnerPoints;
     private SearchableListing<PartnerPoint> searchablePartnerPoints;
+
 
     public PartnerPointsMapFragment() {
         super();
         searchablePartnerPoints = SearchableListing.newInstance(new ArrayList<PartnerPoint>());
-        onMapClickListener = DUMMY_ON_MAP_CLICK_LISTENER;
         clickedMarker = null;
     }
 
@@ -69,35 +62,13 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
 
-        restoreInstanceState(savedInstanceState);
+        restoreInstanceStateIfNeed(savedInstanceState);
         updateMap();
         restoreClickedMarkerIfNeed(savedInstanceState);
     }
 
-    private void restoreClickedMarkerIfNeed(Bundle bundle) {
-        if (bundle == null) {
-            return;
-        }
-        boolean clickedMarkerExist = bundle.getBoolean(Keys.clickedMarkerExist);
-        if (clickedMarkerExist) {
-            restoreClickedMarker(bundle);
-        }
-    }
-
-    private void restoreClickedMarker(Bundle bundle) {
-        LatLng positionOfClickedMarker = readPositionOfClickedMarker(bundle);
-        Marker marker = findMarkerByPosition(positionOfClickedMarker);
-        setClickedMarker(marker);
-    }
-
-    private static LatLng readPositionOfClickedMarker(Bundle bundle) {
-        double latitude = bundle.getDouble(Keys.latitudeOfClickedMarker);
-        double longitude = bundle.getDouble(Keys.longitudeOfClickedMarker);
-        return new LatLng(latitude, longitude);
-    }
-
     @SuppressWarnings("unchecked")
-    private void restoreInstanceState(Bundle savedInstanceState) {
+    private void restoreInstanceStateIfNeed(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             return;
         }
@@ -114,13 +85,41 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private void savePositionOfClickedMarker(Bundle bundle) {
         if (noClickedMarker()) {
-            bundle.putBoolean(Keys.clickedMarkerExist, false);
+            bundle.putBoolean(Keys.noClickedMarker, true);
         } else {
-            bundle.putBoolean(Keys.clickedMarkerExist, true);
-            LatLng positionOfClickedMarker = clickedMarker.getPosition();
-            bundle.putDouble(Keys.latitudeOfClickedMarker, positionOfClickedMarker.latitude);
-            bundle.putDouble(Keys.longitudeOfClickedMarker, positionOfClickedMarker.longitude);
+            bundle.putBoolean(Keys.noClickedMarker, false);
+            savePosition(bundle, clickedMarker.getPosition());
         }
+    }
+
+    private static void savePosition(Bundle bundle, LatLng position) {
+        bundle.putDouble(Keys.latitude, position.latitude);
+        bundle.putDouble(Keys.longitude, position.longitude);
+    }
+
+    private void restoreClickedMarkerIfNeed(Bundle bundle) {
+        if (bundle == null) {
+            return;
+        }
+        if (needToRestoreClickedMarker(bundle)) {
+            restoreClickedMarker(bundle);
+        }
+    }
+
+    private static boolean needToRestoreClickedMarker(Bundle bundle) {
+        return !bundle.getBoolean(Keys.noClickedMarker);
+    }
+
+    private void restoreClickedMarker(Bundle bundle) {
+        LatLng positionOfClickedMarker = readPosition(bundle);
+        Marker marker = findMarkerByPosition(positionOfClickedMarker);
+        setClickedMarker(marker);
+    }
+
+    private static LatLng readPosition(Bundle bundle) {
+        double latitude = bundle.getDouble(Keys.latitude);
+        double longitude = bundle.getDouble(Keys.longitude);
+        return new LatLng(latitude, longitude);
     }
 
     private boolean noClickedMarker() {
@@ -133,56 +132,69 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     private void updateMarkers() {
-        removeAllMarkers();
+        super.removeAllMarkers();
         placeMarkersOnMap();
     }
 
     private void placeMarkersOnMap() {
-        MarkersIncluder markersIncluder = new MarkersIncluder(searchablePartnerPoints);
-        positionsAndPartnerPoints = markersIncluder.includeIn(this);
+        PositionsAndPartnerPoints grouped = new PositionsAndPartnerPoints(searchablePartnerPoints);
+        markersAndPartnerPoints = new MultiMap<Marker, PartnerPoint>();
+        for (LatLng position : grouped.getAllPositions()) {
+            Marker marker = addMarker(prepareMarkerOptions(position));
+            Set<PartnerPoint> partnerPoints = grouped.get(position);
+            markersAndPartnerPoints.putAll(marker, partnerPoints);
+        }
     }
 
-    private void updateAfterFiltering() {
-        if (noClickedMarker()) {
-            return;
-        }
-        LatLng positionOfClickedMarker = clickedMarker.getPosition();
-        Marker marker = findMarkerByPosition(positionOfClickedMarker);
-        if (marker != null) {
-            Set<PartnerPoint> afterFiltering = positionsAndPartnerPoints.get(positionOfClickedMarker);
-            onNeedToShowPartnerPointsListener.onNeedToShowPartnerPoints(afterFiltering);
-            setClickedMarker(marker);
-        } else {
-            unselectClickedMarker();
-            onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
-        }
+    private static MarkerOptions prepareMarkerOptions(LatLng position) {
+        return new MarkerOptions().position(position).icon(MarkerIcons.unselected());
     }
 
     public void setFilterSet(FilterSet filterSet) {
         searchablePartnerPoints.removeAllFilters();
-        addFilters(filterSet);
+        addFilterSet(filterSet);
     }
 
-    public void addFilters(FilterSet filterSet) {
-        List<? extends SearchableListing.SearchCriterion<PartnerPoint>> searchCriteria =
-                filterSet.getSearchCriteria();
-        for (SearchableListing.SearchCriterion<PartnerPoint> criterion : searchCriteria) {
+    public void addFilterSet(FilterSet filterSet) {
+        List<? extends SearchCriterion<PartnerPoint>> searchCriteria = filterSet.getSearchCriteria();
+        for (SearchCriterion<PartnerPoint> criterion : searchCriteria) {
             searchablePartnerPoints.addSearchCriterion(criterion);
         }
         updateMap();
         updateAfterFiltering();
     }
 
+    private void updateAfterFiltering() {
+        if (noClickedMarker()) {
+            return;
+        }
+        Marker oldClickedMarker = clickedMarker;
+        clickedMarker = null;
+        updateAfterFiltering(oldClickedMarker);
+    }
+
+    private void updateAfterFiltering(Marker oldClickedMarker) {
+        LatLng positionOfClickedMarker = oldClickedMarker.getPosition();
+        Marker actualClickedMarker = super.findMarkerByPosition(positionOfClickedMarker);
+        if (actualClickedMarker == null) {
+            onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
+            return;
+        }
+        setClickedMarker(actualClickedMarker);
+        Set<PartnerPoint> actualPartnerPoints = markersAndPartnerPoints.get(actualClickedMarker);
+        onNeedToShowPartnerPointsListener.onNeedToShowPartnerPoints(actualPartnerPoints);
+    }
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        notifyNeedToShowPartnerPoints(marker.getPosition());
+        notifyNeedToShowPartnerPoints(marker);
         unselectClickedMarker();
         setClickedMarker(marker);
         return true;
     }
 
-    private void notifyNeedToShowPartnerPoints(LatLng position) {
-        Set<PartnerPoint> partnerPointsToShow = positionsAndPartnerPoints.get(position);
+    private void notifyNeedToShowPartnerPoints(Marker marker) {
+        Set<PartnerPoint> partnerPointsToShow = markersAndPartnerPoints.get(marker);
         onNeedToShowPartnerPointsListener.onNeedToShowPartnerPoints(partnerPointsToShow);
     }
 
@@ -201,11 +213,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @Override
     public void onMapClick(LatLng position) {
-        onMapClickListener.onMapClick(position);
+        onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
         unselectClickedMarker();
-    }
-
-    public void setOnMapClickListener(GoogleMap.OnMapClickListener listener) {
-        onMapClickListener = listener;
     }
 }

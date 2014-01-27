@@ -3,7 +3,7 @@ package ru.droogcompanii.application.view.fragment.filter_fragment.standard_filt
 import java.io.Serializable;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;
 
@@ -12,7 +12,7 @@ import ru.droogcompanii.application.util.MoreComparableString;
  */
 
 public class SearchCriterionByCashlessPayments
-        implements SearchableListing.SearchCriterion<PartnerPoint>, Serializable {
+        implements SearchCriterion<PartnerPoint>, Serializable {
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {
         MoreComparableString paymentMethods = new MoreComparableString(partnerPoint.paymentMethods);

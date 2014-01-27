@@ -2,7 +2,6 @@ package ru.droogcompanii.application.view.fragment.filter_fragment;
 
 import android.content.SharedPreferences;
 import android.view.View;
-import android.view.ViewGroup;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
@@ -37,25 +36,13 @@ public class Filters {
     }
 
     public void displayOn(View containerOfFilters) {
-        standardFilters.displayOn(findContainerOfStandardFilters(containerOfFilters));
-        moreFilters.displayOn(findContainerOfMoreFilters(containerOfFilters));
-    }
-
-    private ViewGroup findContainerOfStandardFilters(View view) {
-        return findViewGroupById(view, R.id.containerOfStandardFilters);
-    }
-
-    private ViewGroup findContainerOfMoreFilters(View view) {
-        return findViewGroupById(view, R.id.containerOfMoreFilters);
-    }
-
-    private ViewGroup findViewGroupById(View view, int idOfViewGroup) {
-        return (ViewGroup) view.findViewById(idOfViewGroup);
+        standardFilters.displayOn(containerOfFilters.findViewById(R.id.containerOfStandardFilters));
+        moreFilters.displayOn(containerOfFilters.findViewById(R.id.containerOfMoreFilters));
     }
 
     public void readFrom(View containerOfFilters) {
-        standardFilters.readFrom(findContainerOfStandardFilters(containerOfFilters));
-        moreFilters.readFrom(findContainerOfMoreFilters(containerOfFilters));
+        standardFilters.readFrom(containerOfFilters.findViewById(R.id.containerOfStandardFilters));
+        moreFilters.readFrom(containerOfFilters.findViewById(R.id.containerOfMoreFilters));
     }
 
     public void includeIn(FilterSet filterSet) {

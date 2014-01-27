@@ -8,10 +8,10 @@ import com.google.android.gms.maps.model.Marker;
 public class MarkerUtils {
 
     public static void select(Marker marker) {
-        marker.setIcon(MarkerIcons.getSelectedIcon());
+        marker.setIcon(MarkerIcons.selected());
     }
 
     public static void unselect(Marker marker) {
-        marker.setIcon(MarkerIcons.getUnselectedIcon());
+        marker.setIcon(MarkerIcons.unselected());
     }
 }

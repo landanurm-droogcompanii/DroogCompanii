@@ -15,4 +15,12 @@ public class ListUtils {
         list.set(index1, obj2);
         list.set(index2, obj1);
     }
+
+    public static <T> void moveElementAtFirstPosition(T element, List<T> list) {
+        int index = list.indexOf(element);
+        if (index == -1) {
+            throw new IllegalArgumentException("Partner points doesn't have this point");
+        }
+        swap(list, 0, index);
+    }
 }

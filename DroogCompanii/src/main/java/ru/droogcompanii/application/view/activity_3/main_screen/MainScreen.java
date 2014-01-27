@@ -7,9 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +24,7 @@ import ru.droogcompanii.application.view.fragment.partner_points_map_fragment.Pa
  * Created by ls on 14.01.14.
  */
 public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
-        implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener, GoogleMap.OnMapClickListener {
+        implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener {
 
     private PartnerPointsMapFragment partnerPointsMapFragment;
     private PartnerPointsInfoPanelFragment partnerPointsInfoPanelFragment;
@@ -48,10 +45,9 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
         partnerPointsInfoPanelFragment = (PartnerPointsInfoPanelFragment)
                 fragmentManager.findFragmentById(R.id.partnerPointsInfoPanelFragment);
 
-        partnerPointsMapFragment.setOnMapClickListener(this);
 
         if (savedInstanceState == null) {
-            FilterUtils.setDefaultFilters(this);
+            FilterUtils.resetFilters(this);
             initPartnerPointsMapFragment();
         }
 
@@ -108,11 +104,6 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
 
     @Override
     public void onNoLongerNeedToShowPartnerPoints() {
-        partnerPointsInfoPanelFragment.hide();
-    }
-
-    @Override
-    public void onMapClick(LatLng position) {
         partnerPointsInfoPanelFragment.hide();
     }
 }

@@ -10,11 +10,11 @@ public class MarkerIcons {
     private static final float UNSELECTED = BitmapDescriptorFactory.HUE_RED;
     private static final float SELECTED = BitmapDescriptorFactory.HUE_BLUE;
 
-    public static BitmapDescriptor getUnselectedIcon() {
+    public static BitmapDescriptor unselected() {
         return BitmapDescriptorFactory.defaultMarker(UNSELECTED);
     }
 
-    public static BitmapDescriptor getSelectedIcon() {
+    public static BitmapDescriptor selected() {
         return BitmapDescriptorFactory.defaultMarker(SELECTED);
     }
 }

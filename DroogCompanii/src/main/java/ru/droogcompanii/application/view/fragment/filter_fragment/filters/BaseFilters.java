@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.view.fragment.filter_fragment.filters;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +26,14 @@ abstract class BaseFilters implements Filter {
 
     @Override
     public void displayOn(View containerView) {
-        View viewOfFilters = prepareViewOfFilters(containerView);
+        View viewOfFilters = prepareViewOfFilters(containerView.getContext());
         for (Filter filter : getFilters()) {
             filter.displayOn(viewOfFilters);
         }
         tryAddFilterViewToContainer(containerView, viewOfFilters);
     }
 
-    protected abstract View prepareViewOfFilters(View containerView);
+    protected abstract View prepareViewOfFilters(Context context);
 
     private void tryAddFilterViewToContainer(View containerView, View viewOfFilters) {
         if (!(containerView instanceof ViewGroup)) {
@@ -58,9 +59,9 @@ abstract class BaseFilters implements Filter {
     }
 
     @Override
-    public void includeIn(FilterSet includeInto) {
+    public void includeIn(FilterSet filterSet) {
         for (Filter filter : getFilters()) {
-            filter.includeIn(includeInto);
+            filter.includeIn(filterSet);
         }
     }
 }

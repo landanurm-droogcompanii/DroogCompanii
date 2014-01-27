@@ -67,14 +67,6 @@
             android:theme="@style/Theme.Base">
         </activity>
         <activity
-            android:name=".view.activity_2.partner_category_list_activity.PartnerCategoryListActivity2"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".view.activity_2.partner_category_map_activity.PartnerCategoryMapActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name=".view.activity.partner_category_list_activity.PartnerCategoryListActivity"
             android:label="@string/app_name" >
         </activity>

@@ -24,14 +24,6 @@ public class PositionsAndPartnerPoints {
         putAll(partnerPoints);
     }
 
-    public PositionsAndPartnerPoints() {
-        multiMap = new MultiMap<LatLng, PartnerPoint>();
-    }
-
-    public void putAll(LatLng position, Collection<PartnerPoint> partnerPoints) {
-        multiMap.putAll(position, partnerPoints);
-    }
-
     public void putAll(Collection<PartnerPoint> partnerPoints) {
         for (PartnerPoint partnerPoint : partnerPoints) {
             put(partnerPoint);

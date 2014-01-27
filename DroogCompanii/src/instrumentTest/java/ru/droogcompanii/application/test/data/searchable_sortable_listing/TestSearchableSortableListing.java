@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.OnEachHandler;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.test.TestingUtils;
 
@@ -32,7 +33,7 @@ public class TestSearchableSortableListing extends TestCase {
         List<Integer> before = new ArrayList<Integer>(elements);
         searchableSortableListing.addComparator(new ReverseOrderComparator());
         searchableSortableListing.addSearchCriterion(new OnlyEvenNumbersSearchCriterion());
-        searchableSortableListing.forEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        searchableSortableListing.forEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 // do nothing
@@ -43,7 +44,7 @@ public class TestSearchableSortableListing extends TestCase {
 
 
     public void testForEachWithoutSearchCriterionAndComparator() {
-        checkForEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        checkForEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 assertEquals(array[index], each);
@@ -52,9 +53,9 @@ public class TestSearchableSortableListing extends TestCase {
         });
     }
 
-    private void checkForEach(final SearchableSortableListing.OnEachHandler<Integer> onEachHandler) {
+    private void checkForEach(final OnEachHandler<Integer> onEachHandler) {
         index = 0;
-        searchableSortableListing.forEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        searchableSortableListing.forEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 onEachHandler.onEach(each, meetsCriteria);
@@ -66,7 +67,7 @@ public class TestSearchableSortableListing extends TestCase {
 
     public void testForEachWithComparator() {
         searchableSortableListing.addComparator(new ReverseOrderComparator());
-        checkForEach(new SearchableSortableListing.OnEachHandler<Integer>() {
+        checkForEach(new OnEachHandler<Integer>() {
             @Override
             public void onEach(Integer each, boolean meetsCriteria) {
                 assertEquals(getElementFromReversedArray(index), each);
@@ -98,7 +99,7 @@ public class TestSearchableSortableListing extends TestCase {
         searchableSortablePairs.addComparator(new ComparatorBySecondComponent());
         searchableSortablePairs.addComparator(new ComparatorByFirstComponent());
         index = 0;
-        searchableSortablePairs.forEach(new SearchableSortableListing.OnEachHandler<PairOfNumbers>() {
+        searchableSortablePairs.forEach(new OnEachHandler<PairOfNumbers>() {
             @Override
             public void onEach(PairOfNumbers each, boolean meetsCriteria) {
                 assertEquals(expectedPairsAfterSorting.get(index), each);
@@ -160,7 +161,7 @@ public class TestSearchableSortableListing extends TestCase {
                 new PairOfNumbers(2, 2)
         );
         SearchableSortableListing<PairOfNumbers> searchableSortablePairs = SearchableSortableListing.newInstance(pairs);
-        searchableSortablePairs.addSearchCriterion(new SearchableSortableListing.SearchCriterion<PairOfNumbers>() {
+        searchableSortablePairs.addSearchCriterion(new SearchCriterion<PairOfNumbers>() {
             @Override
             public boolean meetCriterion(PairOfNumbers obj) {
                 return obj.first != obj.second;
@@ -169,7 +170,7 @@ public class TestSearchableSortableListing extends TestCase {
         searchableSortablePairs.addComparator(new ComparatorBySecondComponent());
         searchableSortablePairs.addComparator(new ComparatorByFirstComponent());
 
-        searchableSortablePairs.forEach(new SearchableListing.OnEachHandler<PairOfNumbers>() {
+        searchableSortablePairs.forEach(new OnEachHandler<PairOfNumbers>() {
             @Override
             public void onEach(PairOfNumbers each, boolean meetsCriteria) {
                 // do nothing
@@ -180,7 +181,7 @@ public class TestSearchableSortableListing extends TestCase {
         searchableSortablePairs.removeAllFilters();
 
         index = 0;
-        searchableSortablePairs.forEach(new SearchableSortableListing.OnEachHandler<PairOfNumbers>() {
+        searchableSortablePairs.forEach(new OnEachHandler<PairOfNumbers>() {
             @Override
             public void onEach(PairOfNumbers each, boolean meetsCriteria) {
                 assertEquals(pairs.get(index), each);

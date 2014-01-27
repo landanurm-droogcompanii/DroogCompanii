@@ -10,14 +10,6 @@ import java.util.List;
  */
 public class SearchableListing<T> implements Serializable {
 
-    public static interface OnEachHandler<T> {
-        void onEach(T each, boolean meetsCriteria);
-    }
-
-    public static interface SearchCriterion<T> {
-        boolean meetCriterion(T obj);
-    }
-
     private final List<SearchCriterion<T>> searchCriteria;
 
     protected List<T> elements;

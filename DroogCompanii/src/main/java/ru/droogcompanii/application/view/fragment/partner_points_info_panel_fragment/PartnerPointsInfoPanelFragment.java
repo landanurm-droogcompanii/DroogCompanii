@@ -110,19 +110,37 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         if (this.partnerPoints.equals(partnerPoints)) {
             return;
         }
-        this.partnerPoints = new ArrayList<PartnerPoint>(partnerPoints);
-        this.indexOfCurrentPartnerPoint = 0;
+        List<PartnerPoint> oldPartnerPoints = this.partnerPoints;
+        List<PartnerPoint> newPartnerPoints = new ArrayList<PartnerPoint>(partnerPoints);
+        this.partnerPoints = newPartnerPoints;
+        this.indexOfCurrentPartnerPoint = defineIndex(oldPartnerPoints, newPartnerPoints);
         show();
     }
 
-    private void updateUI() {
-        if (indexOutOfBounds()) {
-            throw new IllegalStateException(
-                "Index of current partner point is out of bounds: " + indexOfCurrentPartnerPoint
-            );
+    private int defineIndex(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
+        if ((indexOfCurrentPartnerPoint == -1) || !visible) {
+            return 0;
         }
+        PartnerPoint partnerPointDisplayedNow = oldPartnerPoints.get(indexOfCurrentPartnerPoint);
+        int index = newPartnerPoints.indexOf(partnerPointDisplayedNow);
+        if (index == -1) {
+            return 0;
+        }
+        return index;
+    }
+
+    private void updateUI() {
+        checkIndexOfCurrentPartnerPoint();
         updateNavigationPanel();
         updatePartnerPointInfo();
+    }
+
+    private void checkIndexOfCurrentPartnerPoint() {
+        if (indexOutOfBounds()) {
+            throw new IllegalStateException(
+                    "Index of current partner point is out of bounds: " + indexOfCurrentPartnerPoint
+            );
+        }
     }
 
     private boolean indexOutOfBounds() {
@@ -262,16 +280,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         PartnerPointsReader partnerPointsReader = new PartnerPointsReader(context);
         List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
 
-        movePartnerPointAtFirstPosition(partnerPoint, partnerPoints);
+        ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
         PartnerActivity.start(context, partner, partnerPoints);
     }
-
-    private static void movePartnerPointAtFirstPosition(PartnerPoint partnerPoint, List<PartnerPoint> partnerPoints) {
-        int index = partnerPoints.indexOf(partnerPoint);
-        if (index == -1) {
-            throw new IllegalArgumentException("Partner points doesn't have this point");
-        }
-        ListUtils.swap(partnerPoints, 0, index);
-    }
-
 }

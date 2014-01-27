@@ -8,7 +8,7 @@ import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;
 
@@ -17,7 +17,7 @@ import ru.droogcompanii.application.util.MoreComparableString;
  */
 
 public class SearchCriterionByDiscountType
-        implements SearchableListing.SearchCriterion<PartnerPoint>, Serializable {
+        implements SearchCriterion<PartnerPoint>, Serializable {
 
     private List<String> discountTypes;
 

@@ -3,7 +3,7 @@ package ru.droogcompanii.application.test.data.searchable_sortable_listing;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 
 /**
  * Created by ls on 21.01.14.
@@ -11,7 +11,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableS
 class ListingTestingUtils {
 
     public static Collection<Integer> getNumbersWhichMeetCriteria(Collection<Integer> numbers,
-                           SearchableSortableListing.SearchCriterion<Integer>... searchCriteria) {
+                           SearchCriterion<Integer>... searchCriteria) {
         Collection<Integer> numbersWhichMeetCriteria = new ArrayList<Integer>();
         for (Integer each : numbers) {
             if (meetCriteria(each, searchCriteria)) {
@@ -21,9 +21,8 @@ class ListingTestingUtils {
         return numbersWhichMeetCriteria;
     }
 
-    public static boolean meetCriteria(Integer each,
-                           SearchableSortableListing.SearchCriterion<Integer>... searchCriteria) {
-        for (SearchableSortableListing.SearchCriterion<Integer> criterion : searchCriteria) {
+    public static boolean meetCriteria(Integer each, SearchCriterion<Integer>... searchCriteria) {
+        for (SearchCriterion<Integer> criterion : searchCriteria) {
             if (!criterion.meetCriterion(each)) {
                 return false;
             }

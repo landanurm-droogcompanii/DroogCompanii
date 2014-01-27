@@ -26,9 +26,8 @@ public class StandardFilters extends BaseFilters {
     }
 
     @Override
-    protected View prepareViewOfFilters(View containerView) {
-        Context context = containerView.getContext();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    protected View prepareViewOfFilters(Context context) {
+        LayoutInflater inflater = LayoutInflater.from(context);
         return inflater.inflate(R.layout.view_standard_filters, null, false);
     }
 

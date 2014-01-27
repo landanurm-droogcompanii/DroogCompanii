@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.view.fragment;
+package ru.droogcompanii.application.view.fragment.partner_points_map_fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,15 +24,15 @@ import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlo
 /**
  * Created by ls on 10.01.14.
  */
-public class BaseCustomMapFragment extends android.support.v4.app.Fragment {
-
-    private boolean mapViewIsPlacedOnLayout;
+class BaseCustomMapFragment extends android.support.v4.app.Fragment {
+    private boolean isMapViewPlacedOnLayout;
     private Collection<Marker> markers;
     private GoogleMap map;
 
     public BaseCustomMapFragment() {
-        mapViewIsPlacedOnLayout = false;
+        isMapViewPlacedOnLayout = false;
         markers = new ArrayList<Marker>();
+        map = null;
     }
 
     @Override
@@ -79,14 +79,14 @@ public class BaseCustomMapFragment extends android.support.v4.app.Fragment {
     }
 
     protected final void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
-        if (mapViewIsPlacedOnLayout) {
+        if (isMapViewPlacedOnLayout) {
             fitVisibleMarkersOnScreen();
         } else {
             ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
                 @Override
                 public void run() {
                     fitVisibleMarkersOnScreen();
-                    mapViewIsPlacedOnLayout = true;
+                    isMapViewPlacedOnLayout = true;
                 }
             });
         }

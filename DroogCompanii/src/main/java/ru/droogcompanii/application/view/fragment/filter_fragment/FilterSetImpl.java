@@ -6,13 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 
 /**
  * Created by ls on 21.01.14.
  */
 public class FilterSetImpl implements FilterSet, Serializable {
-    private final List<SearchableListing.SearchCriterion<PartnerPoint>> searchCriteria;
+    private final List<SearchCriterion<PartnerPoint>> searchCriteria;
     private final List<Comparator<PartnerPoint>> comparators;
 
     public static FilterSetImpl from(List<Filter> filters) {
@@ -24,11 +24,11 @@ public class FilterSetImpl implements FilterSet, Serializable {
     }
 
     public FilterSetImpl() {
-        searchCriteria = new ArrayList<SearchableListing.SearchCriterion<PartnerPoint>>();
+        searchCriteria = new ArrayList<SearchCriterion<PartnerPoint>>();
         comparators = new ArrayList<Comparator<PartnerPoint>>();
     }
 
-    public void add(SearchableListing.SearchCriterion<PartnerPoint> searchCriterion) {
+    public void add(SearchCriterion<PartnerPoint> searchCriterion) {
         searchCriteria.add(searchCriterion);
     }
 
@@ -42,7 +42,7 @@ public class FilterSetImpl implements FilterSet, Serializable {
     }
 
     @Override
-    public List<? extends SearchableListing.SearchCriterion<PartnerPoint>> getSearchCriteria() {
+    public List<? extends SearchCriterion<PartnerPoint>> getSearchCriteria() {
         return searchCriteria;
     }
 

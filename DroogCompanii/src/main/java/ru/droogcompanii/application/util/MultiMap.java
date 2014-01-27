@@ -40,4 +40,24 @@ public class MultiMap<K,V> {
     public Set<K> keySet() {
         return map.keySet();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof MultiMap<?,?>)) {
+            return false;
+        }
+        MultiMap<?,?> other = (MultiMap<?,?>) obj;
+        return map.equals(other);
+    }
+
+    @Override
+    public int hashCode() {
+        return map.hashCode();
+    }
 }

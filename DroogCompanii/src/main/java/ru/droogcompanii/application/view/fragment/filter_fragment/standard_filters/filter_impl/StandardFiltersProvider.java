@@ -10,7 +10,7 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.Filter;
  */
 public class StandardFiltersProvider {
     public static List<Filter> getDefaultFilters() {
-        final Filter[] defaultStandardFilters = {
+        final Filter[] standardFiltersInitializedByDefault = {
                 new SearchFilterByCashlessPayments(),
                 new SearchFilterByDiscountType(),
                 new SearchFilterByWorksNow(),
@@ -18,6 +18,6 @@ public class StandardFiltersProvider {
                 new SortingFilterByDistanceBasedOnCurrentLocation(),
                 new SortingFilterByTitle()
         };
-        return Arrays.asList(defaultStandardFilters);
+        return Arrays.asList(standardFiltersInitializedByDefault);
     }
 }
