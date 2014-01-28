@@ -10,6 +10,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.SharedPreferencesProvider;
+import ru.droogcompanii.application.view.fragment.filter_fragment.filters.Filters;
 
 /**
  * Created by ls on 21.01.14.
@@ -23,33 +24,35 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_filter, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragment_filter, container, false);
         if (savedInstanceState == null) {
-            init(getArguments());
+            init(getArguments(), rootView);
         } else {
-            init(savedInstanceState);
+            init(savedInstanceState, rootView);
         }
+        return rootView;
     }
 
-    private void init(Bundle bundle) {
+    private void init(Bundle bundle, View rootView) {
+        partnerCategory = readPartnerCategoryFrom(bundle);
         sharedPreferences = SharedPreferencesProvider.get(getActivity());
-        partnerCategory = extractPartnerCategoryFrom(bundle);
         filters = new Filters(partnerCategory);
         filters.restoreFrom(sharedPreferences);
-        filters.displayOn(getView());
+        filters.displayOn(rootView);
     }
 
-    private PartnerCategory extractPartnerCategoryFrom(Bundle bundle) {
+    private PartnerCategory readPartnerCategoryFrom(Bundle bundle) {
         if (bundle == null) {
             return null;
         } else {
             return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Keys.partnerCategory, partnerCategory);
     }
 
     @Override
@@ -66,5 +69,15 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         filters.readFrom(getView());
         filters.includeIn(filterSet);
         return filterSet;
+    }
+
+    public Filters getFilters() {
+        Filters currentFilters = new Filters(partnerCategory);
+        currentFilters.readFrom(getView());
+        return currentFilters;
+    }
+
+    public PartnerCategory getPartnerCategory() {
+        return partnerCategory;
     }
 }

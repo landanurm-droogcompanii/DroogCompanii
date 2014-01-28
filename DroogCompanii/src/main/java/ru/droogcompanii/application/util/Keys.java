@@ -27,9 +27,8 @@ public class Keys {
 
     public static final String indexOfCurrentPartnerPoint = "indexOfCurrentPartnerPoint";
 
-    public static final String positionOfClickedMarker = "positionOfClickedMarker";
-
     public static final String longitude = "longitude";
     public static final String latitude = "latitude";
-    public static final String noClickedMarker = "noClickedMarker";
+    public static final String filterSet = "filterSet";
+    public static final String clickedMarkerIsExist = "clickedMarkerIsExist";
 }

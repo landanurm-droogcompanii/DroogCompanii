@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CheckBox;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.view.fragment.filter_fragment.Filter;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
@@ -12,7 +14,7 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.standard_filte
 /**
  * Created by ls on 21.01.14.
  */
-class SearchFilterByDiscountType implements Filter {
+class SearchFilterByDiscountType implements Filter, Serializable {
 
     private static class KeyOfDiscountType {
         public static final String BONUS = "Bonus" + getClassName();
@@ -21,7 +23,7 @@ class SearchFilterByDiscountType implements Filter {
     }
 
     private static String getClassName() {
-        return SearchFilterByDiscountType.class.getSimpleName();
+        return SearchFilterByDiscountType.class.getName();
     }
 
     private static final boolean DEFAULT_BONUS = true;
@@ -73,5 +75,27 @@ class SearchFilterByDiscountType implements Filter {
     @Override
     public void includeIn(FilterSet filterSet) {
         filterSet.add(new SearchCriterionByDiscountType(bonus, discount, cashBack));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        SearchFilterByDiscountType other = (SearchFilterByDiscountType) obj;
+        return ((bonus == other.bonus) &&
+                (discount == other.discount) &&
+                (cashBack == other.cashBack));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (bonus ? 1 : 0);
+        result = 31 * result + (discount ? 1 : 0);
+        result = 31 * result + (cashBack ? 1 : 0);
+        return result;
     }
 }

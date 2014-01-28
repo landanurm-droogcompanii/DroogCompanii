@@ -3,6 +3,7 @@ package ru.droogcompanii.application.view.fragment.filter_fragment.filters;
 import android.content.Context;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
@@ -12,7 +13,7 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.filters.helper
 /**
  * Created by ls on 24.01.14.
  */
-public class MoreFilters extends BaseFilters {
+public class MoreFilters extends BaseFilters implements Serializable {
 
     public static interface Helper {
         List<Filter> prepareDefaultFilters();
@@ -37,5 +38,24 @@ public class MoreFilters extends BaseFilters {
         return helper.prepareViewOfFilters(context);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        MoreFilters other = (MoreFilters) obj;
+        return filters.equals(other.filters) && helper.equals(other.helper);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = helper != null ? helper.hashCode() : 0;
+        result = 31 * result + (filters != null ? filters.hashCode() : 0);
+        return result;
+    }
 
 }

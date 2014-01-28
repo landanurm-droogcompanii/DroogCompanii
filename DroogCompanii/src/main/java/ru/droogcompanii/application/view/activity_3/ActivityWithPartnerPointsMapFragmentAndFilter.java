@@ -28,7 +28,7 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndFilter extends andr
     private FilterSet extractReturnedFilters(Intent data) {
         FilterSet filterSet = null;
         if (data != null) {
-            filterSet = (FilterSet) data.getSerializableExtra(Keys.filters);
+            filterSet = (FilterSet) data.getSerializableExtra(Keys.filterSet);
         }
         if (filterSet == null) {
             throw new RuntimeException(FilterActivity.class.getName() + " doesn't return filterSet");

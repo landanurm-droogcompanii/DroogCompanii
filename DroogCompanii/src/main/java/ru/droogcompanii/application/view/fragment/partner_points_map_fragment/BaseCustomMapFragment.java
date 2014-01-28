@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
@@ -26,7 +26,7 @@ import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlo
  */
 class BaseCustomMapFragment extends android.support.v4.app.Fragment {
     private boolean isMapViewPlacedOnLayout;
-    private Collection<Marker> markers;
+    private List<Marker> markers;
     private GoogleMap map;
 
     public BaseCustomMapFragment() {
@@ -121,5 +121,9 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment {
             }
         }
         return null;
+    }
+
+    protected boolean isMarkerPlacedOnMap(Marker marker) {
+        return markers.indexOf(marker) != -1;
     }
 }

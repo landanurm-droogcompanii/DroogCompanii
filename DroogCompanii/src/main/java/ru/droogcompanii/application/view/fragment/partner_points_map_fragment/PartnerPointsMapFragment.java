@@ -85,9 +85,9 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private void savePositionOfClickedMarker(Bundle bundle) {
         if (noClickedMarker()) {
-            bundle.putBoolean(Keys.noClickedMarker, true);
+            bundle.putBoolean(Keys.clickedMarkerIsExist, false);
         } else {
-            bundle.putBoolean(Keys.noClickedMarker, false);
+            bundle.putBoolean(Keys.clickedMarkerIsExist, true);
             savePosition(bundle, clickedMarker.getPosition());
         }
     }
@@ -98,16 +98,13 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     private void restoreClickedMarkerIfNeed(Bundle bundle) {
-        if (bundle == null) {
-            return;
-        }
         if (needToRestoreClickedMarker(bundle)) {
             restoreClickedMarker(bundle);
         }
     }
 
     private static boolean needToRestoreClickedMarker(Bundle bundle) {
-        return !bundle.getBoolean(Keys.noClickedMarker);
+        return (bundle != null) && bundle.getBoolean(Keys.clickedMarkerIsExist);
     }
 
     private void restoreClickedMarker(Bundle bundle) {
@@ -185,7 +182,6 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     @Override
     public boolean onMarkerClick(Marker marker) {
         notifyNeedToShowPartnerPoints(marker);
-        unselectClickedMarker();
         setClickedMarker(marker);
         return true;
     }
@@ -196,7 +192,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     void setClickedMarker(Marker marker) {
-        marker.setIcon(MarkerIcons.selected());
+        unselectClickedMarker();
+        selectMarker(marker);
         clickedMarker = marker;
     }
 
@@ -204,8 +201,18 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         if (noClickedMarker()) {
             return;
         }
-        clickedMarker.setIcon(MarkerIcons.unselected());
+        if (isMarkerPlacedOnMap(clickedMarker)) {
+            unselectMarker(clickedMarker);
+        }
         clickedMarker = null;
+    }
+
+    private void unselectMarker(Marker marker) {
+        marker.setIcon(MarkerIcons.unselected());
+    }
+
+    private void selectMarker(Marker marker) {
+        marker.setIcon(MarkerIcons.selected());
     }
 
     @Override

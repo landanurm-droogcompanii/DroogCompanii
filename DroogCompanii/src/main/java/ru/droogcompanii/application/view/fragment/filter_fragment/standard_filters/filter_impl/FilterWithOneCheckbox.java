@@ -4,14 +4,16 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CheckBox;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.view.fragment.filter_fragment.Filter;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 
 /**
  * Created by ls on 21.01.14.
  */
-abstract class FilterWithOneCheckbox implements Filter {
-    private boolean needToInclude;
+abstract class FilterWithOneCheckbox implements Filter, Serializable {
+    protected boolean needToInclude;
 
     protected FilterWithOneCheckbox() {
         needToInclude = isNeedToIncludeByDefault();
@@ -46,7 +48,7 @@ abstract class FilterWithOneCheckbox implements Filter {
     }
 
     protected String getKey() {
-        return getClass().getSimpleName();
+        return getClass().getName();
     }
 
     @Override
@@ -54,5 +56,22 @@ abstract class FilterWithOneCheckbox implements Filter {
         if (needToInclude) {
             necessarilyIncludeIn(filterSet);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        FilterWithOneCheckbox other = (FilterWithOneCheckbox) obj;
+        return (needToInclude == other.needToInclude);
+    }
+
+    @Override
+    public int hashCode() {
+        return (needToInclude ? 1 : 0) + getClass().hashCode();
     }
 }

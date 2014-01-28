@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.filters.MoreFi
 /**
  * Created by ls on 27.01.14.
  */
-class DummyHelper implements MoreFilters.Helper {
+class DummyHelper implements MoreFilters.Helper, Serializable {
 
     @Override
     public List<Filter> prepareDefaultFilters() {
@@ -31,5 +32,21 @@ class DummyHelper implements MoreFilters.Helper {
 
     private View noView(Context context) {
         return new TextView(context);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if ((obj == null)) {
+            return false;
+        }
+        return getClass() == obj.getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
     }
 }

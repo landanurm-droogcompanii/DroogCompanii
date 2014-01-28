@@ -1,17 +1,18 @@
-package ru.droogcompanii.application.view.fragment.filter_fragment;
+package ru.droogcompanii.application.view.fragment.filter_fragment.filters;
 
 import android.content.SharedPreferences;
 import android.view.View;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.MoreFilters;
-import ru.droogcompanii.application.view.fragment.filter_fragment.filters.StandardFilters;
+import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 
 /**
  * Created by ls on 24.01.14.
  */
-public class Filters {
+public class Filters implements Serializable {
     private StandardFilters standardFilters;
     private MoreFilters moreFilters;
 
@@ -48,5 +49,25 @@ public class Filters {
     public void includeIn(FilterSet filterSet) {
         standardFilters.includeIn(filterSet);
         moreFilters.includeIn(filterSet);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Filters other = (Filters) obj;
+        return (standardFilters.equals(other.standardFilters) &&
+                moreFilters.equals(other.moreFilters));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = standardFilters != null ? standardFilters.hashCode() : 0;
+        result = 31 * result + (moreFilters != null ? moreFilters.hashCode() : 0);
+        return result;
     }
 }

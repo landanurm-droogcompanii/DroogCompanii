@@ -13,9 +13,8 @@ import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 /**
  * Created by ls on 24.01.14.
  */
-abstract class BaseFilters implements Filter {
+abstract class BaseFilters {
 
-    @Override
     public void readFrom(View view) {
         for (Filter filter : getFilters()) {
             filter.readFrom(view);
@@ -24,7 +23,6 @@ abstract class BaseFilters implements Filter {
 
     protected abstract List<Filter> getFilters();
 
-    @Override
     public void displayOn(View containerView) {
         View viewOfFilters = prepareViewOfFilters(containerView.getContext());
         for (Filter filter : getFilters()) {
@@ -44,21 +42,18 @@ abstract class BaseFilters implements Filter {
         viewGroup.addView(viewOfFilters);
     }
 
-    @Override
     public void restoreFrom(SharedPreferences sharedPreferences) {
         for (Filter filter : getFilters()) {
             filter.restoreFrom(sharedPreferences);
         }
     }
 
-    @Override
     public void saveInto(SharedPreferences.Editor editor) {
         for (Filter filter : getFilters()) {
             filter.saveInto(editor);
         }
     }
 
-    @Override
     public void includeIn(FilterSet filterSet) {
         for (Filter filter : getFilters()) {
             filter.includeIn(filterSet);
