@@ -33,7 +33,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private OnNeedToShowPartnerPointsListener onNeedToShowPartnerPointsListener;
 
-    private ClickedMarker clickedMarker;
+    private ClickedMarkerHolder clickedMarkerHolder;
     private MultiMap<Marker, PartnerPoint> markersAndPartnerPoints;
     private SearchableListing<PartnerPoint> searchablePartnerPoints;
 
@@ -41,7 +41,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     public PartnerPointsMapFragment() {
         super();
         searchablePartnerPoints = SearchableListing.newInstance(new ArrayList<PartnerPoint>());
-        clickedMarker = new ClickedMarker(this);
+        clickedMarkerHolder = new ClickedMarkerHolder(this);
     }
 
     @Override
@@ -65,9 +65,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         restoreInstanceStateIfNeed(savedInstanceState);
         updateMap();
 
-        if (savedInstanceState != null) {
-            clickedMarker.restoreFrom(savedInstanceState);
-        }
+        clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
     }
 
     @SuppressWarnings("unchecked")
@@ -83,7 +81,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.searchableSortablePartnerPoints, searchablePartnerPoints);
-        clickedMarker.saveInto(outState);
+        clickedMarkerHolder.saveInto(outState);
     }
 
     private void updateMap() {
@@ -125,26 +123,19 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     private void updateAfterFilteringIfNeed() {
-        if (clickedMarker.isAbsent()) {
+        if (clickedMarkerHolder.isAbsent()) {
             return;
         }
         updateAfterFiltering();
     }
 
     private void updateAfterFiltering() {
-        clickedMarker.update();
-        if (clickedMarker.isAbsent()) {
+        clickedMarkerHolder.update();
+        if (clickedMarkerHolder.isAbsent()) {
             onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
         } else {
-            notifyNeedToShowPartnerPoints(clickedMarker.getMarker());
+            notifyNeedToShowPartnerPoints(clickedMarkerHolder.getMarker());
         }
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        notifyNeedToShowPartnerPoints(marker);
-        clickedMarker.set(marker);
-        return true;
     }
 
     private void notifyNeedToShowPartnerPoints(Marker marker) {
@@ -153,8 +144,15 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     @Override
+    public boolean onMarkerClick(Marker marker) {
+        notifyNeedToShowPartnerPoints(marker);
+        clickedMarkerHolder.set(marker);
+        return true;
+    }
+
+    @Override
     public void onMapClick(LatLng position) {
         onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
-        clickedMarker.unset();
+        clickedMarkerHolder.unset();
     }
 }

@@ -10,28 +10,29 @@ import ru.droogcompanii.application.util.Keys;
 /**
  * Created by ls on 28.01.14.
  */
-class ClickedMarker {
+class ClickedMarkerHolder {
     private final MarkersFinder markersFinder;
     private Marker clickedMarker;
 
-    public ClickedMarker(MarkersFinder markersFinder) {
+    public ClickedMarkerHolder(MarkersFinder markersFinder) {
         this.markersFinder = markersFinder;
         this.clickedMarker = null;
+    }
+
+    public void restoreFromIfNeed(Bundle bundle) {
+        if (needToRestore(bundle)) {
+            restoreFrom(bundle);
+        }
     }
 
     private static boolean needToRestore(Bundle bundle) {
         return (bundle != null) && bundle.getBoolean(Keys.clickedMarkerIsExist);
     }
 
-    public void restoreFrom(Bundle bundle) {
-        if (needToRestore(bundle)) {
-            update(getMarkerRestoredFrom(bundle));
-        }
-    }
-
-    private Marker getMarkerRestoredFrom(Bundle bundle) {
+    private void restoreFrom(Bundle bundle) {
         LatLng positionOfClickedMarker = readPosition(bundle);
-        return markersFinder.findMarkerByPosition(positionOfClickedMarker);
+        Marker marker = markersFinder.findMarkerByPosition(positionOfClickedMarker);
+        update(marker);
     }
 
     private void update(Marker newMarker) {
