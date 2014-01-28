@@ -33,7 +33,7 @@
         android:layout_height="@dimen/search_activity_space_between_search_panel_and_category_list" />
 
     <fragment
-        android:name="ru.droogcompanii.application.view.fragment.partner_category_list_fragment.PartnerCategoryListFragment"
+        android:name="ru.droogcompanii.application.ui.fragment.partner_category_list_fragment.PartnerCategoryListFragment"
         android:id="@+id/partnerCategoryListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

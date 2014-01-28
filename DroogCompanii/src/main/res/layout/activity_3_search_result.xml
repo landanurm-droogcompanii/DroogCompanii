@@ -13,7 +13,7 @@
         android:id="@+id/showSearchResultOnMap" />
 
     <fragment
-        android:name="ru.droogcompanii.application.view.fragment.search_result_fragment.SearchResultFragment"
+        android:name="ru.droogcompanii.application.ui.fragment.search_result_fragment.SearchResultFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/showSearchResultOnMap"

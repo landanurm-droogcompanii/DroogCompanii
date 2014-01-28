@@ -87,4 +87,8 @@ public class PartnersReader extends BaseReaderFromDatabase {
         }
         return partner.get(0);
     }
+
+    public List<Partner> getAllPartners() {
+        return getPartners("");
+    }
 }

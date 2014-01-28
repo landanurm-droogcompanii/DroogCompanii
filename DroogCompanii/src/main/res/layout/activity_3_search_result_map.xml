@@ -6,7 +6,7 @@
     android:id="@+id/rootLayout" >
 
     <fragment
-        android:name="ru.droogcompanii.application.view.fragment.partner_points_map_fragment.PartnerPointsMapFragment"
+        android:name="ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsMapFragment"
         android:id="@+id/mapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
