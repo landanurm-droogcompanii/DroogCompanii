@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterFragment;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.view.fragment.filter_fragment.FilterUtils;
@@ -25,7 +25,7 @@ public class FilterActivity extends FragmentActivity {
     public static final int REQUEST_CODE = 14235;
 
     private Bundle args;
-    private Filters filtersDuringOpening;
+    private Filters filtersDuringCreation;
     private FilterFragment filterFragment;
 
     @Override
@@ -46,13 +46,7 @@ public class FilterActivity extends FragmentActivity {
         }
         fragmentTransaction.commit();
 
-        filtersDuringOpening = prepareFilters(savedInstanceState);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        filtersDuringOpening = prepareFilters(savedInstanceState);
+        filtersDuringCreation = prepareFiltersDuringCreation(savedInstanceState);
     }
 
     private Bundle extractArguments(Bundle savedInstanceState) {
@@ -63,9 +57,10 @@ public class FilterActivity extends FragmentActivity {
         }
     }
 
-    private Filters prepareFilters(Bundle savedInstanceState) {
+    private Filters prepareFiltersDuringCreation(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            return FilterUtils.getCurrentFilters(this, filterFragment.getPartnerCategory());
+            PartnerCategory partnerCategory = filterFragment.getPartnerCategory();
+            return FilterUtils.getCurrentFilters(this, partnerCategory);
         } else {
             return readFiltersFrom(savedInstanceState);
         }
@@ -79,16 +74,14 @@ public class FilterActivity extends FragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBundle(Keys.args, args);
-        outState.putSerializable(Keys.filters, filtersDuringOpening);
+        outState.putSerializable(Keys.filters, filtersDuringCreation);
     }
 
     @Override
     public void onBackPressed() {
         if (changesWereMade()) {
-            LogUtils.debug("WERE MADE");
-            setResult();
+            setResult(RESULT_OK, getResult());
         } else {
-            LogUtils.debug("WERE NOT MADE");
             setResult(RESULT_CANCELED);
         }
         super.onBackPressed();
@@ -96,14 +89,13 @@ public class FilterActivity extends FragmentActivity {
 
     private boolean changesWereMade() {
         Filters currentFilters = filterFragment.getFilters();
-        return !currentFilters.equals(filtersDuringOpening);
+        return !currentFilters.equals(filtersDuringCreation);
     }
 
-    private void setResult() {
-        Intent returnIntent = new Intent();
+    private Intent getResult() {
         FilterSet filterSet = filterFragment.getFilterSet();
-        LogUtils.debug(filterSet == null ? "null" : "not null");
-        returnIntent.putExtra(Keys.filterSet, (Serializable) filterSet);
-        setResult(RESULT_OK, returnIntent);
+        Intent result = new Intent();
+        result.putExtra(Keys.filterSet, (Serializable) filterSet);
+        return result;
     }
 }

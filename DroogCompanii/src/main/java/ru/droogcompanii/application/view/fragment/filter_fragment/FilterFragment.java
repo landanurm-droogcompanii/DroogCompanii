@@ -19,7 +19,6 @@ public class FilterFragment extends android.support.v4.app.Fragment {
 
     private PartnerCategory partnerCategory;
     private SharedPreferences sharedPreferences;
-    private Filters filters;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,9 +35,7 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     private void init(Bundle bundle, View rootView) {
         partnerCategory = readPartnerCategoryFrom(bundle);
         sharedPreferences = SharedPreferencesProvider.get(getActivity());
-        filters = new Filters(partnerCategory);
-        filters.restoreFrom(sharedPreferences);
-        filters.displayOn(rootView);
+        displaySavedFiltersOn(rootView);
     }
 
     private PartnerCategory readPartnerCategoryFrom(Bundle bundle) {
@@ -47,6 +44,12 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         } else {
             return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
         }
+    }
+
+    private void displaySavedFiltersOn(View rootView) {
+        Filters filters = new Filters(partnerCategory);
+        filters.restoreFrom(sharedPreferences);
+        filters.displayOn(rootView);
     }
 
     @Override
@@ -58,16 +61,14 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        filters.readFrom(getView());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        filters.saveInto(editor);
+        getFilters().saveInto(editor);
         editor.commit();
     }
 
     public FilterSet getFilterSet() {
         FilterSet filterSet = new FilterSetImpl();
-        filters.readFrom(getView());
-        filters.includeIn(filterSet);
+        getFilters().includeIn(filterSet);
         return filterSet;
     }
 

@@ -45,7 +45,6 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndFilter
         partnerPointsInfoPanelFragment = (PartnerPointsInfoPanelFragment)
                 fragmentManager.findFragmentById(R.id.partnerPointsInfoPanelFragment);
 
-
         if (savedInstanceState == null) {
             FilterUtils.resetFilters(this);
             initPartnerPointsMapFragment();

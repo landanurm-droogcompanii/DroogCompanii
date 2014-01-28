@@ -24,7 +24,7 @@ import ru.droogcompanii.application.view.helpers.ObserverOfViewWillBePlacedOnGlo
 /**
  * Created by ls on 10.01.14.
  */
-class BaseCustomMapFragment extends android.support.v4.app.Fragment {
+class BaseCustomMapFragment extends android.support.v4.app.Fragment implements MarkersFinder {
     private boolean isMapViewPlacedOnLayout;
     private List<Marker> markers;
     private GoogleMap map;
@@ -114,7 +114,8 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment {
         return getResources().getInteger(R.integer.map_markers_padding);
     }
 
-    protected Marker findMarkerByPosition(LatLng position) {
+    @Override
+    public Marker findMarkerByPosition(LatLng position) {
         for (Marker marker : markers) {
             if (position.equals(marker.getPosition())) {
                 return marker;
@@ -123,7 +124,8 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment {
         return null;
     }
 
-    protected boolean isMarkerPlacedOnMap(Marker marker) {
+    @Override
+    public boolean isMarkerPlacedOnMap(Marker marker) {
         return markers.indexOf(marker) != -1;
     }
 }
