@@ -137,7 +137,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     private void placeMarkersOnMap() {
-        PositionsAndPartnerPoints grouped = new PositionsAndPartnerPoints(searchablePartnerPoints);
+        PartnerPointsGroupedByPosition grouped = new PartnerPointsGroupedByPosition(searchablePartnerPoints);
         markersAndPartnerPoints = new MultiMap<Marker, PartnerPoint>();
         for (LatLng position : grouped.getAllPositions()) {
             Marker marker = addMarker(prepareMarkerOptions(position));
@@ -168,21 +168,18 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         if (noClickedMarker()) {
             return;
         }
-        Marker oldClickedMarker = clickedMarker;
-        clickedMarker = null;
-        updateAfterFiltering(oldClickedMarker);
-    }
-
-    private void updateAfterFiltering(Marker oldClickedMarker) {
-        LatLng positionOfClickedMarker = oldClickedMarker.getPosition();
-        Marker actualClickedMarker = super.findMarkerByPosition(positionOfClickedMarker);
+        Marker actualClickedMarker = getActualClickedMarker(clickedMarker);
         if (actualClickedMarker == null) {
             onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
             return;
         }
         setClickedMarker(actualClickedMarker);
-        Set<PartnerPoint> actualPartnerPoints = markersAndPartnerPoints.get(actualClickedMarker);
-        onNeedToShowPartnerPointsListener.onNeedToShowPartnerPoints(actualPartnerPoints);
+        notifyNeedToShowPartnerPoints(actualClickedMarker);
+    }
+
+    private Marker getActualClickedMarker(Marker oldClickedMarker) {
+        LatLng positionOfClickedMarker = oldClickedMarker.getPosition();
+        return super.findMarkerByPosition(positionOfClickedMarker);
     }
 
     @Override
@@ -199,7 +196,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     void setClickedMarker(Marker marker) {
-        MarkerUtils.select(marker);
+        marker.setIcon(MarkerIcons.selected());
         clickedMarker = marker;
     }
 
@@ -207,7 +204,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         if (noClickedMarker()) {
             return;
         }
-        MarkerUtils.unselect(clickedMarker);
+        clickedMarker.setIcon(MarkerIcons.unselected());
         clickedMarker = null;
     }
 

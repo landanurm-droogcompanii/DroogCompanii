@@ -12,14 +12,14 @@ import ru.droogcompanii.application.util.MultiMap;
 /**
  * Created by ls on 22.01.14.
  */
-public class PositionsAndPartnerPoints {
+public class PartnerPointsGroupedByPosition {
     private final MultiMap<LatLng, PartnerPoint> multiMap;
 
-    public PositionsAndPartnerPoints(SearchableListing<PartnerPoint> searchableListing) {
+    public PartnerPointsGroupedByPosition(SearchableListing<PartnerPoint> searchableListing) {
         this(searchableListing.toList());
     }
 
-    public PositionsAndPartnerPoints(Collection<PartnerPoint> partnerPoints) {
+    public PartnerPointsGroupedByPosition(Collection<PartnerPoint> partnerPoints) {
         multiMap = new MultiMap<LatLng, PartnerPoint>();
         putAll(partnerPoints);
     }
