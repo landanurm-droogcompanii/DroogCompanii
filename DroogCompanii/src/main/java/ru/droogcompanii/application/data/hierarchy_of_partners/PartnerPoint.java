@@ -1,5 +1,9 @@
 package ru.droogcompanii.application.data.hierarchy_of_partners;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -66,8 +70,34 @@ public class PartnerPoint implements Serializable {
                phones.hashCode() +
                workingHours.hashCode() +
                paymentMethods.hashCode() +
-               ((Double) longitude).hashCode() +
-               ((Double) latitude).hashCode() +
+               getPosition().hashCode() +
                partnerId;
+    }
+
+    public LatLng getPosition() {
+        return new LatLng(latitude, longitude);
+    }
+
+    public float distanceTo(PartnerPoint other) {
+        if (other == null) {
+            throw new IllegalArgumentException("argument <other> should be not null");
+        }
+        Location locationThis = toLocation();
+        Location locationOther = other.toLocation();
+        return locationThis.distanceTo(locationOther);
+    }
+
+    public Location toLocation() {
+        Location location = new Location(title);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        return location;
+    }
+
+    public float distanceTo(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException("argument <location> should be not null");
+        }
+        return toLocation().distanceTo(location);
     }
 }

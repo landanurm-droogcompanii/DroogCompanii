@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.Marker;
 /**
  * Created by ls on 28.01.14.
  */
-public interface MarkersFinder {
+interface MarkersFinder {
     boolean isMarkerPlacedOnMap(Marker marker);
     Marker findMarkerByPosition(LatLng position);
 }

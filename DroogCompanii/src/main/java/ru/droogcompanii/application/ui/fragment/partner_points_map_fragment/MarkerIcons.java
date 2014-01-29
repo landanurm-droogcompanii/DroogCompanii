@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 /**
  * Created by ls on 27.01.14.
  */
-public class MarkerIcons {
+class MarkerIcons {
     private static final float UNSELECTED = BitmapDescriptorFactory.HUE_RED;
     private static final float SELECTED = BitmapDescriptorFactory.HUE_BLUE;
 

@@ -16,7 +16,6 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -29,12 +28,12 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.StringsCombiner;
-import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.ui.activity.partner_point_info_activity.PartnerPointInfoActivity;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithBackButton;
 import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.StringsCombiner;
+import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 
 
 public class PartnerInfoActivity extends ActionBarActivityWithBackButton
@@ -119,8 +118,7 @@ public class PartnerInfoActivity extends ActionBarActivityWithBackButton
 
     private MarkerOptions prepareMarkerOptions(PartnerPoint partnerPoint) {
         String title = partnerPoint.title;
-        LatLng position = new LatLng(partnerPoint.latitude, partnerPoint.longitude);
-        MarkerOptions markerOptions = new MarkerOptions().title(title).position(position);
+        MarkerOptions markerOptions = new MarkerOptions().title(title).position(partnerPoint.getPosition());
         includeSnippet(markerOptions, partnerPoint);
         return markerOptions;
     }

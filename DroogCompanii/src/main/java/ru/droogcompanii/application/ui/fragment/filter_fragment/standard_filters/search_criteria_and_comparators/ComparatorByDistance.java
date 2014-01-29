@@ -28,15 +28,8 @@ public class ComparatorByDistance implements Comparator<PartnerPoint>, Serializa
         if (baseLocation == null) {
             return 0;
         }
-        Float d1 = baseLocation.distanceTo(locationFrom(partnerPoint1));
-        Float d2 = baseLocation.distanceTo(locationFrom(partnerPoint2));
+        Float d1 = partnerPoint1.distanceTo(baseLocation);
+        Float d2 = partnerPoint2.distanceTo(baseLocation);
         return d1.compareTo(d2);
-    }
-
-    private static Location locationFrom(PartnerPoint partnerPoint) {
-        Location location = new Location(partnerPoint.title);
-        location.setLatitude(partnerPoint.latitude);
-        location.setLongitude(partnerPoint.longitude);
-        return location;
     }
 }

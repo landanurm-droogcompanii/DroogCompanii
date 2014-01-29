@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.ui.activity_3.search_activity.search_result_provider_impl.SearchResultProviderByPartnerCategory;
+import ru.droogcompanii.application.ui.activity_3.search_activity.search_result_provider_impl.SearchResultProviderBySearchQuery;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.ui.activity_3.search_result_activity.SearchResultActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list_fragment.PartnerCategoryListFragment;

@@ -19,4 +19,18 @@
         android:src="@android:drawable/ic_menu_sort_by_size"
         android:id="@+id/filterButton" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/filterButton" >
+
+        <fragment
+            android:name="ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragment.PartnerPointsInfoPanelFragment"
+            android:id="@+id/partnerPointsInfoPanelFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
 </RelativeLayout>

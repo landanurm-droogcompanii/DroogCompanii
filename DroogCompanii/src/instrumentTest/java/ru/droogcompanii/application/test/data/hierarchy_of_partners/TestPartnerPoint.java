@@ -1,5 +1,9 @@
 package ru.droogcompanii.application.test.data.hierarchy_of_partners;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import junit.framework.TestCase;
 
 import java.util.Arrays;
@@ -28,6 +32,10 @@ public class TestPartnerPoint extends TestCase {
     private static final String title = "Tatneft-Kazan";
     private static final WeekWorkingHours workingHours = new WeekWorkingHours(prepareWorkingHoursOnEachDayOfWeek());
 
+
+    private PartnerPoint partnerPoint;
+
+
     private static WorkingHoursForEachDayOfWeek prepareWorkingHoursOnEachDayOfWeek() {
         TimeOfDay fromOfUsualDay = new TimeOfDay(9, 0);
         TimeOfDay toOfUsualDay = new TimeOfDay(19, 0);
@@ -45,8 +53,6 @@ public class TestPartnerPoint extends TestCase {
         workingHours.onSunday = workingHoursOfHoliday;
         return workingHours;
     }
-
-    private PartnerPoint partnerPoint;
 
 
     @Override
@@ -176,6 +182,112 @@ public class TestPartnerPoint extends TestCase {
     public void testHashCodesAreEqual_OfEqualObjects() {
         PartnerPoint copy = createPartnerPointByConstants();
         assertEquals(partnerPoint.hashCode(), copy.hashCode());
+    }
+
+    public void testGetPosition() {
+        LatLng expected = new LatLng(latitude, longitude);
+        assertEquals(expected, partnerPoint.getPosition());
+    }
+
+    public void testDistanceToItselfIsZero() {
+        assertEquals(0.0f, partnerPoint.distanceTo(partnerPoint));
+    }
+
+    private static class LocationAndPartnerPoint {
+        public final Location location;
+        public final PartnerPoint partnerPoint;
+
+        public LocationAndPartnerPoint(android.location.Location location, PartnerPoint partnerPoint) {
+            this.location = location;
+            this.partnerPoint = partnerPoint;
+        }
+    }
+
+    private static class PairOfLocationAndPartnerPoint {
+        private final LocationAndPartnerPoint first;
+        private final LocationAndPartnerPoint second;
+
+        public PairOfLocationAndPartnerPoint(LocationAndPartnerPoint first, LocationAndPartnerPoint second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        public float expectedDistance() {
+            return getLocation1().distanceTo(getLocation2());
+        }
+
+        public Location getLocation1() {
+            return first.location;
+        }
+
+        public Location getLocation2() {
+            return second.location;
+        }
+
+        public PartnerPoint getPartnerPoint1() {
+            return first.partnerPoint;
+        }
+
+        public PartnerPoint getPartnerPoint2() {
+            return second.partnerPoint;
+        }
+    }
+
+    public void testDistanceToPartnerPoint() {
+        PairOfLocationAndPartnerPoint testData = getPairOfLocationAndPartnerPoint();
+        float actualDistance = testData.getPartnerPoint1().distanceTo(testData.getPartnerPoint2());
+        assertEquals(testData.expectedDistance(), actualDistance);
+    }
+
+    private static PairOfLocationAndPartnerPoint getPairOfLocationAndPartnerPoint() {
+        Location location1 = createLocation("1", 53.5462, 55.2142);
+        Location location2 = createLocation("2", 51.5368, 52.4258);
+        LocationAndPartnerPoint first = new LocationAndPartnerPoint(location1, partnerPointByLocation(location1));
+        LocationAndPartnerPoint second = new LocationAndPartnerPoint(location2, partnerPointByLocation(location2));
+        return new PairOfLocationAndPartnerPoint(first, second);
+    }
+
+    private static Location createLocation(String provider, double latitude, double longitude) {
+        Location location = new Location(provider);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        return location;
+    }
+
+    private static PartnerPoint partnerPointByLocation(Location location) {
+        return new PartnerPoint(title, address, phones, workingHours, paymentMethods,
+                location.getLongitude(), location.getLatitude(), partnerId);
+    }
+
+    public void testDistanceToPartnerPointThrowsExceptionIfArgumentIsNull() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+            @Override
+            public void run() {
+                partnerPoint.distanceTo((PartnerPoint) null);
+            }
+        });
+    }
+
+    public void testDistanceToLocation() {
+        PairOfLocationAndPartnerPoint testData = getPairOfLocationAndPartnerPoint();
+        float actualDistance = testData.getPartnerPoint1().distanceTo(testData.getLocation2());
+        assertEquals(testData.expectedDistance(), actualDistance);
+    }
+
+    public void testDistanceToLocationThrowsExceptionIfArgumentIsNull() {
+        TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
+            @Override
+            public void run() {
+                partnerPoint.distanceTo((Location) null);
+            }
+        });
+    }
+
+    public void testToLocation() {
+        Location actual = partnerPoint.toLocation();
+        assertEquals(title, actual.getProvider());
+        assertEquals(latitude, actual.getLatitude());
+        assertEquals(longitude, actual.getLongitude());
     }
 }
 

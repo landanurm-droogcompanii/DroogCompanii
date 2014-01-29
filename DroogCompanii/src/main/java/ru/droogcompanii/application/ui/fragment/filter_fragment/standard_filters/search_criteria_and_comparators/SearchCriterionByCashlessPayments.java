@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
-import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
+import ru.droogcompanii.application.util.StringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;
 
 /**
@@ -16,7 +16,7 @@ public class SearchCriterionByCashlessPayments
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {
         MoreComparableString paymentMethods = new MoreComparableString(partnerPoint.paymentMethods);
-        for (String each : DroogCompaniiStringConstants.cashlessPaymentMethods) {
+        for (String each : StringConstants.cashlessPaymentMethods) {
             if (paymentMethods.containsIgnoreCase(each)) {
                 return true;
             }

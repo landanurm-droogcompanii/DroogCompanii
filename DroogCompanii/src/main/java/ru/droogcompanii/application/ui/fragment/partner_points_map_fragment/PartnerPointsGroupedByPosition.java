@@ -12,7 +12,7 @@ import ru.droogcompanii.application.util.MultiMap;
 /**
  * Created by ls on 22.01.14.
  */
-public class PartnerPointsGroupedByPosition {
+class PartnerPointsGroupedByPosition {
     private final MultiMap<LatLng, PartnerPoint> multiMap;
 
     public PartnerPointsGroupedByPosition(SearchableListing<PartnerPoint> searchableListing) {
@@ -31,8 +31,7 @@ public class PartnerPointsGroupedByPosition {
     }
 
     public void put(PartnerPoint partnerPoint) {
-        LatLng position = new LatLng(partnerPoint.latitude, partnerPoint.longitude);
-        multiMap.put(position, partnerPoint);
+        multiMap.put(partnerPoint.getPosition(), partnerPoint);
     }
 
     public Set<PartnerPoint> get(LatLng position) {

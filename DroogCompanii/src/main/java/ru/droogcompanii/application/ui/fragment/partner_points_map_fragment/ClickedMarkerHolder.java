@@ -113,4 +113,12 @@ class ClickedMarkerHolder {
         }
         return clickedMarker.equals(marker);
     }
+
+    public LatLng getPosition() {
+        return getMarker().getPosition();
+    }
+
+    public boolean isPresent() {
+        return !isAbsent();
+    }
 }

@@ -64,8 +64,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
         restoreInstanceStateIfNeed(savedInstanceState);
         updateMap();
-
         clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
+        updateMapCameraAfterMapViewWillBePlacedOnLayout(clickedMarkerHolder);
     }
 
     @SuppressWarnings("unchecked")
@@ -85,11 +85,6 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     private void updateMap() {
-        updateMarkers();
-        fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout();
-    }
-
-    private void updateMarkers() {
         super.removeAllMarkers();
         placeMarkersOnMap();
     }
@@ -150,6 +145,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         }
         notifyNeedToShowPartnerPoints(marker);
         clickedMarkerHolder.set(marker);
+        updateMapCamera(clickedMarkerHolder);
         return true;
     }
 

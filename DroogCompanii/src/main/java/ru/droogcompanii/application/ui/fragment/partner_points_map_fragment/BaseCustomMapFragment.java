@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.ui.fragment.partner_points_map_fragment;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.util.CurrentLocationProvider;
+import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 
 /**
  * Created by ls on 10.01.14.
  */
 class BaseCustomMapFragment extends android.support.v4.app.Fragment implements MarkersFinder {
+    private static final int ZOOM = 9;
+
     private boolean isMapViewPlacedOnLayout;
-    private List<Marker> markers;
     private GoogleMap map;
+    private List<Marker> markers;
 
     public BaseCustomMapFragment() {
         isMapViewPlacedOnLayout = false;
@@ -78,18 +82,48 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         markers.clear();
     }
 
-    protected final void fitVisibleMarkersOnScreenAfterMapViewWillBePlacedOnLayout() {
+    protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(final ClickedMarkerHolder clickedMarker) {
         if (isMapViewPlacedOnLayout) {
-            fitVisibleMarkersOnScreen();
+            updateMapCamera();
         } else {
             ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
                 @Override
                 public void run() {
-                    fitVisibleMarkersOnScreen();
+                    updateMapCamera(clickedMarker);
                     isMapViewPlacedOnLayout = true;
                 }
             });
         }
+    }
+
+    private void updateMapCamera() {
+        tryMoveCameraToCurrentLocation();
+    }
+
+    protected void updateMapCamera(ClickedMarkerHolder clickedMarker) {
+        if (clickedMarker.isPresent()) {
+            moveCamera(clickedMarker.getPosition(), ZOOM);
+        } else {
+            tryMoveCameraToCurrentLocation();
+        }
+    }
+
+    protected void moveCamera(LatLng center, int zoom) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, zoom);
+        getGoogleMap().animateCamera(cameraUpdate);
+    }
+
+    private void tryMoveCameraToCurrentLocation() {
+        Location currentLocation = CurrentLocationProvider.get();
+        if (currentLocation != null) {
+            moveCamera(positionOf(currentLocation), ZOOM);
+        } else {
+            fitVisibleMarkersOnScreen();
+        }
+    }
+
+    private static LatLng positionOf(Location location) {
+        return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     private void fitVisibleMarkersOnScreen() {

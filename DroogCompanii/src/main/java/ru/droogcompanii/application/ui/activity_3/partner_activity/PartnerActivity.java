@@ -12,10 +12,10 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.ui.activity_3.search_result_map_activity.SearchResultMapActivity;
 import ru.droogcompanii.application.ui.fragment.partner_fragment.PartnerFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
+import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 15.01.14.
@@ -27,6 +27,7 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
 
     public static void start(Context context, Partner partner, List<PartnerPoint> partnerPoints) {
         Intent intent = new Intent(context, PartnerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(Keys.partner, partner);
         intent.putExtra(Keys.partnerPoints, (Serializable) partnerPoints);
         context.startActivity(intent);

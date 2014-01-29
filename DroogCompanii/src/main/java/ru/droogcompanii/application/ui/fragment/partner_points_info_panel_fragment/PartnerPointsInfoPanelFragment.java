@@ -23,9 +23,9 @@ import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPo
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.ui.activity_3.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
-import ru.droogcompanii.application.ui.activity_3.partner_activity.PartnerActivity;
 
 /**
  * Created by ls on 22.01.14.
@@ -212,6 +212,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         setText(R.id.addressTextView, partnerPoint.address);
         setText(R.id.paymentMethodsTextView, partnerPoint.paymentMethods);
         setPhones(partnerPoint);
+        setRouteButton();
         setWorkingHoursIndicator(partnerPoint);
         findViewById(R.id.goToPartnerButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,6 +252,20 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:" + formattedPhone));
         startActivity(intent);
+    }
+
+    private void setRouteButton() {
+        final PartnerPoint currentPartnerPoint = partnerPoints.get(indexOfCurrentPartnerPoint);
+        findViewById(R.id.routeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRouteFromBaseLocationTo(currentPartnerPoint);
+            }
+        });
+    }
+
+    private void showRouteFromBaseLocationTo(PartnerPoint toPartnerPoint) {
+        startActivity(RouteIntentMaker.makeIntentToRouteTo(toPartnerPoint));
     }
 
     private void setWorkingHoursIndicator(PartnerPoint partnerPoint) {

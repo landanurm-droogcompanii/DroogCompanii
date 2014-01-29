@@ -22,10 +22,10 @@ import ru.droogcompanii.application.data.working_hours.working_hours_impl.Workin
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
 
-import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.Attributes;
-import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.DayOfWeek;
-import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.Tags;
-import static ru.droogcompanii.application.util.DroogCompaniiStringConstants.XmlConstants.TypesOfDay;
+import static ru.droogcompanii.application.util.StringConstants.XmlConstants.Attributes;
+import static ru.droogcompanii.application.util.StringConstants.XmlConstants.DayOfWeek;
+import static ru.droogcompanii.application.util.StringConstants.XmlConstants.Tags;
+import static ru.droogcompanii.application.util.StringConstants.XmlConstants.TypesOfDay;
 
 /**
  * Created by ls on 08.01.14.

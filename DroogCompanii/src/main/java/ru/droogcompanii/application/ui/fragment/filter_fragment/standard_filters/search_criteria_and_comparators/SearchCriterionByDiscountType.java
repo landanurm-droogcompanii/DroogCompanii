@@ -9,7 +9,7 @@ import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersR
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
-import ru.droogcompanii.application.util.DroogCompaniiStringConstants;
+import ru.droogcompanii.application.util.StringConstants;
 import ru.droogcompanii.application.util.MoreComparableString;
 
 /**
@@ -24,13 +24,13 @@ public class SearchCriterionByDiscountType
     public SearchCriterionByDiscountType(boolean bonus, boolean discount, boolean cashBack) {
         discountTypes = new ArrayList<String>();
         if (bonus) {
-            discountTypes.add(DroogCompaniiStringConstants.discountType_Bonus);
+            discountTypes.add(StringConstants.discountType_Bonus);
         }
         if (discount) {
-            discountTypes.add(DroogCompaniiStringConstants.discountType_Discount);
+            discountTypes.add(StringConstants.discountType_Discount);
         }
         if (cashBack) {
-            discountTypes.add(DroogCompaniiStringConstants.discountType_CashBack);
+            discountTypes.add(StringConstants.discountType_CashBack);
         }
     }
 
