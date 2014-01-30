@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -16,9 +17,9 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.MultiMap;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 
 /**
  * Created by ls on 14.01.14.
@@ -33,6 +34,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private OnNeedToShowPartnerPointsListener onNeedToShowPartnerPointsListener;
 
+    private boolean wasActivityCreated;
+    private Bundle savedInstanceState;
     private ClickedMarkerHolder clickedMarkerHolder;
     private MultiMap<Marker, PartnerPoint> markersAndPartnerPoints;
     private SearchableListing<PartnerPoint> searchablePartnerPoints;
@@ -50,19 +53,27 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         onNeedToShowPartnerPointsListener = (OnNeedToShowPartnerPointsListener) activity;
     }
 
-    public void setPartnerPointsProvider(PartnerPointsProvider partnerPointsProvider) {
-        List<PartnerPoint> partnerPoints = partnerPointsProvider.getPartnerPoints(getActivity());
+    public void setPartnerPoints(Collection<PartnerPoint> partnerPoints) {
         searchablePartnerPoints = SearchableSortableListing.newInstance(partnerPoints);
+        if (wasActivityCreated) {
+            init();
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
+        this.wasActivityCreated = true;
 
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
 
         restoreInstanceStateIfNeed(savedInstanceState);
+        init();
+    }
+
+    private void init() {
         updateMap();
         clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
         updateMapCameraAfterMapViewWillBePlacedOnLayout(clickedMarkerHolder);

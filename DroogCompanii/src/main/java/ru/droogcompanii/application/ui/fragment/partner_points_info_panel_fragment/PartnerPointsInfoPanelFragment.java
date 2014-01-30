@@ -31,6 +31,8 @@ import ru.droogcompanii.application.util.ListUtils;
  * Created by ls on 22.01.14.
  */
 public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragment {
+    private static final int NO_INDEX = -1;
+
     private boolean visible;
     private int indexOfCurrentPartnerPoint;
     private List<PartnerPoint> partnerPoints;
@@ -65,7 +67,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private void initStateByDefault() {
         partnerPoints = new ArrayList<PartnerPoint>();
-        indexOfCurrentPartnerPoint = -1;
+        indexOfCurrentPartnerPoint = NO_INDEX;
         hide();
     }
 
@@ -118,7 +120,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private int defineIndex(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
-        if ((indexOfCurrentPartnerPoint == -1) || !visible) {
+        if ((indexOfCurrentPartnerPoint == NO_INDEX) || !visible) {
             return 0;
         }
         PartnerPoint partnerPointDisplayedNow = oldPartnerPoints.get(indexOfCurrentPartnerPoint);
@@ -136,14 +138,14 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void checkIndexOfCurrentPartnerPoint() {
-        if (indexOutOfBounds()) {
+        if (isIndexOutOfBounds()) {
             throw new IllegalStateException(
                     "Index of current partner point is out of bounds: " + indexOfCurrentPartnerPoint
             );
         }
     }
 
-    private boolean indexOutOfBounds() {
+    private boolean isIndexOutOfBounds() {
         return (indexOfCurrentPartnerPoint < 0) || (indexOfCurrentPartnerPoint >= partnerPoints.size());
     }
 
@@ -169,20 +171,20 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         });
     }
 
-    private boolean isAbleToGoToPrevious() {
-        return (indexOfCurrentPartnerPoint > 0);
-    }
-
-    private boolean isAbleToGoToNext() {
-        return (indexOfCurrentPartnerPoint < partnerPoints.size() - 1);
-    }
-
     private void setEnabled(int idOfView, boolean enabled) {
         findViewById(idOfView).setEnabled(enabled);
     }
 
     private View findViewById(int idOfView) {
         return getView().findViewById(idOfView);
+    }
+
+    private boolean isAbleToGoToPrevious() {
+        return (indexOfCurrentPartnerPoint > 0);
+    }
+
+    private boolean isAbleToGoToNext() {
+        return (indexOfCurrentPartnerPoint < partnerPoints.size() - 1);
     }
 
     private void goToPreviousPartnerPoint() {

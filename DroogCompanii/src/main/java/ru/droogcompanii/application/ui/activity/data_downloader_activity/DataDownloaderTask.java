@@ -4,14 +4,15 @@ import android.content.Context;
 import android.os.PowerManager;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.DataUpdater;
+import ru.droogcompanii.application.ui.helpers.task.Task;
 import ru.droogcompanii.application.util.DataUrlProvider;
 import ru.droogcompanii.application.util.LogUtils;
-import ru.droogcompanii.application.ui.helpers.task.Task;
 
 /**
  * Created by ls on 26.12.13.
@@ -29,7 +30,7 @@ public class DataDownloaderTask extends Task {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {
-                return context.getResources().openRawResource(R.raw.test_data_very_small_data);
+                return context.getResources().openRawResource(R.raw.test_data_small);
             }
         };
     }
@@ -47,7 +48,7 @@ public class DataDownloaderTask extends Task {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Serializable doInBackground(Void... params) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wakeLock.acquire();

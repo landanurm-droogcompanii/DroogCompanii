@@ -2,10 +2,12 @@ package ru.droogcompanii.application.ui.helpers.task;
 
 import android.os.AsyncTask;
 
+import java.io.Serializable;
+
 /**
  * Created by ls on 26.12.13.
  */
-public abstract class Task extends AsyncTask<Void, Void, Void> {
+public abstract class Task extends AsyncTask<Void, Void, Serializable> {
 
     private TaskFragment fragment;
 
@@ -14,9 +16,9 @@ public abstract class Task extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void unused) {
+    protected void onPostExecute(Serializable result) {
         if (fragment != null) {
-            fragment.onTaskFinished();
+            fragment.onTaskFinished(result);
         }
     }
 }

@@ -6,16 +6,12 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.util.BaseLocationProvider;
 
 /**
  * Created by ls on 16.01.14.
  */
 public class ComparatorByDistance implements Comparator<PartnerPoint>, Serializable {
-
-    public static interface BaseLocationProvider {
-        Location getBaseLocation();
-    }
-
     private final BaseLocationProvider baseLocationProvider;
 
     public ComparatorByDistance(BaseLocationProvider baseLocationProvider) {

@@ -2,13 +2,17 @@ package ru.droogcompanii.application.ui.helpers.task;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 26.12.13.
@@ -56,7 +60,7 @@ public abstract class TaskFragment extends DialogFragment {
             task.cancel(false);
         }
         if (getTargetFragment() != null) {
-            getTargetFragment().onActivityResult(TaskActivityMainFragment.TASK_FRAGMENT, Activity.RESULT_CANCELED, null);
+            getTargetFragment().onActivityResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_CANCELED, null);
         }
     }
 
@@ -68,13 +72,16 @@ public abstract class TaskFragment extends DialogFragment {
         }
     }
 
-    public void onTaskFinished() {
+    public void onTaskFinished(Serializable result) {
         if (isResumed()) {
             dismiss();
         }
         task = null;
         if (getTargetFragment() != null) {
-            getTargetFragment().onActivityResult(TaskActivityMainFragment.TASK_FRAGMENT, Activity.RESULT_OK, null);
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(Keys.result, result);
+            getTargetFragment().onActivityResult(
+                    TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_OK, resultIntent);
         }
     }
 }

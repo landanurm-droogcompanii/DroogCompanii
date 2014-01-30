@@ -2,9 +2,11 @@ package ru.droogcompanii.application.ui.activity_3.search_result_map_activity;
 
 import android.os.Bundle;
 
+import java.util.Collection;
+
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity_3.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
 import ru.droogcompanii.application.util.Keys;
 
@@ -19,20 +21,14 @@ public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmen
     }
 
     @Override
-    protected void onFirstActivityLaunch() {
-        initPartnerPointsMapFragment();
+    protected void onCreateActivity(Bundle savedInstanceState) {
+        // do nothing
     }
 
-    private void initPartnerPointsMapFragment() {
+    protected Collection<PartnerPoint> preparePartnerPoints() {
         Bundle args = getIntent().getExtras();
         PartnerPointsProvider partnerPointsProvider =
                 (PartnerPointsProvider) args.getSerializable(Keys.partnerPointsProvider);
-        partnerPointsMapFragment.setPartnerPointsProvider(partnerPointsProvider);
-        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
-    }
-
-    @Override
-    protected void onEachActivityLaunch() {
-        // do nothing
+        return partnerPointsProvider.getPartnerPoints(this);
     }
 }

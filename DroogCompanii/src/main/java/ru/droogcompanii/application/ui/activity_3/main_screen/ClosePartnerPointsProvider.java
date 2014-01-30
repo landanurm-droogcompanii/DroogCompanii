@@ -10,18 +10,18 @@ import java.util.Set;
 
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.ComparatorByDistance;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
+import ru.droogcompanii.application.util.BaseLocationProvider;
 
 /**
  * Created by ls on 29.01.14.
  */
 public class ClosePartnerPointsProvider implements PartnerPointsProvider {
-    private static final float MAX_DISTANCE_IN_METERS = 200000.0f;
+    private static final float MAX_DISTANCE_IN_METERS = 10000.0f;
 
-    private final ComparatorByDistance.BaseLocationProvider baseLocationProvider;
+    private final BaseLocationProvider baseLocationProvider;
 
-    public ClosePartnerPointsProvider(ComparatorByDistance.BaseLocationProvider baseLocationProvider) {
+    public ClosePartnerPointsProvider(BaseLocationProvider baseLocationProvider) {
         this.baseLocationProvider = baseLocationProvider;
     }
 

@@ -6,12 +6,12 @@ import android.support.v7.app.ActionBarActivity;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.activity_3.main_screen.MainScreen;
-import ru.droogcompanii.application.ui.helpers.task.TaskActivityMainFragment;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 
 /**
  * Created by ls on 26.12.13.
  */
-public class DataDownloaderActivity extends ActionBarActivity implements TaskActivityMainFragment.Callbacks {
+public class DataDownloaderActivity extends ActionBarActivity implements TaskFragmentHolder.Callbacks {
 
     private static final Class<?> ACTIVITY_TO_START = MainScreen.class;
     private static final int REQUEST_CODE = 23;
@@ -32,7 +32,11 @@ public class DataDownloaderActivity extends ActionBarActivity implements TaskAct
     }
 
     @Override
-    public void onTaskFinished() {
+    public void onTaskFinished(int resultCode, Intent resultIntent) {
+        if (resultCode == RESULT_CANCELED) {
+            finish();
+            return;
+        }
         Intent intent = new Intent(this, ACTIVITY_TO_START);
         startActivityForResult(intent, REQUEST_CODE);
     }

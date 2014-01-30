@@ -31,4 +31,6 @@ public class Keys {
     public static final String latitude = "latitude";
     public static final String filterSet = "filterSet";
     public static final String clickedMarkerIsExist = "clickedMarkerIsExist";
+
+    public static final String result = "result";
 }

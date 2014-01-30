@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
+import java.util.Collection;
 import java.util.Set;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity_3.filter_activity.FilterActivity;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragment.PartnerPointsInfoPanelFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.util.Keys;
@@ -36,8 +38,10 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         partnerPointsInfoPanelFragment = (PartnerPointsInfoPanelFragment)
                 fragmentManager.findFragmentById(R.id.partnerPointsInfoPanelFragment);
 
+        onCreateActivity(savedInstanceState);
+
         if (savedInstanceState == null) {
-            onFirstActivityLaunch();
+            initPartnerPointsMapFragment();
         }
 
         findViewById(R.id.filterButton).setOnClickListener(new View.OnClickListener() {
@@ -46,13 +50,18 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
                 onFilter();
             }
         });
-        onEachActivityLaunch();
     }
 
     protected abstract int getRootLayoutId();
 
-    protected abstract void onFirstActivityLaunch();
-    protected abstract void onEachActivityLaunch();
+    protected abstract void onCreateActivity(Bundle savedInstanceState);
+
+    private void initPartnerPointsMapFragment() {
+        partnerPointsMapFragment.setPartnerPoints(preparePartnerPoints());
+        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
+    }
+
+    protected abstract Collection<PartnerPoint> preparePartnerPoints();
 
     protected void onFilter() {
         Intent intent = new Intent(this, FilterActivity.class);

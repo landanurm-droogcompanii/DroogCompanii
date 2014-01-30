@@ -11,7 +11,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -21,13 +20,12 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
 import ru.droogcompanii.application.util.CurrentLocationProvider;
-import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 
 /**
  * Created by ls on 10.01.14.
  */
 class BaseCustomMapFragment extends android.support.v4.app.Fragment implements MarkersFinder {
-    private static final int ZOOM = 9;
+    private static final int ZOOM = 8;
 
     private boolean isMapViewPlacedOnLayout;
     private GoogleMap map;
@@ -45,13 +43,13 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
     }
 
     protected final GoogleMap getGoogleMap() {
-        if (needToInitMap()) {
+        if (isNeedToInitMap()) {
             initMap();
         }
         return map;
     }
 
-    private boolean needToInitMap() {
+    private boolean isNeedToInitMap() {
         return (map == null) && (getActivity() != null) &&
                 (getActivity().getSupportFragmentManager() != null);
     }
@@ -84,7 +82,7 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
 
     protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(final ClickedMarkerHolder clickedMarker) {
         if (isMapViewPlacedOnLayout) {
-            updateMapCamera();
+            updateMapCamera(clickedMarker);
         } else {
             ObserverOfViewWillBePlacedOnGlobalLayout.runAfterViewWillBePlacedOnLayout(getMapView(), new Runnable() {
                 @Override
@@ -96,27 +94,27 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         }
     }
 
-    private void updateMapCamera() {
-        tryMoveCameraToCurrentLocation();
-    }
-
     protected void updateMapCamera(ClickedMarkerHolder clickedMarker) {
         if (clickedMarker.isPresent()) {
-            moveCamera(clickedMarker.getPosition(), ZOOM);
+            moveCamera(clickedMarker.getPosition());
         } else {
             tryMoveCameraToCurrentLocation();
         }
     }
 
-    protected void moveCamera(LatLng center, int zoom) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, zoom);
+    protected void moveCamera(LatLng center) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, getCurrentZoom());
         getGoogleMap().animateCamera(cameraUpdate);
+    }
+
+    private float getCurrentZoom() {
+        return getGoogleMap().getCameraPosition().zoom;
     }
 
     private void tryMoveCameraToCurrentLocation() {
         Location currentLocation = CurrentLocationProvider.get();
         if (currentLocation != null) {
-            moveCamera(positionOf(currentLocation), ZOOM);
+            moveCamera(positionOf(currentLocation));
         } else {
             fitVisibleMarkersOnScreen();
         }
@@ -127,21 +125,7 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
     }
 
     private void fitVisibleMarkersOnScreen() {
-        if (noVisibleMarkers()) {
-            return;
-        }
-        LatLngBounds bounds = LatLngBoundsCalculator.calculateBoundsOfVisibleMarkers(markers);
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, getMapPadding());
-        getGoogleMap().moveCamera(cameraUpdate);
-    }
-
-    private boolean noVisibleMarkers() {
-        for (Marker each : markers) {
-            if (each.isVisible()) {
-                return false;
-            }
-        }
-        return true;
+        MapCameraUpdater.fitVisibleMarkers(getGoogleMap(), markers, getMapPadding());
     }
 
     private int getMapPadding() {

@@ -4,6 +4,7 @@ import android.location.Location;
 
 import java.io.Serializable;
 
+import ru.droogcompanii.application.util.BaseLocationProvider;
 import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
