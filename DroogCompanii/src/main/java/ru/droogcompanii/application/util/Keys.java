@@ -18,7 +18,7 @@ public class Keys {
 
     public static final String filters = "filters";
 
-    public static final String searchableSortablePartnerPoints = "searchableSortablePartnerPoints";
+    public static final String searchablePartnerPoints = "searchablePartnerPoints";
     public static final String args = "args";
 
     public static final String needToExpandList = "needToExpandList";
@@ -33,4 +33,7 @@ public class Keys {
     public static final String clickedMarkerIsExist = "clickedMarkerIsExist";
 
     public static final String result = "result";
+
+    public static final String isTaskFinished = "isTaskFinished";
+    public static final String isSearchResultReady = "isSearchResultReady";
 }

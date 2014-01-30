@@ -8,26 +8,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
-import ru.droogcompanii.application.util.BaseLocationProvider;
 
 /**
  * Created by ls on 29.01.14.
  */
-public class ClosePartnerPointsProvider implements PartnerPointsProvider {
-    private static final float MAX_DISTANCE_IN_METERS = 10000.0f;
+class ClosePartnerPointsProvider implements PartnerPointsProvider {
+    private static final float MAX_DISTANCE_IN_METERS = 8000.0f;
 
-    private final BaseLocationProvider baseLocationProvider;
+    private final Location baseLocation;
 
-    public ClosePartnerPointsProvider(BaseLocationProvider baseLocationProvider) {
-        this.baseLocationProvider = baseLocationProvider;
+    public ClosePartnerPointsProvider() {
+        baseLocation = DroogCompaniiSettings.getBaseLocation();
     }
 
     @Override
     public List<PartnerPoint> getPartnerPoints(Context context) {
-        Location baseLocation = baseLocationProvider.getBaseLocation();
         PartnerPointsReader reader = new PartnerPointsReader(context);
         Set<PartnerPoint> closePartnerPoints = new HashSet<PartnerPoint>();
         for (PartnerPoint partnerPoint : reader.getAllPartnerPoints()) {

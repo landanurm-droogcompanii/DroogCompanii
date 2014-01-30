@@ -17,9 +17,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
-import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 10.01.14.
@@ -112,9 +112,9 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
     }
 
     private void tryMoveCameraToCurrentLocation() {
-        Location currentLocation = CurrentLocationProvider.get();
-        if (currentLocation != null) {
-            moveCamera(positionOf(currentLocation));
+        Location baseLocation = DroogCompaniiSettings.getBaseLocation();
+        if (baseLocation != null) {
+            moveCamera(positionOf(baseLocation));
         } else {
             fitVisibleMarkersOnScreen();
         }

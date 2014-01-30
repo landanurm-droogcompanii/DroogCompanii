@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.activity_3.main_screen.MainScreen;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
@@ -32,7 +34,7 @@ public class DataDownloaderActivity extends ActionBarActivity implements TaskFra
     }
 
     @Override
-    public void onTaskFinished(int resultCode, Intent resultIntent) {
+    public void onTaskFinished(int resultCode, Serializable result) {
         if (resultCode == RESULT_CANCELED) {
             finish();
             return;

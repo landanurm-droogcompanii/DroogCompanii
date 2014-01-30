@@ -1,21 +1,15 @@
 package ru.droogcompanii.application.ui.activity_3.main_screen;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.Collection;
-
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity_3.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
+import ru.droogcompanii.application.ui.activity_3.activity_with_partner_points_map_fragment_and_info_panel.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
 import ru.droogcompanii.application.ui.activity_3.search_activity.SearchActivity;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
-import ru.droogcompanii.application.util.BaseLocationProvider;
-import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 14.01.14.
@@ -23,7 +17,7 @@ import ru.droogcompanii.application.util.CurrentLocationProvider;
 public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndInfoPanel {
 
     @Override
-    protected int getRootLayoutId() {
+    protected int getContentViewId() {
         return R.layout.activity_3_main_screen;
     }
 
@@ -61,14 +55,7 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     @Override
-    protected Collection<PartnerPoint> preparePartnerPoints() {
-        BaseLocationProvider baseLocationProvider = new BaseLocationProvider() {
-            @Override
-            public Location getBaseLocation() {
-                return CurrentLocationProvider.get();
-            }
-        };
-        PartnerPointsProvider partnerPointsProvider = new ClosePartnerPointsProvider(baseLocationProvider);
-        return partnerPointsProvider.getPartnerPoints(this);
+    protected PartnerPointsProvider preparePartnerPointsProvider() {
+        return new ClosePartnerPointsProvider();
     }
 }

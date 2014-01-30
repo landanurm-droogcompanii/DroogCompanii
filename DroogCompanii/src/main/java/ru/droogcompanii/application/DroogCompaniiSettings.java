@@ -8,8 +8,8 @@ import ru.droogcompanii.application.util.CurrentLocationProvider;
  * Created by ls on 29.01.14.
  */
 public class DroogCompaniiSettings {
-    private static final double LATITUDE_OF_DEFAULT_BASE_LOCATION = 51.2419;
-    private static final double LONGITUDE_OF_DEFAULT_BASE_LOCATION = 53.6579;
+    private static final double LATITUDE_OF_KAZAN = 55.78856;
+    private static final double LONGITUDE_OF_KAZAN = 49.12163;
 
     public static Location getBaseLocation() {
         Location baseLocation = CurrentLocationProvider.get();
@@ -17,9 +17,13 @@ public class DroogCompaniiSettings {
     }
 
     private static Location getDefaultBaseLocation() {
-        Location location = new Location("defaultLocation");
-        location.setLatitude(LATITUDE_OF_DEFAULT_BASE_LOCATION);
-        location.setLongitude(LONGITUDE_OF_DEFAULT_BASE_LOCATION);
+        return getLocationOfKazan();
+    }
+
+    private static Location getLocationOfKazan() {
+        Location location = new Location("Kazan");
+        location.setLatitude(LATITUDE_OF_KAZAN);
+        location.setLongitude(LONGITUDE_OF_KAZAN);
         return location;
     }
 }

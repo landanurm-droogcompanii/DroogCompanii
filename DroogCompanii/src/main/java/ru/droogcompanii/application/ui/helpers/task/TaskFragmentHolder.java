@@ -1,7 +1,6 @@
 package ru.droogcompanii.application.ui.helpers.task;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,20 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 /**
  * Created by ls on 26.12.13.
  */
 public abstract class TaskFragmentHolder extends Fragment {
 
     public interface Callbacks {
-        void onTaskFinished(int resultCode, Intent resultIntent);
+        void onTaskFinished(int resultCode, Serializable result);
     }
 
     protected static final int REQUEST_CODE_TASK_FRAGMENT = 0;
-    protected static final String TASK_FRAGMENT_TAG = "task";
+    protected static final String TAG_TASK_FRAGMENT = "task";
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
-        public void onTaskFinished(int resultCode, Intent resultIntent) {
+        public void onTaskFinished(int resultCode, Serializable result) {
             // do nothing
         }
     };
@@ -51,7 +52,7 @@ public abstract class TaskFragmentHolder extends Fragment {
 
         fragmentManager = getFragmentManager();
 
-        TaskFragment taskFragment = (TaskFragment) fragmentManager.findFragmentByTag(TASK_FRAGMENT_TAG);
+        TaskFragment taskFragment = (TaskFragment) fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT);
         if (taskFragment != null) {
             taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
         }
@@ -59,9 +60,11 @@ public abstract class TaskFragmentHolder extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int fragmentLayoutId = getIdOfMainFragmentLayout();
+        int fragmentLayoutId = getLayoutIdOfTaskFragmentHolder();
         return inflater.inflate(fragmentLayoutId, container, false);
     }
+
+    protected abstract int getLayoutIdOfTaskFragmentHolder();
 
     protected void startTask() {
         TaskFragment taskFragment = prepareTaskFragment();
@@ -70,18 +73,16 @@ public abstract class TaskFragmentHolder extends Fragment {
         startFragment(taskFragment);
     }
 
-    protected abstract int getIdOfMainFragmentLayout();
     protected abstract TaskFragment prepareTaskFragment();
     protected abstract Task prepareTask();
 
     private void startFragment(TaskFragment taskFragment) {
-        fragmentManager.beginTransaction().add(taskFragment, TASK_FRAGMENT_TAG).commit();
+        fragmentManager.beginTransaction().add(taskFragment, TAG_TASK_FRAGMENT).commit();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onResult(int requestCode, int resultCode, Serializable result) {
         if ((requestCode == REQUEST_CODE_TASK_FRAGMENT)) {
-            callbacks.onTaskFinished(resultCode, data);
+            callbacks.onTaskFinished(resultCode, result);
         }
     }
 }

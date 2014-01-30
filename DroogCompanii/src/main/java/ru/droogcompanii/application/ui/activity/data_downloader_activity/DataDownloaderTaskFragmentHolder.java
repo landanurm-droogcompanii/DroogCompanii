@@ -26,8 +26,8 @@ public class DataDownloaderTaskFragmentHolder extends TaskFragmentHolder {
     }
 
     @Override
-    protected int getIdOfMainFragmentLayout() {
-        return R.layout.fragment_data_downloader;
+    protected int getLayoutIdOfTaskFragmentHolder() {
+        return R.layout.empty_layout;
     }
 
     @Override

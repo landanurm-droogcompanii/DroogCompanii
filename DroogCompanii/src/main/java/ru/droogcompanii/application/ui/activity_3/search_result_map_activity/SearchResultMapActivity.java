@@ -2,11 +2,8 @@ package ru.droogcompanii.application.ui.activity_3.search_result_map_activity;
 
 import android.os.Bundle;
 
-import java.util.Collection;
-
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity_3.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
+import ru.droogcompanii.application.ui.activity_3.activity_with_partner_points_map_fragment_and_info_panel.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
 import ru.droogcompanii.application.util.Keys;
 
@@ -16,7 +13,7 @@ import ru.droogcompanii.application.util.Keys;
 public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmentAndInfoPanel {
 
     @Override
-    protected int getRootLayoutId() {
+    protected int getContentViewId() {
         return R.layout.activity_3_search_result_map;
     }
 
@@ -25,10 +22,9 @@ public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmen
         // do nothing
     }
 
-    protected Collection<PartnerPoint> preparePartnerPoints() {
+    @Override
+    protected PartnerPointsProvider preparePartnerPointsProvider() {
         Bundle args = getIntent().getExtras();
-        PartnerPointsProvider partnerPointsProvider =
-                (PartnerPointsProvider) args.getSerializable(Keys.partnerPointsProvider);
-        return partnerPointsProvider.getPartnerPoints(this);
+        return (PartnerPointsProvider) args.getSerializable(Keys.partnerPointsProvider);
     }
 }

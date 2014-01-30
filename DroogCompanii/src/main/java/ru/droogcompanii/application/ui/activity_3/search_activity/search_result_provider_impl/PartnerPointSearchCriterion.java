@@ -7,9 +7,9 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
  * Created by ls on 29.01.14.
  */
 class PartnerPointSearchCriterion implements SearchCriterion<PartnerPoint> {
-    private final SearchByQueryCriterion searchCriterion;
+    private final SearchCriterionByQuery searchCriterion;
 
-    public PartnerPointSearchCriterion(SearchByQueryCriterion searchCriterion) {
+    public PartnerPointSearchCriterion(SearchCriterionByQuery searchCriterion) {
         this.searchCriterion = searchCriterion;
     }
 

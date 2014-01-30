@@ -1,11 +1,15 @@
-package ru.droogcompanii.application.ui.activity_3;
+package ru.droogcompanii.application.ui.activity_3.activity_with_partner_points_map_fragment_and_info_panel;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import ru.droogcompanii.application.R;
@@ -15,14 +19,19 @@ import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragment.PartnerPointsInfoPanelFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
+import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 22.01.14.
  */
 public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
-                        extends android.support.v4.app.FragmentActivity
-                        implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener {
+            extends android.support.v4.app.FragmentActivity
+            implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener, TaskFragmentHolder.Callbacks {
+
+    private boolean isFirstLaunched;
+    private boolean isTaskFinished;
 
     protected PartnerPointsMapFragment partnerPointsMapFragment;
     protected PartnerPointsInfoPanelFragment partnerPointsInfoPanelFragment;
@@ -30,18 +39,42 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getRootLayoutId());
+        setContentView(getContentViewId());
 
+        onCreateActivity(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            isFirstLaunched = true;
+            isTaskFinished = false;
+        } else {
+            isFirstLaunched = false;
+            isTaskFinished = savedInstanceState.getBoolean(Keys.isTaskFinished);
+        }
+
+        if (isTaskFinished) {
+            initPartnerPointsMapAndInfoPanel(null);
+        } else {
+            startTask();
+        }
+    }
+
+    private void startTask() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment taskFragment = new PartnerPointsProviderTaskFragmentHolder();
+        transaction.add(R.id.taskFragmentContainer, taskFragment);
+        transaction.commit();
+    }
+
+    private void initPartnerPointsMapAndInfoPanel(Collection<PartnerPoint> partnerPoints) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         partnerPointsMapFragment = (PartnerPointsMapFragment)
                 fragmentManager.findFragmentById(R.id.mapFragment);
         partnerPointsInfoPanelFragment = (PartnerPointsInfoPanelFragment)
                 fragmentManager.findFragmentById(R.id.partnerPointsInfoPanelFragment);
 
-        onCreateActivity(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            initPartnerPointsMapFragment();
+        if (partnerPoints != null) {
+            initPartnerPointsMapFragment(partnerPoints);
         }
 
         findViewById(R.id.filterButton).setOnClickListener(new View.OnClickListener() {
@@ -52,16 +85,42 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         });
     }
 
-    protected abstract int getRootLayoutId();
+    @Override
+    public void onTaskFinished(int resultCode, Serializable result) {
+        isTaskFinished = true;
+        removeTaskFragment();
+        List<PartnerPoint> partnerPoints = (List<PartnerPoint>) result;
+        initPartnerPointsMapAndInfoPanel(partnerPoints);
+    }
+
+    private void removeTaskFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment taskFragment = fragmentManager.findFragmentById(R.id.taskFragmentContainer);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.remove(taskFragment);
+        transaction.commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Keys.isTaskFinished, isTaskFinished);
+    }
+
+    public boolean isFirstLaunched() {
+        return isFirstLaunched;
+    }
+
+    protected abstract int getContentViewId();
 
     protected abstract void onCreateActivity(Bundle savedInstanceState);
 
-    private void initPartnerPointsMapFragment() {
-        partnerPointsMapFragment.setPartnerPoints(preparePartnerPoints());
+    private void initPartnerPointsMapFragment(Collection<PartnerPoint> partnerPoints) {
+        partnerPointsMapFragment.setPartnerPoints(partnerPoints);
         partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
     }
 
-    protected abstract Collection<PartnerPoint> preparePartnerPoints();
+    protected abstract PartnerPointsProvider preparePartnerPointsProvider();
 
     protected void onFilter() {
         Intent intent = new Intent(this, FilterActivity.class);

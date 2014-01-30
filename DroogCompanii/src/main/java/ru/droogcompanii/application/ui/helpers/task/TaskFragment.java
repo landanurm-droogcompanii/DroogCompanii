@@ -2,7 +2,6 @@ package ru.droogcompanii.application.ui.helpers.task;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -12,12 +11,12 @@ import android.view.ViewGroup;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 26.12.13.
  */
 public abstract class TaskFragment extends DialogFragment {
+    private boolean resultPassed;
     private Task task;
 
     public void setTask(Task task) {
@@ -59,9 +58,21 @@ public abstract class TaskFragment extends DialogFragment {
         if (task != null) {
             task.cancel(false);
         }
-        if (getTargetFragment() != null) {
-            getTargetFragment().onActivityResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_CANCELED, null);
+        onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_CANCELED, null);
+    }
+
+    private void onResult(int requestCode, int resultCode, Serializable result) {
+        if (resultPassed) {
+            return;
         }
+        if (getTaskFragmentHolder() != null) {
+            resultPassed = true;
+            getTaskFragmentHolder().onResult(requestCode, resultCode, result);
+        }
+    }
+
+    private TaskFragmentHolder getTaskFragmentHolder() {
+        return (TaskFragmentHolder) getTargetFragment();
     }
 
     @Override
@@ -73,15 +84,10 @@ public abstract class TaskFragment extends DialogFragment {
     }
 
     public void onTaskFinished(Serializable result) {
+        task = null;
+        onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_OK, result);
         if (isResumed()) {
             dismiss();
-        }
-        task = null;
-        if (getTargetFragment() != null) {
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra(Keys.result, result);
-            getTargetFragment().onActivityResult(
-                    TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_OK, resultIntent);
         }
     }
 }

@@ -81,17 +81,16 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @SuppressWarnings("unchecked")
     private void restoreInstanceStateIfNeed(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            return;
+        if (savedInstanceState != null) {
+            searchablePartnerPoints = (SearchableListing<PartnerPoint>)
+                    savedInstanceState.getSerializable(Keys.searchablePartnerPoints);
         }
-        searchablePartnerPoints = (SearchableSortableListing<PartnerPoint>)
-                savedInstanceState.getSerializable(Keys.searchableSortablePartnerPoints);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.searchableSortablePartnerPoints, searchablePartnerPoints);
+        outState.putSerializable(Keys.searchablePartnerPoints, searchablePartnerPoints);
         clickedMarkerHolder.saveInto(outState);
     }
 

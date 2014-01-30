@@ -18,10 +18,10 @@ import ru.droogcompanii.application.ui.activity_3.search_activity.SearchResultPr
  */
 public class SearchResultProviderBySearchQuery implements SearchResultProvider, Serializable {
 
-    private final SearchByQueryCriterion searchCriterion;
+    private final SearchCriterionByQuery searchCriterion;
 
     public SearchResultProviderBySearchQuery(String searchQuery) {
-        searchCriterion = new SearchByQueryCriterion(searchQuery);
+        searchCriterion = new SearchCriterionByQuery(searchQuery);
     }
 
     @Override

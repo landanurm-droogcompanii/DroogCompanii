@@ -7,22 +7,24 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.ui.activity_3.search_activity.SearchResultProvider;
 import ru.droogcompanii.application.ui.activity_3.search_result_activity.PartnerListAdapter;
+import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 22.01.14.
  */
-public class SearchResultFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class SearchResultFragment extends ListFragment
+        implements AdapterView.OnItemClickListener {
 
     public static interface OnPartnerClickListener {
         void onPartnerClick(Partner partner);
     }
 
+    private boolean isSearchResultReady;
     private List<Partner> partners;
     private OnPartnerClickListener onPartnerClickListener;
     private PartnerListAdapter adapter;
@@ -37,10 +39,37 @@ public class SearchResultFragment extends ListFragment implements AdapterView.On
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            initSearchResultIsNotReadyState();
+        } else {
             restoreState(savedInstanceState);
         }
 
+        if (isSearchResultReady) {
+            updateSearchResultList();
+        }
+    }
+
+    private void initSearchResultIsNotReadyState() {
+        isSearchResultReady = false;
+        partners = new ArrayList<Partner>();
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        partners = (List<Partner>) savedInstanceState.getSerializable(Keys.partners);
+        isSearchResultReady = savedInstanceState.getBoolean(Keys.isSearchResultReady);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Keys.partners, (Serializable) partners);
+        outState.putBoolean(Keys.isSearchResultReady, isSearchResultReady);
+    }
+
+    public void setSearchResult(List<Partner> partners) {
+        this.partners = partners;
+        isSearchResultReady = true;
         updateSearchResultList();
     }
 
@@ -48,20 +77,6 @@ public class SearchResultFragment extends ListFragment implements AdapterView.On
         adapter = new PartnerListAdapter(getActivity(), partners);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
-    }
-
-    public void setSearchResultProvider(SearchResultProvider searchResultProvider) {
-        partners = searchResultProvider.getPartners(getActivity());
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        partners = (List<Partner>) savedInstanceState.getSerializable(Keys.partners);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partners, (Serializable) partners);
     }
 
     @Override
