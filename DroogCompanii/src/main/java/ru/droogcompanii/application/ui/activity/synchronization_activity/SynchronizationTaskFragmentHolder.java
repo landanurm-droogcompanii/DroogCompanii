@@ -20,7 +20,7 @@ public class SynchronizationTaskFragmentHolder extends TaskFragmentHolder {
 
     private boolean isActivityFirstLaunched() {
         SynchronizationActivity activity = (SynchronizationActivity) getActivity();
-        return !activity.screenRotated();
+        return activity.isFirstLaunched();
     }
 
     @Override

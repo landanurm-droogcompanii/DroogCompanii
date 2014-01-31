@@ -27,12 +27,12 @@ import ru.droogcompanii.application.util.MultiMap;
 public class PartnerPointsMapFragment extends BaseCustomMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
-    public static interface OnNeedToShowPartnerPointsListener {
+    public static interface Callbacks {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
         void onNoLongerNeedToShowPartnerPoints();
     }
 
-    private OnNeedToShowPartnerPointsListener onNeedToShowPartnerPointsListener;
+    private Callbacks callbacks;
 
     private boolean wasActivityCreated;
     private Bundle savedInstanceState;
@@ -50,7 +50,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        onNeedToShowPartnerPointsListener = (OnNeedToShowPartnerPointsListener) activity;
+        callbacks = (Callbacks) activity;
     }
 
     public void setPartnerPoints(Collection<PartnerPoint> partnerPoints) {
@@ -137,7 +137,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     private void updateAfterFiltering() {
         clickedMarkerHolder.update();
         if (clickedMarkerHolder.isAbsent()) {
-            onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
+            callbacks.onNoLongerNeedToShowPartnerPoints();
         } else {
             notifyNeedToShowPartnerPoints(clickedMarkerHolder.getMarker());
         }
@@ -145,7 +145,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private void notifyNeedToShowPartnerPoints(Marker marker) {
         Set<PartnerPoint> partnerPointsToShow = markersAndPartnerPoints.get(marker);
-        onNeedToShowPartnerPointsListener.onNeedToShowPartnerPoints(partnerPointsToShow);
+        callbacks.onNeedToShowPartnerPoints(partnerPointsToShow);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @Override
     public void onMapClick(LatLng position) {
-        onNeedToShowPartnerPointsListener.onNoLongerNeedToShowPartnerPoints();
+        callbacks.onNoLongerNeedToShowPartnerPoints();
         clickedMarkerHolder.unset();
     }
 }

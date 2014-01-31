@@ -13,18 +13,18 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 public class PartnerCategoryListFragment extends android.support.v4.app.ListFragment
         implements AdapterView.OnItemClickListener {
 
-    public static interface OnPartnerCategoryClickListener {
+    public static interface Callbacks {
         void onPartnerCategoryClick(PartnerCategory partnerCategory);
     }
 
     private PartnerCategoryListAdapter adapter;
-    private OnPartnerCategoryClickListener onPartnerCategoryClickListener;
+    private Callbacks callbacks;
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        onPartnerCategoryClickListener = (OnPartnerCategoryClickListener) activity;
+        callbacks = (Callbacks) activity;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class PartnerCategoryListFragment extends android.support.v4.app.ListFrag
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         PartnerCategory partnerCategory = adapter.getItem(position);
-        onPartnerCategoryClickListener.onPartnerCategoryClick(partnerCategory);
+        callbacks.onPartnerCategoryClick(partnerCategory);
     }
 }

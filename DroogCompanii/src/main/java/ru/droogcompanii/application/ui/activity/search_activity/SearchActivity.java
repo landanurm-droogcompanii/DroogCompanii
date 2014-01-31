@@ -19,7 +19,7 @@ import ru.droogcompanii.application.ui.fragment.partner_category_list_fragment.P
  * Created by ls on 14.01.14.
  */
 public class SearchActivity extends android.support.v4.app.FragmentActivity
-                implements PartnerCategoryListFragment.OnPartnerCategoryClickListener {
+                implements PartnerCategoryListFragment.Callbacks {
 
     private EditText searchQueryInput;
 

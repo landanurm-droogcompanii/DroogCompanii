@@ -106,7 +106,7 @@ public class SearchResultActivity extends FragmentActivity
 
     @Override
     public void onTaskFinished(int resultCode, Serializable result) {
-        if (resultCode == RESULT_CANCELED) {
+        if (resultCode != RESULT_OK) {
             finish();
             return;
         }

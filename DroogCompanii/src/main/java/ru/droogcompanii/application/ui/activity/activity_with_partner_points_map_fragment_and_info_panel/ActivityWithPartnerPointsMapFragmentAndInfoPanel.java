@@ -29,7 +29,7 @@ import ru.droogcompanii.application.util.Keys;
  */
 public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
             extends android.support.v4.app.FragmentActivity
-            implements PartnerPointsMapFragment.OnNeedToShowPartnerPointsListener, TaskFragmentHolder.Callbacks {
+            implements PartnerPointsMapFragment.Callbacks, TaskFragmentHolder.Callbacks {
 
     private boolean isFirstLaunched;
     private boolean isTaskFinished;
@@ -88,7 +88,7 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
 
     @Override
     public void onTaskFinished(int resultCode, Serializable result) {
-        if (resultCode == RESULT_CANCELED) {
+        if (resultCode != RESULT_OK) {
             finish();
             return;
         }
@@ -108,6 +108,12 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         return isFirstLaunched;
     }
 
+
+    /*
+        content view layout should content:
+            fragments with ids: mapFragment, partnerPointsInfoPanelFragment
+            button with id: filterButton
+     */
     protected abstract int getContentViewId();
 
     protected abstract void onCreateActivity(Bundle savedInstanceState);

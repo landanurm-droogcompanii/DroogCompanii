@@ -14,7 +14,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 /**
  * Created by ls on 29.01.14.
  */
-public class RouteIntentMaker {
+class RouteIntentMaker {
 
     public static Intent makeIntentToRouteTo(PartnerPoint toPartnerPoint) {
         String uri = makeUri(toPartnerPoint);

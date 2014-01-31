@@ -106,8 +106,6 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         getView().setVisibility(View.INVISIBLE);
     }
 
-
-
     public void setPartnerPoints(Collection<PartnerPoint> partnerPointsToSet) {
         if (partnerPointsToSet == null) {
             throw new IllegalArgumentException("partnerPointsToSet should be not null");
