@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import java.io.Serializable;
 
+import ru.droogcompanii.application.R;
+
 /**
  * Created by ls on 26.12.13.
  */
@@ -60,20 +62,18 @@ public abstract class TaskFragmentHolder extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int fragmentLayoutId = getLayoutIdOfTaskFragmentHolder();
-        return inflater.inflate(fragmentLayoutId, container, false);
+        return inflater.inflate(R.layout.empty_layout, container, false);
     }
 
-    protected abstract int getLayoutIdOfTaskFragmentHolder();
-
     protected void startTask() {
-        TaskFragment taskFragment = prepareTaskFragment();
+        TaskFragment taskFragment = new TaskFragment();
+        taskFragment.setTitle(getTaskDialogTitle());
         taskFragment.setTask(prepareTask());
         taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
         startFragment(taskFragment);
     }
 
-    protected abstract TaskFragment prepareTaskFragment();
+    protected abstract String getTaskDialogTitle();
     protected abstract Task prepareTask();
 
     private void startFragment(TaskFragment taskFragment) {

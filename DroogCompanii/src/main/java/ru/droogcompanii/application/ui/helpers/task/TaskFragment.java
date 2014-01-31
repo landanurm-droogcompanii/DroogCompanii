@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import java.io.Serializable;
 
@@ -15,13 +16,18 @@ import ru.droogcompanii.application.R;
 /**
  * Created by ls on 26.12.13.
  */
-public abstract class TaskFragment extends DialogFragment {
+public class TaskFragment extends DialogFragment {
     private boolean resultPassed;
     private Task task;
+    private String title;
 
     public void setTask(Task task) {
         task.setFragment(this);
         this.task = task;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
@@ -35,13 +41,15 @@ public abstract class TaskFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task, container);
-        getDialog().setTitle(getDialogTitle());
+        if (title.isEmpty()) {
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        } else {
+            getDialog().setTitle(title);
+        }
         getDialog().setCanceledOnTouchOutside(false);
-        return view;
+        return inflater.inflate(R.layout.fragment_task, container);
     }
-
-    protected abstract String getDialogTitle();
 
     @Override
     public void onDestroyView() {

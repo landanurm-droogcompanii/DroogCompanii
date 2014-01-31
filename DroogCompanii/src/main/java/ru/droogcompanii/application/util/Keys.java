@@ -36,4 +36,9 @@ public class Keys {
 
     public static final String isTaskFinished = "isTaskFinished";
     public static final String isSearchResultReady = "isSearchResultReady";
+    public static final String visibility = "visibility";
+
+    public static final String visibilityOfShowSearchResultOnMapButton = "visibilityOfShowSearchResultOnMapButton";
+
+    public static final String dataIsUpdated = "dataIsUpdated";
 }

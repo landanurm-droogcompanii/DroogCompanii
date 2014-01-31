@@ -8,5 +8,6 @@
     <dimen name="textSizeOfFilterGroupTitle">28sp</dimen>
     <dimen name="textSizeOfSortingGroupItems">18sp</dimen>
     <dimen name="sizeBetweenFilterGroups">32dp</dimen>
+    <dimen name="textSizeOfNoSearchResultsLabel">28sp</dimen>
 
 </resources>

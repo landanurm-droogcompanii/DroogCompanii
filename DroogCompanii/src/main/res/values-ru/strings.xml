@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_search_results">Не найдено</string>
+
+    <string name="menu_item_personal_account">Личный кабинет</string>
+    <string name="menu_item_partner_categories">Категории партнеров</string>
+    <string name="menu_item_stock">Акции</string>
+    <string name="menu_item_website">Веб-сайт</string>
+    <string name="menu_item_hotline">Горячая линия</string>
+    <string name="menu_item_synchronization">Синхронизация</string>
+    <string name="menu_item_settings">Настройки</string>
+</resources>

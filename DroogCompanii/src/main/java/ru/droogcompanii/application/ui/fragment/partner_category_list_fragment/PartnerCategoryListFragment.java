@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.ui.activity.partner_category_list_activity.PartnerCategoryListAdapter;
 
 /**
  * Created by ls on 10.01.14.
@@ -32,9 +31,10 @@ public class PartnerCategoryListFragment extends android.support.v4.app.ListFrag
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        getListView().setOnItemClickListener(this);
+
         adapter = PartnerCategoryListAdapter.newInstance(getActivity(), savedInstanceState);
         setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);
     }
 
     @Override

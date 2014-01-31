@@ -1,10 +1,7 @@
 package ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +20,8 @@ import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPo
 import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity_3.partner_activity.PartnerActivity;
+import ru.droogcompanii.application.ui.activity.partner_activity.PartnerActivity;
+import ru.droogcompanii.application.ui.helpers.Caller;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
 
@@ -34,6 +32,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     private static final int NO_INDEX = -1;
 
     private boolean visible;
+    private Caller caller;
     private int indexOfCurrentPartnerPoint;
     private List<PartnerPoint> partnerPoints;
 
@@ -46,6 +45,8 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        caller = new Caller(getActivity());
 
         initCatchingOfTouchEvents();
 
@@ -78,8 +79,8 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void restoreVisibilityFrom(Bundle savedInstanceState) {
-        boolean needToShow = savedInstanceState.getBoolean(Keys.visible);
-        if (needToShow) {
+        boolean isNeedToShow = savedInstanceState.getBoolean(Keys.visible);
+        if (isNeedToShow) {
             show();
         } else {
             hide();
@@ -105,18 +106,23 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         getView().setVisibility(View.INVISIBLE);
     }
 
-    public void setPartnerPoints(Collection<PartnerPoint> partnerPoints) {
-        if (partnerPoints == null) {
-            throw new IllegalArgumentException("partnerPoints should be not null");
+
+
+    public void setPartnerPoints(Collection<PartnerPoint> partnerPointsToSet) {
+        if (partnerPointsToSet == null) {
+            throw new IllegalArgumentException("partnerPointsToSet should be not null");
         }
-        if (this.partnerPoints.equals(partnerPoints)) {
+        if (partnerPoints.equals(partnerPointsToSet)) {
             return;
         }
-        List<PartnerPoint> oldPartnerPoints = this.partnerPoints;
-        List<PartnerPoint> newPartnerPoints = new ArrayList<PartnerPoint>(partnerPoints);
-        this.partnerPoints = newPartnerPoints;
-        this.indexOfCurrentPartnerPoint = defineIndex(oldPartnerPoints, newPartnerPoints);
+        List<PartnerPoint> newPartnerPoints = new ArrayList<PartnerPoint>(partnerPointsToSet);
+        setPartnerPoints(partnerPoints, newPartnerPoints);
         show();
+    }
+
+    private void setPartnerPoints(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
+        indexOfCurrentPartnerPoint = defineIndex(oldPartnerPoints, newPartnerPoints);
+        partnerPoints = newPartnerPoints;
     }
 
     private int defineIndex(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
@@ -243,17 +249,10 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onNeedToCall(phone);
+                caller.call(phone);
             }
         });
         return phoneButton;
-    }
-
-    private void onNeedToCall(String phone) {
-        String formattedPhone = PhoneNumberUtils.formatNumber(phone);
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:" + formattedPhone));
-        startActivity(intent);
     }
 
     private void setRouteButton() {

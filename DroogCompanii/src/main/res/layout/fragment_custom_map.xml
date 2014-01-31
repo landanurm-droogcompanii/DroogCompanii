@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     map:cameraZoom="12"
     map:mapType="normal"
-    map:uiZoomControls="false"
+    map:uiZoomControls="true"
     map:uiRotateGestures="true"
     map:uiScrollGestures="true"
     map:uiZoomGestures="true"
