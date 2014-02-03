@@ -4,9 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.Window;
 
 import java.util.List;
 
@@ -16,8 +14,10 @@ import ru.droogcompanii.application.ui.helpers.Caller;
 /**
  * Created by ls on 03.02.14.
  */
-public class MultiPhonesCallerDialog extends Dialog {
+public class MultiPhonesCallerDialog extends Dialog implements PhonesListViewMaker.OnNeedToCallListener {
+
     private final List<String> phones;
+
 
     public MultiPhonesCallerDialog(Context context, List<String> phones) {
         super(context);
@@ -27,27 +27,37 @@ public class MultiPhonesCallerDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mustBeCalledBefore_SetContentView();
+
         setTitle(R.string.titleOfMultiPhonesCallerDialog);
         setContentView(prepareContentView());
     }
 
-    private View prepareContentView() {
-        Context context = getContext();
-        ListView listView = new ListView(context);
-        final ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, phones);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String phone = adapter.getItem(position);
-                onNeedToCall(phone);
-            }
-        });
-        return listView;
+    private void mustBeCalledBefore_SetContentView() {
+        requestWindowFeature(Window.FEATURE_LEFT_ICON);
     }
 
-    private void onNeedToCall(String phone) {
+    private View prepareContentView() {
+        return PhonesListViewMaker.make(getContext(), phones, this);
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        mustBeCalledAfter_Show();
+    }
+
+    private void mustBeCalledAfter_Show() {
+        setTitleIcon(R.drawable.ic_caller);
+    }
+
+    private void setTitleIcon(int iconId) {
+        setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, iconId);
+    }
+
+    @Override
+    public void onNeedToCall(String phone) {
         Caller.call(getContext(), phone);
         dismiss();
     }
