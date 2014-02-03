@@ -12,9 +12,7 @@ import java.util.List;
  */
 public class SearchableSortableListing<T> extends SearchableListing<T> implements Serializable {
 
-    private final List<T> unsortedElements;
     private final List<Comparator<T>> comparators;
-    private boolean sorted;
 
     public static <T> SearchableSortableListing<T> newInstance(Collection<T> elements) {
         return new SearchableSortableListing<T>(elements);
@@ -22,7 +20,6 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
 
     protected SearchableSortableListing(Collection<T> elements) {
         super(elements);
-        unsortedElements = new ArrayList<T>(elements);
         comparators = new ArrayList<Comparator<T>>();
     }
 
@@ -31,32 +28,17 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
             throw new IllegalArgumentException("Comparator should not be <null>");
         }
         comparators.add(comparator);
-        sorted = false;
     }
 
     public void removeAllFilters() {
         super.removeAllFilters();
         comparators.clear();
-        elements = new ArrayList<T>(unsortedElements);
     }
 
     public void forEach(OnEachHandler<T> onEachHandler) {
-        sortIfNeed();
-        for (T each : elements) {
+        for (T each : toList()) {
             onEachHandler.onEach(each, meetCriteria(each));
         }
-    }
-
-    private void sortIfNeed() {
-        if (sorted || noComparators()) {
-            return;
-        }
-        sort(elements);
-        sorted = true;
-    }
-
-    private boolean noComparators() {
-        return comparators.isEmpty();
     }
 
     /*
@@ -64,15 +46,33 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
         Sorting uses comparators in order: from first added to last added comparator.
         In Java 6 and 7 versions the method Collection.sort() is guaranteed to be stable.
     */
-    private void sort(List<T> list) {
-        for (Comparator<T> comparator : comparators) {
-            Collections.sort(list, comparator);
+    private List<T> sorted(List<T> list) {
+        if (noComparators()) {
+            return list;
         }
+        Comparator<T> combinedComparator = new Comparator<T>() {
+            @Override
+            public int compare(T e1, T e2) {
+                for (int i = comparators.size() - 1; i >= 0; --i) {
+                    Comparator<T> comparator = comparators.get(i);
+                    int result = comparator.compare(e1, e2);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return 0;
+            }
+        };
+        Collections.sort(list, combinedComparator);
+        return list;
+    }
+
+    private boolean noComparators() {
+        return comparators.isEmpty();
     }
 
     public List<T> toList() {
-        sortIfNeed();
         List<T> list = super.toList();
-        return list;
+        return sorted(list);
     }
 }

@@ -41,4 +41,6 @@ public class Keys {
     public static final String visibilityOfShowSearchResultOnMapButton = "visibilityOfShowSearchResultOnMapButton";
 
     public static final String dataIsUpdated = "dataIsUpdated";
+
+    public static final String phones = "phones";
 }

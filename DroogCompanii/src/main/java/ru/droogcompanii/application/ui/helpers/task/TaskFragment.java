@@ -17,9 +17,12 @@ import ru.droogcompanii.application.R;
  * Created by ls on 26.12.13.
  */
 public class TaskFragment extends DialogFragment {
-    private boolean resultPassed;
+    private boolean resultReturned;
     private Task task;
     private String title;
+
+    private int resultCode = Activity.RESULT_CANCELED;
+    private Serializable result = null;
 
     public void setTask(Task task) {
         task.setFragment(this);
@@ -66,16 +69,16 @@ public class TaskFragment extends DialogFragment {
         if (task != null) {
             task.cancel(false);
         }
-        onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_CANCELED, null);
+        returnResult();
     }
 
-    private void onResult(int requestCode, int resultCode, Serializable result) {
-        if (resultPassed) {
+    private void returnResult() {
+        if (resultReturned) {
             return;
         }
         if (getTaskFragmentHolder() != null) {
-            resultPassed = true;
-            getTaskFragmentHolder().onResult(requestCode, resultCode, result);
+            getTaskFragmentHolder().onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, resultCode, result);
+            resultReturned = true;
         }
     }
 
@@ -92,10 +95,16 @@ public class TaskFragment extends DialogFragment {
     }
 
     public void onTaskFinished(Serializable result) {
-        task = null;
-        onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, Activity.RESULT_OK, result);
+        setResult(Activity.RESULT_OK, result);
         if (isResumed()) {
             dismiss();
         }
+        task = null;
+        returnResult();
+    }
+
+    private void setResult(int resultCode, Serializable result) {
+        this.resultCode = resultCode;
+        this.result = result;
     }
 }

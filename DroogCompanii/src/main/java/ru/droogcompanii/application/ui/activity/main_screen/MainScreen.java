@@ -8,7 +8,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.activity.activity_with_partner_points_map_fragment_and_info_panel.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
 import ru.droogcompanii.application.ui.activity.menu_activity.MenuActivity;
 import ru.droogcompanii.application.ui.activity.search_activity.SearchActivity;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
 
 /**
@@ -23,13 +22,6 @@ public class MainScreen extends ActivityWithPartnerPointsMapFragmentAndInfoPanel
 
     @Override
     protected void onCreateActivity(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            FilterUtils.resetFilters(this);
-        }
-        initListeners();
-    }
-
-    private void initListeners() {
         findViewById(R.id.searchButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

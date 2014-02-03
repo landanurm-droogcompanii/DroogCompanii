@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.activity.main_screen.MainScreen;
 import ru.droogcompanii.application.ui.activity.synchronization_activity.SynchronizationActivity;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.helpers.YesNoDialogMaker;
 import ru.droogcompanii.application.util.VerifierDataForRelevance;
 
@@ -19,18 +20,36 @@ public class StartActivity extends FragmentActivity {
     private static final int REQUEST_CODE_SYNCHRONIZATION = 11111;
     private static final int REQUEST_CODE_MAIN_SCREEN = 22222;
 
+    private static final BooleanSharedPreference IS_MAIN_SCREEN_STARTED =
+            BooleanSharedPreference.from("IS_MAIN_SCREEN_STARTED");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState == null) {
+            onAppStarted();
+        }
+
+        if (IS_MAIN_SCREEN_STARTED.get()) {
+            finish();
+            return;
+        }
+
         if (VerifierDataForRelevance.isDataUpdated()) {
             openMainScreen();
         } else {
-            updateData();
+            showUpdateDataDialog();
         }
     }
 
+    private void onAppStarted() {
+        IS_MAIN_SCREEN_STARTED.set(false);
+        FilterUtils.resetFilters(this);
+    }
+
     private void openMainScreen() {
+        IS_MAIN_SCREEN_STARTED.set(true);
         startActivityForResult(REQUEST_CODE_MAIN_SCREEN, MainScreen.class);
     }
 
@@ -39,7 +58,7 @@ public class StartActivity extends FragmentActivity {
         startActivityForResult(intent, requestCode);
     }
 
-    private void updateData() {
+    private void showUpdateDataDialog() {
         DialogInterface.OnClickListener onYesListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

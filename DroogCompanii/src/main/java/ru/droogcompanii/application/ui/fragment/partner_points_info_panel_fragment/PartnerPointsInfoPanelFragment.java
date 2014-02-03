@@ -2,12 +2,14 @@ package ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragm
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +34,6 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     private static final int NO_INDEX = -1;
 
     private boolean visible;
-    private Caller caller;
     private int indexOfCurrentPartnerPoint;
     private List<PartnerPoint> partnerPoints;
 
@@ -45,8 +46,6 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        caller = new Caller(getActivity());
 
         initCatchingOfTouchEvents();
 
@@ -218,14 +217,9 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         setText(R.id.addressTextView, partnerPoint.address);
         setText(R.id.paymentMethodsTextView, partnerPoint.paymentMethods);
         setPhones(partnerPoint);
-        setRouteButton();
+        setRouteButton(partnerPoint);
         setWorkingHoursIndicator(partnerPoint);
-        findViewById(R.id.goToPartnerButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToPartner(partnerPoint);
-            }
-        });
+        setGoToPartnerButton(partnerPoint);
     }
 
     private void setText(int idOfTextView, String text) {
@@ -234,37 +228,54 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void setPhones(PartnerPoint partnerPoint) {
-        ViewGroup containerOfPhones = (ViewGroup) findViewById(R.id.containerOfPhones);
-        containerOfPhones.removeAllViews();
-        for (String phone : partnerPoint.phones) {
-            containerOfPhones.addView(preparePhoneButton(phone));
+        View phoneButton = findViewById(R.id.phoneButton);
+        final List<String> phones = partnerPoint.phones;
+        if (phones.isEmpty()) {
+            phoneButton.setVisibility(View.INVISIBLE);
+        } else {
+            phoneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onPhoneButtonClick(phones);
+                }
+            });
+        }
+        Toast.makeText(getActivity(), "Phones: " + phones.size(), Toast.LENGTH_LONG).show();
+    }
+
+    private void onPhoneButtonClick(List<String> phones) {
+        if (phones.size() == 1) {
+            String phone = phones.get(0);
+            Caller.call(getActivity(), phone);
+        } else {
+            showMultiPhonesDialogFragment(phones);
         }
     }
 
-    private Button preparePhoneButton(final String phone) {
-        Button phoneButton = new Button(getActivity());
-        phoneButton.setText(phone);
-        phoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                caller.call(phone);
-            }
-        });
-        return phoneButton;
+    private void showMultiPhonesDialogFragment(List<String> phones) {
+        DialogFragment dialogFragment = new MultiPhonesCallerDialogFragment();
+        dialogFragment.setArguments(prepareArguments(phones));
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        dialogFragment.show(fragmentManager, "MultiPhonesCallerDialogFragment");
     }
 
-    private void setRouteButton() {
-        final PartnerPoint currentPartnerPoint = partnerPoints.get(indexOfCurrentPartnerPoint);
+    private static Bundle prepareArguments(List<String> phones) {
+        Bundle args = new Bundle();
+        args.putSerializable(Keys.phones, (Serializable) phones);
+        return args;
+    }
+
+    private void setRouteButton(final PartnerPoint partnerPoint) {
         findViewById(R.id.routeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRouteFromBaseLocationTo(currentPartnerPoint);
+                showRouteTo(partnerPoint);
             }
         });
     }
 
-    private void showRouteFromBaseLocationTo(PartnerPoint toPartnerPoint) {
-        startActivity(RouteIntentMaker.makeIntentToRouteTo(toPartnerPoint));
+    private void showRouteTo(PartnerPoint destination) {
+        startActivity(RouteIntentMaker.makeIntentRouteTo(destination));
     }
 
     private void setWorkingHoursIndicator(PartnerPoint partnerPoint) {
@@ -285,7 +296,16 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         return partnerPoint.workingHours.includes(now);
     }
 
-    private void goToPartner(PartnerPoint partnerPoint) {
+    private void setGoToPartnerButton(final PartnerPoint partnerPoint) {
+        findViewById(R.id.goToPartnerButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPartnerOf(partnerPoint);
+            }
+        });
+    }
+
+    private void goToPartnerOf(PartnerPoint partnerPoint) {
         Context context = getActivity();
 
         PartnersReader partnersReader = new PartnersReader(context);
@@ -293,8 +313,8 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
         PartnerPointsReader partnerPointsReader = new PartnerPointsReader(context);
         List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
-
         ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
+
         PartnerActivity.start(context, partner, partnerPoints);
     }
 }

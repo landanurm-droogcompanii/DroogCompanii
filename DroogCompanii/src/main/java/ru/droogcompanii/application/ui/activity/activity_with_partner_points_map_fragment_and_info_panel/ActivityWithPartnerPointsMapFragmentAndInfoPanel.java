@@ -52,12 +52,22 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
             isTaskFinished = savedInstanceState.getBoolean(Keys.isTaskFinished);
         }
 
-        if (isTaskFinished) {
-            initPartnerPointsMapAndInfoPanel(null);
-        } else {
+        if (isFirstLaunched) {
             startTask();
         }
+        if (isTaskFinished) {
+            initPartnerPointsMapAndInfoPanel(null);
+        }
     }
+
+    /*
+        content view should have:
+            fragments with ids: mapFragment, partnerPointsInfoPanelFragment
+            button with id: filterButton
+    */
+    protected abstract int getContentViewId();
+
+    protected abstract void onCreateActivity(Bundle savedInstanceState);
 
     private void startTask() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -109,15 +119,6 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
 
-    /*
-        content view layout should content:
-            fragments with ids: mapFragment, partnerPointsInfoPanelFragment
-            button with id: filterButton
-     */
-    protected abstract int getContentViewId();
-
-    protected abstract void onCreateActivity(Bundle savedInstanceState);
-
     private void initPartnerPointsMapFragment(Collection<PartnerPoint> partnerPoints) {
         partnerPointsMapFragment.setPartnerPoints(partnerPoints);
         partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
@@ -133,9 +134,13 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            FilterSet returnedFilterSet = extractReturnedFilters(data);
-            applyFilters(returnedFilterSet);
+            applyFilters(data);
         }
+    }
+
+    private void applyFilters(Intent data) {
+        FilterSet returnedFilterSet = extractReturnedFilters(data);
+        partnerPointsMapFragment.setFilterSet(returnedFilterSet);
     }
 
     private FilterSet extractReturnedFilters(Intent data) {
@@ -147,10 +152,6 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
             throw new RuntimeException(FilterActivity.class.getName() + " doesn't return filterSet");
         }
         return filterSet;
-    }
-
-    private void applyFilters(FilterSet filterSet) {
-        partnerPointsMapFragment.setFilterSet(filterSet);
     }
 
     @Override

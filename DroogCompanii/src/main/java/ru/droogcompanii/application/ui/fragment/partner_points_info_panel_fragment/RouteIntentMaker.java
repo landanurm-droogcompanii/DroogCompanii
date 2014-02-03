@@ -16,21 +16,21 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
  */
 class RouteIntentMaker {
 
-    public static Intent makeIntentToRouteTo(PartnerPoint toPartnerPoint) {
+    public static Intent makeIntentRouteTo(PartnerPoint toPartnerPoint) {
         String uri = makeUri(toPartnerPoint);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
         return intent;
     }
 
-    private static String makeUri(PartnerPoint toPartnerPoint) {
-        LatLng toPosition = toPartnerPoint.getPosition();
-        LatLng basePosition = getPositionOfBaseLocation();
+    private static String makeUri(PartnerPoint destinationPartnerPoint) {
+        LatLng destination = destinationPartnerPoint.getPosition();
+        LatLng source = getPositionOfBaseLocation();
         return String.format(Locale.ENGLISH,
                 "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f(%s)",
-                basePosition.latitude, basePosition.longitude,
-                toPosition.latitude, toPosition.longitude,
-                toPartnerPoint.title);
+                source.latitude, source.longitude,
+                destination.latitude, destination.longitude,
+                destinationPartnerPoint.title);
     }
 
     private static LatLng getPositionOfBaseLocation() {
