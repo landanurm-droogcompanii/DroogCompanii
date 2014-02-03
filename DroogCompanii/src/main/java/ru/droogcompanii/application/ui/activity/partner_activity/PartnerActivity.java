@@ -24,15 +24,12 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
 
     private List<PartnerPoint> partnerPoints;
 
-
     public static void start(Context context, Partner partner, List<PartnerPoint> partnerPoints) {
         Intent intent = new Intent(context, PartnerActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(Keys.partner, partner);
         intent.putExtra(Keys.partnerPoints, (Serializable) partnerPoints);
         context.startActivity(intent);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +37,9 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
         setContentView(R.layout.activity_partner);
 
         if (savedInstanceState == null) {
-            Bundle args = getIntent().getExtras();
-            startPartnerFragment(args);
-            initState(args);
+            onFirstLaunch();
         } else {
-            initState(savedInstanceState);
+            onRelaunch(savedInstanceState);
         }
 
         findViewById(R.id.goOnMapButton).setOnClickListener(new View.OnClickListener() {
@@ -55,12 +50,18 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
         });
     }
 
-    private void startPartnerFragment(Bundle args) {
-        PartnerFragment partnerFragment = new PartnerFragment();
-        partnerFragment.setArguments(args);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.containerOfPartnerFragment, partnerFragment);
-        fragmentTransaction.commit();
+    private void onFirstLaunch() {
+        Bundle bundle = getPassedBundle();
+        initState(bundle);
+        startPartnerFragment(bundle);
+    }
+
+    private Bundle getPassedBundle() {
+        return getIntent().getExtras();
+    }
+
+    private void onRelaunch(Bundle savedInstanceState) {
+        initState(savedInstanceState);
     }
 
     private void initState(Bundle bundle) {
@@ -68,6 +69,14 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
         if (partnerPoints.isEmpty()) {
             findViewById(R.id.goOnMapButton).setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void startPartnerFragment(Bundle args) {
+        PartnerFragment partnerFragment = new PartnerFragment();
+        partnerFragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.containerOfPartnerFragment, partnerFragment);
+        transaction.commit();
     }
 
     @Override

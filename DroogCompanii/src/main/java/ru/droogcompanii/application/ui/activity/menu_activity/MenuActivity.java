@@ -22,16 +22,15 @@ public class MenuActivity extends FragmentActivity implements AdapterView.OnItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setOnItemClickListener(this);
         adapter = new MenuListAdapter(this);
+        listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         MenuListItem item = adapter.getItem(position);
-        MenuListItem.Action action = item.action;
-        action.run(this);
+        item.action.launch(this);
     }
 }

@@ -11,7 +11,7 @@ import ru.droogcompanii.application.util.HotlineNumberProvider;
  */
 class ActionOnHotline implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         Caller caller = new Caller(context);
         caller.call(HotlineNumberProvider.get());
     }

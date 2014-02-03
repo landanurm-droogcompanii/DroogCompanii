@@ -10,7 +10,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
 /**
  * Created by ls on 29.01.14.
  */
-public class PartnerSearchCriterion implements SearchCriterion<Partner> {
+class PartnerSearchCriterion implements SearchCriterion<Partner> {
     private final SearchCriterionByQuery searchCriterion;
     private final PartnerPointsReader partnerPointsReader;
     private final PartnerPointSearchCriterion partnerPointsSearchCriterion;

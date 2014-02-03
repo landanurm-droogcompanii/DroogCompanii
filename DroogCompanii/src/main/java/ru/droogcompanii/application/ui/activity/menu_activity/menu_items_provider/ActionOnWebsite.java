@@ -12,10 +12,9 @@ import ru.droogcompanii.application.util.WebsiteAddressProvider;
  */
 class ActionOnWebsite implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         final String websiteAddress = WebsiteAddressProvider.getWebsiteAddress();
-        Uri uri = Uri.parse(websiteAddress);
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-        context.startActivity(browserIntent);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(websiteAddress));
+        context.startActivity(intent);
     }
 }

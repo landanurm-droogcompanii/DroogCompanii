@@ -24,11 +24,8 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_filter, container, false);
-        if (savedInstanceState == null) {
-            init(getArguments(), rootView);
-        } else {
-            init(savedInstanceState, rootView);
-        }
+        Bundle bundle = (savedInstanceState == null) ? getArguments() : savedInstanceState;
+        init(bundle, rootView);
         return rootView;
     }
 
@@ -39,17 +36,13 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     }
 
     private PartnerCategory readPartnerCategoryFrom(Bundle bundle) {
-        if (bundle == null) {
-            return null;
-        } else {
-            return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
-        }
+        return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
     }
 
-    private void displaySavedFiltersOn(View rootView) {
+    private void displaySavedFiltersOn(View view) {
         Filters filters = new Filters(partnerCategory);
         filters.restoreFrom(sharedPreferences);
-        filters.displayOn(rootView);
+        filters.displayOn(view);
     }
 
     @Override

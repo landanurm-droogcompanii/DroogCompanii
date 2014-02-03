@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.filter_impl;
+package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.filter_impl;
 
 import android.content.SharedPreferences;
 import android.view.View;

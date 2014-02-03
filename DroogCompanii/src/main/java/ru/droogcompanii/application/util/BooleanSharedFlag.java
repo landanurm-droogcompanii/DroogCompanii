@@ -1,21 +1,19 @@
-package ru.droogcompanii.application.ui.activity.start_activity;
+package ru.droogcompanii.application.util;
 
 import android.content.SharedPreferences;
-
-import ru.droogcompanii.application.util.SharedPreferencesProvider;
 
 /**
  * Created by ls on 03.02.14.
  */
-public class BooleanSharedPreference {
+public class BooleanSharedFlag {
 
     private final String key;
 
-    public static BooleanSharedPreference from(String key) {
-        return new BooleanSharedPreference(key);
+    public static BooleanSharedFlag from(String key) {
+        return new BooleanSharedFlag(key);
     }
 
-    private BooleanSharedPreference(String key) {
+    private BooleanSharedFlag(String key) {
         this.key = key;
     }
 

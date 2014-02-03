@@ -16,10 +16,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.ui.activity.partner_activity.PartnerInfoFiller;
-import ru.droogcompanii.application.ui.activity.partner_activity.PartnerPointInfoFiller;
-import ru.droogcompanii.application.ui.activity.partner_activity.PartnerPointListAdapter;
-import ru.droogcompanii.application.ui.activity.partner_activity.PartnerPointListItemViewInflater;
 
 /**
  * Created by ls on 22.01.14.

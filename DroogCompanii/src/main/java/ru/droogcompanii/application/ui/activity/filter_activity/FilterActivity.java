@@ -10,11 +10,11 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterFragment;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 15.01.14.
@@ -25,45 +25,52 @@ public class FilterActivity extends FragmentActivity {
     public static final int REQUEST_CODE = 14235;
 
     private Bundle args;
-    private Filters filtersDuringCreation;
+    private Filters filtersAtTheMomentOfFirstLaunch;
     private FilterFragment filterFragment;
+    private boolean isFirstLaunched;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        isFirstLaunched = (savedInstanceState == null);
+        args = isFirstLaunched ? getPassedBundle() : savedInstanceState;
+
         filterFragment = new FilterFragment();
-        args = extractArguments(savedInstanceState);
         filterFragment.setArguments(args);
 
+        placeFilterFragmentOnActivity();
+
+        filtersAtTheMomentOfFirstLaunch = getFiltersAtTheMomentOfFirstLaunch();
+    }
+
+    private Bundle getPassedBundle() {
+        return getIntent().getExtras();
+    }
+
+    private void placeFilterFragmentOnActivity() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (savedInstanceState == null) {
+        if (isFirstLaunched) {
             fragmentTransaction.add(R.id.containerOfFilterFragment, filterFragment);
         } else {
             fragmentTransaction.replace(R.id.containerOfFilterFragment, filterFragment);
         }
         fragmentTransaction.commit();
-
-        filtersDuringCreation = prepareFiltersDuringCreation(savedInstanceState);
     }
 
-    private Bundle extractArguments(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            return getIntent().getExtras();
+    private Filters getFiltersAtTheMomentOfFirstLaunch() {
+        if (isFirstLaunched) {
+            return getCurrentFilters();
         } else {
-            return savedInstanceState.getBundle(Keys.args);
+            return readFiltersFrom(args);
         }
     }
 
-    private Filters prepareFiltersDuringCreation(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            PartnerCategory partnerCategory = filterFragment.getPartnerCategory();
-            return FilterUtils.getCurrentFilters(this, partnerCategory);
-        } else {
-            return readFiltersFrom(savedInstanceState);
-        }
+    private Filters getCurrentFilters() {
+        PartnerCategory partnerCategory = filterFragment.getPartnerCategory();
+        return FilterUtils.getCurrentFilters(this, partnerCategory);
     }
 
     private Filters readFiltersFrom(Bundle savedInstanceState) {
@@ -74,12 +81,12 @@ public class FilterActivity extends FragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBundle(Keys.args, args);
-        outState.putSerializable(Keys.filters, filtersDuringCreation);
+        outState.putSerializable(Keys.filters, filtersAtTheMomentOfFirstLaunch);
     }
 
     @Override
     public void onBackPressed() {
-        if (changesWereMade()) {
+        if (wereChangesMade()) {
             setResult(RESULT_OK, getResult());
         } else {
             setResult(RESULT_CANCELED);
@@ -87,9 +94,9 @@ public class FilterActivity extends FragmentActivity {
         super.onBackPressed();
     }
 
-    private boolean changesWereMade() {
+    private boolean wereChangesMade() {
         Filters currentFilters = filterFragment.getFilters();
-        return !currentFilters.equals(filtersDuringCreation);
+        return !currentFilters.equals(filtersAtTheMomentOfFirstLaunch);
     }
 
     private Intent getResult() {
@@ -98,4 +105,5 @@ public class FilterActivity extends FragmentActivity {
         result.putExtra(Keys.filterSet, (Serializable) filterSet);
         return result;
     }
+
 }

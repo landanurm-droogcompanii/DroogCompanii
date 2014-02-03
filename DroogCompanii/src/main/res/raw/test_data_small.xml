@@ -4206,7 +4206,25 @@
                         <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(843) 258-58-59</phone>
-                            <phone>(960) 048-58-59</phone>
+                            <phone>(961) 048-58-59</phone>
+                            <phone>(842) 258-58-59</phone>
+                            <phone>(963) 048-58-59</phone>
+                            <phone>(844) 258-58-59</phone>
+                            <phone>(965) 048-58-59</phone>
+                            <phone>(846) 258-58-59</phone>
+                            <phone>(967) 048-58-59</phone>
+                            <phone>(848) 258-58-59</phone>
+                            <phone>(969) 048-58-59</phone>
+                            <phone>(840) 258-58-59</phone>
+                            <phone>(960) 148-58-59</phone>
+                            <phone>(843) 458-58-59</phone>
+                            <phone>(960) 548-58-59</phone>
+                            <phone>(843) 658-58-59</phone>
+                            <phone>(960) 748-58-59</phone>
+                            <phone>(843) 858-58-59</phone>
+                            <phone>(960) 948-58-59</phone>
+                            <phone>(843) 148-58-59</phone>
+                            <phone>(960) 978-58-59</phone>
                         </phones>
                         <workinghours type="array">
                             <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>

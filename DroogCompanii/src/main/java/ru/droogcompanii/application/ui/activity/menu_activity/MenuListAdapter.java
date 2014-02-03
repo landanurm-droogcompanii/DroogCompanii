@@ -10,7 +10,7 @@ import ru.droogcompanii.application.ui.helpers.SimpleArrayAdapter;
  * Created by ls on 31.01.14.
  */
 
-public class MenuListAdapter extends SimpleArrayAdapter<MenuListItem> {
+class MenuListAdapter extends SimpleArrayAdapter<MenuListItem> {
 
 
     public MenuListAdapter(final Context context) {

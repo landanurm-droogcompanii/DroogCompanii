@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.partner_activity;
+package ru.droogcompanii.application.ui.fragment.partner_fragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import ru.droogcompanii.application.R;
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerPointListItemViewInflater {
+class PartnerPointListItemViewInflater {
     private Context context;
 
     public PartnerPointListItemViewInflater(Context context) {

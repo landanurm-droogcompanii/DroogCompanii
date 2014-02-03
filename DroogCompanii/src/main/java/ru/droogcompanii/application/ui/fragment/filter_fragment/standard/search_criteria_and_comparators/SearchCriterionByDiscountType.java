@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.search_criteria_and_comparators;
+package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators;
 
 import java.io.Serializable;
 import java.util.ArrayList;

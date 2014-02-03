@@ -11,7 +11,7 @@ import ru.droogcompanii.application.ui.activity.search_activity.SearchActivity;
  */
 class ActionOnPartnerCategories implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
     }

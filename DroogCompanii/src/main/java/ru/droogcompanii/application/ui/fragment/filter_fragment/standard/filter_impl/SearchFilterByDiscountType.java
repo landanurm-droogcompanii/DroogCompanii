@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.filter_impl;
+package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.filter_impl;
 
 import android.content.SharedPreferences;
 import android.view.View;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.Filter;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.SearchCriterionByDiscountType;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.SearchCriterionByDiscountType;
 
 /**
  * Created by ls on 21.01.14.

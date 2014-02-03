@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.partner_activity;
+package ru.droogcompanii.application.ui.fragment.partner_fragment;
 
 import android.view.View;
 import android.widget.TextView;
@@ -11,7 +11,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerPointInfoFiller {
+class PartnerPointInfoFiller {
     public static void fill(View container, PartnerPoint partnerPoint) {
         TextView titleTextView = (TextView) container.findViewById(R.id.partnerPointTitleTextView);
         titleTextView.setText(partnerPoint.title);

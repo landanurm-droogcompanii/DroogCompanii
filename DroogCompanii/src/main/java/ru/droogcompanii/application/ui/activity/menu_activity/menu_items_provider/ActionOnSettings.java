@@ -11,7 +11,7 @@ import ru.droogcompanii.application.ui.activity.settings_activity.SettingsActivi
  */
 class ActionOnSettings implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
         context.startActivity(intent);
     }

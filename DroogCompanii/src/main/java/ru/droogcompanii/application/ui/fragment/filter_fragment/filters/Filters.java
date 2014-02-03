@@ -7,12 +7,13 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.Filter;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 
 /**
  * Created by ls on 24.01.14.
  */
-public class Filters implements Serializable {
+public class Filters implements Filter, Serializable {
     private StandardFilters standardFilters;
     private MoreFilters moreFilters;
 
@@ -26,26 +27,31 @@ public class Filters implements Serializable {
         restoreFrom(sharedPreferences);
     }
 
+    @Override
     public void restoreFrom(SharedPreferences sharedPreferences) {
         standardFilters.restoreFrom(sharedPreferences);
         moreFilters.restoreFrom(sharedPreferences);
     }
 
+    @Override
     public void saveInto(SharedPreferences.Editor editor) {
         standardFilters.saveInto(editor);
         moreFilters.saveInto(editor);
     }
 
+    @Override
     public void displayOn(View containerOfFilters) {
         standardFilters.displayOn(containerOfFilters.findViewById(R.id.containerOfStandardFilters));
         moreFilters.displayOn(containerOfFilters.findViewById(R.id.containerOfMoreFilters));
     }
 
+    @Override
     public void readFrom(View containerOfFilters) {
         standardFilters.readFrom(containerOfFilters.findViewById(R.id.containerOfStandardFilters));
         moreFilters.readFrom(containerOfFilters.findViewById(R.id.containerOfMoreFilters));
     }
 
+    @Override
     public void includeIn(FilterSet filterSet) {
         standardFilters.includeIn(filterSet);
         moreFilters.includeIn(filterSet);

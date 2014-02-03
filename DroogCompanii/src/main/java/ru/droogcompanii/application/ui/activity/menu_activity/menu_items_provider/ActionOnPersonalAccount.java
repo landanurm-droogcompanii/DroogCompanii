@@ -11,7 +11,7 @@ import ru.droogcompanii.application.ui.activity.personal_account_activity.Person
  */
 class ActionOnPersonalAccount implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         Intent intent = new Intent(context, PersonalAccountActivity.class);
         context.startActivity(intent);
     }

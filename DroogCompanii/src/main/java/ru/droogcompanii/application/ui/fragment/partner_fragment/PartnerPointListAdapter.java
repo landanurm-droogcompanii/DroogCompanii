@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.partner_activity;
+package ru.droogcompanii.application.ui.fragment.partner_fragment;
 
 import android.content.Context;
 import android.view.View;
@@ -13,7 +13,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerPointListAdapter extends ArrayAdapter<PartnerPoint> {
+class PartnerPointListAdapter extends ArrayAdapter<PartnerPoint> {
 
     public PartnerPointListAdapter(Context context, List<PartnerPoint> partnerPoints) {
         super(context, R.layout.view_partner_point_list_item, partnerPoints);

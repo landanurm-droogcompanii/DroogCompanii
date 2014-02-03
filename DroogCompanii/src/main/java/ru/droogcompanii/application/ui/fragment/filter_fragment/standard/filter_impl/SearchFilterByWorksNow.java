@@ -1,13 +1,13 @@
-package ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.filter_impl;
+package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.filter_impl;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.search_criteria_and_comparators.ComparatorByDiscount;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.SearchCriterionByWorksNow;
 
 /**
  * Created by ls on 21.01.14.
  */
-class SortingFilterByDiscount extends FilterWithOneCheckbox {
+class SearchFilterByWorksNow extends FilterWithOneCheckbox {
     @Override
     protected boolean isNeedToIncludeByDefault() {
         return false;
@@ -15,11 +15,11 @@ class SortingFilterByDiscount extends FilterWithOneCheckbox {
 
     @Override
     protected int getIdOfCheckbox() {
-        return R.id.sortByDiscountCheckBox;
+        return R.id.worksNowCheckBox;
     }
 
     @Override
     protected void necessarilyIncludeIn(FilterSet filterSet) {
-        filterSet.add(new ComparatorByDiscount());
+        filterSet.add(new SearchCriterionByWorksNow());
     }
 }

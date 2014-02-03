@@ -8,7 +8,7 @@ import ru.droogcompanii.application.util.MatcherToSearchQuery;
 /**
  * Created by ls on 28.01.14.
  */
-public class SearchCriterionByQuery implements SearchCriterion<String>, Serializable {
+class SearchCriterionByQuery implements SearchCriterion<String>, Serializable {
 
     private final MatcherToSearchQuery matcherToSearchQuery;
 

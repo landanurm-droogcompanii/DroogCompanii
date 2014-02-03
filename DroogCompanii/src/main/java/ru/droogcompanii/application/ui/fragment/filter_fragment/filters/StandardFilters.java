@@ -9,7 +9,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.Filter;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.standard_filters.filter_impl.StandardFiltersProvider;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.filter_impl.StandardFiltersProvider;
 
 /**
  * Created by ls on 24.01.14.

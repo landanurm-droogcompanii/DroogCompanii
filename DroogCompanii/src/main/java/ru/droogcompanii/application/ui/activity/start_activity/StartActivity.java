@@ -10,6 +10,7 @@ import ru.droogcompanii.application.ui.activity.main_screen.MainScreen;
 import ru.droogcompanii.application.ui.activity.synchronization_activity.SynchronizationActivity;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.helpers.YesNoDialogMaker;
+import ru.droogcompanii.application.util.BooleanSharedFlag;
 import ru.droogcompanii.application.util.VerifierDataForRelevance;
 
 /**
@@ -17,11 +18,13 @@ import ru.droogcompanii.application.util.VerifierDataForRelevance;
  */
 public class StartActivity extends FragmentActivity {
 
-    private static final int REQUEST_CODE_SYNCHRONIZATION = 11111;
-    private static final int REQUEST_CODE_MAIN_SCREEN = 22222;
+    private static class RequestCode {
+        public static final int SYNCHRONIZATION = 11111;
+        public static final int MAIN_SCREEN = 22222;
+    }
 
-    private static final BooleanSharedPreference IS_MAIN_SCREEN_STARTED =
-            BooleanSharedPreference.from("IS_MAIN_SCREEN_STARTED");
+    private static final BooleanSharedFlag
+            IS_MAIN_SCREEN_STARTED = BooleanSharedFlag.from("IS_MAIN_SCREEN_STARTED");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class StartActivity extends FragmentActivity {
         }
 
         if (VerifierDataForRelevance.isDataUpdated()) {
-            openMainScreen();
+            startMainScreen();
         } else {
             showUpdateDataDialog();
         }
@@ -48,9 +51,9 @@ public class StartActivity extends FragmentActivity {
         FilterUtils.resetFilters(this);
     }
 
-    private void openMainScreen() {
+    private void startMainScreen() {
         IS_MAIN_SCREEN_STARTED.set(true);
-        startActivityForResult(REQUEST_CODE_MAIN_SCREEN, MainScreen.class);
+        startActivityForResult(RequestCode.MAIN_SCREEN, MainScreen.class);
     }
 
     private void startActivityForResult(int requestCode, Class<?> activityClass) {
@@ -77,23 +80,32 @@ public class StartActivity extends FragmentActivity {
     }
 
     private void startSynchronization() {
-        startActivityForResult(REQUEST_CODE_SYNCHRONIZATION, SynchronizationActivity.class);
+        startActivityForResult(RequestCode.SYNCHRONIZATION, SynchronizationActivity.class);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_CODE_MAIN_SCREEN:
-                finish();
+            case RequestCode.MAIN_SCREEN:
+                onReturnFrom_MainScreen();
                 return;
 
-            case REQUEST_CODE_SYNCHRONIZATION:
-                if (resultCode == RESULT_OK) {
-                    openMainScreen();
-                } else {
-                    finish();
-                }
+            case RequestCode.SYNCHRONIZATION:
+                onReturnFrom_Synchronization(resultCode);
                 return;
         }
     }
+
+    private void onReturnFrom_MainScreen() {
+        finish();
+    }
+
+    private void onReturnFrom_Synchronization(int resultCode) {
+        if (resultCode == RESULT_OK) {
+            startMainScreen();
+        } else {
+            finish();
+        }
+    }
+
 }

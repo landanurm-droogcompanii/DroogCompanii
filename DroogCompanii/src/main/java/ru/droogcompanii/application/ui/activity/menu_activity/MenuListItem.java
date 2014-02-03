@@ -7,7 +7,7 @@ import android.content.Context;
  */
 public class MenuListItem {
     public static interface Action {
-        void run(Context context);
+        void launch(Context context);
     }
 
     public final int titleId;

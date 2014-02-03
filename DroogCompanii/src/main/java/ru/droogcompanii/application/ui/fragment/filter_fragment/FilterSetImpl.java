@@ -11,7 +11,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
 /**
  * Created by ls on 21.01.14.
  */
-public class FilterSetImpl implements FilterSet, Serializable {
+class FilterSetImpl implements FilterSet, Serializable {
     private final List<SearchCriterion<PartnerPoint>> searchCriteria;
     private final List<Comparator<PartnerPoint>> comparators;
 

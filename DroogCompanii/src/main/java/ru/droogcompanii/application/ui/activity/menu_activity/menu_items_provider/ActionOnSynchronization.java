@@ -11,7 +11,7 @@ import ru.droogcompanii.application.ui.activity.menu_activity.MenuListItem;
  */
 class ActionOnSynchronization implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         Intent intent = new Intent(context, SynchronizationActivity.class);
         context.startActivity(intent);
     }

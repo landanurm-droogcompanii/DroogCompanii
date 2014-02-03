@@ -11,7 +11,7 @@ import ru.droogcompanii.application.ui.activity.stock_activity.StockActivity;
  */
 class ActionOnStock implements MenuListItem.Action {
     @Override
-    public void run(Context context) {
+    public void launch(Context context) {
         Intent intent = new Intent(context, StockActivity.class);
         context.startActivity(intent);
     }
