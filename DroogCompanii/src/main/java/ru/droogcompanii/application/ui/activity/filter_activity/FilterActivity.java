@@ -2,7 +2,6 @@ package ru.droogcompanii.application.ui.activity.filter_activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -14,13 +13,14 @@ import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterFragment;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.filters.Filters;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 15.01.14.
  */
 
-public class FilterActivity extends FragmentActivity {
+public class FilterActivity extends ActionBarActivityWithUpButton {
 
     public static final int REQUEST_CODE = 14235;
 
@@ -35,7 +35,7 @@ public class FilterActivity extends FragmentActivity {
         setContentView(R.layout.activity_filter);
 
         isFirstLaunched = (savedInstanceState == null);
-        args = isFirstLaunched ? getPassedBundle() : savedInstanceState;
+        args = (savedInstanceState == null) ? getPassedBundle() : savedInstanceState;
 
         filterFragment = new FilterFragment();
         filterFragment.setArguments(args);

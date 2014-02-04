@@ -32,15 +32,16 @@ public class Keys {
     public static final String filterSet = "filterSet";
     public static final String clickedMarkerIsExist = "clickedMarkerIsExist";
 
-    public static final String result = "result";
-
     public static final String isTaskFinished = "isTaskFinished";
     public static final String isSearchResultReady = "isSearchResultReady";
     public static final String visibility = "visibility";
 
-    public static final String visibilityOfShowSearchResultOnMapButton = "visibilityOfShowSearchResultOnMapButton";
-
     public static final String dataIsUpdated = "dataIsUpdated";
 
     public static final String phones = "phones";
+    public static final String isGoToMapItemVisible = "isGoToMapItemVisible";
+
+    public static final String usageType = "usageType";
+
+    public static final String title = "title";
 }

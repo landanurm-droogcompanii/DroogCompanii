@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="opened_indicator_color">#8810ee10</color>
+    <color name="closed_indicator_color">#88ee1010</color>
+
+</resources>

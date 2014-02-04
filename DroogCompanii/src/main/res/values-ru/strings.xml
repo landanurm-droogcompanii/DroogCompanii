@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_name">Друг Компании</string>
+
     <string name="no_search_results">Не найдено</string>
 
     <string name="menu_item_personal_account">Личный кабинет</string>
@@ -9,4 +12,26 @@
     <string name="menu_item_hotline">Горячая линия</string>
     <string name="menu_item_synchronization">Синхронизация</string>
     <string name="menu_item_settings">Настройки</string>
+
+
+    <string name="messageIfUserWantsToGetData">
+        Данные, необходимые для работы, не загружены.
+        Вы хотите загрузить данные?
+    </string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+
+    <string name="titleOfMultiPhonesCallerDialog">Позвонить</string>
+
+    <string name="action_search">Поиск</string>
+    <string name="action_filters">Фильтры</string>
+    <string name="action_menu">Меню</string>
+    <string name="action_go_to_map">На карту</string>
+
+    <string name="titleOfClosestPartnerPoints">Ближайшие</string>
+
+    <string name="labelOfGoToPartnerButton">Перейти к партнеру</string>
+
+    <string name="titleOfSynchronizationDialog">Данные обновляются...</string>
+
 </resources>

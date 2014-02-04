@@ -10,4 +10,8 @@
     <dimen name="sizeBetweenFilterGroups">32dp</dimen>
     <dimen name="textSizeOfNoSearchResultsLabel">28sp</dimen>
 
+    <dimen name="textSizeOfSearchQueryInput">24sp</dimen>
+
+    <dimen name="partner_point_indicator_width">18dp</dimen>
+
 </resources>

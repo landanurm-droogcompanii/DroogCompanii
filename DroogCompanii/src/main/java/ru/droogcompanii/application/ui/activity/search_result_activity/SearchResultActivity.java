@@ -3,10 +3,8 @@ package ru.droogcompanii.application.ui.activity.search_result_activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,6 +17,7 @@ import ru.droogcompanii.application.ui.activity.search_activity.SearchResultProv
 import ru.droogcompanii.application.ui.activity.search_result_map_activity.SearchResultMapActivity;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_fragment.SearchResultFragment;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
 import ru.droogcompanii.application.ui.helpers.TaskFragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
@@ -26,11 +25,11 @@ import ru.droogcompanii.application.util.Keys;
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchResultActivity extends FragmentActivity
+public class SearchResultActivity extends ActionBarActivityWithGoToMapItem
                 implements SearchResultFragment.Callbacks, TaskFragmentHolder.Callbacks {
 
     private boolean isFirstLaunched;
-    private int visibilityOfShowSearchResultOnMapButton;
+    private boolean isGoToMapItemVisible;
     private SearchResultFragment searchResultFragment;
     private SearchResultProvider searchResultProvider;
 
@@ -50,18 +49,12 @@ public class SearchResultActivity extends FragmentActivity
             searchResultFragment.hide();
             startTask();
         }
-
-        findViewById(R.id.showSearchResultOnMap).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onNeedToShowSearchResultOnMap();
-            }
-        });
     }
 
     private void init(Bundle savedInstanceState) {
         searchResultProvider = getSearchResultProvider(savedInstanceState);
-        initVisibilityOfShowSearchResultOnMapButton(savedInstanceState);
+        setTitle(searchResultProvider.getTitle(this));
+        updateGoToMapItemVisible(getIsGoToMapItemVisible(savedInstanceState));
     }
 
     private SearchResultProvider getSearchResultProvider(Bundle savedInstanceState) {
@@ -69,18 +62,21 @@ public class SearchResultActivity extends FragmentActivity
         return (SearchResultProvider) bundleWithResult.getSerializable(Keys.searchResultProvider);
     }
 
-    private void initVisibilityOfShowSearchResultOnMapButton(Bundle savedInstanceState) {
+    private boolean getIsGoToMapItemVisible(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            updateVisibilityOfShowSearchResultOnMapButton(View.INVISIBLE);
-        } else {
-            updateVisibilityOfShowSearchResultOnMapButton(
-                    savedInstanceState.getInt(Keys.visibilityOfShowSearchResultOnMapButton));
+            return false;
         }
+        return savedInstanceState.getBoolean(Keys.isGoToMapItemVisible);
     }
 
-    private void updateVisibilityOfShowSearchResultOnMapButton(int visibility) {
-        this.visibilityOfShowSearchResultOnMapButton = visibility;
-        findViewById(R.id.showSearchResultOnMap).setVisibility(visibilityOfShowSearchResultOnMapButton);
+    private void updateGoToMapItemVisible(boolean visible) {
+        isGoToMapItemVisible = visible;
+        updateGoToMapItemVisible();
+    }
+
+    @Override
+    protected boolean isGoToMapItemVisible() {
+        return isGoToMapItemVisible;
     }
 
     public boolean isFirstLaunched() {
@@ -91,7 +87,7 @@ public class SearchResultActivity extends FragmentActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
-        outState.putInt(Keys.visibilityOfShowSearchResultOnMapButton, visibilityOfShowSearchResultOnMapButton);
+        outState.putBoolean(Keys.isGoToMapItemVisible, isGoToMapItemVisible);
     }
 
     private void startTask() {
@@ -121,21 +117,22 @@ public class SearchResultActivity extends FragmentActivity
 
     @Override
     public void onPartnerClick(Partner partner) {
-        List<PartnerPoint> partnerPoints = searchResultProvider.getPartnerPoints(this, partner);
+        List<PartnerPoint> partnerPoints = searchResultProvider.getPointsOfPartner(this, partner);
         PartnerActivity.start(this, partner, partnerPoints);
     }
 
     @Override
     public void onNotFound() {
-        updateVisibilityOfShowSearchResultOnMapButton(View.INVISIBLE);
+        updateGoToMapItemVisible(false);
     }
 
     @Override
     public void onFound() {
-        updateVisibilityOfShowSearchResultOnMapButton(View.VISIBLE);
+        updateGoToMapItemVisible(true);
     }
 
-    private void onNeedToShowSearchResultOnMap() {
+    @Override
+    protected void onNeedToGoToMap() {
         PartnerPointsProvider partnerPointsProvider =
                 new AllPartnerPointsFromSearchResultProvider(searchResultProvider);
         showResultOnMap(partnerPointsProvider);
@@ -152,6 +149,11 @@ public class SearchResultActivity extends FragmentActivity
 
         AllPartnerPointsFromSearchResultProvider(SearchResultProvider searchResultProvider) {
             this.searchResultProvider = searchResultProvider;
+        }
+
+        @Override
+        public String getTitle(Context context) {
+            return searchResultProvider.getTitle(context);
         }
 
         @Override

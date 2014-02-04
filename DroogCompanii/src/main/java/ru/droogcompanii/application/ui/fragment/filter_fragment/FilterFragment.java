@@ -30,13 +30,17 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     }
 
     private void init(Bundle bundle, View rootView) {
-        partnerCategory = readPartnerCategoryFrom(bundle);
+        partnerCategory = getPartnerCategory(bundle);
         sharedPreferences = SharedPreferencesProvider.get(getActivity());
         displaySavedFiltersOn(rootView);
     }
 
-    private PartnerCategory readPartnerCategoryFrom(Bundle bundle) {
-        return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
+    private PartnerCategory getPartnerCategory(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        } else {
+            return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
+        }
     }
 
     private void displaySavedFiltersOn(View view) {

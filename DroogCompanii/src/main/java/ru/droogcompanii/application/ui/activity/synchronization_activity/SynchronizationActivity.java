@@ -16,7 +16,6 @@ public class SynchronizationActivity extends ActionBarActivity implements TaskFr
 
     private boolean isFirstLaunched;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

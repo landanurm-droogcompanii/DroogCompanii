@@ -23,13 +23,18 @@ public class SearchResultProviderByPartnerCategory implements SearchResultProvid
     }
 
     @Override
+    public String getTitle(Context context) {
+        return partnerCategory.title;
+    }
+
+    @Override
     public List<Partner> getPartners(Context context) {
         PartnersReader reader = new PartnersReader(context);
         return reader.getPartnersOf(partnerCategory);
     }
 
     @Override
-    public List<PartnerPoint> getPartnerPoints(Context context, Partner partner) {
+    public List<PartnerPoint> getPointsOfPartner(Context context, Partner partner) {
         PartnerPointsReader reader = new PartnerPointsReader(context);
         return reader.getPartnerPointsOf(partner);
     }

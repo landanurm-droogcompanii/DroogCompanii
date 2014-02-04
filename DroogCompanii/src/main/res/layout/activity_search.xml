@@ -24,6 +24,7 @@
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/searchByQueryButton"
             android:layout_centerVertical="true"
+            android:textSize="@dimen/textSizeOfSearchQueryInput"
             android:id="@+id/searchQueryInputEditText" />
 
     </RelativeLayout>

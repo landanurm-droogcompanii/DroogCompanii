@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
  * Created by Leonid on 17.12.13.
@@ -22,18 +24,17 @@ public class PartnerCategoriesReader extends BaseReaderFromDatabase {
     }
 
     public List<PartnerCategory> getPartnerCategories() {
-        initDatabase();
-        List<PartnerCategory> partnerCategories = getPartnerCategoriesFromDatabase();
-        closeDatabase();
-        return partnerCategories;
+        return getPartnerCategoriesFromDatabase("");
     }
 
-    private List<PartnerCategory> getPartnerCategoriesFromDatabase() {
-        String sql = "SELECT * FROM " + PartnerCategoriesContract.TABLE_NAME + ";";
+    private List<PartnerCategory> getPartnerCategoriesFromDatabase(String where) {
+        String sql = "SELECT * FROM " + PartnerCategoriesContract.TABLE_NAME + " " + where + ";";
+        initDatabase();
         Cursor cursor = db.rawQuery(sql, new String[]{});
-        List<PartnerCategory> partnerCategoryTitles = getPartnerCategoriesFromCursor(cursor);
+        List<PartnerCategory> partnerCategories = getPartnerCategoriesFromCursor(cursor);
         cursor.close();
-        return partnerCategoryTitles;
+        closeDatabase();
+        return partnerCategories;
     }
 
     private List<PartnerCategory> getPartnerCategoriesFromCursor(Cursor cursor) {
@@ -57,5 +58,20 @@ public class PartnerCategoriesReader extends BaseReaderFromDatabase {
         int id = cursor.getInt(idColumnIndex);
         String title = cursor.getString(titleColumnIndex);
         return new PartnerCategory(id, title);
+    }
+
+    public PartnerCategory getPartnerCategoryOf(Partner partner) {
+        List<PartnerCategory> partnerCategories = getPartnerCategoriesFromDatabase(
+                " WHERE " + PartnerCategoriesContract.COLUMN_NAME_ID + " = " + partner.categoryId
+        );
+        if (partnerCategories.isEmpty()) {
+            throw new IllegalArgumentException("partner with illegal category id");
+        } else if (partnerCategories.size() > 1) {
+            throw new IllegalStateException(
+                    "The database has several categories with the same id:  " +
+                            StringsCombiner.combine(partnerCategories, ", ")
+            );
+        }
+        return partnerCategories.get(0);
     }
 }

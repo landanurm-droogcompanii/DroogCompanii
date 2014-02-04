@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,14 +14,17 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.search_result_map_activity.SearchResultMapActivity;
 import ru.droogcompanii.application.ui.fragment.partner_fragment.PartnerFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerActivity extends android.support.v4.app.FragmentActivity {
+public class PartnerActivity extends ActionBarActivityWithGoToMapItem {
 
+    private Partner partner;
     private List<PartnerPoint> partnerPoints;
+
 
     public static void start(Context context, Partner partner, List<PartnerPoint> partnerPoints) {
         Intent intent = new Intent(context, PartnerActivity.class);
@@ -42,12 +44,6 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
             onRelaunch(savedInstanceState);
         }
 
-        findViewById(R.id.goOnMapButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goOnMap();
-            }
-        });
     }
 
     private void onFirstLaunch() {
@@ -65,10 +61,14 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
     }
 
     private void initState(Bundle bundle) {
+        partner = (Partner) bundle.getSerializable(Keys.partner);
         partnerPoints = (List<PartnerPoint>) bundle.getSerializable(Keys.partnerPoints);
-        if (partnerPoints.isEmpty()) {
-            findViewById(R.id.goOnMapButton).setVisibility(View.INVISIBLE);
-        }
+        setTitle(prepareTitle());
+        updateGoToMapItemVisible();
+    }
+
+    private String prepareTitle() {
+        return partner.title;
     }
 
     private void startPartnerFragment(Bundle args) {
@@ -82,20 +82,34 @@ public class PartnerActivity extends android.support.v4.app.FragmentActivity {
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable(Keys.partner, partner);
         savedInstanceState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
     }
 
-    private void goOnMap() {
+    @Override
+    protected boolean isGoToMapItemVisible() {
+        return (partnerPoints != null) && !partnerPoints.isEmpty();
+    }
+
+    @Override
+    protected void onNeedToGoToMap() {
         Intent intent = new Intent(this, SearchResultMapActivity.class);
-        intent.putExtra(Keys.partnerPointsProvider, new PartnerPointsProviderImpl(partnerPoints));
+        intent.putExtra(Keys.partnerPointsProvider, new PartnerPointsProviderImpl(prepareTitle(), partnerPoints));
         startActivity(intent);
     }
 
     private static class PartnerPointsProviderImpl implements PartnerPointsProvider, Serializable {
-        private List<PartnerPoint> partnerPoints;
+        private final String title;
+        private final List<PartnerPoint> partnerPoints;
 
-        PartnerPointsProviderImpl(List<PartnerPoint> partnerPoints) {
+        PartnerPointsProviderImpl(String title, List<PartnerPoint> partnerPoints) {
+            this.title = title;
             this.partnerPoints = partnerPoints;
+        }
+
+        @Override
+        public String getTitle(Context context) {
+            return title;
         }
 
         @Override

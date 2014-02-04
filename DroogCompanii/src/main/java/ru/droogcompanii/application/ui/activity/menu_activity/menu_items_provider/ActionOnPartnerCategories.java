@@ -1,7 +1,6 @@
 package ru.droogcompanii.application.ui.activity.menu_activity.menu_items_provider;
 
 import android.content.Context;
-import android.content.Intent;
 
 import ru.droogcompanii.application.ui.activity.menu_activity.MenuListItem;
 import ru.droogcompanii.application.ui.activity.search_activity.SearchActivity;
@@ -12,7 +11,6 @@ import ru.droogcompanii.application.ui.activity.search_activity.SearchActivity;
 class ActionOnPartnerCategories implements MenuListItem.Action {
     @Override
     public void launch(Context context) {
-        Intent intent = new Intent(context, SearchActivity.class);
-        context.startActivity(intent);
+        SearchActivity.start(context, SearchActivity.UsageType.CATEGORIES);
     }
 }

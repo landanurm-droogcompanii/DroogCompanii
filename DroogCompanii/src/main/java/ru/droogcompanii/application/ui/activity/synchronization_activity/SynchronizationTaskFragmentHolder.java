@@ -1,7 +1,9 @@
 package ru.droogcompanii.application.ui.activity.synchronization_activity;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.helpers.task.Task;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 
@@ -25,7 +27,8 @@ public class SynchronizationTaskFragmentHolder extends TaskFragmentHolder {
 
     @Override
     protected String getTaskDialogTitle() {
-        return "Data is updated...";
+        Context context = getActivity();
+        return context.getString(R.string.titleOfSynchronizationDialog);
     }
 
     @Override

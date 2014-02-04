@@ -100,4 +100,9 @@ public class PartnerPoint implements Serializable {
         }
         return toLocation().distanceTo(location);
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

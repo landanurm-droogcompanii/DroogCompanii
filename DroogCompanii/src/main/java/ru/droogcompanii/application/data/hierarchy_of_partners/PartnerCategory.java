@@ -33,4 +33,9 @@ public class PartnerCategory implements Serializable {
     public int hashCode() {
         return id + title.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

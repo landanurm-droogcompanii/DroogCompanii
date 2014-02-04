@@ -34,7 +34,7 @@ public class PartnerPointsProviderTaskFragmentHolder extends TaskFragmentHolder 
     protected Task prepareTask() {
         ActivityWithPartnerPointsMapFragmentAndInfoPanel activity =
                 (ActivityWithPartnerPointsMapFragmentAndInfoPanel) getActivity();
-        PartnerPointsProvider partnerPointsProvider = activity.preparePartnerPointsProvider();
+        PartnerPointsProvider partnerPointsProvider = activity.getPartnerPointsProvider();
         return new PartnerPointsProviderTask(partnerPointsProvider, activity);
     }
 }

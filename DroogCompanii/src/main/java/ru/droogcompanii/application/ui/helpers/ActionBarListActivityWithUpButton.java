@@ -2,21 +2,26 @@ package ru.droogcompanii.application.ui.helpers;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 /**
  * Created by ls on 24.12.13.
  */
-public class ActionBarActivityWithBackButton extends ActionBarActivity {
+public abstract class ActionBarListActivityWithUpButton extends ActionBarListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBackButtonOnActionBar();
+        if (isUpButtonEnabled()) {
+            initUpButtonOnActionBar();
+        }
     }
 
-    private void initBackButtonOnActionBar() {
+    protected boolean isUpButtonEnabled() {
+        return true;
+    }
+
+    private void initUpButtonOnActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

@@ -5,24 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical" >
-
-        <ImageView
-            android:layout_width="@dimen/partner_point_item_indicator_side_length"
-            android:layout_height="@dimen/partner_point_item_indicator_side_length"
-            android:src="@color/opened_indicator_color"
-            android:id="@+id/openedIndicator" />
-
-        <ImageView
-            android:layout_width="@dimen/partner_point_item_indicator_side_length"
-            android:layout_height="@dimen/partner_point_item_indicator_side_length"
-            android:src="@color/closed_indicator_color"
-            android:id="@+id/closedIndicator" />
-
-    </RelativeLayout>
+    <ImageView
+        android:layout_width="@dimen/partner_point_item_indicator_side_length"
+        android:layout_height="@dimen/partner_point_item_indicator_side_length"
+        android:id="@+id/indicator" />
 
     <TextView
         android:layout_width="match_parent"

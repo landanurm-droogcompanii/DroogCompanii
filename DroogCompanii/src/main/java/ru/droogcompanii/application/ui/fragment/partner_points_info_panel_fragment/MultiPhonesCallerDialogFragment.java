@@ -15,27 +15,32 @@ import ru.droogcompanii.application.util.Keys;
 public class MultiPhonesCallerDialogFragment extends DialogFragment {
 
     private List<String> phones;
+    private String title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        phones = extractPhones(savedInstanceState);
+        init(savedInstanceState);
     }
 
-    private List<String> extractPhones(Bundle savedInstanceState) {
+    private void init(Bundle savedInstanceState) {
         Bundle bundle = (savedInstanceState == null) ? getArguments() : savedInstanceState;
-        return (List<String>) bundle.getSerializable(Keys.phones);
+        phones = (List<String>) bundle.getSerializable(Keys.phones);
+        title = bundle.getString(Keys.title);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.phones, (Serializable) phones);
+        outState.putString(Keys.title, title);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new MultiPhonesCallerDialog(getActivity(), phones);
+        Dialog dialog = new MultiPhonesCallerDialog(getActivity(), phones);
+        dialog.setTitle(title);
+        return dialog;
     }
 
 }

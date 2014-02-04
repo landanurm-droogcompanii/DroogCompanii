@@ -25,8 +25,6 @@ import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGloba
  * Created by ls on 10.01.14.
  */
 class BaseCustomMapFragment extends android.support.v4.app.Fragment implements MarkersFinder {
-    private static final int ZOOM = 8;
-
     private boolean isMapViewPlacedOnLayout;
     private GoogleMap map;
     private List<Marker> markers;

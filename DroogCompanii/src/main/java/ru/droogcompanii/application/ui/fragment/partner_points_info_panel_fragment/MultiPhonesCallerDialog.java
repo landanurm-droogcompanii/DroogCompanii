@@ -30,7 +30,6 @@ public class MultiPhonesCallerDialog extends Dialog implements PhonesListViewMak
 
         mustBeCalledBefore_SetContentView();
 
-        setTitle(R.string.titleOfMultiPhonesCallerDialog);
         setContentView(prepareContentView());
     }
 

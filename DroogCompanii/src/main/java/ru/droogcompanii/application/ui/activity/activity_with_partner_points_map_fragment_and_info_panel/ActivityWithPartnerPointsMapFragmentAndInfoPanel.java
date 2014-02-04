@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -15,11 +16,14 @@ import java.util.Set;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.filter_activity.FilterActivity;
+import ru.droogcompanii.application.ui.activity.menu_activity.MenuActivity;
+import ru.droogcompanii.application.ui.activity.search_activity.SearchActivity;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragment.PartnerPointsInfoPanelFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.helpers.TaskFragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
@@ -28,7 +32,7 @@ import ru.droogcompanii.application.util.Keys;
  * Created by ls on 22.01.14.
  */
 public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
-            extends android.support.v4.app.FragmentActivity
+            extends ActionBarActivityWithUpButton
             implements PartnerPointsMapFragment.Callbacks, TaskFragmentHolder.Callbacks {
 
     private boolean isFirstLaunched;
@@ -40,9 +44,7 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
-
-        onCreateActivity(savedInstanceState);
+        setContentView(R.layout.activity_main_screen);
 
         if (savedInstanceState == null) {
             isFirstLaunched = true;
@@ -58,16 +60,9 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         if (isTaskFinished) {
             initPartnerPointsMapAndInfoPanel(null);
         }
+
+        initTitle();
     }
-
-    /*
-        content view should have:
-            fragments with ids: mapFragment, partnerPointsInfoPanelFragment
-            button with id: filterButton
-    */
-    protected abstract int getContentViewId();
-
-    protected abstract void onCreateActivity(Bundle savedInstanceState);
 
     private void startTask() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -87,13 +82,6 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         if (partnerPoints != null) {
             initPartnerPointsMapFragment(partnerPoints);
         }
-
-        findViewById(R.id.filterButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onFilter();
-            }
-        });
     }
 
     @Override
@@ -124,24 +112,12 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
     }
 
-    protected abstract PartnerPointsProvider preparePartnerPointsProvider();
-
-    protected void onFilter() {
-        Intent intent = new Intent(this, FilterActivity.class);
-        startActivityForResult(intent, FilterActivity.REQUEST_CODE);
+    private void initTitle() {
+        PartnerPointsProvider partnerPointsProvider = getPartnerPointsProvider();
+        setTitle(partnerPointsProvider.getTitle(this));
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            applyFilters(data);
-        }
-    }
-
-    private void applyFilters(Intent data) {
-        FilterSet returnedFilterSet = extractReturnedFilters(data);
-        partnerPointsMapFragment.setFilterSet(returnedFilterSet);
-    }
+    protected abstract PartnerPointsProvider getPartnerPointsProvider();
 
     private FilterSet extractReturnedFilters(Intent data) {
         FilterSet filterSet = null;
@@ -162,5 +138,53 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     @Override
     public void onNoLongerNeedToShowPartnerPoints() {
         partnerPointsInfoPanelFragment.hide();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_screen, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filters:
+                onFilter();
+                return true;
+            case R.id.action_search:
+                onSearch();
+                return true;
+            case R.id.action_menu:
+                onMenu();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void onFilter() {
+        Intent intent = new Intent(this, FilterActivity.class);
+        startActivityForResult(intent, FilterActivity.REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
+            applyFilters(data);
+        }
+    }
+
+    private void applyFilters(Intent data) {
+        FilterSet returnedFilterSet = extractReturnedFilters(data);
+        partnerPointsMapFragment.setFilterSet(returnedFilterSet);
+    }
+
+    private void onSearch() {
+        SearchActivity.start(this, SearchActivity.UsageType.SEARCH_BY_QUERY);
+    }
+
+    private void onMenu() {
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
     }
 }

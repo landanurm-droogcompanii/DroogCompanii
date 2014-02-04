@@ -3,12 +3,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/partner_points_info_panel_color" >
+    android:background="@color/partner_points_info_panel_background" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
+        android:background="@color/partner_points_info_navigation_panel_background"
         android:id="@+id/navigationPanelLayout" >
 
         <ImageButton
@@ -45,79 +45,88 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/navigationPanelLayout" >
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/titleTextView"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content" >
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/partnerPointInfoPanelLayout" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/addressTextView" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/titleTextView"
+                    android:textStyle="bold" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/paymentMethodsTextView" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/addressTextView" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
 
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/stat_sys_phone_call"
-            android:id="@+id/phoneButton" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/paymentMethodsTextView" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/partner_point_indicator_width"
+                android:layout_height="0dp"
+                android:layout_alignTop="@id/partnerPointInfoPanelLayout"
+                android:layout_alignBottom="@id/partnerPointInfoPanelLayout"
+                android:id="@+id/workingHoursIndicator" />
+
+        </RelativeLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
+            android:weightSum="3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/containerOfPhones" />
+            android:layout_height="wrap_content">
 
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_compass"
-            android:id="@+id/routeButton" />
+            <ImageButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/ic_menu_compass"
+                android:id="@+id/routeButton" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            <ImageButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/stat_sys_phone_call"
+                android:id="@+id/phoneButton" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/partner_point_item_indicator_side_length"
-            android:clickable="false"
-            android:id="@+id/workingHoursIndicator" />
+            <Button
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/labelOfGoToPartnerButton"
+                android:id="@+id/goToPartnerButton"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Go to partner"
-            android:id="@+id/goToPartnerButton"/>
+        </LinearLayout>
 
     </LinearLayout>
 

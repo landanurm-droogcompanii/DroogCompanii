@@ -1,17 +1,17 @@
 package ru.droogcompanii.application.ui.activity.menu_activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 31.01.14.
  */
-public class MenuActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
+public class MenuActivity extends ActionBarActivityWithUpButton implements AdapterView.OnItemClickListener {
 
     private ListView listView;
     private MenuListAdapter adapter;

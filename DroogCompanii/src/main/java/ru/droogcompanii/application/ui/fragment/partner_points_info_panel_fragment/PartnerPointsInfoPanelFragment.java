@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -227,7 +226,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         textView.setText(text);
     }
 
-    private void setPhones(PartnerPoint partnerPoint) {
+    private void setPhones(final PartnerPoint partnerPoint) {
         View phoneButton = findViewById(R.id.phoneButton);
         final List<String> phones = partnerPoint.phones;
         if (phones.isEmpty()) {
@@ -236,31 +235,31 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
             phoneButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onPhoneButtonClick(phones);
+                    onPhoneButtonClick(partnerPoint, phones);
                 }
             });
         }
-        Toast.makeText(getActivity(), "Phones: " + phones.size(), Toast.LENGTH_LONG).show();
     }
 
-    private void onPhoneButtonClick(List<String> phones) {
+    private void onPhoneButtonClick(PartnerPoint partnerPoint, List<String> phones) {
         if (phones.size() == 1) {
             String phone = phones.get(0);
             Caller.call(getActivity(), phone);
         } else {
-            showMultiPhonesDialogFragment(phones);
+            showMultiPhonesDialogFragment(partnerPoint, phones);
         }
     }
 
-    private void showMultiPhonesDialogFragment(List<String> phones) {
+    private void showMultiPhonesDialogFragment(PartnerPoint partnerPoint, List<String> phones) {
         DialogFragment dialogFragment = new MultiPhonesCallerDialogFragment();
-        dialogFragment.setArguments(prepareArguments(phones));
+        dialogFragment.setArguments(prepareArguments(partnerPoint, phones));
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         dialogFragment.show(fragmentManager, "MultiPhonesCallerDialogFragment");
     }
 
-    private static Bundle prepareArguments(List<String> phones) {
+    private static Bundle prepareArguments(PartnerPoint partnerPoint, List<String> phones) {
         Bundle args = new Bundle();
+        args.putString(Keys.title, partnerPoint.title);
         args.putSerializable(Keys.phones, (Serializable) phones);
         return args;
     }
@@ -280,11 +279,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private void setWorkingHoursIndicator(PartnerPoint partnerPoint) {
         View indicator = findViewById(R.id.workingHoursIndicator);
-        if (isOpened(partnerPoint)) {
-            indicator.setBackgroundResource(R.color.opened_indicator_color);
-        } else {
-            indicator.setBackgroundResource(R.color.closed_indicator_color);
-        }
+        WorkingHoursIndicatorUpdater.update(indicator, isOpened(partnerPoint));
     }
 
     private static boolean isOpened(PartnerPoint partnerPoint) {

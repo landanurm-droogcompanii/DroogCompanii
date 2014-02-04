@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.ui.activity.search_activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,13 +14,33 @@ import ru.droogcompanii.application.ui.activity.search_activity.search_result_pr
 import ru.droogcompanii.application.ui.activity.search_activity.search_result_provider_impl.SearchResultProviderBySearchQuery;
 import ru.droogcompanii.application.ui.activity.search_result_activity.SearchResultActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list_fragment.PartnerCategoryListFragment;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchActivity extends android.support.v4.app.FragmentActivity
+public class SearchActivity extends ActionBarActivityWithUpButton
                 implements PartnerCategoryListFragment.Callbacks {
+
+    public static void start(Context context, String usageType) {
+        if (isUsageTypeIllegal(usageType)) {
+            throw new IllegalArgumentException("Illegal usage type: " + usageType);
+        }
+        Intent intent = new Intent(context, SearchActivity.class);
+        intent.putExtra(Keys.usageType, usageType);
+        context.startActivity(intent);
+    }
+
+    private static boolean isUsageTypeIllegal(String usageType) {
+        return ((!usageType.equals(UsageType.SEARCH_BY_QUERY)) &&
+                (!usageType.equals(UsageType.CATEGORIES)));
+    }
+
+    public static class UsageType {
+        public static final String SEARCH_BY_QUERY = "SearchByQuery";
+        public static final String CATEGORIES = "Categories";
+    }
 
     private EditText searchQueryInput;
 
@@ -30,12 +51,21 @@ public class SearchActivity extends android.support.v4.app.FragmentActivity
 
         searchQueryInput = (EditText) findViewById(R.id.searchQueryInputEditText);
 
+        if (savedInstanceState == null && isUsageTypeSearchByQuery()) {
+            searchQueryInput.requestFocus();
+        }
+
         findViewById(R.id.searchByQueryButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onSearch();
             }
         });
+    }
+
+    private boolean isUsageTypeSearchByQuery() {
+        String usageType = getIntent().getStringExtra(Keys.usageType);
+        return usageType.equals(UsageType.SEARCH_BY_QUERY);
     }
 
     private void onSearch() {

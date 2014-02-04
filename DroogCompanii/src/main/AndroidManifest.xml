@@ -24,7 +24,7 @@
     <application
         android:name="ru.droogcompanii.application.DroogCompaniiApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -38,47 +38,52 @@
         </activity>
         <activity
             android:name=".ui.activity.synchronization_activity.SynchronizationActivity"
-            android:label="@string/app_name" >
+            android:label="@string/titleOfSynchronizationActivity" >
         </activity>
         <activity
             android:name=".ui.activity.main_screen.MainScreen"
-            android:label="@string/app_name">
+            android:label="" >
         </activity>
         <activity
             android:name=".ui.activity.search_activity.SearchActivity"
-            android:label="@string/app_name">
+            android:label="@string/titleOfSearchActivity" >
         </activity>
         <activity
             android:name=".ui.activity.search_result_activity.SearchResultActivity"
-            android:label="@string/app_name">
+            android:icon="@android:drawable/ic_menu_search"
+            android:label="" >
         </activity>
         <activity
             android:name=".ui.activity.search_result_map_activity.SearchResultMapActivity"
-            android:label="@string/app_name">
+            android:icon="@android:drawable/ic_menu_search"
+            android:label="" >
         </activity>
         <activity
             android:name=".ui.activity.partner_activity.PartnerActivity"
-            android:label="@string/app_name">
+            android:label="" >
         </activity>
         <activity
             android:name=".ui.activity.filter_activity.FilterActivity"
-            android:label="@string/app_name">
+            android:label="@string/titleOfFilterActivity"
+            android:icon="@android:drawable/ic_menu_sort_by_size" >
         </activity>
         <activity
             android:name=".ui.activity.menu_activity.MenuActivity"
-            android:label="@string/app_name">
+            android:label="@string/titleOfMenuActivity"
+            android:icon="@android:drawable/ic_dialog_dialer" >
         </activity>
         <activity
             android:name=".ui.activity.personal_account_activity.PersonalAccountActivity"
-            android:label="@string/app_name">
+            android:label="@string/titleOfPersonalAccountActivity" >
         </activity>
         <activity
             android:name=".ui.activity.stock_activity.StockActivity"
-            android:label="@string/app_name">
+            android:label="@string/titleOfStockActivity" >
         </activity>
         <activity
             android:name=".ui.activity.settings_activity.SettingsActivity"
-            android:label="@string/app_name">
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:label="@string/titleOfSettingsActivity" >
         </activity>
 
         <meta-data

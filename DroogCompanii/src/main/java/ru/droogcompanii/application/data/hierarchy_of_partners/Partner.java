@@ -56,4 +56,8 @@ public class Partner implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return title;
+    }
 }
