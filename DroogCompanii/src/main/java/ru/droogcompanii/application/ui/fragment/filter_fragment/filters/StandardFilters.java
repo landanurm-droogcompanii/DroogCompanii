@@ -48,4 +48,13 @@ public class StandardFilters extends BaseFilters implements Serializable {
     public int hashCode() {
         return filters != null ? filters.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (Filter filter : filters) {
+            result.append(filter.toString() + "\n");
+        }
+        return result.toString();
+    }
 }

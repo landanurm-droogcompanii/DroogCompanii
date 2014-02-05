@@ -3,6 +3,7 @@ package ru.droogcompanii.application.ui.fragment.filter_fragment;
 import java.util.Comparator;
 import java.util.List;
 
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 
@@ -10,9 +11,12 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
  * Created by ls on 24.01.14.
  */
 public interface FilterSet {
-    void add(SearchCriterion<PartnerPoint> searchCriterion);
-    void add(Comparator<PartnerPoint> comparator);
-    void add(FilterSet other);
-    List<? extends SearchCriterion<PartnerPoint>> getSearchCriteria();
-    List<? extends Comparator<PartnerPoint>> getComparators();
+    void addPartnerPointSearchCriterion(SearchCriterion<PartnerPoint> searchCriterion);
+    void addPartnerPointComparator(Comparator<PartnerPoint> comparator);
+    List<? extends SearchCriterion<PartnerPoint>> getPartnerPointSearchCriteria();
+    List<? extends Comparator<PartnerPoint>> getPartnerPointComparators();
+    void addPartnerSearchCriterion(SearchCriterion<Partner> searchCriterion);
+    void addPartnerComparator(Comparator<Partner> comparator);
+    List<? extends SearchCriterion<Partner>> getPartnerSearchCriteria();
+    List<? extends Comparator<Partner>> getPartnerComparators();
 }

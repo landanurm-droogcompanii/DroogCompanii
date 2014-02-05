@@ -12,6 +12,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
 import ru.droogcompanii.application.ui.activity.partner_activity.PartnerActivity;
 import ru.droogcompanii.application.ui.activity.search_activity.SearchResultProvider;
 import ru.droogcompanii.application.ui.activity.search_result_map_activity.SearchResultMapActivity;
@@ -107,12 +108,13 @@ public class SearchResultActivity extends ActionBarActivityWithGoToMapItem
             return;
         }
         TaskFragmentRemover.remove(this, R.id.taskFragmentContainer);
-        showSearchResult((List<Partner>) result);
+        showSearchResult(result);
     }
 
-    private void showSearchResult(List<Partner> partners) {
+    private void showSearchResult(Serializable result) {
+        List<SearchResult<Partner>> searchResults = (List<SearchResult<Partner>>) result;
         searchResultFragment.show();
-        searchResultFragment.setSearchResult(partners);
+        searchResultFragment.setSearchResult(searchResults);
     }
 
     @Override

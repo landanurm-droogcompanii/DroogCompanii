@@ -17,8 +17,8 @@ import ru.droogcompanii.application.ui.fragment.filter_fragment.filters.Filters;
  */
 public class FilterFragment extends android.support.v4.app.Fragment {
 
-    private PartnerCategory partnerCategory;
     private SharedPreferences sharedPreferences;
+    private PartnerCategory partnerCategory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,15 +58,13 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        saveFilters();
+    }
+
+    private void saveFilters() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         getFilters().saveInto(editor);
         editor.commit();
-    }
-
-    public FilterSet getFilterSet() {
-        FilterSet filterSet = new FilterSetImpl();
-        getFilters().includeIn(filterSet);
-        return filterSet;
     }
 
     public Filters getFilters() {

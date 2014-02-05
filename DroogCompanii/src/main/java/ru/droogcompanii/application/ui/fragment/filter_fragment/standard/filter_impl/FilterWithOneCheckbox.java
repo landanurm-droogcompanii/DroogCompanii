@@ -13,7 +13,7 @@ import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
  * Created by ls on 21.01.14.
  */
 abstract class FilterWithOneCheckbox implements Filter, Serializable {
-    protected boolean needToInclude;
+    private boolean needToInclude;
 
     protected FilterWithOneCheckbox() {
         needToInclude = isNeedToIncludeByDefault();
@@ -73,5 +73,10 @@ abstract class FilterWithOneCheckbox implements Filter, Serializable {
     @Override
     public int hashCode() {
         return (needToInclude ? 1 : 0) + getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": needToInclude(" + needToInclude + ")";
     }
 }

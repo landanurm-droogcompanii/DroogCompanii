@@ -117,7 +117,7 @@ public class SearchResultProviderBySearchQuery implements SearchResultProvider, 
                                                            Collection<PartnerPoint> partnerPoints) {
         FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(context);
         SearchableListing<PartnerPoint> searchableListing = SearchableListing.newInstance(partnerPoints);
-        for (SearchCriterion<PartnerPoint> criterion : currentFilterSet.getSearchCriteria()) {
+        for (SearchCriterion<PartnerPoint> criterion : currentFilterSet.getPartnerPointSearchCriteria()) {
             searchableListing.addSearchCriterion(criterion);
         }
         return searchableListing.toList();

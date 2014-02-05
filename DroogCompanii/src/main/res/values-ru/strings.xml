@@ -28,7 +28,7 @@
     <string name="action_menu">Меню</string>
     <string name="action_go_to_map">На карту</string>
 
-    <string name="titleOfClosestPartnerPoints">Ближайшие</string>
+    <string name="titleOfClosestPartnerPoints">Ближайшие партнеры</string>
 
     <string name="labelOfGoToPartnerButton">Перейти к партнеру</string>
 

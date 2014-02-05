@@ -27,6 +27,7 @@ import ru.droogcompanii.application.util.MultiMap;
 public class PartnerPointsMapFragment extends BaseCustomMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
+
     public static interface Callbacks {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
         void onNoLongerNeedToShowPartnerPoints();
@@ -119,7 +120,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     public void addFilterSet(FilterSet filterSet) {
-        List<? extends SearchCriterion<PartnerPoint>> searchCriteria = filterSet.getSearchCriteria();
+        List<? extends SearchCriterion<PartnerPoint>> searchCriteria = filterSet.getPartnerPointSearchCriteria();
         for (SearchCriterion<PartnerPoint> criterion : searchCriteria) {
             searchablePartnerPoints.addSearchCriterion(criterion);
         }

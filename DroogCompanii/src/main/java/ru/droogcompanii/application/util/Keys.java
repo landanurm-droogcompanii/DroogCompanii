@@ -16,10 +16,7 @@ public class Keys {
     public static final String searchResultProvider = "searchResultProvider";
     public static final String partnerPointsProvider = "partnerPointsProvider";
 
-    public static final String filters = "filters";
-
     public static final String searchablePartnerPoints = "searchablePartnerPoints";
-    public static final String args = "args";
 
     public static final String needToExpandList = "needToExpandList";
 
@@ -44,4 +41,8 @@ public class Keys {
     public static final String usageType = "usageType";
 
     public static final String title = "title";
+
+    public static final String passedBundle = "passedBundle";
+
+    public static final String filtersAtTheMomentOfFirstLaunch = "filtersAtTheMomentOfFirstLaunch";
 }

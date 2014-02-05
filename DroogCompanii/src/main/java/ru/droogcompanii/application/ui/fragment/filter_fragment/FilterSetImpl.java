@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 
@@ -12,8 +13,10 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
  * Created by ls on 21.01.14.
  */
 class FilterSetImpl implements FilterSet, Serializable {
-    private final List<SearchCriterion<PartnerPoint>> searchCriteria;
-    private final List<Comparator<PartnerPoint>> comparators;
+    private final List<SearchCriterion<PartnerPoint>> partnerPointSearchCriteria;
+    private final List<Comparator<PartnerPoint>> partnerPointComparators;
+    private final List<SearchCriterion<Partner>> partnerSearchCriteria;
+    private final List<Comparator<Partner>> partnerComparators;
 
     public static FilterSetImpl from(List<Filter> filters) {
         FilterSetImpl result = new FilterSetImpl();
@@ -24,30 +27,47 @@ class FilterSetImpl implements FilterSet, Serializable {
     }
 
     public FilterSetImpl() {
-        searchCriteria = new ArrayList<SearchCriterion<PartnerPoint>>();
-        comparators = new ArrayList<Comparator<PartnerPoint>>();
+        partnerPointSearchCriteria = new ArrayList<SearchCriterion<PartnerPoint>>();
+        partnerPointComparators = new ArrayList<Comparator<PartnerPoint>>();
+        partnerSearchCriteria = new ArrayList<SearchCriterion<Partner>>();
+        partnerComparators = new ArrayList<Comparator<Partner>>();
     }
 
-    public void add(SearchCriterion<PartnerPoint> searchCriterion) {
-        searchCriteria.add(searchCriterion);
+    public void addPartnerPointSearchCriterion(SearchCriterion<PartnerPoint> searchCriterion) {
+        partnerPointSearchCriteria.add(searchCriterion);
     }
 
-    public void add(Comparator<PartnerPoint> comparator) {
-        comparators.add(comparator);
-    }
-
-    public void add(FilterSet other) {
-        searchCriteria.addAll(other.getSearchCriteria());
-        comparators.addAll(other.getComparators());
+    public void addPartnerPointComparator(Comparator<PartnerPoint> comparator) {
+        partnerPointComparators.add(comparator);
     }
 
     @Override
-    public List<? extends SearchCriterion<PartnerPoint>> getSearchCriteria() {
-        return searchCriteria;
+    public List<? extends SearchCriterion<PartnerPoint>> getPartnerPointSearchCriteria() {
+        return partnerPointSearchCriteria;
     }
 
     @Override
-    public List<? extends Comparator<PartnerPoint>> getComparators() {
-        return comparators;
+    public List<? extends Comparator<PartnerPoint>> getPartnerPointComparators() {
+        return partnerPointComparators;
+    }
+
+    @Override
+    public void addPartnerSearchCriterion(SearchCriterion<Partner> searchCriterion) {
+        partnerSearchCriteria.add(searchCriterion);
+    }
+
+    @Override
+    public void addPartnerComparator(Comparator<Partner> comparator) {
+        partnerComparators.add(comparator);
+    }
+
+    @Override
+    public List<? extends SearchCriterion<Partner>> getPartnerSearchCriteria() {
+        return partnerSearchCriteria;
+    }
+
+    @Override
+    public List<? extends Comparator<Partner>> getPartnerComparators() {
+        return partnerComparators;
     }
 }

@@ -6,12 +6,14 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.DroogCompaniiApplication;
 
 /**
  * Created by ls on 17.01.14.
  */
-public class CurrentLocationProvider {
+public class CurrentLocationProvider implements BaseLocationProvider, Serializable {
 
     private static Location currentLocation = null;
 
@@ -40,6 +42,11 @@ public class CurrentLocationProvider {
 
     private static final long MIN_TIME = 5000L;
     private static final float MIN_DISTANCE = 10f;
+
+    @Override
+    public Location getBaseLocation() {
+        return CurrentLocationProvider.get();
+    }
 
     public static Location get() {
         updateCurrentLocation();

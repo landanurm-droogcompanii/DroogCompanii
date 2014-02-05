@@ -39,7 +39,7 @@
     <string name="titleOfPersonalAccountActivity">@string/menu_item_personal_account</string>
     <string name="titleOfSynchronizationActivity">@string/menu_item_synchronization</string>
 
-    <string name="titleOfClosestPartnerPoints">Closest</string>
+    <string name="titleOfClosestPartnerPoints">Closest partners</string>
 
     <string name="labelOfGoToPartnerButton">Go to partner</string>
 

@@ -36,7 +36,8 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
     }
 
     public void forEach(OnEachHandler<T> onEachHandler) {
-        for (T each : toList()) {
+        List<T> sortedElements = sorted(new ArrayList<T>(super.elements));
+        for (T each : sortedElements) {
             onEachHandler.onEach(each, meetCriteria(each));
         }
     }
@@ -74,5 +75,31 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
     public List<T> toList() {
         List<T> list = super.toList();
         return sorted(list);
+    }
+
+    @Override
+    public List<SearchResult<T>> toListOfSearchResult() {
+        return sortedSearchResults(super.toListOfSearchResult());
+    }
+
+    private List<SearchResult<T>> sortedSearchResults(List<SearchResult<T>> searchResults) {
+        if (noComparators()) {
+            return searchResults;
+        }
+        Comparator<SearchResult<T>> combinedComparator = new Comparator<SearchResult<T>>() {
+            @Override
+            public int compare(SearchResult<T> e1, SearchResult<T> e2) {
+                for (int i = comparators.size() - 1; i >= 0; --i) {
+                    Comparator<T> comparator = comparators.get(i);
+                    int result = comparator.compare(e1.value(), e2.value());
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return 0;
+            }
+        };
+        Collections.sort(searchResults, combinedComparator);
+        return searchResults;
     }
 }

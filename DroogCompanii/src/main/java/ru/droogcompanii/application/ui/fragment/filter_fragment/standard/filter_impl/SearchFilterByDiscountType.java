@@ -9,7 +9,8 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.Filter;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.SearchCriterionByDiscountType;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.partner.PartnerSearchCriterionByDiscountType;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.partner_point.PartnerPointSearchCriterionByDiscountType;
 
 /**
  * Created by ls on 21.01.14.
@@ -74,7 +75,10 @@ class SearchFilterByDiscountType implements Filter, Serializable {
 
     @Override
     public void includeIn(FilterSet filterSet) {
-        filterSet.add(new SearchCriterionByDiscountType(bonus, discount, cashBack));
+        filterSet.addPartnerPointSearchCriterion(
+                new PartnerPointSearchCriterionByDiscountType(bonus, discount, cashBack));
+        filterSet.addPartnerSearchCriterion(
+                new PartnerSearchCriterionByDiscountType(bonus, discount, cashBack));
     }
 
     @Override
@@ -97,5 +101,11 @@ class SearchFilterByDiscountType implements Filter, Serializable {
         result = 31 * result + (discount ? 1 : 0);
         result = 31 * result + (cashBack ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + ": bonus(" + bonus + "), " +
+                "discount(" + discount + "), cashBack(" + cashBack + ")";
     }
 }

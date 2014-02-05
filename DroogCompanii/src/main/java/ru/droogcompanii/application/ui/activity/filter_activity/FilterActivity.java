@@ -1,16 +1,12 @@
 package ru.droogcompanii.application.ui.activity.filter_activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import java.io.Serializable;
-
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterFragment;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.filters.Filters;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
@@ -24,25 +20,29 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
 
     public static final int REQUEST_CODE = 14235;
 
-    private Bundle args;
+    private boolean isFirstLaunched;
+    private Bundle passedBundle;
     private Filters filtersAtTheMomentOfFirstLaunch;
     private FilterFragment filterFragment;
-    private boolean isFirstLaunched;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
         isFirstLaunched = (savedInstanceState == null);
-        args = (savedInstanceState == null) ? getPassedBundle() : savedInstanceState;
+
+        passedBundle = (savedInstanceState == null)
+                ? getPassedBundle() : savedInstanceState.getBundle(Keys.passedBundle);
 
         filterFragment = new FilterFragment();
-        filterFragment.setArguments(args);
+        filterFragment.setArguments(passedBundle);
 
         placeFilterFragmentOnActivity();
 
-        filtersAtTheMomentOfFirstLaunch = getFiltersAtTheMomentOfFirstLaunch();
+        filtersAtTheMomentOfFirstLaunch = getFiltersAtTheMomentOfFirstLaunch(savedInstanceState);
+
     }
 
     private Bundle getPassedBundle() {
@@ -51,20 +51,20 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
 
     private void placeFilterFragmentOnActivity() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         if (isFirstLaunched) {
-            fragmentTransaction.add(R.id.containerOfFilterFragment, filterFragment);
+            transaction.add(R.id.containerOfFilterFragment, filterFragment);
         } else {
-            fragmentTransaction.replace(R.id.containerOfFilterFragment, filterFragment);
+            transaction.replace(R.id.containerOfFilterFragment, filterFragment);
         }
-        fragmentTransaction.commit();
+        transaction.commit();
     }
 
-    private Filters getFiltersAtTheMomentOfFirstLaunch() {
-        if (isFirstLaunched) {
+    private Filters getFiltersAtTheMomentOfFirstLaunch(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
             return getCurrentFilters();
         } else {
-            return readFiltersFrom(args);
+            return readFiltersFrom(savedInstanceState);
         }
     }
 
@@ -73,21 +73,21 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
         return FilterUtils.getCurrentFilters(this, partnerCategory);
     }
 
-    private Filters readFiltersFrom(Bundle savedInstanceState) {
-        return (Filters) savedInstanceState.getSerializable(Keys.filters);
+    private static Filters readFiltersFrom(Bundle savedInstanceState) {
+        return (Filters) savedInstanceState.getSerializable(Keys.filtersAtTheMomentOfFirstLaunch);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBundle(Keys.args, args);
-        outState.putSerializable(Keys.filters, filtersAtTheMomentOfFirstLaunch);
+        outState.putBundle(Keys.passedBundle, passedBundle);
+        outState.putSerializable(Keys.filtersAtTheMomentOfFirstLaunch, filtersAtTheMomentOfFirstLaunch);
     }
 
     @Override
     public void onBackPressed() {
         if (wereChangesMade()) {
-            setResult(RESULT_OK, getResult());
+            setResult(RESULT_OK);
         } else {
             setResult(RESULT_CANCELED);
         }
@@ -97,13 +97,6 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
     private boolean wereChangesMade() {
         Filters currentFilters = filterFragment.getFilters();
         return !currentFilters.equals(filtersAtTheMomentOfFirstLaunch);
-    }
-
-    private Intent getResult() {
-        FilterSet filterSet = filterFragment.getFilterSet();
-        Intent result = new Intent();
-        result.putExtra(Keys.filterSet, (Serializable) filterSet);
-        return result;
     }
 
 }

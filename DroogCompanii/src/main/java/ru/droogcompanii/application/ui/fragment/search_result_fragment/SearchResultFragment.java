@@ -14,7 +14,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.ui.activity.search_result_activity.PartnerListAdapter;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
 import ru.droogcompanii.application.util.Keys;
 
 /**
@@ -31,8 +31,8 @@ public class SearchResultFragment extends ListFragment
 
     private boolean isSearchResultReady;
     private Callbacks callbacks;
-    private List<Partner> partners;
-    private PartnerListAdapter adapter;
+    private List<SearchResult<Partner>> searchResults;
+    private PartnerSearchResultListAdapter adapter;
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,11 +59,11 @@ public class SearchResultFragment extends ListFragment
 
     private void initSearchResultIsNotReadyState() {
         isSearchResultReady = false;
-        partners = new ArrayList<Partner>();
+        searchResults = new ArrayList<SearchResult<Partner>>();
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        partners = (List<Partner>) savedInstanceState.getSerializable(Keys.partners);
+        searchResults = (List<SearchResult<Partner>>) savedInstanceState.getSerializable(Keys.partners);
         isSearchResultReady = savedInstanceState.getBoolean(Keys.isSearchResultReady);
 
         int visibility = savedInstanceState.getInt(Keys.visibility);
@@ -83,20 +83,20 @@ public class SearchResultFragment extends ListFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partners, (Serializable) partners);
+        outState.putSerializable(Keys.partners, (Serializable) searchResults);
         outState.putBoolean(Keys.isSearchResultReady, isSearchResultReady);
         outState.putInt(Keys.visibility, getView().getVisibility());
     }
 
-    public void setSearchResult(List<Partner> partners) {
-        this.partners = partners;
+    public void setSearchResult(List<SearchResult<Partner>> searchResults) {
+        this.searchResults = searchResults;
         isSearchResultReady = true;
         updateSearchResultList();
     }
 
     private void updateSearchResultList() {
         getListView().setEmptyView(prepareEmptyView());
-        adapter = new PartnerListAdapter(getActivity(), partners);
+        adapter = new PartnerSearchResultListAdapter(getActivity(), searchResults);
         setListAdapter(adapter);
         if (adapter.isEmpty()) {
             callbacks.onNotFound();
@@ -107,7 +107,7 @@ public class SearchResultFragment extends ListFragment
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Partner partner = adapter.getItem(position);
+        Partner partner = adapter.getItem(position).value();
         callbacks.onPartnerClick(partner);
     }
 

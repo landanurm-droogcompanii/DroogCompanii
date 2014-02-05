@@ -58,4 +58,14 @@ public class MoreFilters extends BaseFilters implements Serializable {
         return result;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (Filter filter : filters) {
+            result.append(filter.toString() + "\n");
+        }
+        return result.toString();
+    }
+
+
 }

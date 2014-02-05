@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators;
+package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.partner_point;
 
 import android.location.Location;
 
@@ -11,10 +11,10 @@ import ru.droogcompanii.application.util.BaseLocationProvider;
 /**
  * Created by ls on 16.01.14.
  */
-public class ComparatorByDistance implements Comparator<PartnerPoint>, Serializable {
+public class PartnerPointComparatorByDistance implements Comparator<PartnerPoint>, Serializable {
     private final BaseLocationProvider baseLocationProvider;
 
-    public ComparatorByDistance(BaseLocationProvider baseLocationProvider) {
+    public PartnerPointComparatorByDistance(BaseLocationProvider baseLocationProvider) {
         this.baseLocationProvider = baseLocationProvider;
     }
 

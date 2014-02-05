@@ -2,7 +2,8 @@ package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.filter
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterSet;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.ComparatorByDiscount;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.partner.PartnerComparatorByDiscount;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.partner_point.PartnerPointComparatorByDiscount;
 
 /**
  * Created by ls on 21.01.14.
@@ -20,6 +21,7 @@ class SortingFilterByDiscount extends FilterWithOneCheckbox {
 
     @Override
     protected void necessarilyIncludeIn(FilterSet filterSet) {
-        filterSet.add(new ComparatorByDiscount());
+        filterSet.addPartnerPointComparator(new PartnerPointComparatorByDiscount());
+        filterSet.addPartnerComparator(new PartnerComparatorByDiscount());
     }
 }

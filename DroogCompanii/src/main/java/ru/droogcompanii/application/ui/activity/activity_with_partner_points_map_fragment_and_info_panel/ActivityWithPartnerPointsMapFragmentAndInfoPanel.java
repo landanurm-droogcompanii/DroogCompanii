@@ -170,13 +170,13 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            applyFilters(data);
+            applyFilters();
         }
     }
 
-    private void applyFilters(Intent data) {
-        FilterSet returnedFilterSet = extractReturnedFilters(data);
-        partnerPointsMapFragment.setFilterSet(returnedFilterSet);
+    private void applyFilters() {
+        FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(this);
+        partnerPointsMapFragment.setFilterSet(currentFilterSet);
     }
 
     private void onSearch() {

@@ -1,24 +1,21 @@
-package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators;
+package ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.partner_point;
 
 import java.io.Serializable;
 import java.util.Calendar;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
+import ru.droogcompanii.application.ui.fragment.filter_fragment.standard.search_criteria_and_comparators.CalendarProvider;
 
 /**
  * Created by ls on 16.01.14.
  */
-public class SearchCriterionByWorksAtSomeTime
+public class PartnerPointSearchCriterionByWorksAtSomeTime
         implements SearchCriterion<PartnerPoint>, Serializable {
 
-    public static interface CalendarProvider {
-        Calendar getCalendar();
-    }
+    private final CalendarProvider calendarProvider;
 
-    private CalendarProvider calendarProvider;
-
-    public SearchCriterionByWorksAtSomeTime(CalendarProvider calendarProvider) {
+    public PartnerPointSearchCriterionByWorksAtSomeTime(CalendarProvider calendarProvider) {
         this.calendarProvider = calendarProvider;
     }
 
