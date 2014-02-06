@@ -18,7 +18,7 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.Part
  * Created by ls on 29.01.14.
  */
 class ClosePartnerPointsProvider implements PartnerPointsProvider {
-    private static final float MAX_DISTANCE_IN_METERS = 8000.0f;
+    private static final float MAX_DISTANCE_IN_METERS = 25000.0f;
 
     private final Location baseLocation;
 

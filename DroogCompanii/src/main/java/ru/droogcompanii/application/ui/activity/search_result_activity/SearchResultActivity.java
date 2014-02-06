@@ -19,7 +19,7 @@ import ru.droogcompanii.application.ui.activity.search_result_map_activity.Searc
 import ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_fragment.SearchResultFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
-import ru.droogcompanii.application.ui.helpers.TaskFragmentRemover;
+import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
 
@@ -29,7 +29,6 @@ import ru.droogcompanii.application.util.Keys;
 public class SearchResultActivity extends ActionBarActivityWithGoToMapItem
                 implements SearchResultFragment.Callbacks, TaskFragmentHolder.Callbacks {
 
-    private boolean isFirstLaunched;
     private boolean isGoToMapItemVisible;
     private SearchResultFragment searchResultFragment;
     private SearchResultProvider searchResultProvider;
@@ -39,14 +38,12 @@ public class SearchResultActivity extends ActionBarActivityWithGoToMapItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
-        isFirstLaunched = (savedInstanceState == null);
-
         init(savedInstanceState);
 
         searchResultFragment = (SearchResultFragment)
                 getSupportFragmentManager().findFragmentById(R.id.searchResultFragment);
 
-        if (isFirstLaunched) {
+        if (savedInstanceState == null) {
             searchResultFragment.hide();
             startTask();
         }
@@ -80,10 +77,6 @@ public class SearchResultActivity extends ActionBarActivityWithGoToMapItem
         return isGoToMapItemVisible;
     }
 
-    public boolean isFirstLaunched() {
-        return isFirstLaunched;
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -103,12 +96,20 @@ public class SearchResultActivity extends ActionBarActivityWithGoToMapItem
 
     @Override
     public void onTaskFinished(int resultCode, Serializable result) {
-        if (resultCode != RESULT_OK) {
-            finish();
-            return;
+        if (resultCode == RESULT_OK) {
+            onTaskFinishedSuccessfully(result);
+        } else {
+            onTaskCancelled();
         }
-        TaskFragmentRemover.remove(this, R.id.taskFragmentContainer);
+    }
+
+    private void onTaskFinishedSuccessfully(Serializable result) {
+        FragmentRemover.removeFragmentByContainerId(this, R.id.taskFragmentContainer);
         showSearchResult(result);
+    }
+
+    private void onTaskCancelled() {
+        finish();
     }
 
     private void showSearchResult(Serializable result) {

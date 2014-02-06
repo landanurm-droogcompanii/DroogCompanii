@@ -29,7 +29,6 @@ public class Keys {
     public static final String filterSet = "filterSet";
     public static final String clickedMarkerIsExist = "clickedMarkerIsExist";
 
-    public static final String isTaskFinished = "isTaskFinished";
     public static final String isSearchResultReady = "isSearchResultReady";
     public static final String visibility = "visibility";
 
@@ -45,4 +44,6 @@ public class Keys {
     public static final String passedBundle = "passedBundle";
 
     public static final String filtersAtTheMomentOfFirstLaunch = "filtersAtTheMomentOfFirstLaunch";
+
+    public static final String isTaskStarted = "isTaskStarted";
 }

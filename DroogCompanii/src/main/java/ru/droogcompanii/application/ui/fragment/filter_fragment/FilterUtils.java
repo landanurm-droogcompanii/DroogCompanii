@@ -13,7 +13,7 @@ import ru.droogcompanii.application.ui.fragment.filter_fragment.filters.Filters;
 public class FilterUtils {
 
     public static void resetFilters(Context context) {
-        SharedPreferences sharedPreferences = SharedPreferencesProvider.get(context);
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
@@ -31,7 +31,10 @@ public class FilterUtils {
     }
 
     public static Filters getCurrentFilters(Context context, PartnerCategory partnerCategory) {
-        SharedPreferences sharedPreferences = SharedPreferencesProvider.get(context);
-        return new Filters(partnerCategory, sharedPreferences);
+        return new Filters(partnerCategory, getSharedPreferences(context));
+    }
+
+    private static SharedPreferences getSharedPreferences(Context context) {
+        return SharedPreferencesProvider.get(context);
     }
 }

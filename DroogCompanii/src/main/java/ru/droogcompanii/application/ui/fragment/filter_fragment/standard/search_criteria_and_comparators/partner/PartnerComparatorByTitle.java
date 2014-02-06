@@ -13,6 +13,6 @@ public class PartnerComparatorByTitle implements Comparator<Partner>, Serializab
     public int compare(Partner partner1, Partner partner2) {
         String title1 = partner1.title;
         String title2 = partner2.title;
-        return title1.compareTo(title2);
+        return title1.compareToIgnoreCase(title2);
     }
 }

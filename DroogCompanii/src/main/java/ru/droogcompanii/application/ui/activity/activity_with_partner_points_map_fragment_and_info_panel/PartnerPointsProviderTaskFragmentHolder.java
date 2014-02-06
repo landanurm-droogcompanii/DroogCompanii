@@ -14,20 +14,14 @@ public class PartnerPointsProviderTaskFragmentHolder extends TaskFragmentHolder 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isActivityFirstLaunched()) {
+        if (savedInstanceState == null) {
             startTask();
         }
     }
 
-    private boolean isActivityFirstLaunched() {
-        ActivityWithPartnerPointsMapFragmentAndInfoPanel activity =
-                (ActivityWithPartnerPointsMapFragmentAndInfoPanel) getActivity();
-        return activity.isFirstLaunched();
-    }
-
     @Override
-    protected String getTaskDialogTitle() {
-        return "";
+    protected Integer getTaskDialogTitleId() {
+        return null;
     }
 
     @Override

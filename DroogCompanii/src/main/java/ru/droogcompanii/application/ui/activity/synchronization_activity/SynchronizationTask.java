@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.activity.synchronization_activity;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.PowerManager;
 
 import java.io.InputStream;
@@ -30,7 +31,8 @@ public class SynchronizationTask extends Task {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {
-                return context.getResources().openRawResource(R.raw.test_data_small);
+                Resources resources = context.getResources();
+                return resources.openRawResource(R.raw.test_data_medium);
             }
         };
     }

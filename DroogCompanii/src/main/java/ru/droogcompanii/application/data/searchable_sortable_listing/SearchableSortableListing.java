@@ -78,8 +78,8 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
     }
 
     @Override
-    public List<SearchResult<T>> toListOfSearchResult() {
-        return sortedSearchResults(super.toListOfSearchResult());
+    public List<SearchResult<T>> toListOfSearchResults() {
+        return sortedSearchResults(super.toListOfSearchResults());
     }
 
     private List<SearchResult<T>> sortedSearchResults(List<SearchResult<T>> searchResults) {

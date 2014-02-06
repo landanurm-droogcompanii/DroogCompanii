@@ -22,7 +22,7 @@ public abstract class TaskFragmentHolder extends Fragment {
     }
 
     protected static final int REQUEST_CODE_TASK_FRAGMENT = 0;
-    protected static final String TAG_TASK_FRAGMENT = "task";
+    protected static final String TAG_TASK_FRAGMENT = "inner_task_fragment";
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         public void onTaskFinished(int resultCode, Serializable result) {
@@ -67,13 +67,13 @@ public abstract class TaskFragmentHolder extends Fragment {
 
     protected void startTask() {
         TaskFragment taskFragment = new TaskFragment();
-        taskFragment.setTitle(getTaskDialogTitle());
+        taskFragment.setTitle(getTaskDialogTitleId());
         taskFragment.setTask(prepareTask());
         taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
         startFragment(taskFragment);
     }
 
-    protected abstract String getTaskDialogTitle();
+    protected abstract Integer getTaskDialogTitleId();
     protected abstract Task prepareTask();
 
     private void startFragment(TaskFragment taskFragment) {

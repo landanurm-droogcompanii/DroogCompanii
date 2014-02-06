@@ -10,9 +10,8 @@ import java.util.List;
  */
 public class SearchableListing<T> implements Serializable {
 
-    private final List<SearchCriterion<T>> searchCriteria;
-
     protected final List<T> elements;
+    private final List<SearchCriterion<T>> searchCriteria;
 
 
     public static <T> SearchableListing<T> newInstance(Collection<T> elements) {
@@ -63,35 +62,15 @@ public class SearchableListing<T> implements Serializable {
         return list;
     }
 
-    private static class SearchResultImpl<T> implements SearchResult<T>, Serializable {
-        private final boolean meetsCriteria;
-        private final T value;
-
-        public SearchResultImpl(T value, boolean meetsCriteria) {
-            this.value = value;
-            this.meetsCriteria = meetsCriteria;
-        }
-
-        @Override
-        public T value() {
-            return value;
-        }
-
-        @Override
-        public boolean meetsSearchCriteria() {
-            return meetsCriteria;
-        }
-    }
-
-    public List<SearchResult<T>> toListOfSearchResult() {
-        final List<SearchResult<T>> listOfSearchResult = new ArrayList<SearchResult<T>>(elements.size());
+    public List<SearchResult<T>> toListOfSearchResults() {
+        final List<SearchResult<T>> searchResults = new ArrayList<SearchResult<T>>(elements.size());
         forEach(new OnEachHandler<T>() {
             @Override
             public void onEach(T each, boolean meetsCriteria) {
-                listOfSearchResult.add(new SearchResultImpl<T>(each, meetsCriteria));
+                searchResults.add(new SearchResultImpl<T>(each, meetsCriteria));
             }
         });
-        return listOfSearchResult;
+        return searchResults;
     }
 }
 

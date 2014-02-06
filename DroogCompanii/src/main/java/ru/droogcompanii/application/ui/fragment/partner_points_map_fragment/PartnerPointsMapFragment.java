@@ -28,15 +28,17 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
 
+
     public static interface Callbacks {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
         void onNoLongerNeedToShowPartnerPoints();
     }
 
-    private Callbacks callbacks;
 
+    private boolean doNotInitOnResume;
     private boolean wasActivityCreated;
     private Bundle savedInstanceState;
+    private Callbacks callbacks;
     private ClickedMarkerHolder clickedMarkerHolder;
     private MultiMap<Marker, PartnerPoint> markersAndPartnerPoints;
     private SearchableListing<PartnerPoint> searchablePartnerPoints;
@@ -61,17 +63,34 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         }
     }
 
+    public void setDoNotInitOnResume() {
+        doNotInitOnResume = true;
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
-        this.wasActivityCreated = true;
+
+        wasActivityCreated = true;
 
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
 
         restoreInstanceStateIfNeed(savedInstanceState);
-        init();
+
+        callOnResumeFirstTime(new Runnable() {
+            @Override
+            public void run() {
+                initIfNeed();
+            }
+        });
+    }
+
+    private void initIfNeed() {
+        if (!doNotInitOnResume) {
+            init();
+        }
     }
 
     private void init() {
@@ -162,6 +181,10 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @Override
     public void onMapClick(LatLng position) {
+        setNoClickedMarker();
+    }
+
+    public void setNoClickedMarker() {
         callbacks.onNoLongerNeedToShowPartnerPoints();
         clickedMarkerHolder.unset();
     }

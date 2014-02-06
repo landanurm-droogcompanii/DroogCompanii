@@ -1,6 +1,5 @@
 package ru.droogcompanii.application.ui.activity.synchronization_activity;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import ru.droogcompanii.application.R;
@@ -15,20 +14,14 @@ public class SynchronizationTaskFragmentHolder extends TaskFragmentHolder {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isActivityFirstLaunched()) {
+        if (savedInstanceState == null) {
             startTask();
         }
     }
 
-    private boolean isActivityFirstLaunched() {
-        SynchronizationActivity activity = (SynchronizationActivity) getActivity();
-        return activity.isFirstLaunched();
-    }
-
     @Override
-    protected String getTaskDialogTitle() {
-        Context context = getActivity();
-        return context.getString(R.string.titleOfSynchronizationDialog);
+    protected Integer getTaskDialogTitleId() {
+        return R.string.titleOfSynchronizationDialog;
     }
 
     @Override

@@ -25,9 +25,35 @@ import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGloba
  * Created by ls on 10.01.14.
  */
 class BaseCustomMapFragment extends android.support.v4.app.Fragment implements MarkersFinder {
+
+    private static final Runnable DUMMY_RUNNABLE_ON_RESUME = new Runnable() {
+        @Override
+        public void run() {
+            // do nothing
+        }
+    };
+
     private boolean isMapViewPlacedOnLayout;
     private GoogleMap map;
     private List<Marker> markers;
+    private Runnable runnableOnResume;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
+    }
+
+    public final void callOnResumeFirstTime(Runnable runnable) {
+        runnableOnResume = runnable;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        runnableOnResume.run();
+        runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
+    }
 
     public BaseCustomMapFragment() {
         isMapViewPlacedOnLayout = false;
@@ -60,7 +86,8 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
     }
 
     private SupportMapFragment getNestedSupportMapFragment() {
-        return (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
+        return (SupportMapFragment)
+                getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
     }
 
     protected final View getMapView() {

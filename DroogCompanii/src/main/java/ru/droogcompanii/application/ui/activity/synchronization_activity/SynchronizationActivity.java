@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.activity.activity_with_partner_points_map_fragment_and_info_panel.FlagNeedToUpdateMap;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.VerifierDataForRelevance;
 
@@ -14,27 +15,24 @@ import ru.droogcompanii.application.util.VerifierDataForRelevance;
  */
 public class SynchronizationActivity extends ActionBarActivity implements TaskFragmentHolder.Callbacks {
 
-    private boolean isFirstLaunched;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        isFirstLaunched = (savedInstanceState == null);
-
         setContentView(R.layout.activity_synchronization);
-    }
-
-    public boolean isFirstLaunched() {
-        return isFirstLaunched;
     }
 
     @Override
     public void onTaskFinished(int resultCode, Serializable result) {
         if (resultCode == RESULT_OK) {
-            VerifierDataForRelevance.setDataIsUpdated();
+            onTaskFinishedSuccessfully();
         }
         setResult(resultCode);
         finish();
+    }
+
+    private void onTaskFinishedSuccessfully() {
+        VerifierDataForRelevance.setDataIsUpdated();
+        FlagNeedToUpdateMap.set(true);
     }
 }

@@ -20,7 +20,7 @@ public class SearchResultTaskFragmentHolder extends TaskFragmentHolder {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         searchResultProvider = getSearchResultProvider(savedInstanceState);
-        if (isActivityFirstLaunched()) {
+        if (savedInstanceState == null) {
             startTask();
         }
     }
@@ -39,14 +39,9 @@ public class SearchResultTaskFragmentHolder extends TaskFragmentHolder {
         outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
     }
 
-    private boolean isActivityFirstLaunched() {
-        SearchResultActivity activity = (SearchResultActivity) getActivity();
-        return activity.isFirstLaunched();
-    }
-
     @Override
-    protected String getTaskDialogTitle() {
-        return "";
+    protected Integer getTaskDialogTitleId() {
+        return null;
     }
 
     @Override

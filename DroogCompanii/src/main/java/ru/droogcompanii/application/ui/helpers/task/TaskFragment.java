@@ -23,14 +23,15 @@ public class TaskFragment extends DialogFragment {
 
     private int resultCode = Activity.RESULT_CANCELED;
     private Serializable result = null;
+    private Integer titleId;
 
     public void setTask(Task task) {
         task.setFragment(this);
         this.task = task;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(Integer titleId) {
+        this.titleId = titleId;
     }
 
     @Override
@@ -44,11 +45,11 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (title.isEmpty()) {
+        if (titleId == null) {
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         } else {
-            getDialog().setTitle(title);
+            getDialog().setTitle(titleId);
         }
         getDialog().setCanceledOnTouchOutside(false);
         return inflater.inflate(R.layout.fragment_task, container);

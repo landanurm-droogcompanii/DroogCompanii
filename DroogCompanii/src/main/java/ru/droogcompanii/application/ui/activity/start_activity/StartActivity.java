@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.activity.activity_with_partner_points_map_fragment_and_info_panel.FlagNeedToUpdateMap;
 import ru.droogcompanii.application.ui.activity.main_screen.MainScreen;
 import ru.droogcompanii.application.ui.activity.synchronization_activity.SynchronizationActivity;
 import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
@@ -49,6 +50,7 @@ public class StartActivity extends FragmentActivity {
     private void onAppStarted() {
         IS_MAIN_SCREEN_STARTED.set(false);
         FilterUtils.resetFilters(this);
+        FlagNeedToUpdateMap.init();
     }
 
     private void startMainScreen() {

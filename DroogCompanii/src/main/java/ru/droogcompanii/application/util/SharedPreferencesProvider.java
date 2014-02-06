@@ -14,7 +14,11 @@ public class SharedPreferencesProvider {
     public static final String KEY_OF_SHARED_PREFERENCES = SharedPreferencesProvider.class.getName();
 
     public static SharedPreferences get(Context context) {
-        return context.getSharedPreferences(KEY_OF_SHARED_PREFERENCES, Activity.MODE_PRIVATE);
+        return get(context, KEY_OF_SHARED_PREFERENCES);
+    }
+
+    public static SharedPreferences get(Context context, String key) {
+        return context.getSharedPreferences(key, Activity.MODE_PRIVATE);
     }
 
     public static SharedPreferences getFromApplicationContext() {

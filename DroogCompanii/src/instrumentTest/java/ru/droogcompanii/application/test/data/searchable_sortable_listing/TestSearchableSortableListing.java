@@ -8,6 +8,8 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.searchable_sortable_listing.OnEachHandler;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
+import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResultImpl;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.test.TestingUtils;
 
@@ -202,6 +204,54 @@ public class TestSearchableSortableListing extends TestCase {
         notSerialized.addSearchCriterion(new OnlyTheseNumbersSearchCriterion(1, 2, 3, 4, 5));
         SearchableSortableListing<Integer> serialized = TestingUtils.serializeAndDeserialize(notSerialized);
         assertEquals(notSerialized.toList(), serialized.toList());
+    }
+
+
+    public void testToListOfSearchResultsWithoutSearchCriteria() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3);
+        SearchableSortableListing<Integer> listing = SearchableSortableListing.newInstance(numbers);
+        listing.addComparator(new ReverseOrderComparator());
+        List<? extends SearchResult<Integer>> actualSearchResults = listing.toListOfSearchResults();
+        List<? extends SearchResult<Integer>> expectedSearchResults = Arrays.asList(
+                new SearchResultImpl<Integer>(3, true),
+                new SearchResultImpl<Integer>(2, true),
+                new SearchResultImpl<Integer>(1, true)
+        );
+        assertEquals(expectedSearchResults, actualSearchResults);
+    }
+
+
+    public void testToListOfSearchResultsWithoutSearchCriteriaAndComparators() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3);
+        SearchableSortableListing<Integer> listing = SearchableSortableListing.newInstance(numbers);
+        List<? extends SearchResult<Integer>> actualSearchResults = listing.toListOfSearchResults();
+        List<? extends SearchResult<Integer>> expectedSearchResults = Arrays.asList(
+                new SearchResultImpl<Integer>(1, true),
+                new SearchResultImpl<Integer>(2, true),
+                new SearchResultImpl<Integer>(3, true)
+        );
+        assertEquals(expectedSearchResults, actualSearchResults);
+    }
+
+
+    public void testToListOfSearchResults() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+        SearchableSortableListing<Integer> listing = SearchableSortableListing.newInstance(numbers);
+        listing.addSearchCriterion(new OnlyEvenNumbersSearchCriterion());
+        listing.addSearchCriterion(new OnlyTheseNumbersSearchCriterion(2, 4));
+        listing.addComparator(new ReverseOrderComparator());
+        List<? extends SearchResult<Integer>> actualSearchResults = listing.toListOfSearchResults();
+        List<? extends SearchResult<Integer>> expectedSearchResults = Arrays.asList(
+                new SearchResultImpl<Integer>(8, false),
+                new SearchResultImpl<Integer>(7, false),
+                new SearchResultImpl<Integer>(6, false),
+                new SearchResultImpl<Integer>(5, false),
+                new SearchResultImpl<Integer>(4, true),
+                new SearchResultImpl<Integer>(3, false),
+                new SearchResultImpl<Integer>(2, true),
+                new SearchResultImpl<Integer>(1, false)
+        );
+        assertEquals(expectedSearchResults, actualSearchResults);
     }
 
 }

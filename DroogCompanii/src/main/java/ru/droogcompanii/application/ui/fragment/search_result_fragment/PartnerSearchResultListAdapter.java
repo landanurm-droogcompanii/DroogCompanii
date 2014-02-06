@@ -12,7 +12,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
 import ru.droogcompanii.application.ui.helpers.SimpleArrayAdapter;
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 14.01.14.
@@ -42,12 +41,10 @@ public class PartnerSearchResultListAdapter extends SimpleArrayAdapter<SearchRes
         return resources.getColor(textColorIdOf(item));
     }
 
-    private int textColorIdOf(SearchResult<Partner> item) {
+    private static int textColorIdOf(SearchResult<Partner> item) {
         if (item.meetsSearchCriteria()) {
-            LogUtils.debug("meetsCriteria");
             return R.color.textColorOfItemWhichMeetsCriteria;
         } else {
-            LogUtils.debug("does not meetsCriteria");
             return R.color.textColorOfItemWhichDoesNotMeetCriteria;
         }
     }
