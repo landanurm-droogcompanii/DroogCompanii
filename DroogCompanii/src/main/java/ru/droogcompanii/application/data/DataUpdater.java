@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.InputStream;
 
 import ru.droogcompanii.application.data.db_util.WriterToDatabase;
-import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
+import ru.droogcompanii.application.data.xml_parser.partners_xml_parser.PartnersXmlParser;
 
 /**
  * Created by Leonid on 18.12.13.
@@ -25,12 +25,12 @@ public class DataUpdater {
     }
 
     public void update() throws Exception {
-        DroogCompaniiXmlParser.ParsedData parsedData = downloadAndParseXml();
+        PartnersXmlParser.ParsedData parsedData = downloadAndParseXml();
         writerToDatabase.write(parsedData);
     }
 
-    private DroogCompaniiXmlParser.ParsedData downloadAndParseXml() throws Exception {
-        DroogCompaniiXmlParser parser = new DroogCompaniiXmlParser();
+    private PartnersXmlParser.ParsedData downloadAndParseXml() throws Exception {
+        PartnersXmlParser parser = new PartnersXmlParser();
         return parser.parse(xmlProvider.getXml());
     }
 }

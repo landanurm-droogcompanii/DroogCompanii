@@ -14,7 +14,9 @@ public class TestingUtils {
     public static void assertExpectedException(Class<? extends Exception> exceptionClass, Runnable runnable) {
         try {
             runnable.run();
-            throw new AssertionFailedError("Expected exception: <" + exceptionClass.getName() + ">");
+            throw new AssertionFailedError(
+                "Expected exception: <" + exceptionClass.getName() + ">, but was not thrown"
+            );
         } catch (Exception e) {
             if (!exceptionClass.equals(e.getClass())) {
                 throw new AssertionFailedError(

@@ -11,7 +11,7 @@ import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAnd
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 
-import static ru.droogcompanii.application.util.StringConstants.XmlConstants.TypesOfDay;
+import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.TypesOfDay;
 
 /**
  * Created by ls on 09.01.14.

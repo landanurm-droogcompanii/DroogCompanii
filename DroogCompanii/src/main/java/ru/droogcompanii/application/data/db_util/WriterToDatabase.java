@@ -13,7 +13,7 @@ import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.Partners
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
+import ru.droogcompanii.application.data.xml_parser.partners_xml_parser.PartnersXmlParser;
 import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
@@ -27,7 +27,7 @@ public class WriterToDatabase {
         this.context = context;
     }
 
-    public void write(DroogCompaniiXmlParser.ParsedData parsedData) {
+    public void write(PartnersXmlParser.ParsedData parsedData) {
         DroogCompaniiDbHelper dbHelper = new DroogCompaniiDbHelper(context);
         db = dbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -42,7 +42,7 @@ public class WriterToDatabase {
         dbHelper.close();
     }
 
-    private void tryExecuteTransaction(DroogCompaniiXmlParser.ParsedData parsedData) {
+    private void tryExecuteTransaction(PartnersXmlParser.ParsedData parsedData) {
         clearOldData();
         writePartnerCategories(parsedData.partnerCategories);
         writePartners(parsedData.partners);

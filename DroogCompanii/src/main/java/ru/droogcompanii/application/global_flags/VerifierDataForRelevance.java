@@ -1,9 +1,10 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.global_flags;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
+import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 31.01.14.

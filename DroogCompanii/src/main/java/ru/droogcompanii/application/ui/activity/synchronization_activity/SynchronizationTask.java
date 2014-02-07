@@ -32,7 +32,7 @@ public class SynchronizationTask extends Task {
             @Override
             public InputStream getXml() throws Exception {
                 Resources resources = context.getResources();
-                return resources.openRawResource(R.raw.test_data_medium);
+                return resources.openRawResource(R.raw.test_data_small);
             }
         };
     }

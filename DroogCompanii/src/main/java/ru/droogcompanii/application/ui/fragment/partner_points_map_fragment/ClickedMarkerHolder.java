@@ -13,10 +13,12 @@ import ru.droogcompanii.application.util.Keys;
 class ClickedMarkerHolder {
     private final MarkersFinder markersFinder;
     private Marker clickedMarker;
+    private LatLng positionOfClickedMarker;
 
     public ClickedMarkerHolder(MarkersFinder markersFinder) {
         this.markersFinder = markersFinder;
         this.clickedMarker = null;
+        this.positionOfClickedMarker = null;
     }
 
     public void restoreFromIfNeed(Bundle bundle) {
@@ -25,22 +27,12 @@ class ClickedMarkerHolder {
         }
     }
 
-    private static boolean needToRestore(Bundle bundle) {
-        return (bundle != null) && bundle.getBoolean(Keys.clickedMarkerIsExist);
+    private boolean needToRestore(Bundle bundle) {
+        return (bundle != null && bundle.getBoolean(Keys.clickedMarkerIsExist));
     }
 
     private void restoreFrom(Bundle bundle) {
-        LatLng positionOfClickedMarker = readPosition(bundle);
-        Marker marker = markersFinder.findMarkerByPosition(positionOfClickedMarker);
-        update(marker);
-    }
-
-    private void update(Marker newMarker) {
-        if (newMarker != null) {
-            set(newMarker);
-        } else {
-            unset();
-        }
+        positionOfClickedMarker = readPosition(bundle);
     }
 
     private static LatLng readPosition(Bundle bundle) {
@@ -54,7 +46,7 @@ class ClickedMarkerHolder {
             outState.putBoolean(Keys.clickedMarkerIsExist, false);
         } else {
             outState.putBoolean(Keys.clickedMarkerIsExist, true);
-            savePosition(outState, clickedMarker.getPosition());
+            savePosition(outState, positionOfClickedMarker);
         }
     }
 
@@ -64,7 +56,7 @@ class ClickedMarkerHolder {
     }
 
     public boolean isAbsent() {
-        return (clickedMarker == null);
+        return (positionOfClickedMarker == null);
     }
 
     public void update() {
@@ -74,12 +66,25 @@ class ClickedMarkerHolder {
         update(findActualClickedMarker());
     }
 
+    private void update(Marker newMarker) {
+        if (newMarker != null) {
+            set(newMarker);
+        } else {
+            unset();
+        }
+    }
+
     private Marker findActualClickedMarker() {
-        LatLng position = clickedMarker.getPosition();
-        return markersFinder.findMarkerByPosition(position);
+        return markersFinder.findMarkerByPosition(positionOfClickedMarker);
     }
 
     public Marker getMarker() {
+        if (positionOfClickedMarker == null) {
+            return null;
+        }
+        if (clickedMarker == null) {
+            clickedMarker = markersFinder.findMarkerByPosition(positionOfClickedMarker);
+        }
         return clickedMarker;
     }
 
@@ -87,6 +92,7 @@ class ClickedMarkerHolder {
         unset();
         selectMarker(marker);
         this.clickedMarker = marker;
+        this.positionOfClickedMarker = marker.getPosition();
     }
 
     private static void selectMarker(Marker marker) {
@@ -94,13 +100,11 @@ class ClickedMarkerHolder {
     }
 
     public void unset() {
-        if (isAbsent()) {
-            return;
-        }
-        if (markersFinder.isMarkerPlacedOnMap(clickedMarker)) {
-            unselectMarker(clickedMarker);
+        if (isOwnerOfMarker() && markersFinder.isMarkerPlacedOnMap(getMarker())) {
+            unselectMarker(getMarker());
         }
         clickedMarker = null;
+        positionOfClickedMarker = null;
     }
 
     private static void unselectMarker(Marker marker) {
@@ -108,17 +112,21 @@ class ClickedMarkerHolder {
     }
 
     public boolean isHolding(Marker marker) {
-        if (isAbsent()) {
+        if (isAbsent() || marker == null) {
             return false;
         }
-        return clickedMarker.equals(marker);
+        return positionOfClickedMarker.equals(marker.getPosition());
     }
 
     public LatLng getPosition() {
-        return getMarker().getPosition();
+        return positionOfClickedMarker;
     }
 
     public boolean isPresent() {
         return !isAbsent();
+    }
+
+    public boolean isOwnerOfMarker() {
+        return getMarker() != null;
     }
 }

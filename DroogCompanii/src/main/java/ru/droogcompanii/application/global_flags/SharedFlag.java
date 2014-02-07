@@ -1,19 +1,21 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.global_flags;
 
 import android.content.SharedPreferences;
+
+import ru.droogcompanii.application.util.SharedPreferencesProvider;
 
 /**
  * Created by ls on 03.02.14.
  */
-public class BooleanSharedFlag {
+public class SharedFlag {
 
     private final String key;
 
-    public static BooleanSharedFlag from(String key) {
-        return new BooleanSharedFlag(key);
+    public static SharedFlag from(String key) {
+        return new SharedFlag(key);
     }
 
-    private BooleanSharedFlag(String key) {
+    private SharedFlag(String key) {
         this.key = key;
     }
 

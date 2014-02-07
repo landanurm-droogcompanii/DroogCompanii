@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import ru.droogcompanii.application.ActionsOnApplicationLaunch;
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.activity_with_partner_points_map_fragment_and_info_panel.FlagNeedToUpdateMap;
+import ru.droogcompanii.application.global_flags.SharedFlag;
+import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
 import ru.droogcompanii.application.ui.activity.main_screen.MainScreen;
 import ru.droogcompanii.application.ui.activity.synchronization_activity.SynchronizationActivity;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
 import ru.droogcompanii.application.ui.helpers.YesNoDialogMaker;
-import ru.droogcompanii.application.util.BooleanSharedFlag;
-import ru.droogcompanii.application.util.VerifierDataForRelevance;
 
 /**
  * Created by ls on 31.01.14.
@@ -24,8 +23,8 @@ public class StartActivity extends FragmentActivity {
         public static final int MAIN_SCREEN = 22222;
     }
 
-    private static final BooleanSharedFlag
-            IS_MAIN_SCREEN_STARTED = BooleanSharedFlag.from("IS_MAIN_SCREEN_STARTED");
+    private static final SharedFlag
+            IS_MAIN_SCREEN_STARTED = SharedFlag.from("IS_MAIN_SCREEN_STARTED");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +48,7 @@ public class StartActivity extends FragmentActivity {
 
     private void onAppStarted() {
         IS_MAIN_SCREEN_STARTED.set(false);
-        FilterUtils.resetFilters(this);
-        FlagNeedToUpdateMap.init();
+        ActionsOnApplicationLaunch.actionsOnApplicationLaunch();
     }
 
     private void startMainScreen() {

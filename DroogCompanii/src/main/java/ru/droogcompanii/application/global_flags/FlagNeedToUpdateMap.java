@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.activity_with_partner_points_map_fragment_and_info_panel;
+package ru.droogcompanii.application.global_flags;
 
 import android.content.Context;
 import android.content.SharedPreferences;

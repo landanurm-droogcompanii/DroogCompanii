@@ -6,9 +6,9 @@ import android.support.v7.app.ActionBarActivity;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.activity_with_partner_points_map_fragment_and_info_panel.FlagNeedToUpdateMap;
+import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
-import ru.droogcompanii.application.util.VerifierDataForRelevance;
+import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
 
 /**
  * Created by ls on 26.12.13.

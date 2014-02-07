@@ -1,10 +1,8 @@
-package ru.droogcompanii.application.test.data.xml_parser;
+package ru.droogcompanii.application.test.data.xml_parser.partners_xml_parser;
 
 import junit.framework.TestCase;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -20,17 +18,18 @@ import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfW
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
-import ru.droogcompanii.application.data.xml_parser.DroogCompaniiXmlParser;
+import ru.droogcompanii.application.data.xml_parser.partners_xml_parser.PartnersXmlParser;
+import ru.droogcompanii.application.util.StringToInputStreamConvertor;
 
-import static ru.droogcompanii.application.util.StringConstants.XmlConstants.Attributes;
-import static ru.droogcompanii.application.util.StringConstants.XmlConstants.DayOfWeek;
-import static ru.droogcompanii.application.util.StringConstants.XmlConstants.Tags;
-import static ru.droogcompanii.application.util.StringConstants.XmlConstants.TypesOfDay;
+import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.Attributes;
+import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.DayOfWeek;
+import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.Tags;
+import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.TypesOfDay;
 
 /**
  * Created by ls on 08.01.14.
  */
-public class SimpleTestDroogCompaniiXmlParser extends TestCase {
+public class SimpleTestPartnersXmlParser extends TestCase {
 
     private static final String TYPE_ARRAY = " type=\"array\"";
     private static final String TYPE_INTEGER = " type=\"integer\"";
@@ -96,15 +95,7 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
         weekWorkingHoursOfPartnerPoint = new WeekWorkingHours(workingHoursForEachDayOfWeek);
 
         String xmlText = prepareXml();
-        xml = stringToInputStream(xmlText);
-    }
-
-    private static InputStream stringToInputStream(String str) {
-        try {
-            return new ByteArrayInputStream(str.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            return new ByteArrayInputStream(str.getBytes());
-        }
+        xml = StringToInputStreamConvertor.convert(xmlText);
     }
 
     private String prepareXml() {
@@ -218,8 +209,8 @@ public class SimpleTestDroogCompaniiXmlParser extends TestCase {
 
     public void test() throws Exception {
 
-        DroogCompaniiXmlParser testedXmlParser = new DroogCompaniiXmlParser();
-        DroogCompaniiXmlParser.ParsedData parsedData = testedXmlParser.parse(xml);
+        PartnersXmlParser testedXmlParser = new PartnersXmlParser();
+        PartnersXmlParser.ParsedData parsedData = testedXmlParser.parse(xml);
 
         assertEquals(1, numberOf(parsedData.partnerCategories));
         assertEquals(1, numberOf(parsedData.partners));

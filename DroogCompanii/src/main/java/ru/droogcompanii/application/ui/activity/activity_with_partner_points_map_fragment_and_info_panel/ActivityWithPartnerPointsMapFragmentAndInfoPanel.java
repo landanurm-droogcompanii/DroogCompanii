@@ -15,6 +15,7 @@ import java.util.Set;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
 import ru.droogcompanii.application.ui.activity.filter_activity.FilterActivity;
 import ru.droogcompanii.application.ui.activity.menu_activity.MenuActivity;
 import ru.droogcompanii.application.ui.activity.search_activity.SearchActivity;
@@ -35,8 +36,11 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
             extends ActionBarActivityWithUpButton
             implements PartnerPointsMapFragment.Callbacks, TaskFragmentHolder.Callbacks {
 
-    private boolean isTaskStarted;
+    private static final String TAG_TASK_FRAGMENT_HOLDER =
+            "TaskFragmentHolder" + ActivityWithPartnerPointsMapFragmentAndInfoPanel.class.getName();
 
+
+    private boolean isTaskStarted;
     protected PartnerPointsMapFragment partnerPointsMapFragment;
     protected PartnerPointsInfoPanelFragment partnerPointsInfoPanelFragment;
 
@@ -89,7 +93,7 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment taskFragment = new PartnerPointsProviderTaskFragmentHolder();
-        transaction.add(R.id.taskFragmentContainer, taskFragment);
+        transaction.add(R.id.taskFragmentContainer, taskFragment, TAG_TASK_FRAGMENT_HOLDER);
         transaction.commit();
     }
 
@@ -105,7 +109,7 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
         }
     }
 
-    private void initPartnerPointsMapAndInfoPanel(Collection<PartnerPoint> partnerPoints) {
+    private void initPartnerPointsMapFragmentIfNeed(Collection<PartnerPoint> partnerPoints) {
         if (partnerPoints != null) {
             initPartnerPointsMapFragment(partnerPoints);
         }
@@ -128,8 +132,8 @@ public abstract class ActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     private void onTaskFinishedSuccessfully(Serializable result) {
-        FragmentRemover.removeFragmentByContainerId(this, R.id.taskFragmentContainer);
-        initPartnerPointsMapAndInfoPanel((List<PartnerPoint>) result);
+        FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
+        initPartnerPointsMapFragmentIfNeed((List<PartnerPoint>) result);
         FlagNeedToUpdateMap.set(false);
     }
 

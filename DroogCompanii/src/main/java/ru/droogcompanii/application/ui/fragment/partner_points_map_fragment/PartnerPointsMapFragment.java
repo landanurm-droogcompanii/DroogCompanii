@@ -28,12 +28,10 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
 
-
     public static interface Callbacks {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
         void onNoLongerNeedToShowPartnerPoints();
     }
-
 
     private boolean doNotInitOnResume;
     private boolean wasActivityCreated;
@@ -74,17 +72,27 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
         wasActivityCreated = true;
 
+        clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
+
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
 
         restoreInstanceStateIfNeed(savedInstanceState);
 
-        callOnResumeFirstTime(new Runnable() {
+        super.callOnResumeFirstTime(new Runnable() {
             @Override
             public void run() {
                 initIfNeed();
             }
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private void restoreInstanceStateIfNeed(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            searchablePartnerPoints = (SearchableListing<PartnerPoint>)
+                    savedInstanceState.getSerializable(Keys.searchablePartnerPoints);
+        }
     }
 
     private void initIfNeed() {
@@ -95,16 +103,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private void init() {
         updateMap();
-        clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
-        updateMapCameraAfterMapViewWillBePlacedOnLayout(clickedMarkerHolder);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void restoreInstanceStateIfNeed(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            searchablePartnerPoints = (SearchableListing<PartnerPoint>)
-                    savedInstanceState.getSerializable(Keys.searchablePartnerPoints);
-        }
+        clickedMarkerHolder.update();
+        super.updateMapCameraAfterMapViewWillBePlacedOnLayout(clickedMarkerHolder);
     }
 
     @Override
@@ -139,19 +139,27 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     public void addFilterSet(FilterSet filterSet) {
-        List<? extends SearchCriterion<PartnerPoint>> searchCriteria = filterSet.getPartnerPointSearchCriteria();
-        for (SearchCriterion<PartnerPoint> criterion : searchCriteria) {
-            searchablePartnerPoints.addSearchCriterion(criterion);
-        }
+        addSearchFilters(filterSet);
         updateMap();
         updateAfterFilteringIfNeed();
     }
 
-    private void updateAfterFilteringIfNeed() {
-        if (clickedMarkerHolder.isAbsent()) {
-            return;
+    private void addSearchFilters(FilterSet filterSet) {
+        List<? extends SearchCriterion<PartnerPoint>> searchCriteria =
+                filterSet.getPartnerPointSearchCriteria();
+        for (SearchCriterion<PartnerPoint> criterion : searchCriteria) {
+            searchablePartnerPoints.addSearchCriterion(criterion);
         }
-        updateAfterFiltering();
+    }
+
+    private void updateAfterFilteringIfNeed() {
+        if (needToUpdateAfterFiltering()) {
+            updateAfterFiltering();
+        }
+    }
+
+    private boolean needToUpdateAfterFiltering() {
+        return clickedMarkerHolder.isPresent();
     }
 
     private void updateAfterFiltering() {
@@ -170,13 +178,17 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (clickedMarkerHolder.isHolding(marker)) {
+        if (isMarkerAlreadyClicked(marker)) {
             return true;
         }
         notifyNeedToShowPartnerPoints(marker);
         clickedMarkerHolder.set(marker);
         updateMapCamera(clickedMarkerHolder);
         return true;
+    }
+
+    private boolean isMarkerAlreadyClicked(Marker marker) {
+        return clickedMarkerHolder.isHolding(marker);
     }
 
     @Override

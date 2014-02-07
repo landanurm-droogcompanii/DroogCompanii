@@ -18,7 +18,7 @@ public class StringConstants {
     public static final String discountType_Discount = "Скидка";
     public static final String discountType_CashBack = "Cash back";
 
-    public static class XmlConstants {
+    public static class PartnersXmlConstants {
 
         public static class Tags {
             public static final String partnerCategories = "partner-categories";
@@ -59,6 +59,22 @@ public class StringConstants {
             public static final String usualDay = "usual_day";
             public static final String holiday = "holiday";
             public static final String dayAndNight = "day_and_night";
+        }
+    }
+
+    public static class OffersXmlConstants {
+
+        public static class Tags {
+            public static final String offers = "offers";
+            public static final String offer = "offer";
+            public static final String id = "id";
+            public static final String partnerId = "partnerId";
+            public static final String imageUrl = "imageUrl";
+            public static final String shortDescription = "shortDescription";
+            public static final String fullDescription = "fullDescription";
+            public static final String duration = "duration";
+            public static final String from = "from";
+            public static final String to = "to";
         }
     }
 }

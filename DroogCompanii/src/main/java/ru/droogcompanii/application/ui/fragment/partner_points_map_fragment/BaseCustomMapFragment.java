@@ -105,7 +105,8 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         markers.clear();
     }
 
-    protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(final ClickedMarkerHolder clickedMarker) {
+    protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(
+                                    final ClickedMarkerHolder clickedMarker) {
         if (isMapViewPlacedOnLayout) {
             updateMapCamera(clickedMarker);
         } else {
