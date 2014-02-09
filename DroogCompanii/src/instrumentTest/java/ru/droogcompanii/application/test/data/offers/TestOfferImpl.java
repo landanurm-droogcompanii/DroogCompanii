@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import java.util.Calendar;
 
-import ru.droogcompanii.application.util.CalendarCreator;
+import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
@@ -26,14 +26,14 @@ public class TestOfferImpl extends TestCase {
 	private static final String differentImageUrl = imageUrl + "different";
 
 	private static CalendarRange prepareDuration() {
-		final Calendar from = CalendarCreator.byDate(1, Calendar.DECEMBER, 2013);
-		final Calendar to = CalendarCreator.byDate(2, Calendar.MARCH, 2014);
+		final Calendar from = CalendarUtils.createByDayMonthYear(1, Calendar.DECEMBER, 2013);
+		final Calendar to = CalendarUtils.createByDayMonthYear(2, Calendar.MARCH, 2014);
 		return new CalendarRange(from, to);
 	}
 
 	private static CalendarRange prepareDifferentDuration() {
-		final Calendar from = CalendarCreator.byDate(10, Calendar.SEPTEMBER, 2013);
-		final Calendar to = CalendarCreator.byDate(14, Calendar.APRIL, 2019);
+		final Calendar from = CalendarUtils.createByDayMonthYear(10, Calendar.SEPTEMBER, 2013);
+		final Calendar to = CalendarUtils.createByDayMonthYear(14, Calendar.APRIL, 2019);
 		return new CalendarRange(from, to);
 	}
 	

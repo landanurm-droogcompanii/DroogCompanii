@@ -2,23 +2,30 @@ package ru.droogcompanii.application.data.offers;
 
 import java.util.Calendar;
 
+import ru.droogcompanii.application.util.CalendarUtils;
+import ru.droogcompanii.application.util.ConvertorToString;
+
 public class CalendarRange {
 
 	private final Calendar from;
 	private final Calendar to;
 
 	public CalendarRange(Calendar from, Calendar to) {
-		if (from == null || to == null) {
-			throw new IllegalArgumentException("<from> and <to> must be not null");
-		}
-		if (!to.after(from)) {
-			throw new IllegalArgumentException("<to> must be after <from>");
-		}
+        checkArguments(from, to);
 		this.from = from;
 		this.to = to;
 	}
 
-	public Calendar from() {
+    private void checkArguments(Calendar from, Calendar to) {
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("<from> and <to> must be not null");
+        }
+        if (!to.after(from)) {
+            throw new IllegalArgumentException("<to> must be after <from>");
+        }
+    }
+
+    public Calendar from() {
 		return from;
 	}
 
@@ -42,5 +49,13 @@ public class CalendarRange {
 	public int hashCode() {
 		return from.hashCode() + to.hashCode();
 	}
+
+    @Override
+    public String toString() {
+        return ConvertorToString.buildFor(this)
+                .withFieldNames("from", "to")
+                .withFieldValues(CalendarUtils.convertToString(from), CalendarUtils.convertToString(to))
+                .toString();
+    }
 	
 }

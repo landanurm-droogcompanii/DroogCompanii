@@ -65,6 +65,10 @@ public class StringConstants {
     public static class OffersXmlConstants {
 
         public static class Tags {
+            public Tags() {
+                // do nothing
+            }
+
             public static final String offers = "offers";
             public static final String offer = "offer";
             public static final String id = "id";

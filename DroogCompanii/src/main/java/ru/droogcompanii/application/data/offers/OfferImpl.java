@@ -1,5 +1,8 @@
 package ru.droogcompanii.application.data.offers;
 
+import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.HashCodeCalculator;
+
 public class OfferImpl implements Offer {
 
 	public int id;
@@ -71,17 +74,32 @@ public class OfferImpl implements Offer {
 	
 	@Override
 	public int hashCode() {
-		return sumOfHashCodes(
-			id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial()
-		);
+		return HashCodeCalculator.hashCodeFromFields(
+                id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial()
+        );
 	}
 
-	private static int sumOfHashCodes(Object... objects) {
-		int sum = 0;
-		for (Object obj : objects) {
-			sum += obj.hashCode();
-		}
-		return sum;
-	}
+    @Override
+    public String toString() {
+        /*
+        return getClass().getSimpleName() + "( " +
+                "id=" + id + ", " +
+                "partner_id=" + partnerId + ", " +
+                "duration=" + duration + ", " +
+                "shortDescription=" + quote(shortDescription) + ", " +
+                "fullDescription=" + quote(fullDescription) + ", " +
+                "imageUrl=" + quote(imageUrl) + ", " +
+                "isSpecial=" + isSpecial() +
+        " )";
+        */
+        return ConvertorToString.buildFor(this)
+            .withFieldNames("id", "partnerId", "duration", "shortDescription", "fullDescription", "imageUrl", "isSpecial()")
+            .withFieldValues(id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial())
+            .toString();
+    }
+
+    private static String quote(String str) {
+        return "\"" + str + "\"";
+    }
 
 }

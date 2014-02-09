@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import java.util.Calendar;
 
-import ru.droogcompanii.application.util.CalendarCreator;
+import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.test.TestingUtils;
 
@@ -20,10 +20,10 @@ public class TestCalendarRange extends TestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		from = CalendarCreator.byDate(1, Calendar.JANUARY, 2014);
-		differentFrom = CalendarCreator.byDate(12, Calendar.JANUARY, 2014);
-		to = CalendarCreator.byDate(10, Calendar.FEBRUARY, 2014);
-		differentTo = CalendarCreator.byDate(25, Calendar.FEBRUARY, 2014);
+		from = CalendarUtils.createByDayMonthYear(1, Calendar.JANUARY, 2014);
+		differentFrom = CalendarUtils.createByDayMonthYear(12, Calendar.JANUARY, 2014);
+		to = CalendarUtils.createByDayMonthYear(10, Calendar.FEBRUARY, 2014);
+		differentTo = CalendarUtils.createByDayMonthYear(25, Calendar.FEBRUARY, 2014);
 		calendarRange = new CalendarRange(from, to);
 	}
 	
