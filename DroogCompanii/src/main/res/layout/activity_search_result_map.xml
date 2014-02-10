@@ -5,7 +5,7 @@
     android:layout_height="match_parent" >
 
     <fragment
-        android:name="ru.droogcompanii.application.ui.fragment.partner_points_map_fragment.PartnerPointsMapFragment"
+        android:name="ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsMapFragment"
         android:id="@+id/mapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -25,7 +25,7 @@
         android:layout_above="@id/filterButton" >
 
         <fragment
-            android:name="ru.droogcompanii.application.ui.fragment.partner_points_info_panel_fragment.PartnerPointsInfoPanelFragment"
+            android:name="ru.droogcompanii.application.ui.fragment.partner_points_info_panel.PartnerPointsInfoPanelFragment"
             android:id="@+id/partnerPointsInfoPanelFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -35,7 +35,7 @@
     <string name="titleOfMenuActivity">@string/action_menu</string>
     <string name="titleOfSearchActivity">@string/action_search</string>
     <string name="titleOfSettingsActivity">@string/menu_item_settings</string>
-    <string name="titleOfStockActivity">@string/menu_item_offers</string>
+    <string name="titleOfOfferListActivity">@string/menu_item_offers</string>
     <string name="titleOfPersonalAccountActivity">@string/menu_item_personal_account</string>
     <string name="titleOfSynchronizationActivity">@string/menu_item_synchronization</string>
 

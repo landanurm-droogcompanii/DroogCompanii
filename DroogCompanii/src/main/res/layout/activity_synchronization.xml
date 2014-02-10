@@ -9,7 +9,7 @@
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="ru.droogcompanii.application.ui.activity.synchronization_activity.SynchronizationTaskFragmentHolder"
+        class="ru.droogcompanii.application.ui.activity.synchronization.SynchronizationTaskFragmentHolder"
         tools:layout="@layout/data_downloader_fragment"/>
 
 </FrameLayout>

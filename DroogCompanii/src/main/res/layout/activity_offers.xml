@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:name="ru.droogcompanii.application.ui.fragment.offers_fragment.OffersFragment"
+        android:name="ru.droogcompanii.application.ui.fragment.offer_list.OfferListFragment"
         android:id="@+id/offersFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

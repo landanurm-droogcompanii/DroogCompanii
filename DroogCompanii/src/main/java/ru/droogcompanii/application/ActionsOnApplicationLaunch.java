@@ -1,7 +1,7 @@
 package ru.droogcompanii.application;
 
 import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
-import ru.droogcompanii.application.ui.fragment.filter_fragment.FilterUtils;
+import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 
 /**
  * Created by ls on 07.02.14.

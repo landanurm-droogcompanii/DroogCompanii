@@ -46,7 +46,10 @@ public class Keys {
     public static final String filtersAtTheMomentOfFirstLaunch = "filtersAtTheMomentOfFirstLaunch";
 
     public static final String isTaskStarted = "isTaskStarted";
-    public static final String isNeedToApplyFilters = "isNeedToApplyFilters";
 
     public static final String offers = "offers";
+
+    public static final String offer = "offer";
+
+    public static final String args = "args";
 }
