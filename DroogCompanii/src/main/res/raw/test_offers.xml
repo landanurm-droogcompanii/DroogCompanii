@@ -1,0 +1,82 @@
+<offers type="array">
+    <offer>
+        <id>123</id>
+        <partnerId>48395</partnerId>
+        <imageUrl>http://droogcompanii.ru/system/offers/19/medium/1375352404.jpg</imageUrl>
+        <shortDescription>1. This is Short Description</shortDescription>
+        <fullDescription>
+            1)
+            This is FULL Description.
+            This is FULL Description.
+            This is FULL Description.
+        </fullDescription>
+        <duration>
+            <from>22.01.14</from>
+            <to>23.02.14</to>
+        </duration>
+    </offer>
+    <offer>
+        <id>334</id>
+        <partnerId>4353</partnerId>
+        <imageUrl>http://droogcompanii.ru/system/offers/35/medium/1365156064.jpg</imageUrl>
+        <shortDescription>2. This is Short Description</shortDescription>
+        <fullDescription>
+            2)
+            This is FULL Description.
+            This is FULL Description.
+            This is FULL Description.
+        </fullDescription>
+        <duration>
+            <from>11.01.14</from>
+            <to>23.03.14</to>
+        </duration>
+    </offer>
+    <offer>
+        <id>5515</id>
+        <partnerId>66766</partnerId>
+        <imageUrl>http://droogcompanii.ru/system/offers/38/medium/1371633650.jpg</imageUrl>
+        <shortDescription>3. This is Short Description</shortDescription>
+        <fullDescription>
+            3)
+            This is FULL Description.
+            This is FULL Description.
+            This is FULL Description.
+        </fullDescription>
+        <duration>
+            <from>11.01.14</from>
+            <to>15.05.14</to>
+        </duration>
+    </offer>
+    <offer>
+        <id>98989</id>
+        <partnerId>112345</partnerId>
+        <imageUrl>http://droogcompanii.ru/system/offers/40/medium/1372399043.jpg</imageUrl>
+        <shortDescription>4. This is Short Description</shortDescription>
+        <fullDescription>
+            4)
+            This is FULL Description.
+            This is FULL Description.
+            This is FULL Description.
+        </fullDescription>
+        <duration>
+            <from>01.01.14</from>
+            <to>15.02.14</to>
+        </duration>
+    </offer>
+    <offer>
+        <id>20009</id>
+        <partnerId>11222</partnerId>
+        <imageUrl>http://droogcompanii.ru/system/offers/49/medium/1384430257.jpg</imageUrl>
+        <shortDescription>5. This is Short Description</shortDescription>
+        <fullDescription>
+            5)
+            This is FULL Description.
+            This is FULL Description.
+            This is FULL Description.
+        </fullDescription>
+        <duration>
+            <from>01.02.14</from>
+            <to>17.08.14</to>
+        </duration>
+    </offer>
+</offers>

@@ -77,7 +77,7 @@
             android:label="@string/titleOfPersonalAccountActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.stock_activity.StockActivity"
+            android:name=".ui.activity.offers_activity.OffersActivity"
             android:label="@string/titleOfStockActivity" >
         </activity>
         <activity

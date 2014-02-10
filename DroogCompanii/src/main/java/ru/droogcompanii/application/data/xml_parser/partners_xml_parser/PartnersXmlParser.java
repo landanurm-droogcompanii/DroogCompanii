@@ -38,6 +38,9 @@ public class PartnersXmlParser {
         }
     }
 
+    private static final StringConstants.PartnersXmlConstants.Tags
+            TAGS = new StringConstants.PartnersXmlConstants.Tags();
+
     private static final String NAMESPACE = null;
 
     private Collection<PartnerCategory> outPartnerCategories;
@@ -84,8 +87,7 @@ public class PartnersXmlParser {
     }
 
     private void parsePartnerCategories(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.partnerCategories);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partnerCategories);
 
         int partnerCategoryId = 0;
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -93,7 +95,7 @@ public class PartnersXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.partnerCategory)) {
+            if (tag.equals(TAGS.partnerCategory)) {
                 ++partnerCategoryId;
                 PartnerCategory partnerCategory = parsePartnerCategory(parser, partnerCategoryId);
                 outPartnerCategories.add(partnerCategory);
@@ -106,8 +108,7 @@ public class PartnersXmlParser {
     private PartnerCategory parsePartnerCategory(
                             XmlPullParser parser, int partnerCategoryId) throws Exception {
 
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.partnerCategory);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partnerCategory);
 
         String title = null;
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -115,9 +116,9 @@ public class PartnersXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.title)) {
+            if (tag.equals(TAGS.title)) {
                 title = parseTitle(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.partners)) {
+            } else if (tag.equals(TAGS.partners)) {
                 parsePartners(parser, partnerCategoryId);
             } else {
                 XmlParserUtils.skip(parser);
@@ -127,19 +128,18 @@ public class PartnersXmlParser {
     }
 
     private static String parseTitle(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, StringConstants.PartnersXmlConstants.Tags.title);
+        return XmlParserUtils.parseTextByTag(parser, TAGS.title);
     }
 
     private void parsePartners(XmlPullParser parser, int partnerCategoryId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.partners);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partners);
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.partner)) {
+            if (tag.equals(TAGS.partner)) {
                 Partner partner = parsePartner(parser, partnerCategoryId);
                 outPartners.add(partner);
             } else {
@@ -149,8 +149,7 @@ public class PartnersXmlParser {
     }
 
     private Partner parsePartner(XmlPullParser parser, int partnerCategoryId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.partner);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partner);
 
         int id = 0;
         String title = null;
@@ -163,17 +162,17 @@ public class PartnersXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.id)) {
+            if (tag.equals(TAGS.id)) {
                 id = parseId(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.title)) {
+            } else if (tag.equals(TAGS.title)) {
                 title = parseTitle(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.fullTitle)) {
+            } else if (tag.equals(TAGS.fullTitle)) {
                 fullTitle = parseFullTitle(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.discountType)) {
+            } else if (tag.equals(TAGS.discountType)) {
                 discountType = parseDiscountType(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.discount)) {
+            } else if (tag.equals(TAGS.discount)) {
                 discount = parseDiscount(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.partnerPoints)) {
+            } else if (tag.equals(TAGS.partnerPoints)) {
                 parsePartnerPoints(parser, id);
             } else {
                 XmlParserUtils.skip(parser);
@@ -183,31 +182,30 @@ public class PartnersXmlParser {
     }
 
     private static Integer parseId(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseIntegerByTag(parser, StringConstants.PartnersXmlConstants.Tags.id);
+        return XmlParserUtils.parseIntegerByTag(parser, TAGS.id);
     }
 
     private static String parseFullTitle(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, StringConstants.PartnersXmlConstants.Tags.fullTitle);
+        return XmlParserUtils.parseTextByTag(parser, TAGS.fullTitle);
     }
 
     private static String parseDiscountType(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, StringConstants.PartnersXmlConstants.Tags.discountType);
+        return XmlParserUtils.parseTextByTag(parser, TAGS.discountType);
     }
 
     private static int parseDiscount(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseIntegerByTag(parser, StringConstants.PartnersXmlConstants.Tags.discount);
+        return XmlParserUtils.parseIntegerByTag(parser, TAGS.discount);
     }
 
     private void parsePartnerPoints(XmlPullParser parser, int partnerId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.partnerPoints);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partnerPoints);
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.partnerPoint)) {
+            if (tag.equals(TAGS.partnerPoint)) {
                 outPartnerPoints.add(parsePartnerPoint(parser, partnerId));
             } else {
                 XmlParserUtils.skip(parser);
@@ -216,8 +214,7 @@ public class PartnersXmlParser {
     }
 
     private PartnerPoint parsePartnerPoint(XmlPullParser parser, int partnerId) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.partnerPoint);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partnerPoint);
 
         String title = null;
         String address = null;
@@ -232,19 +229,19 @@ public class PartnersXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.title)) {
+            if (tag.equals(TAGS.title)) {
                 title = parseTitle(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.address)) {
+            } else if (tag.equals(TAGS.address)) {
                 address = parseAddress(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.longitude)) {
+            } else if (tag.equals(TAGS.longitude)) {
                 longitude = parseLongitude(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.latitude)) {
+            } else if (tag.equals(TAGS.latitude)) {
                 latitude = parseLatitude(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.phones)) {
+            } else if (tag.equals(TAGS.phones)) {
                 phones = parsePhones(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.paymentMethods)) {
+            } else if (tag.equals(TAGS.paymentMethods)) {
                 paymentMethods = parsePaymentMethods(parser);
-            } else if (tag.equals(StringConstants.PartnersXmlConstants.Tags.workinghours)) {
+            } else if (tag.equals(TAGS.workinghours)) {
                 weekWorkingHours = parseWeekWorkingHours(parser);
             } else {
                 XmlParserUtils.skip(parser);
@@ -256,20 +253,19 @@ public class PartnersXmlParser {
     }
 
     private static String parseAddress(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, StringConstants.PartnersXmlConstants.Tags.address);
+        return XmlParserUtils.parseTextByTag(parser, TAGS.address);
     }
 
     private static double parseLongitude(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseDoubleByTag(parser, StringConstants.PartnersXmlConstants.Tags.longitude);
+        return XmlParserUtils.parseDoubleByTag(parser, TAGS.longitude);
     }
 
     private static double parseLatitude(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseDoubleByTag(parser, StringConstants.PartnersXmlConstants.Tags.latitude);
+        return XmlParserUtils.parseDoubleByTag(parser, TAGS.latitude);
     }
 
     private static List<String> parsePhones(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.phones);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.phones);
 
         List<String> phones = new ArrayList<String>();
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -277,7 +273,7 @@ public class PartnersXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(StringConstants.PartnersXmlConstants.Tags.phone)) {
+            if (tag.equals(TAGS.phone)) {
                 phones.add(parsePhone(parser));
             } else {
                 XmlParserUtils.skip(parser);
@@ -287,16 +283,15 @@ public class PartnersXmlParser {
     }
 
     private static String parsePhone(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, StringConstants.PartnersXmlConstants.Tags.phone);
+        return XmlParserUtils.parseTextByTag(parser, TAGS.phone);
     }
 
     private static String parsePaymentMethods(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, StringConstants.PartnersXmlConstants.Tags.paymentMethods);
+        return XmlParserUtils.parseTextByTag(parser, TAGS.paymentMethods);
     }
 
     private static WeekWorkingHours parseWeekWorkingHours(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE,
-                StringConstants.PartnersXmlConstants.Tags.workinghours);
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.workinghours);
 
         WorkingHoursForEachDayOfWeek workingHoursForEachDayOfWeek = new WorkingHoursForEachDayOfWeek();
 
@@ -343,10 +338,10 @@ public class PartnersXmlParser {
     }
 
     private static String parseTypeOfDayAttribute(XmlPullParser parser) throws Exception {
-        XmlParserUtils.requireAttributes(parser,
-                StringConstants.PartnersXmlConstants.Attributes.typeOfDay);
+        final String ATTRIBUTE_TYPE_OF_DAY = StringConstants.PartnersXmlConstants.Attributes.typeOfDay;
+        XmlParserUtils.requireAttributes(parser, ATTRIBUTE_TYPE_OF_DAY);
         Map<String, String> attributes = XmlParserUtils.parseAttributes(parser);
-        return attributes.get(StringConstants.PartnersXmlConstants.Attributes.typeOfDay);
+        return attributes.get(ATTRIBUTE_TYPE_OF_DAY);
     }
 
     private static WorkingHours parseWorkingHours(XmlPullParser parser,

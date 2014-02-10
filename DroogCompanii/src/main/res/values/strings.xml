@@ -9,7 +9,7 @@
 
     <string name="menu_item_personal_account">Personal Account</string>
     <string name="menu_item_partner_categories">Partner Categories</string>
-    <string name="menu_item_stock">Stock</string>
+    <string name="menu_item_offers">Offers</string>
     <string name="menu_item_website">Website</string>
     <string name="menu_item_hotline">Hotline</string>
     <string name="menu_item_synchronization">Synchronization</string>
@@ -35,7 +35,7 @@
     <string name="titleOfMenuActivity">@string/action_menu</string>
     <string name="titleOfSearchActivity">@string/action_search</string>
     <string name="titleOfSettingsActivity">@string/menu_item_settings</string>
-    <string name="titleOfStockActivity">@string/menu_item_stock</string>
+    <string name="titleOfStockActivity">@string/menu_item_offers</string>
     <string name="titleOfPersonalAccountActivity">@string/menu_item_personal_account</string>
     <string name="titleOfSynchronizationActivity">@string/menu_item_synchronization</string>
 

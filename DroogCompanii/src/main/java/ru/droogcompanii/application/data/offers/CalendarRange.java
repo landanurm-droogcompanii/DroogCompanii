@@ -1,11 +1,12 @@
 package ru.droogcompanii.application.data.offers;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.ConvertorToString;
 
-public class CalendarRange {
+public class CalendarRange implements Serializable {
 
 	private final Calendar from;
 	private final Calendar to;

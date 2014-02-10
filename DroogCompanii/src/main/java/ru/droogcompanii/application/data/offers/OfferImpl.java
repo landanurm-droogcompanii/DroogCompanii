@@ -1,9 +1,11 @@
 package ru.droogcompanii.application.data.offers;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.util.ConvertorToString;
 import ru.droogcompanii.application.util.HashCodeCalculator;
 
-public class OfferImpl implements Offer {
+public class OfferImpl implements Offer, Serializable {
 
 	public int id;
 	public int partnerId;

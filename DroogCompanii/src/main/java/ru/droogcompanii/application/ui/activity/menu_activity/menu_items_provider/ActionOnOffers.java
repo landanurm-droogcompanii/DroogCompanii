@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 
 import ru.droogcompanii.application.ui.activity.menu_activity.MenuListItem;
-import ru.droogcompanii.application.ui.activity.stock_activity.StockActivity;
+import ru.droogcompanii.application.ui.activity.offers_activity.OffersActivity;
 
 /**
  * Created by ls on 31.01.14.
  */
-class ActionOnStock implements MenuListItem.Action {
+class ActionOnOffers implements MenuListItem.Action {
     @Override
     public void launch(Context context) {
-        Intent intent = new Intent(context, StockActivity.class);
+        Intent intent = new Intent(context, OffersActivity.class);
         context.startActivity(intent);
     }
 }
