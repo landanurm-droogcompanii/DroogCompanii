@@ -2,6 +2,8 @@ package ru.droogcompanii.application.data.hierarchy_of_partners;
 
 import java.io.Serializable;
 
+import ru.droogcompanii.application.util.HashCodeCalculator;
+
 /**
  * Created by Leonid on 02.12.13.
  */
@@ -31,7 +33,7 @@ public class PartnerCategory implements Serializable {
 
     @Override
     public int hashCode() {
-        return id + title.hashCode();
+        return HashCodeCalculator.hashCodeFromFields(id, title);
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
+import ru.droogcompanii.application.util.HashCodeCalculator;
 
 /**
  * Created by Leonid on 02.12.13.
@@ -65,13 +66,9 @@ public class PartnerPoint implements Serializable {
 
     @Override
     public int hashCode() {
-        return title.hashCode() +
-               address.hashCode() +
-               phones.hashCode() +
-               workingHours.hashCode() +
-               paymentMethods.hashCode() +
-               getPosition().hashCode() +
-               partnerId;
+        return HashCodeCalculator.hashCodeFromFields(
+                title, address, phones, workingHours, paymentMethods, getPosition(), partnerId
+        );
     }
 
     public LatLng getPosition() {

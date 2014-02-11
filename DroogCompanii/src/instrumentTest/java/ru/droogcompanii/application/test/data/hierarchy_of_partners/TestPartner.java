@@ -104,6 +104,10 @@ public class TestPartner extends TestCase {
         assertEquals(partner.hashCode(), copy.hashCode());
     }
 
+    public void testHashCodeDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        new Partner(0, null, null, null, 0, 0).hashCode();
+    }
+
 
     public void testIdAffectsHashCode() {
         int idOfOne = id;

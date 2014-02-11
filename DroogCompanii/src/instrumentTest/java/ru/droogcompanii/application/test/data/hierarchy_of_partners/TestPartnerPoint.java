@@ -184,6 +184,11 @@ public class TestPartnerPoint extends TestCase {
         assertEquals(partnerPoint.hashCode(), copy.hashCode());
     }
 
+    public void testHashCodeDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        new PartnerPoint(null, null, null, null, null, 0.0, 0.0, 0)
+                .hashCode();
+    }
+
     public void testGetPosition() {
         LatLng expected = new LatLng(latitude, longitude);
         assertEquals(expected, partnerPoint.getPosition());

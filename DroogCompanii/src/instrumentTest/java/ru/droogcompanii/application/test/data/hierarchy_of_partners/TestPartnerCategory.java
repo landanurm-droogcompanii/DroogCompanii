@@ -71,4 +71,8 @@ public class TestPartnerCategory extends TestCase {
         Object two = new PartnerCategory(id, title);
         assertEquals(one.hashCode(), two.hashCode());
     }
+
+    public void testHashCodeDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        new PartnerCategory(0, null).hashCode();
+    }
 }
