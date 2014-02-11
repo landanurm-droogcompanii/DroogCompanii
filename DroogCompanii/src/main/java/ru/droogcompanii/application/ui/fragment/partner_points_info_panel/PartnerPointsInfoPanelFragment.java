@@ -17,8 +17,8 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerPointsReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner.PartnerActivity;

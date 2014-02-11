@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import java.io.Serializable;
-import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
@@ -58,8 +57,7 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
 
     private void onTaskFinishedSuccessfully(Serializable result) {
         FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
-        List<Offer> offers = (List<Offer>) result;
-        offerListFragment.setOffers(offers);
+        offerListFragment.setOffers(result);
     }
 
     private void onTaskCancelled() {

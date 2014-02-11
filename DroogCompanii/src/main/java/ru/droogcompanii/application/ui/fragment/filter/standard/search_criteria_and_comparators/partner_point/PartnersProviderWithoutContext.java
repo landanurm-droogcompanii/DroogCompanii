@@ -1,7 +1,7 @@
 package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
-import ru.droogcompanii.application.data.db_util.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 

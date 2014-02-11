@@ -17,6 +17,12 @@ public class CalendarUtils {
 		return calendar;
 	}
 
+    public static Calendar createByMilliseconds(long milliseconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliseconds);
+        return calendar;
+    }
+
     public static String convertToString(Calendar calendar) {
         return (toTwoDigitString(calendar.get(Calendar.DAY_OF_MONTH)) +
                 SEPARATOR_OF_DATE_COMPONENTS +

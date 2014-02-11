@@ -4,6 +4,9 @@ import android.content.Context;
 
 import java.io.Serializable;
 
+import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
+import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.DummyOffersDownloader;
+import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProviderViaDatabase;
 import ru.droogcompanii.application.ui.helpers.task.Task;
 
 /**
@@ -15,7 +18,7 @@ public class OffersProviderTask extends Task {
 
     public OffersProviderTask(Context context) {
         super();
-        this.offersProvider = new DummyOffersProvider(context);
+        this.offersProvider = new OffersProviderViaDatabase(context, new DummyOffersDownloader(context));
     }
 
     @Override

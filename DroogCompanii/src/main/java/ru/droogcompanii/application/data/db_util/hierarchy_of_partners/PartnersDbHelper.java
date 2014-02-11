@@ -1,17 +1,17 @@
-package ru.droogcompanii.application.data.db_util;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnersContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerCategoriesContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnersContract;
 
 /**
  * Created by Leonid on 09.12.13.
  */
-public class DroogCompaniiDbHelper extends SQLiteOpenHelper {
+public class PartnersDbHelper extends SQLiteOpenHelper {
 
     private static final String INTEGER_TYPE = " INTEGER ";
     private static final String TEXT_TYPE = " TEXT ";
@@ -63,9 +63,9 @@ public class DroogCompaniiDbHelper extends SQLiteOpenHelper {
 
 
     public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "DroogCompanii.db";
+    public static final String DATABASE_NAME = "Partners.db";
 
-    public DroogCompaniiDbHelper(Context context) {
+    public PartnersDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

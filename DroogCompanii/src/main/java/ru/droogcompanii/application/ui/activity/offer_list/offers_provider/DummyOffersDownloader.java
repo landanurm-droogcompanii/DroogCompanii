@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.offer_list;
+package ru.droogcompanii.application.ui.activity.offer_list.offers_provider;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -14,22 +14,23 @@ import ru.droogcompanii.application.util.LogUtils;
 /**
  * Created by ls on 10.02.14.
  */
-public class DummyOffersProvider implements OffersProvider {
+public class DummyOffersDownloader implements OffersProvider {
 
     private final Context context;
+    private final OffersXmlParser parser;
 
-    public DummyOffersProvider(Context context) {
+    public DummyOffersDownloader(Context context) {
         this.context = context;
+        parser = new OffersXmlParser();
     }
 
-    public List<Offer> getOffers() {
-        OffersXmlParser parser = new OffersXmlParser();
+    public Result getOffers() {
         try {
-            return parser.parse(prepareInputStream());
+            List<Offer> parsedOffers = parser.parse(prepareInputStream());
+            return new OffersResultImpl(parsedOffers);
         } catch (Exception e) {
             LogUtils.debug(e.getMessage());
-            // TODO: return something other instead of <null>
-            return null;
+            return OffersResultImpl.noOffers();
         }
     }
 

@@ -74,17 +74,25 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
         clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
 
+        restoreInstanceStateIfNeed(savedInstanceState);
+
+        /*
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
-
-        restoreInstanceStateIfNeed(savedInstanceState);
+        */
 
         super.callOnResumeFirstTime(new Runnable() {
             @Override
             public void run() {
-                initIfNeed();
+                initOnFirstResume();
             }
         });
+    }
+
+    private void initOnFirstResume() {
+        getGoogleMap().setOnMapClickListener(this);
+        getGoogleMap().setOnMarkerClickListener(this);
+        initIfNeed();
     }
 
     @SuppressWarnings("unchecked")

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util.readers_from_database;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
@@ -14,7 +14,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 /**
  * Created by Leonid on 17.12.13.
  */
-public class PartnersReader extends BaseReaderFromDatabase {
+public class PartnersReader extends BasePartnersReaderFromDatabase {
 
     private int idColumnIndex;
     private int titleColumnIndex;
@@ -29,12 +29,12 @@ public class PartnersReader extends BaseReaderFromDatabase {
 
     public List<Partner> getPartnersOf(PartnerCategory category) {
         String where = " WHERE " +
-                DroogCompaniiContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.id;
+                PartnersContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.id;
         return getPartners(where);
     }
 
     private List<Partner> getPartners(String where) {
-        String sql = "SELECT * FROM " + DroogCompaniiContracts.PartnersContract.TABLE_NAME + where + " ;";
+        String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + where + " ;";
 
         initDatabase();
 
@@ -59,12 +59,12 @@ public class PartnersReader extends BaseReaderFromDatabase {
     }
 
     private void calculateColumnIndices(Cursor cursor) {
-        idColumnIndex = cursor.getColumnIndexOrThrow(DroogCompaniiContracts.PartnersContract.COLUMN_NAME_ID);
-        titleColumnIndex = cursor.getColumnIndexOrThrow(DroogCompaniiContracts.PartnersContract.COLUMN_NAME_TITLE);
-        fullTitleColumnIndex = cursor.getColumnIndexOrThrow(DroogCompaniiContracts.PartnersContract.COLUMN_NAME_FULL_TITLE);
-        discountTypeColumnIndex = cursor.getColumnIndexOrThrow(DroogCompaniiContracts.PartnersContract.COLUMN_NAME_DISCOUNT_TYPE);
-        discountColumnIndex = cursor.getColumnIndexOrThrow(DroogCompaniiContracts.PartnersContract.COLUMN_NAME_DISCOUNT);
-        categoryIdColumnIndex = cursor.getColumnIndexOrThrow(DroogCompaniiContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID);
+        idColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnersContract.COLUMN_NAME_ID);
+        titleColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnersContract.COLUMN_NAME_TITLE);
+        fullTitleColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnersContract.COLUMN_NAME_FULL_TITLE);
+        discountTypeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnersContract.COLUMN_NAME_DISCOUNT_TYPE);
+        discountColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnersContract.COLUMN_NAME_DISCOUNT);
+        categoryIdColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID);
     }
 
     @SuppressWarnings("unchecked")
@@ -80,7 +80,7 @@ public class PartnersReader extends BaseReaderFromDatabase {
 
     public Partner getPartnerOf(PartnerPoint partnerPoint) {
         String where = " WHERE " +
-                DroogCompaniiContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerPoint.partnerId;
+                PartnersContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerPoint.partnerId;
         List<Partner> partner = getPartners(where);
         if (partner.isEmpty()) {
             throw new IllegalArgumentException("No partners for partner point: " + partnerPoint);

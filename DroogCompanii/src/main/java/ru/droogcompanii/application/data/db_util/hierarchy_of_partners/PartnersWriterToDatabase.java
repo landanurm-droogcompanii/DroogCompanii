@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteStatement;
 import java.io.Serializable;
 import java.util.Collection;
 
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerCategoriesContract;
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnersContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerCategoriesContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnersContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
@@ -19,16 +19,16 @@ import ru.droogcompanii.application.util.SerializationUtils;
 /**
  * Created by Leonid on 09.12.13.
  */
-public class WriterToDatabase {
+public class PartnersWriterToDatabase {
     private final Context context;
     private SQLiteDatabase db;
 
-    public WriterToDatabase(Context context) {
+    public PartnersWriterToDatabase(Context context) {
         this.context = context;
     }
 
     public void write(PartnersXmlParser.ParsedData parsedData) {
-        DroogCompaniiDbHelper dbHelper = new DroogCompaniiDbHelper(context);
+        PartnersDbHelper dbHelper = new PartnersDbHelper(context);
         db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {

@@ -52,4 +52,8 @@ public class Keys {
     public static final String offer = "offer";
 
     public static final String args = "args";
+
+    public static final String result = "result";
+
+    public static final String status = "status";
 }

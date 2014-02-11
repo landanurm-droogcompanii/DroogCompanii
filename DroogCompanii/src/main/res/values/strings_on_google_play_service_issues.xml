@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_on_google_play_service_missing">
+        Google Play Service is missing. You should install it.
+    </string>
+    <string name="message_on_google_play_service_version_update_required">
+        Google Play Service is out of date. You should update it.
+    </string>
+    <string name="message_on_google_play_service_disabled">
+        Google Play Service is disabled. You should enable it.
+    </string>
+    <string name="message_on_google_play_service_invalid">
+        Google Play Service is invalid.
+    </string>
+    <string name="message_on_google_play_service_date_invalid">
+        Google Play Service date is invalid.
+    </string>
+    <string name="message_on_unknown_google_play_service_error">
+        An unknown error occurred with the Google Play Services.
+    </string>
+</resources>

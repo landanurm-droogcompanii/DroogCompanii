@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util.readers_from_database;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.db_util.DroogCompaniiContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
@@ -16,7 +16,7 @@ import ru.droogcompanii.application.util.SerializationUtils;
 /**
  * Created by Leonid on 17.12.13.
  */
-public class PartnerPointsReader extends BaseReaderFromDatabase {
+public class PartnerPointsReader extends BasePartnersReaderFromDatabase {
 
     private final Context context;
 

@@ -1,22 +1,22 @@
-package ru.droogcompanii.application.data.db_util;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners;
 
 import android.provider.BaseColumns;
 
 /**
  * Created by Leonid on 09.12.13.
  */
-public final class DroogCompaniiContracts {
+public final class PartnersContracts {
 
-    public DroogCompaniiContracts() { }
+    public PartnersContracts() { }
 
-    public static abstract class PartnerCategoriesContract implements BaseColumns {
+    public static class PartnerCategoriesContract implements BaseColumns {
         public static final String TABLE_NAME = "partner_categories";
 
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_TITLE = "title";
     }
 
-    public static abstract class PartnersContract implements BaseColumns {
+    public static class PartnersContract implements BaseColumns {
         public static final String TABLE_NAME = "partners";
 
         public static final String COLUMN_NAME_ID = "id";
@@ -27,7 +27,7 @@ public final class DroogCompaniiContracts {
         public static final String COLUMN_NAME_CATEGORY_ID = "category_id";
     }
 
-    public static abstract class PartnerPointsContract implements BaseColumns {
+    public static class PartnerPointsContract implements BaseColumns {
         public static final String TABLE_NAME = "partner_points";
 
         public static final String COLUMN_NAME_TITLE = "title";

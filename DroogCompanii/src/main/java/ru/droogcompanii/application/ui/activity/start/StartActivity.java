@@ -23,12 +23,15 @@ public class StartActivity extends FragmentActivity {
         public static final int MAIN_SCREEN = 22222;
     }
 
-    private static final SharedFlag
-            IS_MAIN_SCREEN_STARTED = SharedFlag.from("IS_MAIN_SCREEN_STARTED");
+    private static final SharedFlag IS_MAIN_SCREEN_STARTED = SharedFlag.from("IS_MAIN_SCREEN_STARTED");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!ApplicationRequirementsChecker.areRequirementsSatisfied(this)) {
+            return;
+        }
 
         if (savedInstanceState == null) {
             onAppStarted();

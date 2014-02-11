@@ -8,18 +8,18 @@
         android:id="@+id/action_search"
         android:title="@string/action_search"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_filters"
         android:title="@string/action_filters"
         android:icon="@android:drawable/ic_menu_sort_by_size"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_menu"
         android:title="@string/action_menu"
         android:icon="@android:drawable/ic_dialog_dialer"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>

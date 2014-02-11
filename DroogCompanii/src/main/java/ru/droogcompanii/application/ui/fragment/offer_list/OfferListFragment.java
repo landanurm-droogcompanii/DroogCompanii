@@ -16,6 +16,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
+import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
 import ru.droogcompanii.application.util.Keys;
 
 /**
@@ -80,7 +81,12 @@ public class OfferListFragment extends Fragment implements AdapterView.OnItemCli
         outState.putSerializable(Keys.offers, (Serializable) offers);
     }
 
-    public void setOffers(List<Offer> newOffers) {
+    public void setOffers(Serializable result) {
+        OffersProvider.Result offersResult = (OffersProvider.Result) result;
+        setOffers(offersResult.getOffers());
+    }
+
+    private void setOffers(List<Offer> newOffers) {
         adapter = prepareAdapter(newOffers);
         setListAdapter(adapter);
     }
