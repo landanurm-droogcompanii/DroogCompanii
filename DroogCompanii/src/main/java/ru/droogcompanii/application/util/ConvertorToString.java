@@ -47,9 +47,9 @@ public class ConvertorToString {
         }
 
         private void checkIndex(int index) {
-            if (index < 0 || index >= getCountOfFields()) {
+            if (index < 0 || index >= countOfFields()) {
                 throw new IllegalArgumentException("Index should be inside a range: " +
-                        "[0," + getCountOfFields() + "];  " + "but index was: " + index);
+                        "[0," + countOfFields() + "];  " + "but index was: " + index);
             }
         }
     }
@@ -69,15 +69,15 @@ public class ConvertorToString {
     }
 
     private List<Field> getFields() {
-        List<Field> fields = new ArrayList<Field>(fieldNames.length);
-        int countOfFields = getCountOfFields();
+        List<Field> fields = new ArrayList<Field>(countOfFields());
+        int countOfFields = countOfFields();
         for (int i = 0; i < countOfFields; ++i) {
             fields.add(new Field(i));
         }
         return fields;
     }
 
-    private int getCountOfFields() {
+    private int countOfFields() {
         return fieldNames.length;
     }
 }

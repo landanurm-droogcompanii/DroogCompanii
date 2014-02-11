@@ -2,7 +2,8 @@ package ru.droogcompanii.application.data.hierarchy_of_partners;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.util.HashCodeCalculator;
+import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by Leonid on 02.12.13.
@@ -45,23 +46,24 @@ public class Partner implements Serializable {
             return false;
         }
         Partner other = (Partner) obj;
-        return (id == other.id) &&
-               (discount == other.discount) &&
-               (title.equals(other.title)) &&
-               (fullTitle.equals(other.fullTitle)) &&
-               (discountType.equals(other.discountType));
+        return (Objects.equals(id, other.id) &&
+                Objects.equals(discount, other.discount) &&
+                Objects.equals(title, other.title) &&
+                Objects.equals(fullTitle, other.fullTitle) &&
+                Objects.equals(discountType, other.discountType));
     }
 
     @Override
     public int hashCode() {
-        return HashCodeCalculator.hashCodeFromFields(
-                id, discount, title, fullTitle, discountType
-        );
+        return Objects.hash(id, discount, title, fullTitle, discountType);
     }
 
 
     @Override
     public String toString() {
-        return title;
+        return ConvertorToString.buildFor(this)
+                .withFieldNames("id", "title", "fullTitle", "discount", "discountType")
+                .withFieldValues(id, title, fullTitle, discount, discountType)
+                .toString();
     }
 }

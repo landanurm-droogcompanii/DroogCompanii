@@ -66,6 +66,14 @@ public class TestPartnerCategory extends TestCase {
     }
 
 
+    public void testEqualsDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        PartnerCategory one = new PartnerCategory(0, null);
+        PartnerCategory two = new PartnerCategory(0, "not null");
+        one.equals(two);
+        two.equals(one);
+    }
+
+
     public void testHashCodesAreEqual_OfEqualObjects() {
         Object one = new PartnerCategory(id, title);
         Object two = new PartnerCategory(id, title);
@@ -74,5 +82,10 @@ public class TestPartnerCategory extends TestCase {
 
     public void testHashCodeDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
         new PartnerCategory(0, null).hashCode();
+    }
+
+    public void testToStringDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        String toStringResult = new PartnerCategory(0, null).toString();
+        assertNotNull(toStringResult);
     }
 }

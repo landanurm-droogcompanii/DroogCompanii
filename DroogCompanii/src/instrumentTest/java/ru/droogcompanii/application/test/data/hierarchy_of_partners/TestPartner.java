@@ -99,6 +99,13 @@ public class TestPartner extends TestCase {
     }
 
 
+    public void testEqualsDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        Partner one = new Partner(0, null, null, "dummy", 0, 0);
+        Partner two = new Partner(0, null, "dummy", null, 0, 0);
+        one.equals(two);
+    }
+
+
     public void testHashCodesAreEqualOfEqualObjects() {
         Partner copy = new Partner(id, title, fullTitle, discountType, discount, categoryId);
         assertEquals(partner.hashCode(), copy.hashCode());
@@ -115,5 +122,11 @@ public class TestPartner extends TestCase {
         Partner one = new Partner(idOfOne, title, fullTitle, discountType, discount, categoryId);
         Partner two = new Partner(idOfTwo, title, fullTitle, discountType, discount, categoryId);
         assertTrue(one.hashCode() != two.hashCode());
+    }
+
+
+    public void testToStringReturnsNotNullAndDoesNotThrowExceptionEvenIfSomeOfFieldsIsNull() {
+        String toStringResult = new Partner(0, null, null, "dummy", 0, 0).toString();
+        assertNotNull(toStringResult);
     }
 }

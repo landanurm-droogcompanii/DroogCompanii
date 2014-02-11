@@ -179,6 +179,17 @@ public class TestPartnerPoint extends TestCase {
     }
 
 
+    public void testEqualsDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        PartnerPoint one = new PartnerPoint(
+                null, null, phones, workingHours, paymentMethods, longitude, latitude, partnerId
+        );
+        PartnerPoint two = new PartnerPoint(
+                title, null, null, workingHours, paymentMethods, longitude, latitude, partnerId + 2
+        );
+        one.equals(two);
+    }
+
+
     public void testHashCodesAreEqual_OfEqualObjects() {
         PartnerPoint copy = createPartnerPointByConstants();
         assertEquals(partnerPoint.hashCode(), copy.hashCode());
@@ -293,6 +304,11 @@ public class TestPartnerPoint extends TestCase {
         assertEquals(title, actual.getProvider());
         assertEquals(latitude, actual.getLatitude());
         assertEquals(longitude, actual.getLongitude());
+    }
+
+    public void testToStringDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
+        String toStringResult = new PartnerPoint(null, "dummy", null, null, null, 0.0, 0.0, 0).toString();
+        assertNotNull(toStringResult);
     }
 }
 

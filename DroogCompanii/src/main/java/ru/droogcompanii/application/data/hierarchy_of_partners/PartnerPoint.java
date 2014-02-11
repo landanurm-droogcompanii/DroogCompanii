@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
-import ru.droogcompanii.application.util.HashCodeCalculator;
+import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by Leonid on 02.12.13.
@@ -54,19 +55,19 @@ public class PartnerPoint implements Serializable {
         }
 
         PartnerPoint other = (PartnerPoint) obj;
-        return (title.equals(other.title)) &&
-               (address.equals(other.address)) &&
-               (phones.equals(other.phones)) &&
-               (workingHours.equals(other.workingHours)) &&
-               (paymentMethods.equals(other.paymentMethods)) &&
-               (longitude == other.longitude) &&
-               (latitude == other.latitude) &&
-               (partnerId == other.partnerId);
+        return (Objects.equals(title, other.title) &&
+                Objects.equals(address, other.address) &&
+                Objects.equals(phones, other.phones) &&
+                Objects.equals(workingHours, other.workingHours) &&
+                Objects.equals(paymentMethods, other.paymentMethods) &&
+                Objects.equals(longitude, other.longitude) &&
+                Objects.equals(latitude, other.latitude) &&
+                Objects.equals(partnerId, other.partnerId));
     }
 
     @Override
     public int hashCode() {
-        return HashCodeCalculator.hashCodeFromFields(
+        return Objects.hash(
                 title, address, phones, workingHours, paymentMethods, getPosition(), partnerId
         );
     }
@@ -100,6 +101,13 @@ public class PartnerPoint implements Serializable {
 
     @Override
     public String toString() {
-        return title;
+        return ConvertorToString.buildFor(this)
+            .withFieldNames(
+                "title", "address", "phones", "workingHours", "paymentMethods", "longitude", "latitude", "partnerId"
+            )
+            .withFieldValues(
+                title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
+            )
+            .toString();
     }
 }

@@ -3,7 +3,7 @@ package ru.droogcompanii.application.data.offers;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.util.ConvertorToString;
-import ru.droogcompanii.application.util.HashCodeCalculator;
+import ru.droogcompanii.application.util.Objects;
 
 public class OfferImpl implements Offer, Serializable {
 
@@ -58,50 +58,33 @@ public class OfferImpl implements Offer, Serializable {
 			return false;
 		}
 		Offer other = (Offer) obj;
-		return ((getId() == other.getId()) &&
-				(getPartnerId() == other.getPartnerId()) &&
-				areEqual(getDuration(), other.getDuration()) &&
-				areEqual(getShortDescription(), other.getShortDescription()) &&
-				areEqual(getFullDescription(), other.getFullDescription()) &&
-				areEqual(getImageUrl(), other.getImageUrl()) &&
-				(isSpecial() == other.isSpecial()));
-	}
-
-	private static boolean areEqual(Object obj1, Object obj2) {
-		return (obj1 == null)
-				? (obj2 == null)
-				: obj1.equals(obj2);
+		return (Objects.equals(getId(), other.getId()) &&
+				Objects.equals(getPartnerId(), other.getPartnerId()) &&
+                Objects.equals(getDuration(), other.getDuration()) &&
+                Objects.equals(getShortDescription(), other.getShortDescription()) &&
+                Objects.equals(getFullDescription(), other.getFullDescription()) &&
+                Objects.equals(getImageUrl(), other.getImageUrl()) &&
+                Objects.equals(isSpecial(), other.isSpecial()));
 	}
 	
 	
 	@Override
 	public int hashCode() {
-		return HashCodeCalculator.hashCodeFromFields(
+		return Objects.hash(
                 id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial()
         );
 	}
 
     @Override
     public String toString() {
-        /*
-        return getClass().getSimpleName() + "( " +
-                "id=" + id + ", " +
-                "partner_id=" + partnerId + ", " +
-                "duration=" + duration + ", " +
-                "shortDescription=" + quote(shortDescription) + ", " +
-                "fullDescription=" + quote(fullDescription) + ", " +
-                "imageUrl=" + quote(imageUrl) + ", " +
-                "isSpecial=" + isSpecial() +
-        " )";
-        */
         return ConvertorToString.buildFor(this)
-            .withFieldNames("id", "partnerId", "duration", "shortDescription", "fullDescription", "imageUrl", "isSpecial()")
-            .withFieldValues(id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial())
+            .withFieldNames(
+                    "id", "partnerId", "duration", "shortDescription", "fullDescription", "imageUrl", "isSpecial()"
+            )
+            .withFieldValues(
+                    id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial()
+            )
             .toString();
-    }
-
-    private static String quote(String str) {
-        return "\"" + str + "\"";
     }
 
 }
