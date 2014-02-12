@@ -49,7 +49,7 @@
             android:label="@string/titleOfSearchActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.search_result.SearchResultActivity"
+            android:name=".ui.activity.search_result_list.SearchResultListActivity"
             android:icon="@android:drawable/ic_menu_search"
             android:label="" >
         </activity>
@@ -59,13 +59,13 @@
             android:label="" >
         </activity>
         <activity
-            android:name=".ui.activity.partner.PartnerActivity"
+            android:name=".ui.activity.partner_details.PartnerDetailsActivity"
             android:label="" >
         </activity>
         <activity
             android:name=".ui.activity.filter.FilterActivity"
             android:label="@string/titleOfFilterActivity"
-            android:icon="@android:drawable/ic_menu_sort_by_size" >
+            android:icon="@drawable/ic_filter" >
         </activity>
         <activity
             android:name=".ui.activity.menu.MenuActivity"

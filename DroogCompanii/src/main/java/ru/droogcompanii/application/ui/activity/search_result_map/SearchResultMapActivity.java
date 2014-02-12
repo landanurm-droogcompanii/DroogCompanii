@@ -5,14 +5,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.base_with_partner_points_map_fragment_and_info_panel.ActivityWithPartnerPointsMapFragmentAndInfoPanel;
+import ru.droogcompanii.application.ui.activity.base_with_partner_points_map_fragment_and_info_panel.BaseActivityWithPartnerPointsMapFragmentAndInfoPanel;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchResultMapActivity extends ActivityWithPartnerPointsMapFragmentAndInfoPanel {
+public class SearchResultMapActivity extends BaseActivityWithPartnerPointsMapFragmentAndInfoPanel {
 
     @Override
     protected PartnerPointsProvider getPartnerPointsProvider() {

@@ -45,5 +45,7 @@
 
     <string name="titleOfSynchronizationDialog">Data is updated...</string>
 
+    <string name="textMapIsLoaded">Map is loaded...</string>
+
 
 </resources>

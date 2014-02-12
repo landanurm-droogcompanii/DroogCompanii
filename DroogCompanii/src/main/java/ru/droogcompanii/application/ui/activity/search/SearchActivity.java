@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import java.io.Serializable;
-
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderBySearchQuery;
-import ru.droogcompanii.application.ui.activity.search_result.SearchResultActivity;
+import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.Keys;
@@ -91,9 +89,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
     }
 
     private void showSearchResult(SearchResultProvider searchResultProvider) {
-        Intent intent = new Intent(this, SearchResultActivity.class);
-        intent.putExtra(Keys.searchResultProvider, (Serializable) searchResultProvider);
-        startActivity(intent);
+        SearchResultListActivity.start(this, searchResultProvider);
     }
 
 }

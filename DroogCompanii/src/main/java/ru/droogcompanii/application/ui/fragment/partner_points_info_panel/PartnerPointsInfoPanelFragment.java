@@ -2,8 +2,6 @@ package ru.droogcompanii.application.ui.fragment.partner_points_info_panel;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,8 +19,7 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_f
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity.partner.PartnerActivity;
-import ru.droogcompanii.application.ui.helpers.Caller;
+import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
 
@@ -46,7 +43,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initCatchingOfTouchEvents();
+        initCatchingTouchEvents();
 
         if (savedInstanceState == null) {
             initStateByDefault();
@@ -55,7 +52,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         }
     }
 
-    private void initCatchingOfTouchEvents() {
+    private void initCatchingTouchEvents() {
         getView().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -228,53 +225,18 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private void setPhones(final PartnerPoint partnerPoint) {
         View phoneButton = findViewById(R.id.phoneButton);
-        final List<String> phones = partnerPoint.phones;
-        if (phones.isEmpty()) {
-            phoneButton.setVisibility(View.INVISIBLE);
-        } else {
-            phoneButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onPhoneButtonClick(partnerPoint, phones);
-                }
-            });
-        }
-    }
-
-    private void onPhoneButtonClick(PartnerPoint partnerPoint, List<String> phones) {
-        if (phones.size() == 1) {
-            String phone = phones.get(0);
-            Caller.call(getActivity(), phone);
-        } else {
-            showMultiPhonesDialogFragment(partnerPoint, phones);
-        }
-    }
-
-    private void showMultiPhonesDialogFragment(PartnerPoint partnerPoint, List<String> phones) {
-        DialogFragment dialogFragment = new MultiPhonesCallerDialogFragment();
-        dialogFragment.setArguments(prepareArguments(partnerPoint, phones));
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        dialogFragment.show(fragmentManager, "MultiPhonesCallerDialogFragment");
-    }
-
-    private static Bundle prepareArguments(PartnerPoint partnerPoint, List<String> phones) {
-        Bundle args = new Bundle();
-        args.putString(Keys.title, partnerPoint.title);
-        args.putSerializable(Keys.phones, (Serializable) phones);
-        return args;
+        CallerHelper callerHelper = new CallerHelper(getActivity());
+        callerHelper.initPhoneButton(phoneButton, partnerPoint);
     }
 
     private void setRouteButton(final PartnerPoint partnerPoint) {
+        final RouteHelper routeHelper = new RouteHelper(getActivity());
         findViewById(R.id.routeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showRouteTo(partnerPoint);
+                routeHelper.showRouteTo(partnerPoint);
             }
         });
-    }
-
-    private void showRouteTo(PartnerPoint destination) {
-        startActivity(RouteIntentMaker.makeIntentRouteTo(destination));
     }
 
     private void setWorkingHoursIndicator(PartnerPoint partnerPoint) {
@@ -310,6 +272,6 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
         ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
 
-        PartnerActivity.start(context, partner, partnerPoints);
+        PartnerDetailsActivity.start(context, partner, partnerPoints);
     }
 }

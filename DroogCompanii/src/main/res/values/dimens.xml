@@ -13,5 +13,11 @@
     <dimen name="textSizeOfSearchQueryInput">24sp</dimen>
 
     <dimen name="partner_point_indicator_width">18dp</dimen>
+    <dimen name="textSizeOfPartnerPointTitle">24sp</dimen>
+    <dimen name="textSizeOfPartnerPointAddress">18sp</dimen>
+    <dimen name="leftMarginOfAddressTextView">18dp</dimen>
+    <dimen name="textSizeOfPaymentMethods">16sp</dimen>
+    <dimen name="textSizeOfFullPartnerTitle">28sp</dimen>
+    <dimen name="textSizeOfDiscount">18sp</dimen>
 
 </resources>

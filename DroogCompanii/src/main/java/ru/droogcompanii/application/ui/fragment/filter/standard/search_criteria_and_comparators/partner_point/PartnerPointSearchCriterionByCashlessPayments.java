@@ -15,7 +15,7 @@ public class PartnerPointSearchCriterionByCashlessPayments implements SearchCrit
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {
         MoreComparableString paymentMethods = new MoreComparableString(partnerPoint.paymentMethods);
-        for (String each : StringConstants.cashlessPaymentMethods) {
+        for (String each : StringConstants.PaymentMethods.CASHLESS_METHODS) {
             if (paymentMethods.containsIgnoreCase(each)) {
                 return true;
             }

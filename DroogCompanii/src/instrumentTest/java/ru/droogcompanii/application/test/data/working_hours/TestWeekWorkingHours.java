@@ -125,4 +125,37 @@ public class TestWeekWorkingHours extends TestCase {
     public void testIsSerializable() {
         assertEquals(weekWorkingHours, TestingUtils.serializeAndDeserialize(weekWorkingHours));
     }
+
+    public void testGetWorkingHoursOfDay() {
+        assertEquals(workingHoursForEachDayOfWeek.onMonday, weekWorkingHours.getWorkingHoursOf(Calendar.MONDAY));
+        assertEquals(workingHoursForEachDayOfWeek.onTuesday, weekWorkingHours.getWorkingHoursOf(Calendar.TUESDAY));
+        assertEquals(workingHoursForEachDayOfWeek.onWednesday, weekWorkingHours.getWorkingHoursOf(Calendar.WEDNESDAY));
+        assertEquals(workingHoursForEachDayOfWeek.onThursday, weekWorkingHours.getWorkingHoursOf(Calendar.THURSDAY));
+        assertEquals(workingHoursForEachDayOfWeek.onFriday, weekWorkingHours.getWorkingHoursOf(Calendar.FRIDAY));
+        assertEquals(workingHoursForEachDayOfWeek.onSaturday, weekWorkingHours.getWorkingHoursOf(Calendar.SATURDAY));
+        assertEquals(workingHoursForEachDayOfWeek.onSunday, weekWorkingHours.getWorkingHoursOf(Calendar.SUNDAY));
+    }
+
+    public void testGetWorkingHoursOfCalendar() {
+        assertEquals(workingHoursForEachDayOfWeek.onMonday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.MONDAY)));
+        assertEquals(workingHoursForEachDayOfWeek.onTuesday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.TUESDAY)));
+        assertEquals(workingHoursForEachDayOfWeek.onWednesday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.WEDNESDAY)));
+        assertEquals(workingHoursForEachDayOfWeek.onThursday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.THURSDAY)));
+        assertEquals(workingHoursForEachDayOfWeek.onFriday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.FRIDAY)));
+        assertEquals(workingHoursForEachDayOfWeek.onSaturday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.SATURDAY)));
+        assertEquals(workingHoursForEachDayOfWeek.onSunday,
+                weekWorkingHours.getWorkingHoursOf(calendarBy(Calendar.SUNDAY)));
+    }
+
+    private static Calendar calendarBy(int dayOfWeek) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        return calendar;
+    }
 }

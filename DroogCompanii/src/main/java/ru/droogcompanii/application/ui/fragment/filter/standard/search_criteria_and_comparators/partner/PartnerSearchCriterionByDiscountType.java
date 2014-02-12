@@ -21,13 +21,13 @@ public class PartnerSearchCriterionByDiscountType
     public PartnerSearchCriterionByDiscountType(boolean bonus, boolean discount, boolean cashBack) {
         discountTypes = new ArrayList<String>();
         if (bonus) {
-            discountTypes.add(StringConstants.discountType_Bonus);
+            discountTypes.add(StringConstants.DiscountType.BONUS);
         }
         if (discount) {
-            discountTypes.add(StringConstants.discountType_Discount);
+            discountTypes.add(StringConstants.DiscountType.DISCOUNT);
         }
         if (cashBack) {
-            discountTypes.add(StringConstants.discountType_CashBack);
+            discountTypes.add(StringConstants.DiscountType.CASH_BACK);
         }
     }
 

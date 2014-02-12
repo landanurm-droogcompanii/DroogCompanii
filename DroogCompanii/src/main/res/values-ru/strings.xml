@@ -34,4 +34,6 @@
 
     <string name="titleOfSynchronizationDialog">Данные обновляются...</string>
 
+    <string name="textMapIsLoaded">Карта загружается...</string>
+
 </resources>

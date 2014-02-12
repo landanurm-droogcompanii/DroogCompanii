@@ -13,18 +13,22 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.fragment.offer_details.OfferDetailsFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 10.02.14.
  */
 public class OfferDetailsActivity extends ActionBarActivityWithUpButton {
 
+    public static class Key {
+        public static final String ARGS = "args";
+        public static final String OFFER = "offer";
+    }
+
     public static void start(Context context, Offer offer) {
         Intent intent = new Intent(context, OfferDetailsActivity.class);
         Bundle args = new Bundle();
-        args.putSerializable(Keys.offer, (Serializable) offer);
-        intent.putExtra(Keys.args, args);
+        args.putSerializable(Key.OFFER, (Serializable) offer);
+        intent.putExtra(Key.ARGS, args);
         context.startActivity(intent);
     }
 
@@ -33,11 +37,11 @@ public class OfferDetailsActivity extends ActionBarActivityWithUpButton {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer_details);
         if (savedInstanceState == null) {
-            prepareFragment();
+            startFragment();
         }
     }
 
-    private void prepareFragment() {
+    private void startFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.containerOfFragment, createFragment());
@@ -52,6 +56,6 @@ public class OfferDetailsActivity extends ActionBarActivityWithUpButton {
 
     private Bundle getPassedArguments() {
         Intent intent = getIntent();
-        return intent.getBundleExtra(Keys.args);
+        return intent.getBundleExtra(Key.ARGS);
     }
 }

@@ -6,17 +6,21 @@ package ru.droogcompanii.application.util;
 public class StringConstants {
 
     public static class PaymentMethods {
-        public static final String visa = "Visa";
-        public static final String masterCard = "MasterCard";
+        public static final String SEPARATOR = ",";
+
+        public static final String VISA = "Visa";
+        public static final String MASTER_CARD = "MasterCard";
+
+        public static final String[] CASHLESS_METHODS = {
+                PaymentMethods.VISA, PaymentMethods.MASTER_CARD
+        };
     }
 
-    public static final String[] cashlessPaymentMethods = {
-            PaymentMethods.visa, PaymentMethods.masterCard
-    };
-
-    public static final String discountType_Bonus = "Бонус";
-    public static final String discountType_Discount = "Скидка";
-    public static final String discountType_CashBack = "Cash back";
+    public static class DiscountType {
+        public static final String BONUS = "Бонус";
+        public static final String DISCOUNT = "Скидка";
+        public static final String CASH_BACK = "Cash back";
+    }
 
     public static class PartnersXmlConstants {
 

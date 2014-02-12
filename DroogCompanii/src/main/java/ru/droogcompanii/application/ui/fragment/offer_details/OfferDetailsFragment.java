@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
+import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.util.ImageDownloader;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 10.02.14.
@@ -20,6 +22,7 @@ public class OfferDetailsFragment extends Fragment {
 
     private final ImageDownloader imageDownloader = new ImageDownloader();
 
+    private Offer offer;
     private ImageView image;
     private TextView shortDescription;
     private TextView fullDescription;
@@ -40,18 +43,22 @@ public class OfferDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState == null) {
-            init();
-        }
+        offer = extractOffer(savedInstanceState);
+        init();
+    }
+
+    private Offer extractOffer(Bundle savedInstanceState) {
+        Bundle bundle = (savedInstanceState == null) ? getArguments() : savedInstanceState;
+        return (Offer) bundle.getSerializable(OfferDetailsActivity.Key.OFFER);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(OfferDetailsActivity.Key.OFFER, (Serializable) offer);
     }
 
     private void init() {
-        Bundle args = getArguments();
-        Offer offer = (Offer) args.getSerializable(Keys.offer);
-        init(offer);
-    }
-
-    private void init(Offer offer) {
         shortDescription.setText(offer.getShortDescription());
         fullDescription.setText(offer.getFullDescription());
         imageDownloader.download(offer.getImageUrl(), image);

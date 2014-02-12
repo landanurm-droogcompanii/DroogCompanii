@@ -85,13 +85,13 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
     }
 
     @Override
-    public void onBackPressed() {
+    public void finish() {
         if (wereChangesMade()) {
             setResult(RESULT_OK);
         } else {
             setResult(RESULT_CANCELED);
         }
-        super.onBackPressed();
+        super.finish();
     }
 
     private boolean wereChangesMade() {

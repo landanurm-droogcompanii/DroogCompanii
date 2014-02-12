@@ -77,4 +77,12 @@ public class WeekWorkingHours implements Serializable {
         }
         return StringsCombiner.combine(lines);
     }
+
+    public WorkingHours getWorkingHoursOf(int dayOfWeek) {
+        return workingHoursForDaysOfWeek.get(dayOfWeek);
+    }
+
+    public WorkingHours getWorkingHoursOf(Calendar calendar) {
+        return workingHoursForDaysOfWeek.get(calendar.get(Calendar.DAY_OF_WEEK));
+    }
 }
