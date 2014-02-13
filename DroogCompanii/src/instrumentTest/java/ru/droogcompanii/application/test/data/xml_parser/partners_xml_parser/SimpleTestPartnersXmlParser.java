@@ -40,13 +40,17 @@ public class SimpleTestPartnersXmlParser extends TestCase {
     private double latitudeOfPartnerPoint;
     private InputStream xml;
     private int idOfPartner;
-    private int discountOfPartner;
+    private int discountSize;
     private List<String> phonesOfPartnerPoint;
+    private List<String> webSitesOfPartner;
+    private List<String> emailsOfPartner;
     private String addressOfPartnerPoint;
     private String fullTitleOfPartner;
     private String paymentMethodsOfPartnerPoint;
-    private String discountTypeOfPartner;
+    private String discountType;
     private String titleOfPartner;
+    private String imageUrlOfPartner;
+    private String descriptionOfPartner;
     private String titleOfPartnerCategory;
     private String titleOfPartnerPoint;
     private WeekWorkingHours weekWorkingHoursOfPartnerPoint;
@@ -66,14 +70,18 @@ public class SimpleTestPartnersXmlParser extends TestCase {
         idOfPartner = 12;
         titleOfPartner = "Title of Partner 1";
         fullTitleOfPartner = "Full Title of Partner 1";
-        discountTypeOfPartner = "Discount Type of Partner 1";
-        discountOfPartner = 4;
+        imageUrlOfPartner = "some image url";
+        discountType = "Discount Type of Partner 1";
+        discountSize = 4;
+        descriptionOfPartner = "This is description";
         titleOfPartnerPoint = "Title of Partner Point of Partner 1";
         addressOfPartnerPoint = "Address of Partner Point of Partner 1";
         longitudeOfPartnerPoint = 12.214535;
         latitudeOfPartnerPoint = 32.12414;
         paymentMethodsOfPartnerPoint = "Visa, MasterCard";
         phonesOfPartnerPoint = Arrays.asList("79196763351", "79105352235");
+        webSitesOfPartner = Arrays.asList("http://droogcompanii.ru", "http://google.com");
+        emailsOfPartner = Arrays.asList("email1@gmail.com", "email2@gmail.com");
 
         workingHoursForEachDayOfWeek = new WorkingHoursForEachDayOfWeek();
         WorkingHoursOnBusinessDay onBusinessDay1 = new WorkingHoursOnBusinessDay()
@@ -110,8 +118,12 @@ public class SimpleTestPartnersXmlParser extends TestCase {
             .append("\t\t\t\t" + openTag(Tags.id + TYPE_INTEGER) + idOfPartner + closeTag(Tags.id) + "\n")
             .append("\t\t\t\t" + openTag(Tags.title) + titleOfPartner + closeTag(Tags.title) + "\n")
             .append("\t\t\t\t" + openTag(Tags.fullTitle) + fullTitleOfPartner + closeTag(Tags.fullTitle) + "\n")
-            .append("\t\t\t\t" + openTag(Tags.discountType) + discountTypeOfPartner + closeTag(Tags.discountType) + "\n")
-            .append("\t\t\t\t" + openTag(Tags.discount + TYPE_INTEGER) + discountOfPartner + closeTag(Tags.discount) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.imageUrl) + imageUrlOfPartner + closeTag(Tags.imageUrl) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.description) + descriptionOfPartner + closeTag(Tags.description) + "\n")
+            .append(prepareWebsitesXml("\t\t\t\t", webSitesOfPartner))
+            .append(prepareEmailsXml("\t\t\t\t", emailsOfPartner))
+            .append("\t\t\t\t" + openTag(Tags.discountType) + discountType + closeTag(Tags.discountType) + "\n")
+            .append("\t\t\t\t" + openTag(Tags.discountSize + TYPE_INTEGER) + discountSize + closeTag(Tags.discountSize) + "\n")
             .append("\t\t\t\t" + openArrayTag(Tags.partnerPoints) + "\n")
             .append("\t\t\t\t\t" + openTag(Tags.partnerPoint) + "\n")
             .append("\t\t\t\t\t\t" + openTag(Tags.title) + titleOfPartnerPoint + closeTag(Tags.title) + "\n")
@@ -119,8 +131,8 @@ public class SimpleTestPartnersXmlParser extends TestCase {
             .append("\t\t\t\t\t\t" + openTag(Tags.longitude + TYPE_DECIMAL) + longitudeOfPartnerPoint + closeTag(Tags.longitude) + "\n")
             .append("\t\t\t\t\t\t" + openTag(Tags.latitude + TYPE_DECIMAL) + latitudeOfPartnerPoint + closeTag(Tags.latitude) + "\n")
             .append("\t\t\t\t\t\t" + openTag(Tags.paymentMethods) + paymentMethodsOfPartnerPoint + closeTag(Tags.paymentMethods) + "\n")
-            .append(preparePhonesXml("\t\t\t\t\t\t", phonesOfPartnerPoint) + "\n")
-            .append(prepareWorkingHoursXml("\t\t\t\t\t\t", workingHoursForEachDayOfWeek) + "\n")
+            .append(preparePhonesXml("\t\t\t\t\t\t", phonesOfPartnerPoint))
+            .append(prepareWorkingHoursXml("\t\t\t\t\t\t", workingHoursForEachDayOfWeek))
             .append("\t\t\t\t\t" + closeTag(Tags.partnerPoint) + "\n")
             .append("\t\t\t\t" + closeTag(Tags.partnerPoints) + "\n")
             .append("\t\t\t" + closeTag(Tags.partner) + "\n")
@@ -131,21 +143,34 @@ public class SimpleTestPartnersXmlParser extends TestCase {
         return xmlBuilder.toString();
     }
 
+    private String prepareWebsitesXml(String indent, List<String> webSites) {
+        return prepareArrayXml(indent, webSites, Tags.webSites, Tags.webSite);
+    }
+
+    private String prepareEmailsXml(String indent, List<String> emails) {
+        return prepareArrayXml(indent, emails, Tags.emails, Tags.email);
+    }
+
     private String preparePhonesXml(String indent, List<String> phones) {
-        StringBuilder phonesBuilder = new StringBuilder();
-        phonesBuilder.append(indent).append(openArrayTag(Tags.phones) + "\n");
-        for (String phone : phones) {
-            phonesBuilder.append(indent).append("\t").append(prepareTextWithTags(Tags.phone, phone)).append("\n");
+        return prepareArrayXml(indent, phones, Tags.phones, Tags.phone);
+    }
+
+    private String prepareArrayXml(String indent, List<String> elements, String arrayTag, String elementTag) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(indent).append(openArrayTag(arrayTag) + "\n");
+        for (String element : elements) {
+            String elementXmlRow = prepareTextWithTags(elementTag, element);
+            builder.append(indent).append("\t").append(elementXmlRow).append("\n");
         }
-        phonesBuilder.append(indent).append(closeTag(Tags.phones));
-        return phonesBuilder.toString();
+        builder.append(indent).append(closeTag(arrayTag)).append("\n");
+        return builder.toString();
     }
 
     private String prepareTextWithTags(String tagName, String value) {
         return openTag(tagName) + value + closeTag(tagName);
     }
 
-    private String prepareWorkingHoursXml(String indent, WorkingHoursForEachDayOfWeek workingHours) {
+    private static String prepareWorkingHoursXml(String indent, WorkingHoursForEachDayOfWeek workingHours) {
         StringBuilder builder = new StringBuilder();
 
         builder.append(indent).append(openArrayTag(Tags.workinghours) + "\n");
@@ -158,22 +183,22 @@ public class SimpleTestPartnersXmlParser extends TestCase {
         appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.saturday, workingHours.onSaturday);
         appendWorkingHoursOnDay(builder, indent + "\t", DayOfWeek.sunday, workingHours.onSunday);
 
-        builder.append(indent).append(closeTag(Tags.workinghours));
+        builder.append(indent).append(closeTag(Tags.workinghours)).append("\n");
 
         return builder.toString();
     }
 
-    private void appendWorkingHoursOnDay(StringBuilder workingHoursBuilder,
+    private static void appendWorkingHoursOnDay(StringBuilder workingHoursBuilder,
                            String indent, String tagOfDay, WorkingHours workingHoursOnDay) {
         String workingHoursOnDayWithinTags = prepareWorkingHoursRow(tagOfDay, workingHoursOnDay);
         workingHoursBuilder.append(indent).append(workingHoursOnDayWithinTags).append("\n");
     }
 
-    private String prepareWorkingHoursRow(String tagOfDay, WorkingHours workingHours) {
+    private static String prepareWorkingHoursRow(String tagOfDay, WorkingHours workingHours) {
         return openTag(tagOfDay + " " + attributeDayTypeOf(workingHours)) + workingHours + closeTag(tagOfDay);
     }
 
-    private String attributeDayTypeOf(WorkingHours workingHours) {
+    private static String attributeDayTypeOf(WorkingHours workingHours) {
         return Attributes.typeOfDay + "=" + quote(dayTypeOf(workingHours));
     }
 
@@ -181,7 +206,7 @@ public class SimpleTestPartnersXmlParser extends TestCase {
         return "\"" + s + "\"";
     }
 
-    private String dayTypeOf(WorkingHours workingHours) {
+    private static String dayTypeOf(WorkingHours workingHours) {
         if (workingHours instanceof WorkingHoursOnHoliday) {
             return TypesOfDay.holiday;
         }
@@ -194,15 +219,15 @@ public class SimpleTestPartnersXmlParser extends TestCase {
         throw new IllegalArgumentException("Unknown type of WorkingHours: " + workingHours);
     }
 
-    private String openArrayTag(String tagName) {
+    private static String openArrayTag(String tagName) {
         return openTag(tagName + TYPE_ARRAY);
     }
 
-    private String openTag(String tagName) {
+    private static String openTag(String tagName) {
         return "<" + tagName + ">";
     }
 
-    private String closeTag(String tagName) {
+    private static String closeTag(String tagName) {
         return "</" + tagName + ">";
     }
 
@@ -237,26 +262,31 @@ public class SimpleTestPartnersXmlParser extends TestCase {
     }
 
     private void assertParsedPartnerCategoryIsCorrect() {
-        assertEquals(titleOfPartnerCategory, parsedPartnerCategory.title);
+        assertEquals(titleOfPartnerCategory, parsedPartnerCategory.getTitle());
     }
 
     private void assertParsedPartnerIsCorrect() {
-        assertEquals(idOfPartner, parsedPartner.id);
-        assertEquals(titleOfPartner, parsedPartner.title);
-        assertEquals(fullTitleOfPartner, parsedPartner.fullTitle);
-        assertEquals(discountTypeOfPartner, parsedPartner.discountType);
-        assertEquals(parsedPartnerCategory.id, parsedPartner.categoryId);
+        assertEquals(idOfPartner, parsedPartner.getId());
+        assertEquals(titleOfPartner, parsedPartner.getTitle());
+        assertEquals(fullTitleOfPartner, parsedPartner.getFullTitle());
+        assertEquals(imageUrlOfPartner, parsedPartner.getImageUrl());
+        assertEquals(descriptionOfPartner, parsedPartner.getDescription());
+        assertEquals(webSitesOfPartner, parsedPartner.getWebSites());
+        assertEquals(emailsOfPartner, parsedPartner.getEmails());
+        assertEquals(discountType, parsedPartner.getDiscountType());
+        assertEquals(discountSize, parsedPartner.getDiscountSize());
+        assertEquals(parsedPartnerCategory.getId(), parsedPartner.getCategoryId());
     }
 
     private void assertParsedPartnerPointIsCorrect() {
-        assertEquals(titleOfPartnerPoint, parsedPartnerPoint.title);
-        assertEquals(addressOfPartnerPoint, parsedPartnerPoint.address);
-        assertEquals(paymentMethodsOfPartnerPoint, parsedPartnerPoint.paymentMethods);
-        assertEquals(longitudeOfPartnerPoint, parsedPartnerPoint.longitude);
-        assertEquals(latitudeOfPartnerPoint, parsedPartnerPoint.latitude);
-        assertEquals(phonesOfPartnerPoint, parsedPartnerPoint.phones);
-        assertEquals(weekWorkingHoursOfPartnerPoint, parsedPartnerPoint.workingHours);
-        assertEquals(parsedPartner.id, parsedPartnerPoint.partnerId);
+        assertEquals(titleOfPartnerPoint, parsedPartnerPoint.getTitle());
+        assertEquals(addressOfPartnerPoint, parsedPartnerPoint.getAddress());
+        assertEquals(paymentMethodsOfPartnerPoint, parsedPartnerPoint.getPaymentMethods());
+        assertEquals(longitudeOfPartnerPoint, parsedPartnerPoint.getLongitude());
+        assertEquals(latitudeOfPartnerPoint, parsedPartnerPoint.getLatitude());
+        assertEquals(phonesOfPartnerPoint, parsedPartnerPoint.getPhones());
+        assertEquals(weekWorkingHoursOfPartnerPoint, parsedPartnerPoint.getWorkingHours());
+        assertEquals(parsedPartner.getId(), parsedPartnerPoint.getPartnerId());
     }
 
 

@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 import java.util.List;
 
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.data.time.TimeOfDay;
 import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
@@ -18,11 +18,12 @@ import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfW
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 import ru.droogcompanii.application.test.TestingUtils;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 08.01.14.
  */
-public class TestPartnerPoint extends TestCase {
+public class TestPartnerPointImpl extends TestCase {
     private static final double latitude = 23.24455;
     private static final double longitude = 21.35354;
     private static final int partnerId = 123;
@@ -33,7 +34,7 @@ public class TestPartnerPoint extends TestCase {
     private static final WeekWorkingHours workingHours = new WeekWorkingHours(prepareWorkingHoursOnEachDayOfWeek());
 
 
-    private PartnerPoint partnerPoint;
+    private PartnerPointImpl partnerPoint;
 
 
     private static WorkingHoursForEachDayOfWeek prepareWorkingHoursOnEachDayOfWeek() {
@@ -62,10 +63,17 @@ public class TestPartnerPoint extends TestCase {
         partnerPoint = createPartnerPointByConstants();
     }
 
-    private PartnerPoint createPartnerPointByConstants() {
-        return new PartnerPoint(
-            title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
-        );
+    private static PartnerPointImpl createPartnerPointByConstants() {
+        PartnerPointImpl partnerPoint = new PartnerPointImpl();
+        partnerPoint.title = title;
+        partnerPoint.address = address;
+        partnerPoint.phones = phones;
+        partnerPoint.workingHours = workingHours;
+        partnerPoint.paymentMethods = paymentMethods;
+        partnerPoint.longitude = longitude;
+        partnerPoint.latitude = latitude;
+        partnerPoint.partnerId = partnerId;
+        return partnerPoint;
     }
 
 
@@ -74,22 +82,33 @@ public class TestPartnerPoint extends TestCase {
     }
 
 
-    public void testConstructor() {
-        assertEquals(title, partnerPoint.title);
-        assertEquals(address, partnerPoint.address);
-        assertEquals(phones, partnerPoint.phones);
-        assertEquals(workingHours, partnerPoint.workingHours);
-        assertEquals(paymentMethods, partnerPoint.paymentMethods);
-        assertEquals(longitude, partnerPoint.longitude);
-        assertEquals(latitude, partnerPoint.latitude);
-        assertEquals(partnerId, partnerPoint.partnerId);
+    public void testAccessors() {
+        assertEquals(title, partnerPoint.getTitle());
+        assertEquals(address, partnerPoint.getAddress());
+        assertEquals(phones, partnerPoint.getPhones());
+        assertEquals(workingHours, partnerPoint.getWorkingHours());
+        assertEquals(paymentMethods, partnerPoint.getPaymentMethods());
+        assertEquals(longitude, partnerPoint.getLongitude());
+        assertEquals(latitude, partnerPoint.getLatitude());
+        assertEquals(partnerId, partnerPoint.getPartnerId());
+    }
+
+    public void testDefaultConstructor() {
+        PartnerPointImpl def = new PartnerPointImpl();
+        assertTrue(def.getTitle().isEmpty());
+        assertTrue(def.getAddress().isEmpty());
+        assertTrue(def.getLatitude() == 0.0);
+        assertTrue(def.getLongitude() == 0.0);
+        assertTrue(def.getPhones().isEmpty());
+        assertTrue(def.getPaymentMethods().isEmpty());
+        assertTrue(def.getWorkingHours() == null);
+        assertTrue(def.getPartnerId() == 0);
     }
 
 
     public void testEquals() {
-        PartnerPoint one = createPartnerPointByConstants();
-        PartnerPoint two = createPartnerPointByConstants();
-        assertEquals(one, two);
+        assertEquals(createPartnerPointByConstants(),
+                     createPartnerPointByConstants());
     }
 
 
@@ -104,100 +123,121 @@ public class TestPartnerPoint extends TestCase {
 
 
     public void testNotEqualsWithDifferent_Title() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title + "a", address, phones, workingHours, paymentMethods, longitude, latitude, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.title = partnerPointToChange.title + " other address";
+            }
+        });
+    }
+
+    private static interface Changer {
+        void change(PartnerPointImpl partnerPointToChange);
+    }
+
+    public void assertNotEqualsAfterChanging(Changer changer) {
+        PartnerPointImpl one = createPartnerPointByConstants();
+        PartnerPointImpl two = createPartnerPointByConstants();
+        changer.change(two);
+        assertNotEquals(one, two);
     }
 
     private void assertNotEquals(Object obj1, Object obj2) {
-        assertFalse(areEqual(obj1, obj2));
+        assertFalse(Objects.equals(obj1, obj2));
     }
-
-    private boolean areEqual(Object obj1, Object obj2) {
-        return (obj1 == null) ? (obj2 == null) : obj1.equals(obj2);
-    }
-
 
     public void testNotEqualsWithDifferent_Address() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address + "a", phones, workingHours, paymentMethods, longitude, latitude, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.address = partnerPointToChange.address + " other address";
+            }
+        });
     }
 
 
     public void testNotEqualsWithDifferent_Phones() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address, Arrays.asList("111"), workingHours, paymentMethods, longitude, latitude, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.phones = Arrays.asList("111");
+            }
+        });
     }
 
 
     public void testNotEqualsWithDifferent_WorkingHours() {
         WorkingHoursForEachDayOfWeek workingHoursForEachDayOfWeek = prepareWorkingHoursOnEachDayOfWeek();
         workingHoursForEachDayOfWeek.onMonday = new WorkingHoursOnHoliday("Monday - Holiday");
-        WeekWorkingHours otherWorkingHours = new WeekWorkingHours(workingHoursForEachDayOfWeek);
+        final WeekWorkingHours otherWorkingHours = new WeekWorkingHours(workingHoursForEachDayOfWeek);
 
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address, phones, otherWorkingHours, paymentMethods, longitude, latitude, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.workingHours = otherWorkingHours;
+            }
+        });
     }
 
 
     public void testNotEqualsWithDifferent_PaymentMethods() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods + " Visa", longitude, latitude, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.paymentMethods = partnerPointToChange.paymentMethods + " Visa";
+            }
+        });
     }
 
 
     public void testNotEqualsWithDifferent_Longitude() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude + 1.1, latitude, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.longitude += 1.1;
+            }
+        });
     }
 
 
     public void testNotEqualsWithDifferent_Latitude() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude + 2.31, partnerId)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.latitude += 2.31;
+            }
+        });
     }
 
 
     public void testNotEqualsWithDifferent_PartnerId() {
-        assertNotEquals(
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId),
-            new PartnerPoint(title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId + 2)
-        );
+        assertNotEqualsAfterChanging(new Changer() {
+            @Override
+            public void change(PartnerPointImpl partnerPointToChange) {
+                partnerPointToChange.partnerId += 1;
+            }
+        });
     }
 
 
     public void testEqualsDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
-        PartnerPoint one = new PartnerPoint(
-                null, null, phones, workingHours, paymentMethods, longitude, latitude, partnerId
-        );
-        PartnerPoint two = new PartnerPoint(
-                title, null, null, workingHours, paymentMethods, longitude, latitude, partnerId + 2
-        );
+        PartnerPointImpl one = createPartnerPointByConstants();
+        PartnerPointImpl two = createPartnerPointByConstants();
+        one.title = null;
+        two.title = null;
+        one.address = null;
+        two.phones = null;
         one.equals(two);
     }
 
 
     public void testHashCodesAreEqual_OfEqualObjects() {
-        PartnerPoint copy = createPartnerPointByConstants();
-        assertEquals(partnerPoint.hashCode(), copy.hashCode());
+        assertEquals(createPartnerPointByConstants().hashCode(),
+                     createPartnerPointByConstants().hashCode());
     }
 
     public void testHashCodeDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
-        new PartnerPoint(null, null, null, null, null, 0.0, 0.0, 0)
-                .hashCode();
+        new PartnerPointImpl().hashCode();
     }
 
     public void testGetPosition() {
@@ -211,9 +251,9 @@ public class TestPartnerPoint extends TestCase {
 
     private static class LocationAndPartnerPoint {
         public final Location location;
-        public final PartnerPoint partnerPoint;
+        public final PartnerPointImpl partnerPoint;
 
-        public LocationAndPartnerPoint(android.location.Location location, PartnerPoint partnerPoint) {
+        public LocationAndPartnerPoint(android.location.Location location, PartnerPointImpl partnerPoint) {
             this.location = location;
             this.partnerPoint = partnerPoint;
         }
@@ -240,11 +280,11 @@ public class TestPartnerPoint extends TestCase {
             return second.location;
         }
 
-        public PartnerPoint getPartnerPoint1() {
+        public PartnerPointImpl getPartnerPoint1() {
             return first.partnerPoint;
         }
 
-        public PartnerPoint getPartnerPoint2() {
+        public PartnerPointImpl getPartnerPoint2() {
             return second.partnerPoint;
         }
     }
@@ -270,16 +310,18 @@ public class TestPartnerPoint extends TestCase {
         return location;
     }
 
-    private static PartnerPoint partnerPointByLocation(Location location) {
-        return new PartnerPoint(title, address, phones, workingHours, paymentMethods,
-                location.getLongitude(), location.getLatitude(), partnerId);
+    private static PartnerPointImpl partnerPointByLocation(Location location) {
+        PartnerPointImpl partnerPoint = createPartnerPointByConstants();
+        partnerPoint.latitude = location.getLatitude();
+        partnerPoint.longitude = location.getLongitude();
+        return partnerPoint;
     }
 
     public void testDistanceToPartnerPointThrowsExceptionIfArgumentIsNull() {
         TestingUtils.assertExpectedException(IllegalArgumentException.class, new Runnable() {
             @Override
             public void run() {
-                partnerPoint.distanceTo((PartnerPoint) null);
+                partnerPoint.distanceTo((PartnerPointImpl) null);
             }
         });
     }
@@ -307,8 +349,11 @@ public class TestPartnerPoint extends TestCase {
     }
 
     public void testToStringDoesNotThrowExceptionIfSomeOfFieldsIsNull() {
-        String toStringResult = new PartnerPoint(null, "dummy", null, null, null, 0.0, 0.0, 0).toString();
-        assertNotNull(toStringResult);
+        PartnerPointImpl partnerPoint = new PartnerPointImpl();
+        partnerPoint.title = "some title";
+        String str = partnerPoint.toString();
+        assertNotNull(str);
+        assertFalse(str.isEmpty());
     }
 }
 

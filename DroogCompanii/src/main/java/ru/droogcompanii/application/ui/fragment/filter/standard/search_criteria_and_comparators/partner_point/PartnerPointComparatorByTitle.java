@@ -11,8 +11,8 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 public class PartnerPointComparatorByTitle implements Comparator<PartnerPoint>, Serializable {
     @Override
     public int compare(PartnerPoint partnerPoint1, PartnerPoint partnerPoint2) {
-        String title1 = partnerPoint1.title.toLowerCase();
-        String title2 = partnerPoint2.title.toLowerCase();
+        String title1 = partnerPoint1.getTitle().toLowerCase();
+        String title2 = partnerPoint2.getTitle().toLowerCase();
         return title1.compareToIgnoreCase(title2);
     }
 }

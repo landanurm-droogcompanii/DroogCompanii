@@ -9,7 +9,7 @@ import android.widget.AdapterView;
 import java.io.Serializable;
 import java.util.List;
 
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 
 /**
@@ -18,12 +18,12 @@ import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsAc
 public class PartnerPointListFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     public static interface Callbacks {
-        void onPartnerPointClick(PartnerPoint partnerPoint);
+        void onPartnerPointClick(PartnerPointImpl partnerPoint);
     }
 
 
     private Callbacks callbacks;
-    private List<PartnerPoint> partnerPoints;
+    private List<PartnerPointImpl> partnerPoints;
     private PartnerPointListAdapter adapter;
 
 
@@ -44,7 +44,7 @@ public class PartnerPointListFragment extends ListFragment implements AdapterVie
     }
 
     private void init(Bundle bundle) {
-        partnerPoints = (List<PartnerPoint>) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER_POINTS);
+        partnerPoints = (List<PartnerPointImpl>) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER_POINTS);
         adapter = new PartnerPointListAdapter(getActivity(), partnerPoints);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
@@ -58,7 +58,7 @@ public class PartnerPointListFragment extends ListFragment implements AdapterVie
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        PartnerPoint clickedPartnerPoint = adapter.getItem(position);
+        PartnerPointImpl clickedPartnerPoint = adapter.getItem(position);
         callbacks.onPartnerPointClick(clickedPartnerPoint);
     }
 }

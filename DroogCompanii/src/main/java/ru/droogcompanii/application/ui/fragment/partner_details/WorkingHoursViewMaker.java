@@ -17,21 +17,23 @@ import ru.droogcompanii.application.data.working_hours.WorkingHours;
  */
 public class WorkingHoursViewMaker {
 
-    private final View view;
+    private final LayoutInflater layoutInflater;
+
+    private View view;
     private WeekWorkingHours workingHours;
 
     public WorkingHoursViewMaker(Context context) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        view = layoutInflater.inflate(R.layout.view_working_hours, null);
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     public View makeView(WeekWorkingHours workingHours) {
         this.workingHours = workingHours;
-        fillViewUsing();
+        view = layoutInflater.inflate(R.layout.view_working_hours, null);
+        setView();
         return view;
     }
 
-    private void fillViewUsing() {
+    private void setView() {
         setOpeningHours();
         setLunchBreakHours();
     }

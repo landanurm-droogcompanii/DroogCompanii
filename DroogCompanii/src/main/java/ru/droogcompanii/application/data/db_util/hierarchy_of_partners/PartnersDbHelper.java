@@ -35,8 +35,12 @@ public class PartnersDbHelper extends SQLiteOpenHelper {
                     PartnersContract.COLUMN_NAME_TITLE  + TEXT_TYPE + NOT_NULL + COMMA +
                     PartnersContract.COLUMN_NAME_FULL_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
                     PartnersContract.COLUMN_NAME_DISCOUNT_TYPE + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_DISCOUNT + INTEGER_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE + NOT_NULL +
+                    PartnersContract.COLUMN_NAME_DISCOUNT_SIZE + INTEGER_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_IMAGE_URL + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_WEB_SITES + BLOB_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_NAME_EMAILS + BLOB_TYPE + NOT_NULL +
             " )";
 
     private static final String SQL_CREATE_PARTNER_POINTS_TABLE =

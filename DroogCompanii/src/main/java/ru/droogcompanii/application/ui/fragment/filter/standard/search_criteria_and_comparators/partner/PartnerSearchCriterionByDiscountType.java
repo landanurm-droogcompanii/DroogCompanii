@@ -33,7 +33,7 @@ public class PartnerSearchCriterionByDiscountType
 
     @Override
     public boolean meetCriterion(Partner partner) {
-        MoreComparableString partnerPointDiscountType = new MoreComparableString(partner.discountType);
+        MoreComparableString partnerPointDiscountType = new MoreComparableString(partner.getDiscountType());
         for (String discountType : discountTypes) {
             if (partnerPointDiscountType.containsIgnoreCase(discountType)) {
                 return true;

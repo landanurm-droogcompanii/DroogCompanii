@@ -11,8 +11,7 @@ import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_
  * Created by ls on 16.01.14.
  */
 
-public class PartnerSearchCriterionByCashlessPayments
-        implements SearchCriterion<Partner>, Serializable {
+public class PartnerSearchCriterionByCashlessPayments implements SearchCriterion<Partner>, Serializable {
     @Override
     public boolean meetCriterion(Partner partner) {
         SearchCriterion<PartnerPoint> searchCriterion = new PartnerPointSearchCriterionByCashlessPayments();

@@ -22,7 +22,7 @@ public class PartnerSearchResultListAdapter extends SimpleArrayAdapter<SearchRes
         super(context, partners, new ItemToTitleConvertor<SearchResult<Partner>>() {
             @Override
             public String getTitle(SearchResult<Partner> item) {
-                return item.value().title;
+                return item.value().getTitle();
             }
         });
     }

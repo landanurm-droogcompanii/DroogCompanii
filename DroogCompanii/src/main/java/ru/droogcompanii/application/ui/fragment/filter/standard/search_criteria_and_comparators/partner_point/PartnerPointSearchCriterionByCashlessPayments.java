@@ -14,7 +14,7 @@ import ru.droogcompanii.application.util.StringConstants;
 public class PartnerPointSearchCriterionByCashlessPayments implements SearchCriterion<PartnerPoint>, Serializable {
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {
-        MoreComparableString paymentMethods = new MoreComparableString(partnerPoint.paymentMethods);
+        MoreComparableString paymentMethods = new MoreComparableString(partnerPoint.getPaymentMethods());
         for (String each : StringConstants.PaymentMethods.CASHLESS_METHODS) {
             if (paymentMethods.containsIgnoreCase(each)) {
                 return true;

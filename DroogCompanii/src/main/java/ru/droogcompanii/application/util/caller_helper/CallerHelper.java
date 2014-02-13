@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.partner_points_info_panel;
+package ru.droogcompanii.application.util.caller_helper;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -25,7 +25,7 @@ public class CallerHelper {
     }
 
     public void initPhoneButton(View phoneButton, final PartnerPoint partnerPoint) {
-        if (partnerPoint.phones.isEmpty()) {
+        if (partnerPoint.getPhones().isEmpty()) {
             phoneButton.setVisibility(View.INVISIBLE);
         } else {
             phoneButton.setOnClickListener(new View.OnClickListener() {
@@ -37,8 +37,8 @@ public class CallerHelper {
         }
     }
 
-    private void onPhoneButtonClick(PartnerPoint partnerPoint) {
-        List<String> phones = partnerPoint.phones;
+    public void onPhoneButtonClick(PartnerPoint partnerPoint) {
+        List<String> phones = partnerPoint.getPhones();
         if (phones.size() == 1) {
             String phone = phones.get(0);
             Caller.call(activity, phone);
@@ -56,8 +56,8 @@ public class CallerHelper {
 
     private static Bundle prepareArguments(PartnerPoint partnerPoint) {
         Bundle args = new Bundle();
-        args.putString(Keys.title, partnerPoint.title);
-        args.putSerializable(Keys.phones, (Serializable) partnerPoint.phones);
+        args.putString(Keys.title, partnerPoint.getTitle());
+        args.putSerializable(Keys.phones, (Serializable) partnerPoint.getPhones());
         return args;
     }
 }

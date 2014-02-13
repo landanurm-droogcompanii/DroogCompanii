@@ -11,6 +11,7 @@ import ru.droogcompanii.application.ui.fragment.filter.Filter;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerSearchCriterionByDiscountType;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point.PartnerPointSearchCriterionByDiscountType;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 21.01.14.
@@ -97,10 +98,7 @@ class SearchFilterByDiscountType implements Filter, Serializable {
 
     @Override
     public int hashCode() {
-        int result = (bonus ? 1 : 0);
-        result = 31 * result + (discount ? 1 : 0);
-        result = 31 * result + (cashBack ? 1 : 0);
-        return result;
+        return Objects.hash(bonus, discount, cashBack);
     }
 
     @Override

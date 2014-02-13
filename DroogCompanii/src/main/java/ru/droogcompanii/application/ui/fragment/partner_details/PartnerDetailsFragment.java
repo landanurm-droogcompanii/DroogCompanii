@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 
 /**
@@ -34,13 +37,13 @@ public class PartnerDetailsFragment extends android.support.v4.app.Fragment {
 
     private void initData(Bundle bundle) {
         partner = (Partner) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER);
-        partnerPoint = (PartnerPoint) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER_POINT);
+        partnerPoint = (PartnerPointImpl) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER_POINT);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(PartnerDetailsActivity.Key.PARTNER, partner);
-        outState.putSerializable(PartnerDetailsActivity.Key.PARTNER_POINT, partnerPoint);
+        outState.putSerializable(PartnerDetailsActivity.Key.PARTNER, (Serializable) partner);
+        outState.putSerializable(PartnerDetailsActivity.Key.PARTNER_POINT, (Serializable) partnerPoint);
     }
 }

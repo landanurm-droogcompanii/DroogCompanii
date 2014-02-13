@@ -1,10 +1,9 @@
 package ru.droogcompanii.application.ui.activity.menu.menu_items_provider;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 
 import ru.droogcompanii.application.ui.activity.menu.MenuListItem;
+import ru.droogcompanii.application.util.NavigationToWebsiteHelper;
 import ru.droogcompanii.application.util.WebsiteAddressProvider;
 
 /**
@@ -13,8 +12,7 @@ import ru.droogcompanii.application.util.WebsiteAddressProvider;
 class ActionOnWebsite implements MenuListItem.Action {
     @Override
     public void launch(Context context) {
-        final String websiteAddress = WebsiteAddressProvider.getWebsiteAddress();
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(websiteAddress));
-        context.startActivity(intent);
+        NavigationToWebsiteHelper helper = new NavigationToWebsiteHelper(context);
+        helper.navigateToSite(WebsiteAddressProvider.getWebsiteAddress());
     }
 }

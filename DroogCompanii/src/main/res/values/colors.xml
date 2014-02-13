@@ -2,4 +2,8 @@
 <resources>
     <color name="textColorOfItemWhichMeetsCriteria">#ff050505</color>
     <color name="textColorOfItemWhichDoesNotMeetCriteria">#80050505</color>
+
+    <color name="backgroundOfOffersLayout">#cf272f20</color>
+    <color name="backgroundOfOfferRow">#ddcccccc</color>
+    <color name="textColorOfOfferRowTitle">@color/backgroundOfOffersLayout</color>
 </resources>

@@ -6,7 +6,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.WorkingHoursIndicatorUpdater;
 
 /**
@@ -14,16 +14,16 @@ import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.Workin
  */
 public class PartnerPointDetailsFiller {
 
-    public static void fill(View container, PartnerPoint partnerPoint) {
+    public static void fill(View container, PartnerPointImpl partnerPoint) {
         TextView titleTextView = (TextView) container.findViewById(R.id.partnerPointTitle);
-        titleTextView.setText(partnerPoint.title);
+        titleTextView.setText(partnerPoint.getTitle());
 
         View indicator = container.findViewById(R.id.indicator);
         WorkingHoursIndicatorUpdater.update(indicator, isOpenedNow(partnerPoint));
     }
 
-    private static boolean isOpenedNow(PartnerPoint partnerPoint) {
+    private static boolean isOpenedNow(PartnerPointImpl partnerPoint) {
         Calendar now = Calendar.getInstance();
-        return partnerPoint.workingHours.includes(now);
+        return partnerPoint.getWorkingHours().includes(now);
     }
 }

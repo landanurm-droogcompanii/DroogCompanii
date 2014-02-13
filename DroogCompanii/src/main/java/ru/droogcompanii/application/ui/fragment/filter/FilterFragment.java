@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.SharedPreferencesProvider;
-import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 
 /**
  * Created by ls on 21.01.14.
@@ -52,7 +54,7 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partnerCategory, partnerCategory);
+        outState.putSerializable(Keys.partnerCategory, (Serializable) partnerCategory);
     }
 
     @Override

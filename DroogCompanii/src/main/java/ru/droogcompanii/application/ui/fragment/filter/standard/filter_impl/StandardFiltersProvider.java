@@ -12,13 +12,13 @@ public class StandardFiltersProvider {
 
     public static List<Filter> getDefaultFilters() {
 
-        // always, when this method is executed, need to use new filters
-        // (i.e. local array instead of static array)
+        // !!! always, when this method is executed, need to use new filters
+        // !!! (i.e. local array instead of static array)
         final Filter[] standardFiltersInitializedByDefault = {
             new SearchFilterByCashlessPayments(),
             new SearchFilterByDiscountType(),
             new SearchFilterByWorksNow(),
-            new SortingFilterByDiscount(),
+            new SortingFilterByDiscountSize(),
             new SortingFilterByDistanceBasedOnCurrentLocation(),
             new SortingFilterByTitle()
         };

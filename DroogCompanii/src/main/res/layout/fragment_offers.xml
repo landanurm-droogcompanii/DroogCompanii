@@ -3,8 +3,10 @@
     android:id="@+id/gridView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/offer_row_margin"
     android:verticalSpacing="0dp"
     android:horizontalSpacing="0dp"
     android:stretchMode="columnWidth"
-    android:numColumns="1" />
+    android:numColumns="1"
+    android:background="@color/backgroundOfOffersLayout" />
 

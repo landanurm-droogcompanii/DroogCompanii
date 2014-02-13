@@ -11,8 +11,8 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 public class PartnerComparatorByTitle implements Comparator<Partner>, Serializable {
     @Override
     public int compare(Partner partner1, Partner partner2) {
-        String title1 = partner1.title;
-        String title2 = partner2.title;
+        String title1 = partner1.getTitle();
+        String title2 = partner2.getTitle();
         return title1.compareToIgnoreCase(title2);
     }
 }

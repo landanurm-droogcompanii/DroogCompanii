@@ -1,117 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/rootLayout" >
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfFullPartnerTitle"
-        android:textStyle="bold"
-        android:id="@+id/fullPartnerTitle" />
-
-    <ImageView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        android:layout_height="match_parent"
+        android:id="@+id/rootLayout" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfDiscount"
-        android:id="@+id/discount" />
+        <ImageView
+            android:layout_width="@dimen/widthOfPartnerLogo"
+            android:layout_height="@dimen/heightOfPartnerLogo"
+            android:scaleType="centerInside"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/logo" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_alignParentRight="true"
-            android:weightSum="2"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:id="@+id/partnerPointButtonsPanel" >
+            android:textSize="@dimen/textSizeOfFullPartnerTitle"
+            android:textStyle="bold"
+            android:id="@+id/fullPartnerTitle" />
 
-            <ImageButton
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:src="@android:drawable/ic_menu_compass"
-                android:id="@+id/routeButton" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
-            <ImageButton
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:src="@android:drawable/stat_sys_phone_call"
-                android:id="@+id/phoneButton" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfPartnerDescription"
+            android:id="@+id/partnerDescription" />
 
-        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/partnerPointButtonsPanel"
-            android:id="@+id/partnerPointDetailsContainer" >
+            android:id="@+id/containerOfContacts" />
 
-            <TextView
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfDiscount"
+            android:id="@+id/discount" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:weightSum="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/textSizeOfPartnerPointTitle"
-                android:id="@+id/partnerPointTitle" />
+                android:layout_centerVertical="true"
+                android:id="@+id/partnerPointButtonsPanel" >
 
-            <TextView
-                android:layout_width="wrap_content"
+                <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_menu_compass"
+                    android:id="@+id/routeButton" />
+
+                <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/stat_sys_phone_call"
+                    android:id="@+id/phoneButton" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/leftMarginOfAddressTextView"
-                android:textSize="@dimen/textSizeOfPartnerPointAddress"
-                android:textColor="@android:color/darker_gray"
-                android:id="@+id/partnerPointAddress" />
+                android:layout_toLeftOf="@id/partnerPointButtonsPanel"
+                android:id="@+id/partnerPointDetailsContainer" >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/textSizeOfPaymentMethods"
-                android:id="@+id/paymentMethods"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/textSizeOfPartnerPointTitle"
+                    android:id="@+id/partnerPointTitle" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/leftMarginOfAddressTextView"
+                    android:textSize="@dimen/textSizeOfPartnerPointAddress"
+                    android:textColor="@android:color/darker_gray"
+                    android:id="@+id/partnerPointAddress" />
 
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/textSizeOfPaymentMethods"
+                    android:id="@+id/paymentMethods"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/partnerPointDetailsContainer"
-        android:id="@+id/dividerAboveWorkingHours"
-        android:background="@android:color/darker_gray"/>
+            </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dividerAboveWorkingHours"
-        android:id="@+id/containerOfWorkingHours" />
+        </RelativeLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/partnerPointDetailsContainer"
+            android:id="@+id/dividerAboveWorkingHours"
+            android:background="@android:color/darker_gray"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/categoryButton" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dividerAboveWorkingHours"
+            android:id="@+id/containerOfWorkingHours" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
-</LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/categoryButton" />
+
+    </LinearLayout>
+
+</ScrollView>

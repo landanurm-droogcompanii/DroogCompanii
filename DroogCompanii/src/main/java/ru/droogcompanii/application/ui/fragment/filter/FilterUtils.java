@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.util.SharedPreferencesProvider;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
+import ru.droogcompanii.application.util.SharedPreferencesProvider;
 
 /**
  * Created by ls on 22.01.14.

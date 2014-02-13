@@ -9,6 +9,7 @@ import java.util.List;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerCategoriesContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategoryImpl;
 import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
@@ -55,14 +56,15 @@ public class PartnerCategoriesReader extends BasePartnersReaderFromDatabase {
     }
 
     private PartnerCategory getPartnerCategoryFromCursor(Cursor cursor) {
-        int id = cursor.getInt(idColumnIndex);
-        String title = cursor.getString(titleColumnIndex);
-        return new PartnerCategory(id, title);
+        PartnerCategoryImpl partnerCategory = new PartnerCategoryImpl();
+        partnerCategory.id = cursor.getInt(idColumnIndex);
+        partnerCategory.title = cursor.getString(titleColumnIndex);
+        return partnerCategory;
     }
 
     public PartnerCategory getPartnerCategoryOf(Partner partner) {
         List<PartnerCategory> partnerCategories = getPartnerCategoriesFromDatabase(
-                " WHERE " + PartnerCategoriesContract.COLUMN_NAME_ID + " = " + partner.categoryId
+                " WHERE " + PartnerCategoriesContract.COLUMN_NAME_ID + " = " + partner.getCategoryId()
         );
         if (partnerCategories.isEmpty()) {
             throw new IllegalArgumentException("partner with illegal category id");

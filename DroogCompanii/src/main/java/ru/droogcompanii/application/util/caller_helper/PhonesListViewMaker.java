@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.partner_points_info_panel;
+package ru.droogcompanii.application.util.caller_helper;
 
 import android.content.Context;
 import android.view.View;

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
@@ -15,8 +16,9 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.CallerHelper;
-import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.RouteHelper;
+import ru.droogcompanii.application.util.caller_helper.CallerHelper;
+import ru.droogcompanii.application.util.RouteHelper;
+import ru.droogcompanii.application.util.ImageDownloader;
 
 /**
  * Created by ls on 12.02.14.
@@ -24,7 +26,9 @@ import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.RouteH
 public class PartnerDetailsViewHelper {
 
     private final CallerHelper callerHelper;
+    private final ContactsViewHelper contactsViewHelper;
     private final Context context;
+    private final ImageDownloader imageDownloader;
     private final RouteHelper routeHelper;
     private final View view;
     private final WorkingHoursViewMaker workingHoursViewMaker;
@@ -35,6 +39,8 @@ public class PartnerDetailsViewHelper {
 
     public PartnerDetailsViewHelper(FragmentActivity activity, LayoutInflater inflater, ViewGroup container) {
         context = activity;
+        imageDownloader = new ImageDownloader();
+        contactsViewHelper = new ContactsViewHelper(activity);
         workingHoursViewMaker = new WorkingHoursViewMaker(activity);
         callerHelper = new CallerHelper(activity);
         routeHelper = new RouteHelper(activity);
@@ -49,10 +55,9 @@ public class PartnerDetailsViewHelper {
     }
 
     private void fill() {
-        setText(R.id.fullPartnerTitle, partner.fullTitle);
-        setText(R.id.discount, prepareDiscountText());
-        setText(R.id.partnerPointTitle, partnerPoint.title);
-        setText(R.id.partnerPointAddress, partnerPoint.address);
+        setLogo();
+        setTextDetails();
+        setContacts();
         setPaymentMethods();
         setWorkingHours();
         setPhoneButton();
@@ -60,9 +65,32 @@ public class PartnerDetailsViewHelper {
         setCategory();
     }
 
+    private void setTextDetails() {
+        setText(R.id.fullPartnerTitle, partner.getFullTitle());
+        setText(R.id.partnerDescription, partner.getDescription());
+        setText(R.id.discount, prepareDiscountText());
+        setText(R.id.partnerPointTitle, partnerPoint.getTitle());
+        setText(R.id.partnerPointAddress, partnerPoint.getAddress());
+    }
+
+    private void setContacts() {
+        ViewGroup containerOfContacts = (ViewGroup) findViewById(R.id.containerOfContacts);
+        for (String webSite : partner.getWebSites()) {
+            containerOfContacts.addView(contactsViewHelper.makeViewByWebSite(webSite));
+        }
+        for (String email : partner.getEmails()) {
+            containerOfContacts.addView(contactsViewHelper.makeViewByEmail(email));
+        }
+    }
+
+    private void setLogo() {
+        ImageView logoImageView = (ImageView) findViewById(R.id.logo);
+        imageDownloader.download(partner.getImageUrl(), logoImageView);
+    }
+
     private void setText(int idOfTextView, String text) {
         TextView textView = (TextView) findViewById(idOfTextView);
-        textView.setText(text);
+        textView.setText(text.trim());
     }
 
     private View findViewById(int id) {
@@ -70,17 +98,17 @@ public class PartnerDetailsViewHelper {
     }
 
     private String prepareDiscountText() {
-        return partner.discountType + ": " + partner.discount + "%";
+        return partner.getDiscountType() + ": " + partner.getDiscountSize() + "%";
     }
 
     private void setPaymentMethods() {
         TextView paymentMethodsTextView = (TextView) findViewById(R.id.paymentMethods);
-        paymentMethodsTextView.setText(partnerPoint.paymentMethods);
+        paymentMethodsTextView.setText(partnerPoint.getPaymentMethods());
     }
 
     private void setWorkingHours() {
         ViewGroup containerOfWorkingHours = (ViewGroup) findViewById(R.id.containerOfWorkingHours);
-        View workingHoursView = workingHoursViewMaker.makeView(partnerPoint.workingHours);
+        View workingHoursView = workingHoursViewMaker.makeView(partnerPoint.getWorkingHours());
         containerOfWorkingHours.addView(workingHoursView);
     }
 
@@ -102,7 +130,7 @@ public class PartnerDetailsViewHelper {
     private void setCategory() {
         final PartnerCategory category = defineCategory();
         Button categoryButton = (Button) findViewById(R.id.categoryButton);
-        categoryButton.setText(category.title);
+        categoryButton.setText(category.getTitle());
         categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -68,8 +68,8 @@ public class PartnersWriterToDatabase {
                      ") VALUES(?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();
-        insertStatement.bindLong(1, partnerCategory.id);
-        insertStatement.bindString(2, partnerCategory.title);
+        insertStatement.bindLong(1, partnerCategory.getId());
+        insertStatement.bindString(2, partnerCategory.getTitle());
         insertStatement.executeInsert();
     }
 
@@ -85,17 +85,25 @@ public class PartnersWriterToDatabase {
                          PartnersContract.COLUMN_NAME_TITLE + ", " +
                          PartnersContract.COLUMN_NAME_FULL_TITLE + ", " +
                          PartnersContract.COLUMN_NAME_DISCOUNT_TYPE + ", " +
-                         PartnersContract.COLUMN_NAME_DISCOUNT + ", " +
-                         PartnersContract.COLUMN_NAME_CATEGORY_ID +
-                     ") VALUES(?,?,?,?,?,?)";
+                         PartnersContract.COLUMN_NAME_DISCOUNT_SIZE + ", " +
+                         PartnersContract.COLUMN_NAME_CATEGORY_ID + ", " +
+                         PartnersContract.COLUMN_NAME_IMAGE_URL + ", " +
+                         PartnersContract.COLUMN_NAME_DESCRIPTION + ", " +
+                         PartnersContract.COLUMN_NAME_WEB_SITES + ", " +
+                         PartnersContract.COLUMN_NAME_EMAILS +
+                     ") VALUES(?,?,?,?,?,?,?,?,?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();
-        insertStatement.bindLong(1, partner.id);
-        insertStatement.bindString(2, partner.title);
-        insertStatement.bindString(3, partner.fullTitle);
-        insertStatement.bindString(4, partner.discountType);
-        insertStatement.bindLong(5, partner.discount);
-        insertStatement.bindLong(6, partner.categoryId);
+        insertStatement.bindLong(1, partner.getId());
+        insertStatement.bindString(2, partner.getTitle());
+        insertStatement.bindString(3, partner.getFullTitle());
+        insertStatement.bindString(4, partner.getDiscountType());
+        insertStatement.bindLong(5, partner.getDiscountSize());
+        insertStatement.bindLong(6, partner.getCategoryId());
+        insertStatement.bindString(7, partner.getImageUrl());
+        insertStatement.bindString(8, partner.getDescription());
+        insertStatement.bindBlob(9, SerializationUtils.serialize((Serializable) partner.getWebSites()));
+        insertStatement.bindBlob(10, SerializationUtils.serialize((Serializable) partner.getEmails()));
         insertStatement.executeInsert();
     }
 
@@ -118,14 +126,14 @@ public class PartnersWriterToDatabase {
                      ") VALUES(?,?,?,?,?,?,?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();
-        insertStatement.bindString(1, partnerPoint.title);
-        insertStatement.bindString(2, partnerPoint.address);
-        insertStatement.bindDouble(3, partnerPoint.longitude);
-        insertStatement.bindDouble(4, partnerPoint.latitude);
-        insertStatement.bindString(5, partnerPoint.paymentMethods);
-        insertStatement.bindBlob(6, SerializationUtils.serialize((Serializable) partnerPoint.phones));
-        insertStatement.bindBlob(7, SerializationUtils.serialize(partnerPoint.workingHours));
-        insertStatement.bindLong(8, partnerPoint.partnerId);
+        insertStatement.bindString(1, partnerPoint.getTitle());
+        insertStatement.bindString(2, partnerPoint.getAddress());
+        insertStatement.bindDouble(3, partnerPoint.getLongitude());
+        insertStatement.bindDouble(4, partnerPoint.getLatitude());
+        insertStatement.bindString(5, partnerPoint.getPaymentMethods());
+        insertStatement.bindBlob(6, SerializationUtils.serialize((Serializable) partnerPoint.getPhones()));
+        insertStatement.bindBlob(7, SerializationUtils.serialize(partnerPoint.getWorkingHours()));
+        insertStatement.bindLong(8, partnerPoint.getPartnerId());
         insertStatement.executeInsert();
     }
 }

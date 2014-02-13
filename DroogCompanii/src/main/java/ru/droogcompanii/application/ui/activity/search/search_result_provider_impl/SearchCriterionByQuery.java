@@ -23,14 +23,14 @@ class SearchCriterionByQuery implements Serializable {
     }
 
     public boolean meetCriterion(PartnerCategory category) {
-        return matcherToSearchQuery.matchToQuery(category.title);
+        return matcherToSearchQuery.matchToQuery(category.getTitle());
     }
 
     public boolean meetCriterion(Partner partner) {
-        return matcherToSearchQuery.matchToQuery(partner.title);
+        return matcherToSearchQuery.matchToQuery(partner.getTitle());
     }
 
     public boolean meetCriterion(PartnerPoint partnerPoint) {
-        return matcherToSearchQuery.matchToQuery(partnerPoint.title);
+        return matcherToSearchQuery.matchToQuery(partnerPoint.getTitle());
     }
 }

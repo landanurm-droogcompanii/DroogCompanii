@@ -11,7 +11,10 @@ import java.util.Map;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategoryImpl;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerImpl;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
@@ -110,25 +113,22 @@ public class PartnersXmlParser {
 
         parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partnerCategory);
 
-        String title = null;
+        PartnerCategoryImpl partnerCategory = new PartnerCategoryImpl();
+        partnerCategory.id = partnerCategoryId;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
             if (tag.equals(TAGS.title)) {
-                title = parseTitle(parser);
+                partnerCategory.title = XmlParserUtils.parseTextByTag(parser, tag);
             } else if (tag.equals(TAGS.partners)) {
                 parsePartners(parser, partnerCategoryId);
             } else {
                 XmlParserUtils.skip(parser);
             }
         }
-        return new PartnerCategory(partnerCategoryId, title);
-    }
-
-    private static String parseTitle(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, TAGS.title);
+        return partnerCategory;
     }
 
     private void parsePartners(XmlPullParser parser, int partnerCategoryId) throws Exception {
@@ -151,11 +151,9 @@ public class PartnersXmlParser {
     private Partner parsePartner(XmlPullParser parser, int partnerCategoryId) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partner);
 
-        int id = 0;
-        String title = null;
-        String fullTitle = null;
-        String discountType = null;
-        int discount = 0;
+        PartnerImpl partner = new PartnerImpl();
+
+        partner.categoryId = partnerCategoryId;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -163,38 +161,57 @@ public class PartnersXmlParser {
             }
             String tag = parser.getName();
             if (tag.equals(TAGS.id)) {
-                id = parseId(parser);
+                partner.id = XmlParserUtils.parseIntegerByTag(parser, tag);
             } else if (tag.equals(TAGS.title)) {
-                title = parseTitle(parser);
+                partner.title = XmlParserUtils.parseTextByTag(parser, tag);
             } else if (tag.equals(TAGS.fullTitle)) {
-                fullTitle = parseFullTitle(parser);
+                partner.fullTitle = XmlParserUtils.parseTextByTag(parser, tag);
+            } else if (tag.equals(TAGS.imageUrl)) {
+                partner.imageUrl = XmlParserUtils.parseTextByTag(parser, tag);
+            } else if (tag.equals(TAGS.description)) {
+                partner.description = XmlParserUtils.parseTextByTag(parser, tag);
+            } else if (tag.equals(TAGS.webSites)) {
+                partner.webSites = parseWebSites(parser);
+            } else if (tag.equals(TAGS.emails)) {
+                partner.emails = parseEmails(parser);
             } else if (tag.equals(TAGS.discountType)) {
-                discountType = parseDiscountType(parser);
-            } else if (tag.equals(TAGS.discount)) {
-                discount = parseDiscount(parser);
+                partner.discountType = XmlParserUtils.parseTextByTag(parser, tag);
+            } else if (tag.equals(TAGS.discountSize)) {
+                partner.discountSize = XmlParserUtils.parseIntegerByTag(parser, tag);
             } else if (tag.equals(TAGS.partnerPoints)) {
-                parsePartnerPoints(parser, id);
+                parsePartnerPoints(parser, partner.getId());
             } else {
                 XmlParserUtils.skip(parser);
             }
         }
-        return new Partner(id, title, fullTitle, discountType, discount, partnerCategoryId);
+        return partner;
     }
 
-    private static Integer parseId(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseIntegerByTag(parser, TAGS.id);
+    private List<String> parseEmails(XmlPullParser parser) throws Exception {
+        return parseArrayOfTextFields(parser, TAGS.emails, TAGS.email);
     }
 
-    private static String parseFullTitle(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, TAGS.fullTitle);
+    private static List<String> parseWebSites(XmlPullParser parser) throws Exception {
+        return parseArrayOfTextFields(parser, TAGS.webSites, TAGS.webSite);
     }
 
-    private static String parseDiscountType(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, TAGS.discountType);
-    }
+    private static List<String> parseArrayOfTextFields(
+            XmlPullParser parser, String arrayTag, String elementTag) throws Exception {
+        parser.require(XmlPullParser.START_TAG, NAMESPACE, arrayTag);
 
-    private static int parseDiscount(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseIntegerByTag(parser, TAGS.discount);
+        List<String> elements = new ArrayList<String>();
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String tag = parser.getName();
+            if (tag.equals(elementTag)) {
+                elements.add(XmlParserUtils.parseTextByTag(parser, elementTag));
+            } else {
+                XmlParserUtils.skip(parser);
+            }
+        }
+        return elements;
     }
 
     private void parsePartnerPoints(XmlPullParser parser, int partnerId) throws Exception {
@@ -213,16 +230,12 @@ public class PartnersXmlParser {
         }
     }
 
-    private PartnerPoint parsePartnerPoint(XmlPullParser parser, int partnerId) throws Exception {
+    private PartnerPointImpl parsePartnerPoint(XmlPullParser parser, int partnerId) throws Exception {
         parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.partnerPoint);
 
-        String title = null;
-        String address = null;
-        double longitude = 0.0;
-        double latitude = 0.0;
-        List<String> phones = null;
-        String paymentMethods = null;
-        WeekWorkingHours weekWorkingHours = null;
+        PartnerPointImpl partnerPoint = new PartnerPointImpl();
+
+        partnerPoint.partnerId = partnerId;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -230,64 +243,28 @@ public class PartnersXmlParser {
             }
             String tag = parser.getName();
             if (tag.equals(TAGS.title)) {
-                title = parseTitle(parser);
+                partnerPoint.title = XmlParserUtils.parseTextByTag(parser, tag);
             } else if (tag.equals(TAGS.address)) {
-                address = parseAddress(parser);
+                partnerPoint.address = XmlParserUtils.parseTextByTag(parser, tag);
             } else if (tag.equals(TAGS.longitude)) {
-                longitude = parseLongitude(parser);
+                partnerPoint.longitude = XmlParserUtils.parseDoubleByTag(parser, tag);
             } else if (tag.equals(TAGS.latitude)) {
-                latitude = parseLatitude(parser);
+                partnerPoint.latitude = XmlParserUtils.parseDoubleByTag(parser, tag);
             } else if (tag.equals(TAGS.phones)) {
-                phones = parsePhones(parser);
+                partnerPoint.phones = parsePhones(parser);
             } else if (tag.equals(TAGS.paymentMethods)) {
-                paymentMethods = parsePaymentMethods(parser);
+                partnerPoint.paymentMethods = XmlParserUtils.parseTextByTag(parser, tag);
             } else if (tag.equals(TAGS.workinghours)) {
-                weekWorkingHours = parseWeekWorkingHours(parser);
+                partnerPoint.workingHours = parseWeekWorkingHours(parser);
             } else {
                 XmlParserUtils.skip(parser);
             }
         }
-        return new PartnerPoint(
-            title, address, phones, weekWorkingHours, paymentMethods, longitude, latitude, partnerId
-        );
-    }
-
-    private static String parseAddress(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, TAGS.address);
-    }
-
-    private static double parseLongitude(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseDoubleByTag(parser, TAGS.longitude);
-    }
-
-    private static double parseLatitude(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseDoubleByTag(parser, TAGS.latitude);
+        return partnerPoint;
     }
 
     private static List<String> parsePhones(XmlPullParser parser) throws Exception {
-        parser.require(XmlPullParser.START_TAG, NAMESPACE, TAGS.phones);
-
-        List<String> phones = new ArrayList<String>();
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String tag = parser.getName();
-            if (tag.equals(TAGS.phone)) {
-                phones.add(parsePhone(parser));
-            } else {
-                XmlParserUtils.skip(parser);
-            }
-        }
-        return phones;
-    }
-
-    private static String parsePhone(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, TAGS.phone);
-    }
-
-    private static String parsePaymentMethods(XmlPullParser parser) throws Exception {
-        return XmlParserUtils.parseTextByTag(parser, TAGS.paymentMethods);
+        return parseArrayOfTextFields(parser, TAGS.phones, TAGS.phone);
     }
 
     private static WeekWorkingHours parseWeekWorkingHours(XmlPullParser parser) throws Exception {

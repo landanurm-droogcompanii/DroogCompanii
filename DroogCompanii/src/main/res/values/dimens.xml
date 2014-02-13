@@ -19,5 +19,10 @@
     <dimen name="textSizeOfPaymentMethods">16sp</dimen>
     <dimen name="textSizeOfFullPartnerTitle">28sp</dimen>
     <dimen name="textSizeOfDiscount">18sp</dimen>
+    <dimen name="offer_row_padding">4dp</dimen>
+    <dimen name="offer_row_margin">4dp</dimen>
+    <dimen name="textSizeOfPartnerDescription">14sp</dimen>
+    <dimen name="widthOfPartnerLogo">400dp</dimen>
+    <dimen name="heightOfPartnerLogo">210dp</dimen>
 
 </resources>

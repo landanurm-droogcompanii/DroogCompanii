@@ -8,8 +8,8 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.ui.helpers.SimpleArrayAdapter;
+import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by Leonid on 17.12.13.
@@ -48,7 +48,7 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
                 new ItemToTitleConvertor<PartnerCategory>() {
                     @Override
                     public String getTitle(PartnerCategory item) {
-                        return item.title;
+                        return item.getTitle();
                     }
                 });
         this.partnerCategoriesReader = partnerCategoriesReader;

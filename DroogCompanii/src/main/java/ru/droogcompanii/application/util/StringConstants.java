@@ -6,8 +6,6 @@ package ru.droogcompanii.application.util;
 public class StringConstants {
 
     public static class PaymentMethods {
-        public static final String SEPARATOR = ",";
-
         public static final String VISA = "Visa";
         public static final String MASTER_CARD = "MasterCard";
 
@@ -32,8 +30,10 @@ public class StringConstants {
             public static final String partner = "partner";
             public static final String id = "id";
             public static final String fullTitle = "full-title";
+            public static final String imageUrl = "image-url";
+            public static final String description = "description";
             public static final String discountType = "discount-type";
-            public static final String discount = "discount";
+            public static final String discountSize = "discount-size";
             public static final String partnerPoints = "partner-points";
             public static final String partnerPoint = "partner-point";
             public static final String address = "address";
@@ -43,6 +43,10 @@ public class StringConstants {
             public static final String phone = "phone";
             public static final String paymentMethods = "payment-methods";
             public static final String workinghours = "workinghours";
+            public static final String webSites = "web-sites";
+            public static final String webSite = "web-site";
+            public static final String emails = "emails";
+            public static final String email = "email";
         }
 
         public static class DayOfWeek {

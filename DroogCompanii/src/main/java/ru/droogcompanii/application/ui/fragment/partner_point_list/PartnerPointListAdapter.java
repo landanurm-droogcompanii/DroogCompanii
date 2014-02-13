@@ -8,14 +8,14 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerPointListAdapter extends ArrayAdapter<PartnerPoint> {
+public class PartnerPointListAdapter extends ArrayAdapter<PartnerPointImpl> {
 
-    public PartnerPointListAdapter(Context context, List<PartnerPoint> partnerPoints) {
+    public PartnerPointListAdapter(Context context, List<PartnerPointImpl> partnerPoints) {
         super(context, R.layout.view_partner_point_list_item, partnerPoints);
     }
 

@@ -22,6 +22,6 @@ public class PartnerPointSearchCriterionByWorksAtSomeTime
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {
         Calendar calendar = calendarProvider.getCalendar();
-        return partnerPoint.workingHours.includes(calendar);
+        return partnerPoint.getWorkingHours().includes(calendar);
     }
 }

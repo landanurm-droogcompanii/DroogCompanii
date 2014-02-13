@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.partner_points_info_panel;
+package ru.droogcompanii.application.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ public class RouteHelper {
     }
 
     public void showRouteTo(PartnerPoint destination) {
-        context.startActivity(RouteHelper.makeIntentRouteTo(destination));
+        context.startActivity(makeIntentRouteTo(destination));
     }
 
     private static Intent makeIntentRouteTo(PartnerPoint destination) {
@@ -35,13 +35,12 @@ public class RouteHelper {
     }
 
     private static String makeUri(PartnerPoint destination) {
-        LatLng to = destination.getPosition();
         LatLng from = getPositionOfBaseLocation();
         return String.format(Locale.ENGLISH,
                 "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f(%s)",
                 from.latitude, from.longitude,
-                to.latitude, to.longitude,
-                destination.title);
+                destination.getLatitude(), destination.getLongitude(),
+                destination.getTitle());
     }
 
     private static LatLng getPositionOfBaseLocation() {

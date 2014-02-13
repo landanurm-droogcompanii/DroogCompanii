@@ -24,7 +24,7 @@ public class SearchResultProviderByPartnerCategory implements SearchResultProvid
 
     @Override
     public String getTitle(Context context) {
-        return partnerCategory.title;
+        return partnerCategory.getTitle();
     }
 
     @Override

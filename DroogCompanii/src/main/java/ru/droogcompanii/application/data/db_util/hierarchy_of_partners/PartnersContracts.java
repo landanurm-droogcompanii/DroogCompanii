@@ -22,8 +22,12 @@ public final class PartnersContracts {
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_FULL_TITLE = "full_title";
+        public static final String COLUMN_NAME_IMAGE_URL = "image_url";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_WEB_SITES = "web_sites";
+        public static final String COLUMN_NAME_EMAILS = "emails";
         public static final String COLUMN_NAME_DISCOUNT_TYPE = "discount_type";
-        public static final String COLUMN_NAME_DISCOUNT = "discount";
+        public static final String COLUMN_NAME_DISCOUNT_SIZE = "discount_size";
         public static final String COLUMN_NAME_CATEGORY_ID = "category_id";
     }
 

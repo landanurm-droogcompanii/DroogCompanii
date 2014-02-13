@@ -22,6 +22,8 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
+import ru.droogcompanii.application.util.RouteHelper;
+import ru.droogcompanii.application.util.caller_helper.CallerHelper;
 
 /**
  * Created by ls on 22.01.14.
@@ -209,9 +211,9 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private void updatePartnerPointInfo() {
         final PartnerPoint partnerPoint = partnerPoints.get(indexOfCurrentPartnerPoint);
-        setText(R.id.titleTextView, partnerPoint.title);
-        setText(R.id.addressTextView, partnerPoint.address);
-        setText(R.id.paymentMethodsTextView, partnerPoint.paymentMethods);
+        setText(R.id.titleTextView, partnerPoint.getTitle());
+        setText(R.id.addressTextView, partnerPoint.getAddress());
+        setText(R.id.paymentMethodsTextView, partnerPoint.getPaymentMethods());
         setPhones(partnerPoint);
         setRouteButton(partnerPoint);
         setWorkingHoursIndicator(partnerPoint);
@@ -250,7 +252,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private static boolean isOpenedNow(PartnerPoint partnerPoint) {
         Calendar now = Calendar.getInstance();
-        return partnerPoint.workingHours.includes(now);
+        return partnerPoint.getWorkingHours().includes(now);
     }
 
     private void setGoToPartnerButton(final PartnerPoint partnerPoint) {

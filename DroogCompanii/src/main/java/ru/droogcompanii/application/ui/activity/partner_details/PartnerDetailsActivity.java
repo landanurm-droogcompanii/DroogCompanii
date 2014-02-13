@@ -11,6 +11,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.activity.search_result_map.SearchResultMapActivity;
 import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
@@ -39,7 +40,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
 
     public static void start(Context context, Partner partner, List<PartnerPoint> partnerPoints) {
         Intent intent = new Intent(context, PartnerDetailsActivity.class);
-        intent.putExtra(Key.PARTNER, partner);
+        intent.putExtra(Key.PARTNER, (Serializable) partner);
         intent.putExtra(Key.PARTNER_POINTS, (Serializable) partnerPoints);
         context.startActivity(intent);
     }
@@ -66,7 +67,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     }
 
     @Override
-    public void onPartnerPointClick(PartnerPoint partnerPoint) {
+    public void onPartnerPointClick(PartnerPointImpl partnerPoint) {
         startPartnerDetailsFragment(partnerPoint);
     }
 
@@ -119,8 +120,8 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     private PartnerDetailsFragment preparePartnerDetailsFragment(PartnerPoint partnerPoint) {
         PartnerDetailsFragment partnerDetailsFragment = new PartnerDetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(Key.PARTNER, partner);
-        args.putSerializable(Key.PARTNER_POINT, partnerPoint);
+        args.putSerializable(Key.PARTNER, (Serializable) partner);
+        args.putSerializable(Key.PARTNER_POINT, (Serializable) partnerPoint);
         partnerDetailsFragment.setArguments(args);
         return partnerDetailsFragment;
     }
@@ -130,13 +131,13 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     }
 
     private String prepareTitle() {
-        return partner.title;
+        return partner.getTitle();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable(Key.PARTNER, partner);
+        savedInstanceState.putSerializable(Key.PARTNER, (Serializable) partner);
         savedInstanceState.putSerializable(Key.PARTNER_POINTS, (Serializable) partnerPoints);
     }
 
