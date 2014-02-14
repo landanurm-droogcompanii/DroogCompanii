@@ -80,7 +80,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_alignParentRight="true"
-                android:weightSum="3"
+                android:weightSum="2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -99,13 +99,6 @@
                     android:layout_height="match_parent"
                     android:src="@android:drawable/stat_sys_phone_call"
                     android:id="@+id/phoneButton" />
-
-                <ImageButton
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:src="@android:drawable/ic_dialog_map"
-                    android:id="@+id/goToMapButton" />
 
             </LinearLayout>
 

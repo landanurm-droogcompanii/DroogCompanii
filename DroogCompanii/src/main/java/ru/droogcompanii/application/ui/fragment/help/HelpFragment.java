@@ -43,12 +43,11 @@ public class HelpFragment extends Fragment {
     }
 
     private View prepareWebsiteView(IconAndLabelItemInflater inflater) {
-        final String webSite = WebsiteAddressProvider.getWebsiteAddress();
-        return inflater.inflate(R.drawable.phone, webSite, new Runnable() {
+        return inflater.inflate(R.drawable.ic_web_site, getString(R.string.website), new Runnable() {
             @Override
             public void run() {
                 NavigationToWebsiteHelper helper = new NavigationToWebsiteHelper(getActivity());
-                helper.navigateToSite(webSite);
+                helper.navigateToSite(WebsiteAddressProvider.getWebsiteAddress());
             }
         });
     }

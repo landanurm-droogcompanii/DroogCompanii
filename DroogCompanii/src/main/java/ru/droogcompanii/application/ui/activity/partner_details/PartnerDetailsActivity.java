@@ -13,7 +13,6 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
@@ -50,6 +49,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
 
     private static final String LIST_FRAGMENT_TAG = "List Fragment Tag";
     private static final String DETAILS_FRAGMENT_TAG = "Details Fragment Tag";
+
 
     private PartnerDetailsTask.Result resultFromTask;
 
@@ -116,7 +116,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     }
 
     @Override
-    public void onPartnerPointClick(PartnerPointImpl partnerPoint) {
+    public void onPartnerPointClick(PartnerPoint partnerPoint) {
         startPartnerDetailsFragment(partnerPoint);
     }
 
@@ -126,6 +126,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
         } else {
             startPartnerDetailsFragment(onlyExistingPartnerPoint());
         }
+        updateGoToMapItemVisible();
         initTitle();
     }
 
@@ -208,7 +209,24 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
 
     @Override
     public PartnerPointsProvider getPartnerPointsProvider() {
-        return new PartnerPointsProviderImpl(resultFromTask.partner, resultFromTask.partnerPoints);
+        return new PartnerPointsProviderImpl(resultFromTask.partner, getPartnerPointsDisplayedNow());
+    }
+
+    private List<PartnerPoint> getPartnerPointsDisplayedNow() {
+        PartnerPointsProvider partnerPointsProvider = (PartnerPointsProvider) findDisplayedFragment();
+        return partnerPointsProvider.getPartnerPoints(this);
+    }
+
+    private Fragment findDisplayedFragment() {
+        return getDetailsFragmentIfItIsDisplayedAndListFragmentOtherwise();
+    }
+
+    private Fragment getDetailsFragmentIfItIsDisplayedAndListFragmentOtherwise() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(DETAILS_FRAGMENT_TAG);
+        if (fragment == null) {
+            fragment = getSupportFragmentManager().findFragmentByTag(LIST_FRAGMENT_TAG);
+        }
+        return fragment;
     }
 
     private static class PartnerPointsProviderImpl implements PartnerPointsProvider, Serializable {

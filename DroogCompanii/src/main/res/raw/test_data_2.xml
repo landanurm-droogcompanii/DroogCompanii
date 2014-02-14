@@ -186,4 +186,53 @@
             </partner>
         </partners>
     </partner-category>
+
+    <partner-category>
+        <title>Категория 2</title>
+        <partners type="array">
+            <partner>
+                <id type="integer">2001</id>
+                <image-url>http://3.bp.blogspot.com/_Rs53-MPsJaI/Rs-qh8MGQ5I/AAAAAAAACqg/7kIsHaMzPlI/s400/1agirl8.jpg</image-url>
+                <title>Компания 2-1</title>
+                <full-title> Полное название для Компания 2-1</full-title>
+                <description>Это описание компании Компания 2-1.
+                    Здесь будет написана вся возможная информация о компании.
+                    Может занимать много строк.
+                    Тра-та-та.
+                    Та-та.
+                </description>
+                <web-sites type="array">
+                    <web-site>http://droogcompanii.ru</web-site>
+                    <web-site>http://google.com</web-site>
+                </web-sites>
+                <emails type="array">
+                    <email>person_1@gmail.com</email>
+                </emails>
+                <discount-type>Скидка</discount-type>
+                <discount-size type="integer">2</discount-size>
+                <partner-points type="array">
+                    <partner-point>
+                        <title>Точка 1. Компания 2-1</title>
+                        <address>Адрес. Точка 1. Компания 2-1</address>
+                        <longitude type="decimal">49.1301</longitude>
+                        <latitude type="decimal">55.8198</latitude>
+                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(843) 258-58-59</phone>
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                </partner-points>
+            </partner>
+        </partners>
+    </partner-category>
 </partner-categories>

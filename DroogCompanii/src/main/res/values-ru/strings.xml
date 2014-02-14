@@ -8,7 +8,7 @@
     <string name="menu_item_personal_account">Личный кабинет</string>
     <string name="menu_item_partner_categories">Категории партнеров</string>
     <string name="menu_item_offers">Акции</string>
-    <string name="menu_item_website">Веб-сайт</string>
+    <string name="website">Веб-сайт</string>
     <string name="hotline">Горячая линия</string>
     <string name="menu_item_synchronization">Синхронизация</string>
     <string name="menu_item_settings">Настройки</string>

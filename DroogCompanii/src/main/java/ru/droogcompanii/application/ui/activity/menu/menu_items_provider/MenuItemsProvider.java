@@ -18,7 +18,7 @@ public class MenuItemsProvider {
                 new MenuListItem(R.string.menu_item_personal_account, new ActionOnPersonalAccount()),
                 new MenuListItem(R.string.menu_item_partner_categories, new ActionOnPartnerCategories()),
                 new MenuListItem(R.string.menu_item_offers, new ActionOnOffers()),
-                new MenuListItem(R.string.menu_item_website, new ActionOnWebsite()),
+                new MenuListItem(R.string.website, new ActionOnWebsite()),
                 new MenuListItem(R.string.hotline, new ActionOnHotline()),
                 new MenuListItem(R.string.menu_item_synchronization, new ActionOnSynchronization()),
                 new MenuListItem(R.string.menu_item_settings, new ActionOnSettings())

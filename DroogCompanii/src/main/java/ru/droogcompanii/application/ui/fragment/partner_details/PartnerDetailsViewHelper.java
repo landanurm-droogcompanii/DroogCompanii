@@ -9,10 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
@@ -22,8 +18,6 @@ import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProviderFromPartner;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.ui.activity.search_result_map.SearchResultMapActivity;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.util.ImageDownloader;
 import ru.droogcompanii.application.util.RouteHelper;
 import ru.droogcompanii.application.util.caller_helper.CallerHelper;
@@ -71,7 +65,6 @@ public class PartnerDetailsViewHelper {
         setWorkingHours();
         setPhoneButton();
         setRouteButton();
-        setGoToMapButton();
         setLinkToCategory();
     }
 
@@ -148,35 +141,6 @@ public class PartnerDetailsViewHelper {
                 routeHelper.showRouteTo(partnerPoint);
             }
         });
-    }
-
-    private void setGoToMapButton() {
-        View goToMapButton = findViewById(R.id.goToMapButton);
-        goToMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SearchResultMapActivity.start(context, new SinglePartnerPointProvider(partnerPoint));
-            }
-        });
-    }
-
-    private static class SinglePartnerPointProvider implements PartnerPointsProvider, Serializable {
-
-        private final PartnerPoint partnerPoint;
-
-        public SinglePartnerPointProvider(PartnerPoint partnerPoint) {
-            this.partnerPoint = partnerPoint;
-        }
-
-        @Override
-        public String getTitle(Context context) {
-            return partnerPoint.getTitle();
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            return Arrays.asList(partnerPoint);
-        }
     }
 
     private void setLinkToCategory() {
