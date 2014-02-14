@@ -68,26 +68,29 @@
             android:icon="@drawable/ic_filter" >
         </activity>
         <activity
-            android:name=".ui.activity.menu.MenuActivity"
-            android:label="@string/titleOfMenuActivity"
-            android:icon="@android:drawable/ic_dialog_dialer" >
-        </activity>
-        <activity
             android:name=".ui.activity.personal_account.PersonalAccountActivity"
-            android:label="@string/titleOfPersonalAccountActivity" >
+            android:label="@string/titleOfPersonalAccountActivity"
+            android:icon="@drawable/ic_personal_account" >
         </activity>
         <activity
             android:name=".ui.activity.offer_list.OfferListActivity"
+            android:icon="@drawable/ic_offers"
             android:label="@string/titleOfOfferListActivity" >
         </activity>
         <activity
             android:name=".ui.activity.offer_details.OfferDetailsActivity"
+            android:icon="@drawable/ic_offers"
             android:label="@string/titleOfOfferListActivity" >
         </activity>
         <activity
             android:name=".ui.activity.settings.SettingsActivity"
-            android:icon="@android:drawable/ic_menu_preferences"
+            android:icon="@drawable/ic_action_settings"
             android:label="@string/titleOfSettingsActivity" >
+        </activity>
+        <activity
+            android:name=".ui.activity.help.HelpActivity"
+            android:icon="@drawable/ic_action_help"
+            android:label="@string/titleOfHelpActivity" >
         </activity>
 
         <meta-data

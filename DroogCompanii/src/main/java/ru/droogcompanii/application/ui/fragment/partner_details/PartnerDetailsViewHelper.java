@@ -9,16 +9,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
+import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProviderFromPartner;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.util.caller_helper.CallerHelper;
-import ru.droogcompanii.application.util.RouteHelper;
+import ru.droogcompanii.application.ui.activity.search_result_map.SearchResultMapActivity;
+import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.util.ImageDownloader;
+import ru.droogcompanii.application.util.RouteHelper;
+import ru.droogcompanii.application.util.caller_helper.CallerHelper;
 
 /**
  * Created by ls on 12.02.14.
@@ -57,12 +65,14 @@ public class PartnerDetailsViewHelper {
     private void fill() {
         setLogo();
         setTextDetails();
+        setGoToOffersButton();
         setContacts();
         setPaymentMethods();
         setWorkingHours();
         setPhoneButton();
         setRouteButton();
-        setCategory();
+        setGoToMapButton();
+        setLinkToCategory();
     }
 
     private void setTextDetails() {
@@ -71,6 +81,28 @@ public class PartnerDetailsViewHelper {
         setText(R.id.discount, prepareDiscountText());
         setText(R.id.partnerPointTitle, partnerPoint.getTitle());
         setText(R.id.partnerPointAddress, partnerPoint.getAddress());
+    }
+
+    private void setText(int idOfTextView, String text) {
+        TextView textView = (TextView) findViewById(idOfTextView);
+        textView.setText(text.trim());
+    }
+
+    private View findViewById(int id) {
+        return view.findViewById(id);
+    }
+
+    private void setGoToOffersButton() {
+        findViewById(R.id.goToOffersButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onNeedGoToOffersOfPartner(partner);
+            }
+        });
+    }
+
+    private void onNeedGoToOffersOfPartner(Partner partner) {
+        OfferListActivity.start(context, new OffersProviderFromPartner(partner));
     }
 
     private void setContacts() {
@@ -86,15 +118,6 @@ public class PartnerDetailsViewHelper {
     private void setLogo() {
         ImageView logoImageView = (ImageView) findViewById(R.id.logo);
         imageDownloader.download(partner.getImageUrl(), logoImageView);
-    }
-
-    private void setText(int idOfTextView, String text) {
-        TextView textView = (TextView) findViewById(idOfTextView);
-        textView.setText(text.trim());
-    }
-
-    private View findViewById(int id) {
-        return view.findViewById(id);
     }
 
     private String prepareDiscountText() {
@@ -127,7 +150,36 @@ public class PartnerDetailsViewHelper {
         });
     }
 
-    private void setCategory() {
+    private void setGoToMapButton() {
+        View goToMapButton = findViewById(R.id.goToMapButton);
+        goToMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SearchResultMapActivity.start(context, new SinglePartnerPointProvider(partnerPoint));
+            }
+        });
+    }
+
+    private static class SinglePartnerPointProvider implements PartnerPointsProvider, Serializable {
+
+        private final PartnerPoint partnerPoint;
+
+        public SinglePartnerPointProvider(PartnerPoint partnerPoint) {
+            this.partnerPoint = partnerPoint;
+        }
+
+        @Override
+        public String getTitle(Context context) {
+            return partnerPoint.getTitle();
+        }
+
+        @Override
+        public List<PartnerPoint> getPartnerPoints(Context context) {
+            return Arrays.asList(partnerPoint);
+        }
+    }
+
+    private void setLinkToCategory() {
         final PartnerCategory category = defineCategory();
         Button categoryButton = (Button) findViewById(R.id.categoryButton);
         categoryButton.setText(category.getTitle());

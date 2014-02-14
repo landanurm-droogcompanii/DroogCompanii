@@ -3,6 +3,8 @@ package ru.droogcompanii.application.ui.activity.partner_details;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import java.io.Serializable;
@@ -12,36 +14,49 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
-import ru.droogcompanii.application.ui.activity.search_result_map.SearchResultMapActivity;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
-import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
+import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 
 /**
  * Created by ls on 15.01.14.
  */
 public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
-                                    implements PartnerPointListFragment.Callbacks {
+                     implements PartnerPointListFragment.Callbacks,
+                                TaskFragmentHolder.Callbacks,
+                                PartnerPointsProviderHolder {
+
+    private static final String TAG_TASK_FRAGMENT_HOLDER = "TaskFragmentHolder";
+
+    public static interface PartnerAndPartnerPointsProvider {
+        Partner getPartner(Context context);
+        List<PartnerPoint> getPartnerPoints(Context context);
+    }
 
     public static class Key {
         public static final String PARTNER = "partner";
-        public static final String PARTNER_POINT = "partner_point";
+        public static final String PARTNER_POINT = PARTNER + "point";
         public static final String PARTNER_POINTS = PARTNER_POINT + "s";
+        public static final String PARTNER_AND_PARTNER_POINTS_PROVIDER = PARTNER + PARTNER_POINTS + " provider";
+        public static final String RESULT_FROM_TASK = "result from task";
     }
 
     private static final String LIST_FRAGMENT_TAG = "List Fragment Tag";
     private static final String DETAILS_FRAGMENT_TAG = "Details Fragment Tag";
 
-    private Partner partner;
-    private List<PartnerPoint> partnerPoints;
+    private PartnerDetailsTask.Result resultFromTask;
 
 
-    public static void start(Context context, Partner partner, List<PartnerPoint> partnerPoints) {
+    public static void start(Context context, PartnerAndPartnerPointsProvider partnerAndPartnerPointsProvider) {
         Intent intent = new Intent(context, PartnerDetailsActivity.class);
-        intent.putExtra(Key.PARTNER, (Serializable) partner);
-        intent.putExtra(Key.PARTNER_POINTS, (Serializable) partnerPoints);
+        intent.putExtra(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER, (Serializable) partnerAndPartnerPointsProvider);
         context.startActivity(intent);
     }
 
@@ -51,19 +66,53 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
         setContentView(R.layout.activity_partner);
 
         if (savedInstanceState == null) {
-            initState(getPassedBundle());
-            init();
+            startTask();
         } else {
-            initState(savedInstanceState);
+            restoreState(savedInstanceState);
         }
-
-        setTitle(prepareTitle());
     }
 
-    private void initState(Bundle bundle) {
-        partner = (Partner) bundle.getSerializable(Key.PARTNER);
-        partnerPoints = (List<PartnerPoint>) bundle.getSerializable(Key.PARTNER_POINTS);
-        updateGoToMapItemVisible();
+    private void restoreState(Bundle savedInstanceState) {
+        resultFromTask = (PartnerDetailsTask.Result)
+                savedInstanceState.getSerializable(Key.RESULT_FROM_TASK);
+        initTitle();
+    }
+
+    private void initTitle() {
+        if (resultFromTask != null && resultFromTask.partner != null) {
+            setTitle(resultFromTask.partner.getTitle());
+        }
+    }
+
+    private void startTask() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.taskFragmentContainer, prepareTaskFragment(), TAG_TASK_FRAGMENT_HOLDER);
+        transaction.commit();
+    }
+
+    private Fragment prepareTaskFragment() {
+        Fragment taskFragment = new PartnerDetailsTaskFragmentHolder();
+        taskFragment.setArguments(prepareArgumentsForTaskFragment());
+        return taskFragment;
+    }
+
+    private Bundle prepareArgumentsForTaskFragment() {
+        Intent intent = getIntent();
+        Serializable provider = intent.getSerializableExtra(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER);
+        Bundle args = new Bundle();
+        args.putSerializable(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER, provider);
+        return args;
+    }
+
+    @Override
+    public void onTaskFinished(int resultCode, Serializable result) {
+        if (resultCode != RESULT_OK) {
+            finish();
+            return;
+        }
+        resultFromTask = (PartnerDetailsTask.Result) result;
+        init();
     }
 
     @Override
@@ -77,12 +126,11 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
         } else {
             startPartnerDetailsFragment(onlyExistingPartnerPoint());
         }
-    }
-    private Bundle getPassedBundle() {
-        return getIntent().getExtras();
+        initTitle();
     }
 
     private boolean isNeedToShowPartnerPointListFirst() {
+        List<PartnerPoint> partnerPoints = resultFromTask.partnerPoints;
         return (partnerPoints != null) && (partnerPoints.size() > 1);
     }
 
@@ -96,13 +144,13 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     private PartnerPointListFragment preparePartnerPointListFragment() {
         PartnerPointListFragment fragment = new PartnerPointListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(Key.PARTNER_POINTS, (Serializable) partnerPoints);
+        args.putSerializable(Key.PARTNER_POINTS, (Serializable) resultFromTask.partnerPoints);
         fragment.setArguments(args);
         return fragment;
     }
 
     private PartnerPoint onlyExistingPartnerPoint() {
-        return partnerPoints.get(0);
+        return resultFromTask.partnerPoints.get(0);
     }
 
     private void startPartnerDetailsFragment(PartnerPoint partnerPoint) {
@@ -120,7 +168,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     private PartnerDetailsFragment preparePartnerDetailsFragment(PartnerPoint partnerPoint) {
         PartnerDetailsFragment partnerDetailsFragment = new PartnerDetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(Key.PARTNER, (Serializable) partner);
+        args.putSerializable(Key.PARTNER, (Serializable) resultFromTask.partner);
         args.putSerializable(Key.PARTNER_POINT, (Serializable) partnerPoint);
         partnerDetailsFragment.setArguments(args);
         return partnerDetailsFragment;
@@ -130,43 +178,51 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
         return getSupportFragmentManager().findFragmentByTag(LIST_FRAGMENT_TAG) != null;
     }
 
-    private String prepareTitle() {
-        return partner.getTitle();
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable(Key.PARTNER, (Serializable) partner);
-        savedInstanceState.putSerializable(Key.PARTNER_POINTS, (Serializable) partnerPoints);
+        savedInstanceState.putSerializable(Key.RESULT_FROM_TASK, resultFromTask);
     }
 
     @Override
     protected boolean isGoToMapItemVisible() {
-        return (partnerPoints != null) && !partnerPoints.isEmpty();
+        return (resultFromTask != null) &&
+                (resultFromTask.partnerPoints != null) &&
+                !resultFromTask.partnerPoints.isEmpty();
     }
 
     @Override
-    protected void onNeedToGoToMap() {
-        Intent intent = new Intent(this, SearchResultMapActivity.class);
-        PartnerPointsProviderImpl partnerPointsProvider =
-                new PartnerPointsProviderImpl(prepareTitle(), partnerPoints);
-        intent.putExtra(Keys.partnerPointsProvider, partnerPointsProvider);
-        startActivity(intent);
+    protected MenuHelper getMenuHelper() {
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        MenuItemHelpers.GO_TO_MAP,
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
+                };
+            }
+        };
+    }
+
+    @Override
+    public PartnerPointsProvider getPartnerPointsProvider() {
+        return new PartnerPointsProviderImpl(resultFromTask.partner, resultFromTask.partnerPoints);
     }
 
     private static class PartnerPointsProviderImpl implements PartnerPointsProvider, Serializable {
-        private final String title;
+        private final Partner partner;
         private final List<PartnerPoint> partnerPoints;
 
-        PartnerPointsProviderImpl(String title, List<PartnerPoint> partnerPoints) {
-            this.title = title;
+        PartnerPointsProviderImpl(Partner partner, List<PartnerPoint> partnerPoints) {
+            this.partner = partner;
             this.partnerPoints = partnerPoints;
         }
 
         @Override
         public String getTitle(Context context) {
-            return title;
+            return partner.getTitle();
         }
 
         @Override

@@ -70,7 +70,7 @@
 
     <offer>
         <id>4</id>
-        <partnerId>1004</partnerId>
+        <partnerId>1001</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/40/medium/1372399043.jpg</imageUrl>
         <shortDescription>ДЕНЬГИ ВОЗВРАЩАЮТСЯ!</shortDescription>
         <fullDescription>
@@ -93,7 +93,7 @@
 
     <offer>
         <id>5</id>
-        <partnerId>1005</partnerId>
+        <partnerId>1002</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/61/medium/1390631767.jpg</imageUrl>
         <shortDescription>ВОЛШЕБСТВО CIRQUE DU SOLEIL БЛИЖЕ С КАРТОЙ MASTERCARD PAYPASS «ДРУГ КОМПАНИИ» ОТ ОАО «АК БАРС» БАНК</shortDescription>
         <fullDescription>
@@ -130,7 +130,7 @@
 
     <offer>
         <id>6</id>
-        <partnerId>1006</partnerId>
+        <partnerId>1003</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/63/medium/1391175281.jpg</imageUrl>
         <shortDescription>НАКОРМИ ЖЕЛЕЗНОГО КОНЯ С ТАТНЕФТЕПРОДУКТ</shortDescription>
         <fullDescription>
@@ -175,7 +175,7 @@
 
     <offer>
         <id>7</id>
-        <partnerId>1007</partnerId>
+        <partnerId>1001</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/64/alter/%D1%84%D0%B8%D0%BE%D0%BB%D0%B5%D1%82-740.jpg</imageUrl>
         <shortDescription>ДЕСЕРТ В ПОДАРОК</shortDescription>
         <fullDescription>
@@ -201,7 +201,7 @@
 
     <offer>
         <id>8</id>
-        <partnerId>1008</partnerId>
+        <partnerId>1002</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/55/medium/1386942783.jpg</imageUrl>
         <shortDescription>ЛЕТАЙ ЗА БОНУСАМИ!</shortDescription>
         <fullDescription>
@@ -235,7 +235,7 @@
 
     <offer>
         <id>9</id>
-        <partnerId>1009</partnerId>
+        <partnerId>1003</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/46/medium/1378186751.jpg</imageUrl>
         <shortDescription>ЗАПРАВЬСЯ ДВАЖДЫ</shortDescription>
         <fullDescription>
@@ -261,7 +261,7 @@
 
     <offer>
         <id>10</id>
-        <partnerId>10010</partnerId>
+        <partnerId>1001</partnerId>
         <imageUrl>http://droogcompanii.ru/system/offers/30/medium/1362572560.jpg</imageUrl>
         <shortDescription>КРАСОТА БОЛЬШЕ НЕ ТРЕБУЕТ ЖЕРТВ! ИЗЫСКАННЫЕ ПРОЦЕДУРЫ ДЛЯ ВАШЕГО ТЕЛА СО СКИДКОЙ ДО 70%</shortDescription>
         <fullDescription>

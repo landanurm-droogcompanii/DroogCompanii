@@ -18,6 +18,7 @@ public class StandardFiltersProvider {
             new SearchFilterByCashlessPayments(),
             new SearchFilterByDiscountType(),
             new SearchFilterByWorksNow(),
+            new SearchClosestPointsFilter(),
             new SortingFilterByDiscountSize(),
             new SortingFilterByDistanceBasedOnCurrentLocation(),
             new SortingFilterByTitle()

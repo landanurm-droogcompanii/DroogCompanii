@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.fragment.filter.FilterFragment;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
@@ -98,5 +99,4 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
         Filters currentFilters = filterFragment.getFilters();
         return !currentFilters.equals(filtersAtTheMomentOfFirstLaunch);
     }
-
 }

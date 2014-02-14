@@ -28,16 +28,16 @@ public class PartnerDetailsFragment extends android.support.v4.app.Fragment {
         initData(bundle);
     }
 
+    private void initData(Bundle bundle) {
+        partner = (Partner) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER);
+        partnerPoint = (PartnerPointImpl) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER_POINT);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         PartnerDetailsViewHelper viewMaker = new PartnerDetailsViewHelper(getActivity(), inflater, container);
         return viewMaker.getViewFilledBy(partner, partnerPoint);
-    }
-
-    private void initData(Bundle bundle) {
-        partner = (Partner) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER);
-        partnerPoint = (PartnerPointImpl) bundle.getSerializable(PartnerDetailsActivity.Key.PARTNER_POINT);
     }
 
     @Override

@@ -8,6 +8,10 @@ import android.widget.EditText;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderBySearchQuery;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
@@ -92,4 +96,16 @@ public class SearchActivity extends ActionBarActivityWithUpButton
         SearchResultListActivity.start(this, searchResultProvider);
     }
 
+    @Override
+    protected MenuHelper getMenuHelper() {
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
+                };
+            }
+        };
+    }
 }

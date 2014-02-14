@@ -13,5 +13,7 @@
     <string name="labelOfBonusCheckBox">Бонус</string>
     <string name="labelOfDiscountCheckBox">Скидка</string>
     <string name="labelOfCashBackCheckBox">Cash back</string>
+    <string name="titleOfFilterSearchClosestPointsGroup">Ближайшие</string>
+    <string name="labelOfSearchClosestPointsCheckBox">В радиусе</string>
     
 </resources>

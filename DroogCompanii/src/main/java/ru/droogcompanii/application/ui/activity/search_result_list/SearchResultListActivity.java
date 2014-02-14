@@ -13,21 +13,27 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
-import ru.droogcompanii.application.ui.activity.search_result_map.SearchResultMapActivity;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result.SearchResultFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
 import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
+import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 14.01.14.
  */
 public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
-                implements SearchResultFragment.Callbacks, TaskFragmentHolder.Callbacks {
+                implements SearchResultFragment.Callbacks,
+                           TaskFragmentHolder.Callbacks,
+                           PartnerPointsProviderHolder {
 
     private boolean isGoToMapItemVisible;
     private SearchResultFragment searchResultFragment;
@@ -127,8 +133,28 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
 
     @Override
     public void onPartnerClick(Partner partner) {
-        List<PartnerPoint> partnerPoints = searchResultProvider.getPointsOfPartner(this, partner);
-        PartnerDetailsActivity.start(this, partner, partnerPoints);
+        PartnerDetailsActivity.start(this, new PartnerAndPartnerPointsProviderImpl(partner, searchResultProvider));
+    }
+
+    private static class PartnerAndPartnerPointsProviderImpl
+            implements PartnerDetailsActivity.PartnerAndPartnerPointsProvider, Serializable{
+        private final Partner partner;
+        private final SearchResultProvider searchResultProvider;
+
+        PartnerAndPartnerPointsProviderImpl(Partner partner, SearchResultProvider searchResultProvider) {
+            this.partner = partner;
+            this.searchResultProvider = searchResultProvider;
+        }
+
+        @Override
+        public Partner getPartner(Context context) {
+            return partner;
+        }
+
+        @Override
+        public List<PartnerPoint> getPartnerPoints(Context context) {
+            return searchResultProvider.getPointsOfPartner(context, partner);
+        }
     }
 
     @Override
@@ -142,16 +168,23 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
     }
 
     @Override
-    protected void onNeedToGoToMap() {
-        PartnerPointsProvider partnerPointsProvider =
-                new AllPartnerPointsFromSearchResultProvider(searchResultProvider);
-        showResultOnMap(partnerPointsProvider);
+    protected MenuHelper getMenuHelper() {
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        MenuItemHelpers.GO_TO_MAP,
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
+                };
+            }
+        };
     }
 
-    private void showResultOnMap(PartnerPointsProvider partnerPointsProvider) {
-        Intent intent = new Intent(this, SearchResultMapActivity.class);
-        intent.putExtra(Keys.partnerPointsProvider, (Serializable) partnerPointsProvider);
-        startActivity(intent);
+    @Override
+    public PartnerPointsProvider getPartnerPointsProvider() {
+        return new AllPartnerPointsFromSearchResultProvider(searchResultProvider);
     }
 
     private static class AllPartnerPointsFromSearchResultProvider implements PartnerPointsProvider, Serializable {

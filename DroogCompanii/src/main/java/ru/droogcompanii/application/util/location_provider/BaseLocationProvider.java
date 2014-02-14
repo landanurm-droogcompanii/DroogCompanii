@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.util.location_provider;
 
 import android.location.Location;
 

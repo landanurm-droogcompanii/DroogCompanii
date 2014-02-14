@@ -1,9 +1,11 @@
 package ru.droogcompanii.application.ui.activity.offer_list;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 
+import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
 import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 
 /**
@@ -11,22 +13,22 @@ import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
  */
 public class OffersProviderTaskFragmentHolder extends TaskFragmentHolder {
 
+    private OffersProvider offersProvider;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            startTask();
-        }
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Bundle args = getArguments();
+        this.offersProvider = (OffersProvider) args.getSerializable(OfferListActivity.KEY_OFFERS_PROVIDER);
     }
 
     @Override
     protected Integer getTaskDialogTitleId() {
-        return null;
+        return TaskFragment.NO_TITLE_ID;
     }
 
     @Override
     protected Task prepareTask() {
-        Context context = getActivity();
-        return new OffersProviderTask(context);
+        return new OffersProviderTask(offersProvider, getActivity());
     }
 }

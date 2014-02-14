@@ -11,6 +11,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerImpl;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
@@ -98,13 +99,21 @@ public class PartnersReader extends BasePartnersReaderFromDatabase {
     }
 
     public Partner getPartnerOf(PartnerPoint partnerPoint) {
+        return getPartnerById(partnerPoint.getPartnerId());
+    }
+
+    public Partner getPartnerOf(Offer offer) {
+        return getPartnerById(offer.getPartnerId());
+    }
+
+    public Partner getPartnerById(int partnerId) {
         String where = " WHERE " +
-                PartnersContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerPoint.getPartnerId();
-        List<Partner> partner = getPartners(where);
-        if (partner.isEmpty()) {
-            throw new IllegalArgumentException("No partners for partner point: " + partnerPoint);
+                PartnersContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerId;
+        List<Partner> partners = getPartners(where);
+        if (partners.isEmpty()) {
+            throw new IllegalArgumentException("There is no partners with id: " + partnerId);
         }
-        return partner.get(0);
+        return partners.get(0);
     }
 
     public List<Partner> getAllPartners() {

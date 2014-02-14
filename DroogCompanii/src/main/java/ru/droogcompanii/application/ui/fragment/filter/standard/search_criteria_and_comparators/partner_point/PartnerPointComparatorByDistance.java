@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.BaseLocationProvider;
+import ru.droogcompanii.application.util.location_provider.BaseLocationProvider;
 
 /**
  * Created by ls on 16.01.14.

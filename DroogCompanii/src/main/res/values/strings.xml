@@ -11,10 +11,11 @@
     <string name="menu_item_partner_categories">Partner Categories</string>
     <string name="menu_item_offers">Offers</string>
     <string name="menu_item_website">Website</string>
-    <string name="menu_item_hotline">Hotline</string>
     <string name="menu_item_synchronization">Synchronization</string>
     <string name="menu_item_settings">Settings</string>
+    <string name="menu_item_help">Help</string>
 
+    <string name="hotline">Hotline</string>
 
     <string name="messageIfUserWantsToGetData">
         You have not downloaded data.
@@ -27,17 +28,18 @@
     <string name="titleOfMultiPhonesCallerDialog">Call</string>
 
     <string name="action_search">Search</string>
-    <string name="action_filters">Filters</string>
+    <string name="action_filter">Filters</string>
     <string name="action_menu">Menu</string>
     <string name="action_go_to_map">Go to Map</string>
 
-    <string name="titleOfFilterActivity">@string/action_filters</string>
+    <string name="titleOfFilterActivity">@string/action_filter</string>
     <string name="titleOfMenuActivity">@string/action_menu</string>
     <string name="titleOfSearchActivity">@string/action_search</string>
     <string name="titleOfSettingsActivity">@string/menu_item_settings</string>
     <string name="titleOfOfferListActivity">@string/menu_item_offers</string>
     <string name="titleOfPersonalAccountActivity">@string/menu_item_personal_account</string>
     <string name="titleOfSynchronizationActivity">@string/menu_item_synchronization</string>
+    <string name="titleOfHelpActivity">@string/menu_item_help</string>
 
     <string name="titleOfClosestPartnerPoints">Closest partners</string>
 
@@ -46,6 +48,8 @@
     <string name="titleOfSynchronizationDialog">Data is updated...</string>
 
     <string name="textMapIsLoaded">Map is loaded...</string>
+
+    <string name="labelOfGoToOffersButton">Offers</string>
 
 
 </resources>

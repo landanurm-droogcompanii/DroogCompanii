@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.util.location_provider;
 
 import android.content.Context;
 import android.location.Location;
@@ -49,6 +49,7 @@ public class CurrentLocationProvider implements BaseLocationProvider, Serializab
     }
 
     public static Location get() {
+        // This method might return <null>
         updateCurrentLocation();
         return currentLocation;
     }

@@ -12,14 +12,17 @@ import android.view.Window;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 26.12.13.
  */
 public class TaskFragment extends DialogFragment {
+
+    public static final Integer NO_TITLE_ID = null;
+
     private boolean resultReturned;
     private Task task;
-    private String title;
 
     private int resultCode = Activity.RESULT_CANCELED;
     private Serializable result = null;
@@ -45,7 +48,7 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (titleId == null) {
+        if (Objects.equals(titleId, NO_TITLE_ID)) {
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         } else {

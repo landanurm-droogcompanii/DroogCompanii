@@ -9,17 +9,16 @@ import java.util.Calendar;
 import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.BaseReaderFromDatabase;
+import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
-import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
-import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersResultImpl;
 import ru.droogcompanii.application.util.CalendarUtils;
 
 /**
  * Created by ls on 11.02.14.
  */
-public class OffersReaderFromDatabase extends BaseReaderFromDatabase implements OffersProvider {
+public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
 
     private int idColumnIndex;
     private int partnerIdColumnIndex;
@@ -38,13 +37,14 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase implements 
         return new OffersDbHelper(context);
     }
 
-    @Override
-    public Result getOffers() {
-        return new OffersResultImpl(getAllOffers());
+    public List<Offer> getOffers() {
+        return getOffersFromDatabase("");
     }
 
-    private List<Offer> getAllOffers() {
-        return getOffersFromDatabase("");
+    public List<Offer> getOffersOf(Partner partner) {
+        return getOffersFromDatabase(
+                " WHERE " + OffersContract.COLUMN_NAME_PARTNER_ID + " = " + partner.getId()
+        );
     }
 
     private List<Offer> getOffersFromDatabase(String where) {

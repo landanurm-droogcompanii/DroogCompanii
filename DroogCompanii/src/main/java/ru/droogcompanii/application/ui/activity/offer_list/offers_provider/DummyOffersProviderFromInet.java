@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
@@ -14,19 +15,13 @@ import ru.droogcompanii.application.util.LogUtils;
 /**
  * Created by ls on 10.02.14.
  */
-public class DummyOffersDownloader implements OffersProvider {
+public class DummyOffersProviderFromInet implements OffersProvider, Serializable {
 
-    private final Context context;
-    private final OffersXmlParser parser;
-
-    public DummyOffersDownloader(Context context) {
-        this.context = context;
-        parser = new OffersXmlParser();
-    }
-
-    public Result getOffers() {
+    public Result getOffers(Context context) {
         try {
-            List<Offer> parsedOffers = parser.parse(prepareInputStream());
+            OffersXmlParser parser = new OffersXmlParser();
+            InputStream inputStream = prepareInputStream(context);
+            List<Offer> parsedOffers = parser.parse(inputStream);
             return new OffersResultImpl(parsedOffers);
         } catch (Exception e) {
             LogUtils.debug(e.getMessage());
@@ -34,7 +29,7 @@ public class DummyOffersDownloader implements OffersProvider {
         }
     }
 
-    private InputStream prepareInputStream() {
+    private static InputStream prepareInputStream(Context context) {
         Resources resources = context.getResources();
         return resources.openRawResource(R.raw.test_offers);
     }

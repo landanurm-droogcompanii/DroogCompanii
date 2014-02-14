@@ -13,5 +13,8 @@
     <string name="labelOfBonusCheckBox">Bonus</string>
     <string name="labelOfDiscountCheckBox">Discount</string>
     <string name="labelOfCashBackCheckBox">Cash back</string>
+    <string name="titleOfFilterSearchClosestPointsGroup">Closest</string>
+    <string name="labelOfSearchClosestPointsCheckBox">Within</string>
+    <string name="hintOfRadiusWithinSearchEditText">in meters</string>
 
 </resources>

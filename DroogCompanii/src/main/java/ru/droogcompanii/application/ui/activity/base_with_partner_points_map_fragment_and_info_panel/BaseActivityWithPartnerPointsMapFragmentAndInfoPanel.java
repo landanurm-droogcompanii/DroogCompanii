@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,8 +15,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
 import ru.droogcompanii.application.ui.activity.filter.FilterActivity;
-import ru.droogcompanii.application.ui.activity.menu.MenuActivity;
-import ru.droogcompanii.application.ui.activity.search.SearchActivity;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.PartnerPointsInfoPanelFragment;
@@ -110,12 +106,6 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
         }
     }
 
-    private void initPartnerPointsMapFragmentIfNeed(Collection<PartnerPoint> partnerPoints) {
-        if (partnerPoints != null) {
-            initPartnerPointsMapFragment(partnerPoints);
-        }
-    }
-
     private void initPartnerPointsMapFragment(Collection<PartnerPoint> partnerPoints) {
         partnerPointsMapFragment.setPartnerPoints(partnerPoints);
         partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
@@ -136,6 +126,12 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
         FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
         initPartnerPointsMapFragmentIfNeed((List<PartnerPoint>) result);
         FlagNeedToUpdateMap.set(false);
+    }
+
+    private void initPartnerPointsMapFragmentIfNeed(Collection<PartnerPoint> partnerPoints) {
+        if (partnerPoints != null) {
+            initPartnerPointsMapFragment(partnerPoints);
+        }
     }
 
     private void onTaskCancelled() {
@@ -161,33 +157,6 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_screen, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_filters:
-                onFilter();
-                return true;
-            case R.id.action_search:
-                onSearch();
-                return true;
-            case R.id.action_menu:
-                onMenu();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    protected void onFilter() {
-        Intent intent = new Intent(this, FilterActivity.class);
-        startActivityForResult(intent, FilterActivity.REQUEST_CODE);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         LogUtils.debug("onActivityResult");
 
@@ -201,14 +170,5 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
 
         FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(this);
         partnerPointsMapFragment.setFilterSet(currentFilterSet);
-    }
-
-    private void onSearch() {
-        SearchActivity.start(this, SearchActivity.UsageType.SEARCH_BY_QUERY);
-    }
-
-    private void onMenu() {
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
     }
 }

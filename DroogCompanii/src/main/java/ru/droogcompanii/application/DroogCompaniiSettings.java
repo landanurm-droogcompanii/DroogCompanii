@@ -2,7 +2,7 @@ package ru.droogcompanii.application;
 
 import android.location.Location;
 
-import ru.droogcompanii.application.util.CurrentLocationProvider;
+import ru.droogcompanii.application.util.location_provider.CurrentLocationProvider;
 
 /**
  * Created by ls on 29.01.14.

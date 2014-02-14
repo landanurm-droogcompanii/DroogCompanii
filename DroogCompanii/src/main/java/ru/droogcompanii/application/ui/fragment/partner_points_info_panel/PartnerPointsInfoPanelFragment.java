@@ -265,15 +265,32 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void goToPartnerOf(PartnerPoint partnerPoint) {
-        Context context = getActivity();
+        PartnerDetailsActivity.start(getActivity(),
+                new PartnerAndPartnerPointsProviderImpl(partnerPoint));
+    }
 
-        PartnersReader partnersReader = new PartnersReader(context);
-        Partner partner = partnersReader.getPartnerOf(partnerPoint);
+    private static class PartnerAndPartnerPointsProviderImpl
+            implements PartnerDetailsActivity.PartnerAndPartnerPointsProvider, Serializable {
 
-        PartnerPointsReader partnerPointsReader = new PartnerPointsReader(context);
-        List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
-        ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
+        private final PartnerPoint partnerPoint;
 
-        PartnerDetailsActivity.start(context, partner, partnerPoints);
+        PartnerAndPartnerPointsProviderImpl(PartnerPoint partnerPoint) {
+            this.partnerPoint = partnerPoint;
+        }
+
+        @Override
+        public Partner getPartner(Context context) {
+            PartnersReader partnersReader = new PartnersReader(context);
+            return partnersReader.getPartnerOf(partnerPoint);
+        }
+
+        @Override
+        public List<PartnerPoint> getPartnerPoints(Context context) {
+            PartnerPointsReader partnerPointsReader = new PartnerPointsReader(context);
+            Partner partner = getPartner(context);
+            List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
+            ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
+            return partnerPoints;
+        }
     }
 }

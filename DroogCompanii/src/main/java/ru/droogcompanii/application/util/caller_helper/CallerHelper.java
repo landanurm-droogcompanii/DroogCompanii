@@ -31,33 +31,28 @@ public class CallerHelper {
             phoneButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onPhoneButtonClick(partnerPoint);
+                    call(partnerPoint.getTitle(), partnerPoint.getPhones());
                 }
             });
         }
     }
 
-    public void onPhoneButtonClick(PartnerPoint partnerPoint) {
-        List<String> phones = partnerPoint.getPhones();
+    public void call(String title, List<String> phones) {
         if (phones.size() == 1) {
             String phone = phones.get(0);
             Caller.call(activity, phone);
-        } else {
-            showMultiPhonesDialogFragment(partnerPoint);
+        } else if (phones.size() > 1) {
+            showMultiPhonesDialogFragment(title, phones);
         }
     }
 
-    private void showMultiPhonesDialogFragment(PartnerPoint partnerPoint) {
+    private void showMultiPhonesDialogFragment(String title, List<String> phones) {
+        Bundle args = new Bundle();
+        args.putString(Keys.title, title);
+        args.putSerializable(Keys.phones, (Serializable) phones);
         DialogFragment dialogFragment = new MultiPhonesCallerDialogFragment();
-        dialogFragment.setArguments(prepareArguments(partnerPoint));
+        dialogFragment.setArguments(args);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         dialogFragment.show(fragmentManager, "MultiPhonesCallerDialogFragment");
-    }
-
-    private static Bundle prepareArguments(PartnerPoint partnerPoint) {
-        Bundle args = new Bundle();
-        args.putString(Keys.title, partnerPoint.getTitle());
-        args.putSerializable(Keys.phones, (Serializable) partnerPoint.getPhones());
-        return args;
     }
 }

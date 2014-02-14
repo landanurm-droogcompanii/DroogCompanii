@@ -9,9 +9,10 @@
     <string name="menu_item_partner_categories">Категории партнеров</string>
     <string name="menu_item_offers">Акции</string>
     <string name="menu_item_website">Веб-сайт</string>
-    <string name="menu_item_hotline">Горячая линия</string>
+    <string name="hotline">Горячая линия</string>
     <string name="menu_item_synchronization">Синхронизация</string>
     <string name="menu_item_settings">Настройки</string>
+    <string name="menu_item_help">Помощь</string>
 
 
     <string name="messageIfUserWantsToGetData">
@@ -24,7 +25,7 @@
     <string name="titleOfMultiPhonesCallerDialog">Позвонить</string>
 
     <string name="action_search">Поиск</string>
-    <string name="action_filters">Фильтры</string>
+    <string name="action_filter">Фильтры</string>
     <string name="action_menu">Меню</string>
     <string name="action_go_to_map">На карту</string>
 
@@ -35,5 +36,8 @@
     <string name="titleOfSynchronizationDialog">Данные обновляются...</string>
 
     <string name="textMapIsLoaded">Карта загружается...</string>
+
+    <string name="labelOfGoToOffersButton">Акции</string>
+    <string name="titleOfHelpActivity" />
 
 </resources>

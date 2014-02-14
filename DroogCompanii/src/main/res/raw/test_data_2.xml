@@ -4,7 +4,7 @@
         <partners type="array">
             <partner>
                 <id type="integer">1001</id>
-                <image-url>http://velocityagency.com/wp-content/uploads/2013/08/go.jpg</image-url>
+                <image-url>http://3.bp.blogspot.com/_Rs53-MPsJaI/Rs-qh8MGQ5I/AAAAAAAACqg/7kIsHaMzPlI/s400/1agirl8.jpg</image-url>
                 <title>Компания 1-1</title>
                 <full-title> Полное название для Компания 1-1</full-title>
                 <description>Это описание компании Компания 1-1.
@@ -25,7 +25,7 @@
                 <partner-points type="array">
                     <partner-point>
                         <title>Точка 1. Компания 1-1</title>
-                        <address>адрес. Точка 1. Компания 1-1</address>
+                        <address>Адрес. Точка 1. Компания 1-1</address>
                         <longitude type="decimal">49.1172</longitude>
                         <latitude type="decimal">55.8238</latitude>
                         <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
@@ -40,6 +40,145 @@
                             <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
                             <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
                             <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                    <partner-point>
+                        <title>Точка 2. Компания 1-1</title>
+                        <address>Адрес. Точка 2. Компания 1-1</address>
+                        <longitude type="decimal">49.2272</longitude>
+                        <latitude type="decimal">55.8138</latitude>
+                        <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(843) 258-58-59</phone>
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                </partner-points>
+            </partner>
+
+            <partner>
+                <id type="integer">1002</id>
+                <image-url>https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQz6k9suA15ZJQrqsOH5ir4GrZNFjAFEUUcWa7rgSNUnyvKfZ5gZA</image-url>
+                <title>Компания 1-2</title>
+                <full-title> Полное название для Компания 1-2</full-title>
+                <description>Это описание компании Компания 1-2.
+                    Здесь будет написана вся возможная информация о компании.
+                    Может занимать много строк.
+                    Тра-та-та.
+                    Та-та.
+                </description>
+                <emails type="array">
+                    <email>person_2_1@gmail.com</email>
+                    <email>person_2_2@gmail.com</email>
+                </emails>
+                <discount-type>Бонус</discount-type>
+                <discount-size type="integer">6</discount-size>
+                <partner-points type="array">
+                    <partner-point>
+                        <title>Точка 1. Компания 1-2</title>
+                        <address>Адрес. Точка 1. Компания 1-2</address>
+                        <longitude type="decimal">49.1092</longitude>
+                        <latitude type="decimal">55.8122</latitude>
+                        <payment-methods>Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-19:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-19:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-19:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-19:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-19:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-19:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                </partner-points>
+            </partner>
+
+            <partner>
+                <id type="integer">1003</id>
+                <image-url>https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQz6k9suA15ZJQrqsOH5ir4GrZNFjAFEUUcWa7rgSNUnyvKfZ5gZA</image-url>
+                <title>Компания 1-3</title>
+                <full-title> Полное название для Компания 1-3</full-title>
+                <description>Это описание компании Компания 1-3.
+                    Здесь будет написана вся возможная информация о компании.
+                    Может занимать много строк.
+                    Тра-та-та.
+                    Та-та.
+                </description>
+                <emails type="array">
+                    <email>person_3_1@gmail.com</email>
+                </emails>
+                <discount-type>Бонус</discount-type>
+                <discount-size type="integer">4</discount-size>
+                <partner-points type="array">
+                    <partner-point>
+                        <title>Точка 1. Компания 1-3</title>
+                        <address>Адрес. Точка 1. Компания 1-3</address>
+                        <longitude type="decimal">49.1172</longitude>
+                        <latitude type="decimal">55.8238</latitude>
+                        <payment-methods>Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
+                            <sun type="holiday">Выходной день</sun>
+                        </workinghours>
+                    </partner-point>
+                </partner-points>
+            </partner>
+
+            <partner>
+                <id type="integer">1004</id>
+                <title>Компания 1-4</title>
+                <image-url>http://3.bp.blogspot.com/_Rs53-MPsJaI/Rs-qh8MGQ5I/AAAAAAAACqg/7kIsHaMzPlI/s400/1agirl8.jpg</image-url>
+                <full-title> Полное название для Компания 1-4</full-title>
+                <description>Это описание компании Компания 1-4.
+                    Здесь будет написана вся возможная информация о компании.
+                    Может занимать много строк.
+                    Тра-та-та.
+                    Та-та.
+                </description>
+                <emails type="array">
+                    <email>person_4_XXX@gmail.com</email>
+                    <email>person_4_YYY@gmail.com</email>
+                </emails>
+                <discount-type>Бонус</discount-type>
+                <discount-size type="integer">5</discount-size>
+                <partner-points type="array">
+                    <partner-point>
+                        <title>Точка 1. Компания 1-4</title>
+                        <address>Адрес. Точка 1. Компания 1-4</address>
+                        <longitude type="decimal">49.1781</longitude>
+                        <latitude type="decimal">55.3345</latitude>
+                        <payment-methods>Visa, MasterCard</payment-methods>
+                        <phones type="array">
+                            <phone>(960) 048-58-59</phone>
+                        </phones>
+                        <workinghours type="array">
+                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
+                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
+                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
+                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
+                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
+                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
                             <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>

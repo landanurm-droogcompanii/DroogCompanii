@@ -58,6 +58,10 @@ public abstract class TaskFragmentHolder extends Fragment {
         if (taskFragment != null) {
             taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
         }
+
+        if (savedInstanceState == null) {
+            startTask();
+        }
     }
 
     @Override

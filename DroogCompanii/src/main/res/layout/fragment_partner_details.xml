@@ -40,6 +40,17 @@
             android:layout_height="1dp"
             android:background="@android:color/darker_gray"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/labelOfGoToOffersButton"
+            android:id="@+id/goToOffersButton" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -69,7 +80,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_alignParentRight="true"
-                android:weightSum="2"
+                android:weightSum="3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -88,6 +99,13 @@
                     android:layout_height="match_parent"
                     android:src="@android:drawable/stat_sys_phone_call"
                     android:id="@+id/phoneButton" />
+
+                <ImageButton
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_dialog_map"
+                    android:id="@+id/goToMapButton" />
 
             </LinearLayout>
 

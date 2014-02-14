@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
 
@@ -18,11 +19,8 @@ public class SearchResultTaskFragmentHolder extends TaskFragmentHolder {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         searchResultProvider = getSearchResultProvider(savedInstanceState);
-        if (savedInstanceState == null) {
-            startTask();
-        }
+        super.onCreate(savedInstanceState);
     }
 
     private SearchResultProvider getSearchResultProvider(Bundle savedInstanceState) {
@@ -41,7 +39,7 @@ public class SearchResultTaskFragmentHolder extends TaskFragmentHolder {
 
     @Override
     protected Integer getTaskDialogTitleId() {
-        return null;
+        return TaskFragment.NO_TITLE_ID;
     }
 
     @Override

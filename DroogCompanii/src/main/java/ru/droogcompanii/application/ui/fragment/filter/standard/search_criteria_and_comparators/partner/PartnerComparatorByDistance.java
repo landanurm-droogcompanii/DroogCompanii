@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.BaseLocationProvider;
+import ru.droogcompanii.application.util.location_provider.BaseLocationProvider;
 import ru.droogcompanii.application.util.MinMax;
 
 /**
