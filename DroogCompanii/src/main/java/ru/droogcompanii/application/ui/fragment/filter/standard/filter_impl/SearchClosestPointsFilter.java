@@ -25,8 +25,8 @@ import ru.droogcompanii.application.util.location_provider.SettingBaseLocationPr
  */
 class SearchClosestPointsFilter implements Filter, Serializable {
 
-    private static final boolean DEFAULT_NEED_TO_SEARCH = false;
-    private static final float DEFAULT_RADIUS_WITHIN_SEARCH = 0.0f;
+    private static final boolean DEFAULT_NEED_TO_SEARCH = true;
+    private static final float DEFAULT_RADIUS_WITHIN_SEARCH = 8000.0f;
 
     private static class Key {
         public static final String NEED_TO_SEARCH = "needToSearch";

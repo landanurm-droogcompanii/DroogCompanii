@@ -14,7 +14,7 @@ public class MainScreen extends BaseActivityWithPartnerPointsMapFragmentAndInfoP
 
     @Override
     protected PartnerPointsProvider getPartnerPointsProvider() {
-        return new ClosePartnerPointsProvider();
+        return new AllPartnerPointsProvider();
     }
 
     @Override
