@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.ui.fragment.filter.standard.filter_impl;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -19,6 +20,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
 import ru.droogcompanii.application.ui.fragment.filter.Filter;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point.PartnerPointSearchClosestPointsCriterion;
+import ru.droogcompanii.application.util.ApiVersionUtils;
 import ru.droogcompanii.application.util.ConvertorToString;
 import ru.droogcompanii.application.util.location_provider.SettingBaseLocationProvider;
 
@@ -58,9 +60,8 @@ class SearchClosestPointsFilter implements Filter, Serializable {
             DistanceOption.from(5000.0f, R.id.distanceOption_5000meters, R.string.distanceOption_5000meters)
     );
 
-    private static final int DEFAULT_ID_OF_DISTANCE_OPTION = R.id.distanceOption_NoNeedToSearch;
-
     private static final String KEY_ID_OF_DISTANCE_OPTION = "IdOfDistanceOption";
+    private static final int DEFAULT_ID_OF_DISTANCE_OPTION = R.id.distanceOption_NoNeedToSearch;
 
     private int idOfDistanceOption;
 
@@ -77,19 +78,19 @@ class SearchClosestPointsFilter implements Filter, Serializable {
     @Override
     public void displayOn(View view) {
         ViewGroup container = (ViewGroup) view.findViewById(R.id.containerOfSearchClosestPointsFilter);
-        insertRadioGroupIfNeed(container);
         RadioGroup radioGroup = (RadioGroup) container.findViewById(R.id.distanceOptionRadioGroup);
+        if (radioGroup == null) {
+            radioGroup = insertRadioGroup(container);
+        }
         radioGroup.check(idOfDistanceOption);
     }
 
-    private void insertRadioGroupIfNeed(ViewGroup container) {
-        if (container.findViewById(R.id.distanceOptionRadioGroup) != null) {
-            return;
-        }
+    private RadioGroup insertRadioGroup(ViewGroup container) {
         RadioGroup radioGroup = prepareRadioGroup(container.getContext());
         final int WIDTH = ViewGroup.LayoutParams.MATCH_PARENT;
         final int HEIGHT = ViewGroup.LayoutParams.WRAP_CONTENT;
         container.addView(radioGroup, new ViewGroup.LayoutParams(WIDTH, HEIGHT));
+        return radioGroup;
     }
 
     private RadioGroup prepareRadioGroup(Context context) {
@@ -98,6 +99,7 @@ class SearchClosestPointsFilter implements Filter, Serializable {
         radioGroup.setOrientation(RadioGroup.HORIZONTAL);
 
         radioGroup.setWeightSum(DISTANCE_OPTIONS.size());
+        setSpaceBetweenRadioButtons(radioGroup);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT, 1.0f
@@ -111,17 +113,29 @@ class SearchClosestPointsFilter implements Filter, Serializable {
         return radioGroup;
     }
 
+    @SuppressLint("NewApi")
+    private static void setSpaceBetweenRadioButtons(RadioGroup radioGroup) {
+        if (ApiVersionUtils.isCurrentVersionLowerThan(14)) {
+            return;
+        }
+        radioGroup.setShowDividers(RadioGroup.SHOW_DIVIDER_MIDDLE);
+        Resources res = radioGroup.getResources();
+        int dividerPadding = res.getDimensionPixelSize(R.dimen.dividerPaddingOfDistanceOptionRadioGroup);
+        radioGroup.setDividerPadding(dividerPadding);
+    }
+
     private RadioButton prepareRadioButton(LayoutInflater layoutInflater, DistanceOption distanceOption) {
-        RadioButton radioButton = (RadioButton) layoutInflater.inflate(R.layout.view_custom_radio_button, null);
+        RadioButton radioButton = (RadioButton)
+                layoutInflater.inflate(R.layout.view_distance_option_radio_button, null);
         radioButton.setText(distanceOption.textId);
         radioButton.setId(distanceOption.id);
-        setMinimumHeight(radioButton, R.dimen.minHeightOfDistanceOptionRadioButton);
+        setMinHeight(radioButton, R.dimen.minHeightOfDistanceOptionRadioButton);
         return radioButton;
     }
 
-    private void setMinimumHeight(RadioButton radioButton, int dimenResId) {
+    private void setMinHeight(RadioButton radioButton, int minHeightResId) {
         Resources res = radioButton.getContext().getResources();
-        int minHeight = res.getDimensionPixelSize(dimenResId);
+        int minHeight = res.getDimensionPixelSize(minHeightResId);
         if (radioButton.getHeight() < minHeight) {
             radioButton.setHeight(minHeight);
         }

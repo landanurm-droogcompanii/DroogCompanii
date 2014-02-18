@@ -6,6 +6,10 @@ package ru.droogcompanii.application.util;
 public class ApiVersionUtils {
 
     public static boolean isCurrentVersionLowerThan(int apiVersion) {
-        return android.os.Build.VERSION.SDK_INT < apiVersion;
+        return getCurrentVersion() < apiVersion;
+    }
+
+    public static int getCurrentVersion() {
+        return android.os.Build.VERSION.SDK_INT;
     }
 }

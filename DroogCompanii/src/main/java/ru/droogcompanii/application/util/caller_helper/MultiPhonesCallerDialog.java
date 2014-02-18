@@ -71,8 +71,8 @@ public class MultiPhonesCallerDialog extends Dialog implements PhonesListViewMak
     }
 
     private void onNeedToCopyNumberToClipboard(String phone) {
-        CopierToClipboard copierToClipboard = new CopierToClipboard(getContext());
-        copierToClipboard.copyToClipboard(phone);
+        CopierToClipboard copier = new CopierToClipboard(getContext(), R.string.messagePhoneCopied);
+        copier.copyToClipboard(phone);
     }
 
     private static boolean isContentView(View view) {

@@ -64,7 +64,7 @@ public class SearchResultListFragment extends ListFragment
         getListView().setOnItemClickListener(this);
 
         if (isSearchResultReady) {
-            updateSearchResultList();
+            initSearchResultList();
         }
     }
 
@@ -105,10 +105,10 @@ public class SearchResultListFragment extends ListFragment
     public void setSearchResult(List<SearchResult<Partner>> searchResults) {
         this.searchResults = searchResults;
         isSearchResultReady = true;
-        updateSearchResultList();
+        initSearchResultList();
     }
 
-    private void updateSearchResultList() {
+    private void initSearchResultList() {
         getListView().setEmptyView(prepareEmptyView());
         adapter = new PartnerSearchResultListAdapter(getActivity(), searchResults);
         sortAdapter();
@@ -144,10 +144,12 @@ public class SearchResultListFragment extends ListFragment
         getView().setVisibility(View.INVISIBLE);
     }
 
-    public void updateList(Comparator<Partner> newComparator) {
+    public void setComparator(Comparator<Partner> newComparator) {
         currentComparator = newComparator;
-        sortAdapter();
-        adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            sortAdapter();
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }

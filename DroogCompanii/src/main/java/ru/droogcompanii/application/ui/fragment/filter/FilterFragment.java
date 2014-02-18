@@ -10,7 +10,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 21.01.14.
@@ -54,8 +53,6 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     }
 
     private void onRelaunch(Bundle savedInstanceState) {
-        LogUtils.debug("onRelaunch()");
-
         Filters filters = (Filters) savedInstanceState.getSerializable(KEY_DISPLAYED_FILTERS);
         filters.displayOn(getView());
     }

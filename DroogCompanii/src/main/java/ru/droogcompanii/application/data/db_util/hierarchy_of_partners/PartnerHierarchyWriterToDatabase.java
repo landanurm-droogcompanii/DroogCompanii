@@ -19,11 +19,11 @@ import ru.droogcompanii.application.util.SerializationUtils;
 /**
  * Created by Leonid on 09.12.13.
  */
-public class PartnersWriterToDatabase {
+public class PartnerHierarchyWriterToDatabase {
     private final Context context;
     private SQLiteDatabase db;
 
-    public PartnersWriterToDatabase(Context context) {
+    public PartnerHierarchyWriterToDatabase(Context context) {
         this.context = context;
     }
 

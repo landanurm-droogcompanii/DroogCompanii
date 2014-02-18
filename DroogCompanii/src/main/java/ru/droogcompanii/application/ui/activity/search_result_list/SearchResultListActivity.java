@@ -30,7 +30,6 @@ import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 14.01.14.
@@ -118,8 +117,7 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
     }
 
     private void onComparatorChanged(Comparator<Partner> newComparator) {
-        LogUtils.debug("onComparatorChanged()");
-        searchResultFragment.updateList(newComparator);
+        searchResultFragment.setComparator(newComparator);
     }
 
     @Override

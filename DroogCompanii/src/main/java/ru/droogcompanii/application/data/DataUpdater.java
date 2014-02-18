@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.io.InputStream;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersWriterToDatabase;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyWriterToDatabase;
 import ru.droogcompanii.application.data.xml_parser.partners_xml_parser.PartnersXmlParser;
 
 /**
@@ -16,11 +16,11 @@ public class DataUpdater {
         InputStream getXml() throws Exception;
     }
 
-    private final PartnersWriterToDatabase writerToDatabase;
+    private final PartnerHierarchyWriterToDatabase writerToDatabase;
     private final XmlProvider xmlProvider;
 
     public DataUpdater(Context context, XmlProvider xmlProvider) {
-        this.writerToDatabase = new PartnersWriterToDatabase(context);
+        this.writerToDatabase = new PartnerHierarchyWriterToDatabase(context);
         this.xmlProvider = xmlProvider;
     }
 

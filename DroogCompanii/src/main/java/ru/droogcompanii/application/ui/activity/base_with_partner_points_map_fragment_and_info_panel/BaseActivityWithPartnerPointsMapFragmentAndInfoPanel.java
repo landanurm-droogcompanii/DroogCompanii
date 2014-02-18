@@ -24,7 +24,6 @@ import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 22.01.14.
@@ -123,8 +122,6 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     private void onTaskFinishedSuccessfully(Serializable result) {
-        LogUtils.debug("onTaskFinishedSuccessfully()");
-
         FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
         initPartnerPointsMapFragmentIfNeed((List<PartnerPoint>) result);
         FlagNeedToUpdateMap.set(false);
@@ -137,8 +134,6 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     private void onTaskCancelled() {
-        LogUtils.debug("onTaskCancelled()");
-
         finish();
     }
 
@@ -162,16 +157,12 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        LogUtils.debug("onActivityResult");
-
         if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
             applyFilters();
         }
     }
 
     private void applyFilters() {
-        LogUtils.debug("applyFilters");
-
         FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(this);
         partnerPointsMapFragment.setFilterSet(currentFilterSet);
     }

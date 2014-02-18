@@ -50,14 +50,18 @@
     <string name="textMapIsLoaded">Map is loaded...</string>
 
     <string name="labelOfGoToOffersButton">Offers</string>
-    <string name="defaultMessageOnTextWasCopied">Text copied</string>
+    <string name="defaultMessageTextCopied">Text copied</string>
     <string name="copyToClipboard">Copy to clipboard</string>
     <string name="done">Done</string>
+
 
     <string name="distanceOption_NoNeedToSearch">   -   </string>
     <string name="distanceOption_1000meters">1000 m</string>
     <string name="distanceOption_3000meters">3000 m</string>
     <string name="distanceOption_5000meters">5000 m</string>
+
+
+    <string name="messagePhoneCopied">Phone number copied</string>
 
 
 </resources>

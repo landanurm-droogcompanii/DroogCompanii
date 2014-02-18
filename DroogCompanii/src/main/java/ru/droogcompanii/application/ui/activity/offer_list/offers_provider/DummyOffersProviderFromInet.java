@@ -19,14 +19,18 @@ public class DummyOffersProviderFromInet implements OffersProvider, Serializable
 
     public Result getOffers(Context context) {
         try {
-            OffersXmlParser parser = new OffersXmlParser();
-            InputStream inputStream = prepareInputStream(context);
-            List<Offer> parsedOffers = parser.parse(inputStream);
-            return new OffersResultImpl(parsedOffers);
+            return tryGetOffers(context);
         } catch (Exception e) {
             LogUtils.debug(e.getMessage());
             return OffersResultImpl.noOffers();
         }
+    }
+
+    private Result tryGetOffers(Context context) throws Exception {
+        OffersXmlParser parser = new OffersXmlParser();
+        InputStream inputStream = prepareInputStream(context);
+        List<Offer> parsedOffers = parser.parse(inputStream);
+        return new OffersResultImpl(parsedOffers);
     }
 
     private static InputStream prepareInputStream(Context context) {

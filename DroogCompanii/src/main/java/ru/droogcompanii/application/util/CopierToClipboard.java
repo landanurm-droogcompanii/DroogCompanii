@@ -14,12 +14,16 @@ public class CopierToClipboard {
     private final Toast toastOnCopy;
 
     public CopierToClipboard(Context context) {
+        this(context, R.string.defaultMessageTextCopied);
+    }
+
+    public CopierToClipboard(Context context, int idOfMessageTextCopied) {
         this.context = context;
-        toastOnCopy = Toast.makeText(context, R.string.defaultMessageOnTextWasCopied, Toast.LENGTH_SHORT);
+        toastOnCopy = Toast.makeText(context, idOfMessageTextCopied, Toast.LENGTH_SHORT);
     }
 
     public void copyToClipboard(String text) {
-        String defaultLabel = context.getString(R.string.defaultMessageOnTextWasCopied);
+        String defaultLabel = context.getString(R.string.defaultMessageTextCopied);
         copyToClipboard(defaultLabel, text);
     }
 

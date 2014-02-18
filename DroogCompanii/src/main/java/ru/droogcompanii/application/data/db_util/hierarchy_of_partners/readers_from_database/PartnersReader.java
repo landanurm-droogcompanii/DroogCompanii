@@ -19,6 +19,10 @@ import ru.droogcompanii.application.util.SerializationUtils;
  */
 public class PartnersReader extends BasePartnersReaderFromDatabase {
 
+    public static interface CursorHandler {
+        void handle(Cursor cursor);
+    }
+
     private static final PartnersContracts.PartnersContract COLUMNS = new PartnersContracts.PartnersContract();
 
     private int idColumnIndex;
@@ -31,9 +35,24 @@ public class PartnersReader extends BasePartnersReaderFromDatabase {
     private int descriptionColumnIndex;
     private int webSitesColumnIndex;
     private int emailsColumnIndex;
+    private int isFavoriteColumnIndex;
+
 
     public PartnersReader(Context context) {
         super(context);
+    }
+
+    public void forEachWhere(String where, CursorHandler cursorHandler) {
+        String correctedWhere = ((where == null || where.isEmpty()) ? "" : where);
+        String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + " " + correctedWhere + " ;";
+
+        initDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+
+        cursorHandler.handle(cursor);
+
+        cursor.close();
+        closeDatabase();
     }
 
     public List<Partner> getPartnersOf(PartnerCategory category) {
@@ -76,8 +95,9 @@ public class PartnersReader extends BasePartnersReaderFromDatabase {
         categoryIdColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_CATEGORY_ID);
         imageUrlColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_IMAGE_URL);
         descriptionColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DESCRIPTION);
-        webSitesColumnIndex = cursor.getColumnIndex(COLUMNS.COLUMN_NAME_WEB_SITES);
-        emailsColumnIndex = cursor.getColumnIndex(COLUMNS.COLUMN_NAME_EMAILS);
+        webSitesColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_WEB_SITES);
+        emailsColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_EMAILS);
+        isFavoriteColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_IS_FAVORITE);
     }
 
     @SuppressWarnings("unchecked")

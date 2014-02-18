@@ -29,6 +29,7 @@ public final class PartnersContracts {
         public static final String COLUMN_NAME_DISCOUNT_TYPE = "discount_type";
         public static final String COLUMN_NAME_DISCOUNT_SIZE = "discount_size";
         public static final String COLUMN_NAME_CATEGORY_ID = "category_id";
+        public static final String COLUMN_NAME_IS_FAVORITE = "is_favorite";
     }
 
     public static class PartnerPointsContract implements BaseColumns {

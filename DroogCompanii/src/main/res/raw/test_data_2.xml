@@ -87,8 +87,8 @@
                     <partner-point>
                         <title>Точка 1. Компания 1-2</title>
                         <address>Адрес. Точка 1. Компания 1-2</address>
-                        <longitude type="decimal">49.1234</longitude>
-                        <latitude type="decimal">55.7901</latitude>
+                        <longitude type="decimal">49.1935</longitude>
+                        <latitude type="decimal">55.7771</latitude>
                         <payment-methods>Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(960) 048-58-59</phone>
