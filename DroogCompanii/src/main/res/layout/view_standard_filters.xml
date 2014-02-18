@@ -13,29 +13,49 @@
         android:textSize="@dimen/textSizeOfFilterGroupTitle"
         android:text="@string/titleOfSortingGroup" />
 
-    <CheckBox
-        android:visibility="gone"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfSortByTitleCheckBox"
-        android:id="@+id/sortByTitleCheckBox" />
+        android:id="@+id/sortByTitleCheckBox" >
 
-    <CheckBox
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfSortByDistanceCheckBox"
-        android:id="@+id/sortByDistanceCheckBox" />
+        <CheckBox
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfSortByTitleCheckBox" />
 
-    <CheckBox
-        android:visibility="gone"
+    </FrameLayout>
+
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfSortByDiscountSizeCheckBox"
-        android:id="@+id/sortByDiscountCheckBox" />
+        android:id="@+id/sortByDistanceCheckBox" >
+
+        <CheckBox
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfSortByDistanceCheckBox" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sortByDiscountSizeCheckBox" >
+
+        <CheckBox
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfSortByDiscountSizeCheckBox" />
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -48,12 +68,18 @@
         android:textSize="@dimen/textSizeOfFilterGroupTitle"
         android:text="@string/titleOfPaymentMethodGroup"/>
 
-    <CheckBox
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfCashlessPaymentsCheckBox"
-        android:id="@+id/cashlessPaymentsCheckBox" />
+        android:id="@+id/cashlessPaymentsCheckBox" >
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfCashlessPaymentsCheckBox" />
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -64,14 +90,21 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="@dimen/textSizeOfFilterGroupTitle"
-        android:text="@string/titleOfWorkingHoursGroup"/>
+        android:text="@string/titleOfWorkingHoursGroup" />
 
-    <CheckBox
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfWorksNowCheckBox"
-        android:id="@+id/worksNowCheckBox" />
+        android:id="@+id/worksNowCheckBox" >
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfWorksNowCheckBox" />
+
+    </FrameLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -84,27 +117,11 @@
         android:textSize="@dimen/textSizeOfFilterGroupTitle"
         android:text="@string/titleOfFilterSearchClosestPointsGroup"/>
 
-    <LinearLayout
+    <FrameLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/labelOfSearchClosestPointsCheckBox"
-            android:id="@+id/searchClosestPointsCheckBox" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:inputType="number"
-            android:hint="@string/hintOfRadiusWithinSearchEditText"
-            android:id="@+id/radiusWithinSearchEditText" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/containerOfSearchClosestPointsFilter" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -113,25 +130,43 @@
         android:textSize="@dimen/textSizeOfFilterGroupTitle"
         android:text="@string/titleOfDiscountTypeGroup" />
 
-    <CheckBox
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfBonusCheckBox"
-        android:id="@+id/bonusCheckBox" />
+        android:id="@+id/bonusCheckBox" >
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfDiscountCheckBox"
-        android:id="@+id/discountCheckBox" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfBonusCheckBox" />
 
-    <CheckBox
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfCashBackCheckBox"
-        android:id="@+id/cashBackCheckBox" />
+        android:id="@+id/discountCheckBox" >
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfDiscountCheckBox" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cashBackCheckBox" >
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeOfSortingGroupItems"
+            android:text="@string/labelOfCashBackCheckBox" />
+
+    </FrameLayout>
 
 </LinearLayout>

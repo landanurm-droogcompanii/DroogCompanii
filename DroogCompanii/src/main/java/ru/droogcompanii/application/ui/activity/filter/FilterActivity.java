@@ -51,7 +51,6 @@ public class FilterActivity extends ActionBarActivityWithUpButton
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="distanceOptionRadioGroup" />
+    <item type="id" name="distanceOption_NoNeedToSearch" />
+    <item type="id" name="distanceOption_1000meters" />
+    <item type="id" name="distanceOption_3000meters" />
+    <item type="id" name="distanceOption_5000meters" />
+</resources>

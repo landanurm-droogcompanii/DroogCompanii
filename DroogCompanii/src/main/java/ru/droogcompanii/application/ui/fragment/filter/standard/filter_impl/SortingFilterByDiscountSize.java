@@ -16,7 +16,7 @@ class SortingFilterByDiscountSize extends FilterWithOneCheckbox {
 
     @Override
     protected int getIdOfCheckbox() {
-        return R.id.sortByDiscountCheckBox;
+        return R.id.sortByDiscountSizeCheckBox;
     }
 
     @Override
@@ -24,4 +24,5 @@ class SortingFilterByDiscountSize extends FilterWithOneCheckbox {
         filterSet.addPartnerPointComparator(new PartnerPointComparatorByDiscountSize());
         filterSet.addPartnerComparator(new PartnerComparatorByDiscountSize());
     }
+
 }

@@ -24,4 +24,5 @@ class SortingFilterByDistanceBasedOnCurrentLocation extends FilterWithOneCheckbo
         filterSet.addPartnerPointComparator(new PartnerPointComparatorByDistanceBasedOnCurrentLocation());
         filterSet.addPartnerComparator(new PartnerComparatorByDistanceBasedOnCurrentLocation());
     }
+
 }

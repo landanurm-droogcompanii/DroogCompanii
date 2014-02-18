@@ -24,4 +24,5 @@ class SortingFilterByTitle extends FilterWithOneCheckbox {
         filterSet.addPartnerPointComparator(new PartnerPointComparatorByTitle());
         filterSet.addPartnerComparator(new PartnerComparatorByTitle());
     }
+
 }

@@ -26,8 +26,8 @@
                     <partner-point>
                         <title>Точка 1. Компания 1-1</title>
                         <address>Адрес. Точка 1. Компания 1-1</address>
-                        <longitude type="decimal">49.1172</longitude>
-                        <latitude type="decimal">55.8238</latitude>
+                        <longitude type="decimal">49.1935</longitude>
+                        <latitude type="decimal">55.7771</latitude>
                         <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(843) 258-58-59</phone>
@@ -46,8 +46,8 @@
                     <partner-point>
                         <title>Точка 2. Компания 1-1</title>
                         <address>Адрес. Точка 2. Компания 1-1</address>
-                        <longitude type="decimal">49.2272</longitude>
-                        <latitude type="decimal">55.8138</latitude>
+                        <longitude type="decimal">49.1212</longitude>
+                        <latitude type="decimal">55.7823</latitude>
                         <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(843) 258-58-59</phone>
@@ -87,8 +87,8 @@
                     <partner-point>
                         <title>Точка 1. Компания 1-2</title>
                         <address>Адрес. Точка 1. Компания 1-2</address>
-                        <longitude type="decimal">49.1092</longitude>
-                        <latitude type="decimal">55.8122</latitude>
+                        <longitude type="decimal">49.1234</longitude>
+                        <latitude type="decimal">55.7901</latitude>
                         <payment-methods>Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(960) 048-58-59</phone>
@@ -126,8 +126,8 @@
                     <partner-point>
                         <title>Точка 1. Компания 1-3</title>
                         <address>Адрес. Точка 1. Компания 1-3</address>
-                        <longitude type="decimal">60.1172</longitude>
-                        <latitude type="decimal">60.8238</latitude>
+                        <longitude type="decimal">49.1209</longitude>
+                        <latitude type="decimal">55.7763</latitude>
                         <payment-methods>Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(960) 048-58-59</phone>
@@ -166,8 +166,8 @@
                     <partner-point>
                         <title>Точка 1. Компания 1-4</title>
                         <address>Адрес. Точка 1. Компания 1-4</address>
-                        <longitude type="decimal">49.1781</longitude>
-                        <latitude type="decimal">55.3345</latitude>
+                        <longitude type="decimal">49.1201</longitude>
+                        <latitude type="decimal">55.7864</latitude>
                         <payment-methods>Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(960) 048-58-59</phone>
@@ -214,8 +214,8 @@
                     <partner-point>
                         <title>Точка 1. Компания 2-1</title>
                         <address>Адрес. Точка 1. Компания 2-1</address>
-                        <longitude type="decimal">49.1301</longitude>
-                        <latitude type="decimal">55.8198</latitude>
+                        <longitude type="decimal">49.1216</longitude>
+                        <latitude type="decimal">55.7886</latitude>
                         <payment-methods>наличный расчет, Visa, MasterCard</payment-methods>
                         <phones type="array">
                             <phone>(843) 258-58-59</phone>

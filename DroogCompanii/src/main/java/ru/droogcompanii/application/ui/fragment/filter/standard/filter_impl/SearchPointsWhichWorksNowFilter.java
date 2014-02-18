@@ -24,4 +24,5 @@ class SearchPointsWhichWorksNowFilter extends FilterWithOneCheckbox {
         filterSet.addPartnerPointSearchCriterion(new PartnerPointSearchCriterionByWorksNow());
         filterSet.addPartnerSearchCriterion(new PartnerSearchCriterionByWorksNow());
     }
+
 }

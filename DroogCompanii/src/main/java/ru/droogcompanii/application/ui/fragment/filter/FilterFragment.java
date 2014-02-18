@@ -10,6 +10,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 21.01.14.
@@ -32,6 +33,12 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_filter, container, false);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
@@ -41,14 +48,15 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_filter, container, false);
-    }
-
     private void onFirstLaunch() {
         Filters filters = FilterUtils.getCurrentFilters(getActivity(), getPartnerCategory());
+        filters.displayOn(getView());
+    }
+
+    private void onRelaunch(Bundle savedInstanceState) {
+        LogUtils.debug("onRelaunch()");
+
+        Filters filters = (Filters) savedInstanceState.getSerializable(KEY_DISPLAYED_FILTERS);
         filters.displayOn(getView());
     }
 
@@ -56,11 +64,6 @@ public class FilterFragment extends android.support.v4.app.Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_DISPLAYED_FILTERS, getDisplayedFilters());
-    }
-
-    private void onRelaunch(Bundle savedInstanceState) {
-        Filters filters = (Filters) savedInstanceState.getSerializable(KEY_DISPLAYED_FILTERS);
-        filters.displayOn(getView());
     }
 
     public Filters getDisplayedFilters() {

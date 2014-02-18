@@ -24,4 +24,5 @@ class SearchByCashlessPaymentsFilter extends FilterWithOneCheckbox {
         filterSet.addPartnerPointSearchCriterion(new PartnerPointSearchCriterionByCashlessPayments());
         filterSet.addPartnerSearchCriterion(new PartnerSearchCriterionByCashlessPayments());
     }
+
 }

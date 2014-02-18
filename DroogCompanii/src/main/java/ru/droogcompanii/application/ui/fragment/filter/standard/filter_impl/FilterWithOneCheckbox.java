@@ -29,7 +29,7 @@ abstract class FilterWithOneCheckbox implements Filter, Serializable {
     }
 
     private CheckBox findCheckBox(View view) {
-        return (CheckBox) view.findViewById(getIdOfCheckbox());
+        return WrappedCheckBoxFinder.findByContainerId(view, getIdOfCheckbox());
     }
 
     @Override

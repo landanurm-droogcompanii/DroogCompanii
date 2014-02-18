@@ -57,7 +57,7 @@ class SearchByDiscountTypeFilter implements Filter, Serializable {
     }
 
     private CheckBox findCheckBox(View view, int idOfCheckBox) {
-        return (CheckBox) view.findViewById(idOfCheckBox);
+        return WrappedCheckBoxFinder.findByContainerId(view, idOfCheckBox);
     }
 
     @Override
