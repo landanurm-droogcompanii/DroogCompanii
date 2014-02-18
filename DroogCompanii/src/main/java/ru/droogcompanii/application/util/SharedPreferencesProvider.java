@@ -11,10 +11,10 @@ import ru.droogcompanii.application.DroogCompaniiApplication;
  */
 public class SharedPreferencesProvider {
 
-    public static final String KEY_OF_SHARED_PREFERENCES = SharedPreferencesProvider.class.getName();
+    public static final String KEY_OF_COMMON_SHARED_PREFERENCES = SharedPreferencesProvider.class.getName();
 
     public static SharedPreferences get(Context context) {
-        return get(context, KEY_OF_SHARED_PREFERENCES);
+        return get(context, KEY_OF_COMMON_SHARED_PREFERENCES);
     }
 
     public static SharedPreferences get(Context context, String key) {

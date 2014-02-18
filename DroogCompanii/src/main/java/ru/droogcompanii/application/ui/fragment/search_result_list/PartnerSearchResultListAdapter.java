@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.search_result;
+package ru.droogcompanii.application.ui.fragment.search_result_list;
 
 import android.content.Context;
 import android.content.res.Resources;

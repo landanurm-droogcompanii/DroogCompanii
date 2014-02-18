@@ -50,6 +50,9 @@
     <string name="textMapIsLoaded">Map is loaded...</string>
 
     <string name="labelOfGoToOffersButton">Offers</string>
+    <string name="defaultMessageOnTextWasCopied">Text copied</string>
+    <string name="copyToClipboard">Copy to clipboard</string>
+    <string name="done">Done</string>
 
 
 </resources>

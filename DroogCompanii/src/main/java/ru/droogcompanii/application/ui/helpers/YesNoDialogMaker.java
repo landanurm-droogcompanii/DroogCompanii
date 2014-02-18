@@ -11,10 +11,28 @@ import ru.droogcompanii.application.R;
  */
 public class YesNoDialogMaker {
 
+    private static final boolean DEFAULT_CANCELABLE = false;
+
     private final Context context;
+    private final int titleOfYesButton;
+    private final int titleOfNoButton;
+    private boolean cancelable;
+
+    public static YesNoDialogMaker createCancelable(Context context, int titleOfYesButton, int titleOfNoButton) {
+        YesNoDialogMaker maker = new YesNoDialogMaker(context, titleOfYesButton, titleOfNoButton);
+        maker.cancelable = true;
+        return maker;
+    }
 
     public YesNoDialogMaker(Context context) {
+        this(context, R.string.yes, R.string.no);
+    }
+
+    public YesNoDialogMaker(Context context, int titleOfYesButton, int titleOfNoButton) {
         this.context = context;
+        this.titleOfYesButton = titleOfYesButton;
+        this.titleOfNoButton = titleOfNoButton;
+        this.cancelable = DEFAULT_CANCELABLE;
     }
 
     public AlertDialog make(String message,
@@ -22,13 +40,20 @@ public class YesNoDialogMaker {
                             DialogInterface.OnClickListener onNoListener) {
         return new AlertDialog.Builder(context)
                 .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), onYesListener)
-                .setNegativeButton(getString(R.string.no), onNoListener)
+                .setCancelable(cancelable)
+                .setPositiveButton(titleOfYesButton, onYesListener)
+                .setNegativeButton(titleOfNoButton, onNoListener)
                 .show();
     }
 
-    private String getString(int resId) {
-        return context.getString(resId);
+    public AlertDialog make(int messageId,
+                            DialogInterface.OnClickListener onYesListener,
+                            DialogInterface.OnClickListener onNoListener) {
+        return new AlertDialog.Builder(context)
+                .setMessage(messageId)
+                .setCancelable(cancelable)
+                .setPositiveButton(titleOfYesButton, onYesListener)
+                .setNegativeButton(titleOfNoButton, onNoListener)
+                .show();
     }
 }

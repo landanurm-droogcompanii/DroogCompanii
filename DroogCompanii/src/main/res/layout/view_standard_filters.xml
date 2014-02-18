@@ -6,6 +6,7 @@
     android:layout_height="match_parent" >
 
     <TextView
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -13,6 +14,7 @@
         android:text="@string/titleOfSortingGroup" />
 
     <CheckBox
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSortingGroupItems"
@@ -20,6 +22,7 @@
         android:id="@+id/sortByTitleCheckBox" />
 
     <CheckBox
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSortingGroupItems"
@@ -27,10 +30,11 @@
         android:id="@+id/sortByDistanceCheckBox" />
 
     <CheckBox
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSortingGroupItems"
-        android:text="@string/labelOfSortByDiscountCheckBox"
+        android:text="@string/labelOfSortByDiscountSizeCheckBox"
         android:id="@+id/sortByDiscountCheckBox" />
 
     <TextView

@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.widget.SpinnerAdapter;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
@@ -19,24 +22,26 @@ import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helpe
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
+import ru.droogcompanii.application.ui.activity.search_result_list.spinner_util.SpinnerAdapterPartnerImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.fragment.search_result.SearchResultFragment;
+import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
 import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 14.01.14.
  */
 public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
-                implements SearchResultFragment.Callbacks,
+                implements SearchResultListFragment.Callbacks,
                            TaskFragmentHolder.Callbacks,
                            PartnerPointsProviderHolder {
 
     private boolean isGoToMapItemVisible;
-    private SearchResultFragment searchResultFragment;
+    private SearchResultListFragment searchResultFragment;
     private SearchResultProvider searchResultProvider;
 
 
@@ -53,8 +58,10 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
 
         init(savedInstanceState);
 
-        searchResultFragment = (SearchResultFragment)
+        searchResultFragment = (SearchResultListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.searchResultFragment);
+
+        initSpinnerOnActionBar();
 
         if (savedInstanceState == null) {
             searchResultFragment.hide();
@@ -64,7 +71,6 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
 
     private void init(Bundle savedInstanceState) {
         searchResultProvider = getSearchResultProvider(savedInstanceState);
-        setTitle(searchResultProvider.getTitle(this));
         updateGoToMapItemVisible(getIsGoToMapItemVisible(savedInstanceState));
     }
 
@@ -88,6 +94,32 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
     @Override
     protected boolean isGoToMapItemVisible() {
         return isGoToMapItemVisible;
+    }
+
+
+    private void initSpinnerOnActionBar() {
+        SpinnerAdapter spinnerAdapter = new SpinnerAdapterPartnerImpl(this);
+        ActionBar.OnNavigationListener onNavigationListener = new ActionBar.OnNavigationListener() {
+            @Override
+            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                Comparator<Partner> newComparator = SpinnerAdapterPartnerImpl.getComparatorByPosition(itemPosition);
+                onComparatorChanged(newComparator);
+                return true;
+            }
+        };
+        initSpinnerOnActionBar(spinnerAdapter, onNavigationListener);
+    }
+
+    private void initSpinnerOnActionBar(SpinnerAdapter spinnerAdapter,
+                                        ActionBar.OnNavigationListener listener) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        actionBar.setListNavigationCallbacks(spinnerAdapter, listener);
+    }
+
+    private void onComparatorChanged(Comparator<Partner> newComparator) {
+        LogUtils.debug("onComparatorChanged()");
+        searchResultFragment.updateList(newComparator);
     }
 
     @Override

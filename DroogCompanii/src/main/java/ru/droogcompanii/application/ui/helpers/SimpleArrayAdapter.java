@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.helpers;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,28 @@ public class SimpleArrayAdapter<T> extends ArrayAdapter<T> {
         String getTitle(T item);
     }
 
+    public static interface ItemToTitleIdConvertor<T> {
+        int getTitleId(T item);
+    }
+
     private final ItemToTitleConvertor<T> itemToTitleConvertor;
 
     public SimpleArrayAdapter(Context context, List<T> items,
                               ItemToTitleConvertor<T> itemToTitleConvertor) {
         super(context, android.R.layout.simple_list_item_1, items);
         this.itemToTitleConvertor = itemToTitleConvertor;
+    }
+
+    public SimpleArrayAdapter(final Context context, List<T> items,
+                              final ItemToTitleIdConvertor<T> itemToTitleIdConvertor) {
+        this(context, items, new ItemToTitleConvertor<T>() {
+            @Override
+            public String getTitle(T item) {
+                Resources res = context.getResources();
+                int titleId = itemToTitleIdConvertor.getTitleId(item);
+                return res.getString(titleId);
+            }
+        });
     }
 
     @Override

@@ -11,13 +11,13 @@ import ru.droogcompanii.application.util.NavigationToWebsiteHelper;
 /**
  * Created by ls on 13.02.14.
  */
-public class ContactsViewHelper {
+public class ContactsViewMaker {
 
     private final EmailSenderHelper emailSenderHelper;
     private final NavigationToWebsiteHelper navigationToWebsiteHelper;
     private final IconAndLabelItemInflater inflater;
 
-    public ContactsViewHelper(Context context) {
+    public ContactsViewMaker(Context context) {
         navigationToWebsiteHelper = new NavigationToWebsiteHelper(context);
         emailSenderHelper = new EmailSenderHelper(context);
         inflater = new IconAndLabelItemInflater(context);

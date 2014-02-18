@@ -27,31 +27,42 @@ import ru.droogcompanii.application.util.caller_helper.CallerHelper;
  */
 public class PartnerDetailsViewHelper {
 
+    private static interface ViewMaker {
+        View make();
+    }
+
     private final CallerHelper callerHelper;
-    private final ContactsViewHelper contactsViewHelper;
+    private final ContactsViewMaker contactsViewMaker;
     private final Context context;
     private final ImageDownloader imageDownloader;
     private final RouteHelper routeHelper;
-    private final View view;
+    private final ViewMaker viewMaker;
     private final WorkingHoursViewMaker workingHoursViewMaker;
 
     private Partner partner;
     private PartnerPoint partnerPoint;
+    private View view;
 
-
-    public PartnerDetailsViewHelper(FragmentActivity activity, LayoutInflater inflater, ViewGroup container) {
+    public PartnerDetailsViewHelper(FragmentActivity activity,
+                                    final LayoutInflater inflater, final ViewGroup container) {
         context = activity;
         imageDownloader = new ImageDownloader();
-        contactsViewHelper = new ContactsViewHelper(activity);
+        contactsViewMaker = new ContactsViewMaker(activity);
         workingHoursViewMaker = new WorkingHoursViewMaker(activity);
         callerHelper = new CallerHelper(activity);
         routeHelper = new RouteHelper(activity);
-        view = inflater.inflate(R.layout.fragment_partner_details, container, false);
+        viewMaker = new ViewMaker() {
+            @Override
+            public View make() {
+                return inflater.inflate(R.layout.fragment_partner_details, container, false);
+            }
+        };
     }
 
     public View getViewFilledBy(Partner partner, PartnerPoint partnerPoint) {
         this.partner = partner;
         this.partnerPoint = partnerPoint;
+        this.view = viewMaker.make();
         fill();
         return view;
     }
@@ -101,10 +112,10 @@ public class PartnerDetailsViewHelper {
     private void setContacts() {
         ViewGroup containerOfContacts = (ViewGroup) findViewById(R.id.containerOfContacts);
         for (String webSite : partner.getWebSites()) {
-            containerOfContacts.addView(contactsViewHelper.makeViewByWebSite(webSite));
+            containerOfContacts.addView(contactsViewMaker.makeViewByWebSite(webSite));
         }
         for (String email : partner.getEmails()) {
-            containerOfContacts.addView(contactsViewHelper.makeViewByEmail(email));
+            containerOfContacts.addView(contactsViewMaker.makeViewByEmail(email));
         }
     }
 

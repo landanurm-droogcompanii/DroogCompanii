@@ -15,7 +15,6 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_f
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
@@ -117,9 +116,7 @@ public class SearchResultProviderBySearchQuery implements SearchResultProvider, 
                                                            Collection<PartnerPoint> partnerPoints) {
         FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(context);
         SearchableListing<PartnerPoint> searchableListing = SearchableListing.newInstance(partnerPoints);
-        for (SearchCriterion<PartnerPoint> criterion : currentFilterSet.getPartnerPointSearchCriteria()) {
-            searchableListing.addSearchCriterion(criterion);
-        }
+        searchableListing.addSearchCriterion(currentFilterSet.getCombinedPartnerPointSearchCriterion());
         return searchableListing.toList();
     }
 }

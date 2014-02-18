@@ -10,11 +10,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
@@ -147,17 +145,9 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     }
 
     public void addFilterSet(FilterSet filterSet) {
-        addSearchFilters(filterSet);
+        searchablePartnerPoints.addSearchCriterion(filterSet.getCombinedPartnerPointSearchCriterion());
         updateMap();
         updateAfterFilteringIfNeed();
-    }
-
-    private void addSearchFilters(FilterSet filterSet) {
-        List<? extends SearchCriterion<PartnerPoint>> searchCriteria =
-                filterSet.getPartnerPointSearchCriteria();
-        for (SearchCriterion<PartnerPoint> criterion : searchCriteria) {
-            searchablePartnerPoints.addSearchCriterion(criterion);
-        }
     }
 
     private void updateAfterFilteringIfNeed() {

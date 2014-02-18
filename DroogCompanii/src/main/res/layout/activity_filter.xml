@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <FrameLayout
+    <fragment
+        android:name="ru.droogcompanii.application.ui.fragment.filter.FilterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/containerOfFilterFragment" />
+        android:id="@+id/filterFragment" />
 
 </FrameLayout>

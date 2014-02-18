@@ -89,4 +89,15 @@ public abstract class TaskFragmentHolder extends Fragment {
             callbacks.onTaskFinished(resultCode, result);
         }
     }
+
+    /*
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        try {
+            super.onSaveInstanceState(outState);
+        } catch (Throwable e) {
+
+        }
+    }
+    */
 }

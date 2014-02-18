@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class SearchableSortableListing<T> extends SearchableListing<T> implements Serializable {
 
-    private final List<Comparator<T>> comparators;
+    private final CombinedComparator<T> combinedComparator;
 
     public static <T> SearchableSortableListing<T> newInstance(Collection<T> elements) {
         return new SearchableSortableListing<T>(elements);
@@ -20,25 +20,25 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
 
     protected SearchableSortableListing(Collection<T> elements) {
         super(elements);
-        comparators = new ArrayList<Comparator<T>>();
+        combinedComparator = new CombinedComparator<T>();
     }
 
     public void addComparator(Comparator<T> comparator) {
         if (comparator == null) {
             throw new IllegalArgumentException("Comparator should not be <null>");
         }
-        comparators.add(comparator);
+        combinedComparator.add(comparator);
     }
 
     public void removeAllFilters() {
         super.removeAllFilters();
-        comparators.clear();
+        combinedComparator.clear();
     }
 
     public void forEach(OnEachHandler<T> onEachHandler) {
         List<T> sortedElements = sorted(new ArrayList<T>(super.elements));
         for (T each : sortedElements) {
-            onEachHandler.onEach(each, meetCriteria(each));
+            onEachHandler.onEach(each, combinedSearchCriterion.meetCriterion(each));
         }
     }
 
@@ -51,25 +51,12 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
         if (noComparators()) {
             return list;
         }
-        Comparator<T> combinedComparator = new Comparator<T>() {
-            @Override
-            public int compare(T e1, T e2) {
-                for (int i = comparators.size() - 1; i >= 0; --i) {
-                    Comparator<T> comparator = comparators.get(i);
-                    int result = comparator.compare(e1, e2);
-                    if (result != 0) {
-                        return result;
-                    }
-                }
-                return 0;
-            }
-        };
         Collections.sort(list, combinedComparator);
         return list;
     }
 
     private boolean noComparators() {
-        return comparators.isEmpty();
+        return combinedComparator.isEmpty();
     }
 
     public List<T> toList() {
@@ -86,20 +73,13 @@ public class SearchableSortableListing<T> extends SearchableListing<T> implement
         if (noComparators()) {
             return searchResults;
         }
-        Comparator<SearchResult<T>> combinedComparator = new Comparator<SearchResult<T>>() {
+        Comparator<SearchResult<T>> combinedSearchResultComparator = new Comparator<SearchResult<T>>() {
             @Override
             public int compare(SearchResult<T> e1, SearchResult<T> e2) {
-                for (int i = comparators.size() - 1; i >= 0; --i) {
-                    Comparator<T> comparator = comparators.get(i);
-                    int result = comparator.compare(e1.value(), e2.value());
-                    if (result != 0) {
-                        return result;
-                    }
-                }
-                return 0;
+                return combinedComparator.compare(e1.value(), e2.value());
             }
         };
-        Collections.sort(searchResults, combinedComparator);
+        Collections.sort(searchResults, combinedSearchResultComparator);
         return searchResults;
     }
 }

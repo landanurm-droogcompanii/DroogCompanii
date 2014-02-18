@@ -1,81 +1,80 @@
 package ru.droogcompanii.application.ui.fragment.filter;
 
-import android.content.SharedPreferences;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
-
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.SharedPreferencesProvider;
 
 /**
  * Created by ls on 21.01.14.
  */
 public class FilterFragment extends android.support.v4.app.Fragment {
 
-    private SharedPreferences sharedPreferences;
-    private PartnerCategory partnerCategory;
+    public static interface Callbacks {
+        Bundle getArguments();
+    }
+
+    private static final String KEY_DISPLAYED_FILTERS = "DisplayedFilters";
+
+    private Callbacks callbacks;
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState == null) {
+            onFirstLaunch();
+        } else {
+            onRelaunch(savedInstanceState);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_filter, container, false);
-        Bundle bundle = (savedInstanceState == null) ? getArguments() : savedInstanceState;
-        init(bundle, rootView);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_filter, container, false);
     }
 
-    private void init(Bundle bundle, View rootView) {
-        partnerCategory = getPartnerCategory(bundle);
-        sharedPreferences = SharedPreferencesProvider.get(getActivity());
-        displaySavedFiltersOn(rootView);
-    }
-
-    private PartnerCategory getPartnerCategory(Bundle bundle) {
-        if (bundle == null) {
-            return null;
-        } else {
-            return (PartnerCategory) bundle.getSerializable(Keys.partnerCategory);
-        }
-    }
-
-    private void displaySavedFiltersOn(View view) {
-        Filters filters = new Filters(partnerCategory);
-        filters.restoreFrom(sharedPreferences);
-        filters.displayOn(view);
+    private void onFirstLaunch() {
+        Filters filters = FilterUtils.getCurrentFilters(getActivity(), getPartnerCategory());
+        filters.displayOn(getView());
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partnerCategory, (Serializable) partnerCategory);
+        outState.putSerializable(KEY_DISPLAYED_FILTERS, getDisplayedFilters());
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        saveFilters();
+    private void onRelaunch(Bundle savedInstanceState) {
+        Filters filters = (Filters) savedInstanceState.getSerializable(KEY_DISPLAYED_FILTERS);
+        filters.displayOn(getView());
     }
 
-    private void saveFilters() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        getFilters().saveInto(editor);
-        editor.commit();
-    }
-
-    public Filters getFilters() {
-        Filters currentFilters = new Filters(partnerCategory);
+    public Filters getDisplayedFilters() {
+        Filters currentFilters = new Filters(getPartnerCategory());
         currentFilters.readFrom(getView());
         return currentFilters;
     }
 
     public PartnerCategory getPartnerCategory() {
-        return partnerCategory;
+        Bundle args = callbacks.getArguments();
+        if (args == null) {
+            return null;
+        } else {
+            return (PartnerCategory) args.getSerializable(Keys.partnerCategory);
+        }
     }
 }

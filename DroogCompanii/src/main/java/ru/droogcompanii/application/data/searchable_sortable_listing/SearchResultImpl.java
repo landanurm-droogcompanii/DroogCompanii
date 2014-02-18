@@ -5,7 +5,8 @@ import java.io.Serializable;
 /**
  * Created by ls on 06.02.14.
  */
-public class SearchResultImpl<T> implements SearchResult<T>, Serializable {
+public class SearchResultImpl<T>
+        implements SearchResult<T>, Comparable<SearchResult<T>>, Serializable {
     private final boolean meetsCriteria;
     private final T value;
 
@@ -40,5 +41,11 @@ public class SearchResultImpl<T> implements SearchResult<T>, Serializable {
     @Override
     public int hashCode() {
         return value().hashCode() + (meetsSearchCriteria() ? 1 : 0);
+    }
+
+    @Override
+    public int compareTo(SearchResult<T> searchResult) {
+        Comparable<T> comparable = (Comparable<T>) value();
+        return comparable.compareTo(searchResult.value());
     }
 }

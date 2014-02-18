@@ -13,10 +13,11 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
 public interface FilterSet {
     void addPartnerPointSearchCriterion(SearchCriterion<PartnerPoint> searchCriterion);
     void addPartnerPointComparator(Comparator<PartnerPoint> comparator);
-    List<? extends SearchCriterion<PartnerPoint>> getPartnerPointSearchCriteria();
-    List<? extends Comparator<PartnerPoint>> getPartnerPointComparators();
     void addPartnerSearchCriterion(SearchCriterion<Partner> searchCriterion);
     void addPartnerComparator(Comparator<Partner> comparator);
-    List<? extends SearchCriterion<Partner>> getPartnerSearchCriteria();
-    List<? extends Comparator<Partner>> getPartnerComparators();
+    SearchCriterion<PartnerPoint> getCombinedPartnerPointSearchCriterion();
+    SearchCriterion<Partner> getCombinedPartnerSearchCriterion();
+    List<Comparator<PartnerPoint>> getPartnerPointComparators();
+    List<Comparator<Partner>> getPartnerComparators();
+
 }

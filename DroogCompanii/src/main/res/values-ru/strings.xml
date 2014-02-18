@@ -40,4 +40,9 @@
     <string name="labelOfGoToOffersButton">Акции</string>
     <string name="titleOfHelpActivity" />
 
+    <string name="defaultMessageOnTextWasCopied">Текст скопирован</string>
+    <string name="copyToClipboard">Скопировать в буфер</string>
+
+    <string name="done">Применить</string>
+
 </resources>

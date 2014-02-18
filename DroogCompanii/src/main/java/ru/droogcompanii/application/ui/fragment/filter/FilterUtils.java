@@ -19,6 +19,13 @@ public class FilterUtils {
         editor.commit();
     }
 
+    public static void shareFilters(Context context, Filters filters) {
+        SharedPreferences.Editor editor = SharedPreferencesProvider.get(context).edit();
+        editor.clear();
+        filters.saveInto(editor);
+        editor.commit();
+    }
+
     public static FilterSet getCurrentFilterSet(Context context) {
         return getCurrentFilterSet(context, null);
     }

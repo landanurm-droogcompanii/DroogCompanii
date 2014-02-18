@@ -2,15 +2,12 @@ package ru.droogcompanii.application.ui.activity.search_result_list;
 
 import android.content.Context;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResultImpl;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
@@ -18,25 +15,24 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableS
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
-import ru.droogcompanii.application.ui.helpers.task.Task;
 
 /**
- * Created by ls on 30.01.14.
+ * Created by ls on 17.02.14.
  */
-public class SearchResultTaskUsedCurrentFilters extends Task {
+public class SearchResultExtractorUsedCurrentFilters implements SearchResultExtractor {
     private final Context context;
     private final SearchResultProvider searchResultProvider;
 
-    public SearchResultTaskUsedCurrentFilters(SearchResultProvider searchResultProvider, Context context) {
+    public SearchResultExtractorUsedCurrentFilters(SearchResultProvider searchResultProvider, Context context) {
         this.searchResultProvider = searchResultProvider;
         this.context = context;
     }
 
     @Override
-    protected Serializable doInBackground(Void... voids) {
+    public List<SearchResult<Partner>> extract() {
         List<Partner> partners = searchResultProvider.getPartners(context);
         List<SearchResult<Partner>> resultsOfSearchUsingPartnerPoints = searchUsingPartnerPoints(partners);
-        return (Serializable) filter(partners, resultsOfSearchUsingPartnerPoints);
+        return filter(partners, resultsOfSearchUsingPartnerPoints);
     }
 
     private List<SearchResult<Partner>> searchUsingPartnerPoints(List<Partner> partners) {
@@ -54,19 +50,13 @@ public class SearchResultTaskUsedCurrentFilters extends Task {
     private boolean definePartnerMeetsCriterion(Partner partner) {
         List<PartnerPoint> partnerPoints = searchResultProvider.getPointsOfPartner(context, partner);
         SearchableListing<PartnerPoint> searchableListing = SearchableListing.newInstance(partnerPoints);
-        addCurrentSearchFiltersTo(searchableListing);
+        FilterSet filterSet = FilterUtils.getCurrentFilterSet(DroogCompaniiApplication.getContext());
+        searchableListing.addSearchCriterion(filterSet.getCombinedPartnerPointSearchCriterion());
         return searchableListing.toList().size() > 0;
     }
 
-    private static void addCurrentSearchFiltersTo(SearchableListing<PartnerPoint> searchableListing) {
-        FilterSet filterSet = FilterUtils.getCurrentFilterSet(DroogCompaniiApplication.getContext());
-        for (SearchCriterion<PartnerPoint> searchCriterion : filterSet.getPartnerPointSearchCriteria()) {
-            searchableListing.addSearchCriterion(searchCriterion);
-        }
-    }
-
-    private static List<? extends SearchResult<Partner>> filter(List<Partner> partners,
-                                               List<SearchResult<Partner>> searchResults) {
+    private static List<SearchResult<Partner>> filter(List<Partner> partners,
+                                                      List<SearchResult<Partner>> searchResults) {
         SearchableSortableListing<Partner> searchableSortableListing =
                 SearchableSortableListing.newInstance(partners);
         addCurrentFiltersTo(searchableSortableListing);
@@ -76,29 +66,23 @@ public class SearchResultTaskUsedCurrentFilters extends Task {
 
     private static void addCurrentFiltersTo(SearchableSortableListing<Partner> searchableSortableListing) {
         FilterSet filterSet = FilterUtils.getCurrentFilterSet(DroogCompaniiApplication.getContext());
-        for (SearchCriterion<Partner> searchCriterion : filterSet.getPartnerSearchCriteria()) {
-            searchableSortableListing.addSearchCriterion(searchCriterion);
-        }
-        for (Comparator<Partner> comparator : filterSet.getPartnerComparators()) {
-            searchableSortableListing.addComparator(comparator);
-        }
+        searchableSortableListing.addSearchCriterion(filterSet.getCombinedPartnerSearchCriterion());
+        searchableSortableListing.addComparator(CurrentComparatorProvider.getCombinedPartnerComparator());
     }
 
-    private static List<? extends SearchResult<Partner>> combine(
-                                    List<SearchResult<Partner>> filtered,
-                                    List<SearchResult<Partner>> searchResults) {
+    private static List<SearchResult<Partner>> combine(List<SearchResult<Partner>> filtered,
+                                                       List<SearchResult<Partner>> searchResults) {
         for (SearchResult<Partner> searchResult : searchResults) {
             if (!searchResult.meetsSearchCriteria()) {
-                setPartnerDoesNotMeetSearchCriteria(filtered, searchResult.value());
+                markThatPartnerDoesNotMeetSearchCriteria(filtered, searchResult.value());
             }
         }
         return filtered;
     }
 
-    private static void setPartnerDoesNotMeetSearchCriteria(
+    private static void markThatPartnerDoesNotMeetSearchCriteria(
             List<SearchResult<Partner>> filtered, Partner partner) {
-
-        int size = filtered.size();
+        final int size = filtered.size();
         for (int i = 0; i < size; ++i) {
             SearchResult<Partner> searchResult = filtered.get(i);
             if (partner.equals(searchResult.value())) {

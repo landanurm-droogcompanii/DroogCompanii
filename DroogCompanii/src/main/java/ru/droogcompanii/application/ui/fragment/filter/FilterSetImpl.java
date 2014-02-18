@@ -7,6 +7,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.data.searchable_sortable_listing.CombinedSearchCriterion;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
 
 /**
@@ -42,12 +43,7 @@ class FilterSetImpl implements FilterSet, Serializable {
     }
 
     @Override
-    public List<? extends SearchCriterion<PartnerPoint>> getPartnerPointSearchCriteria() {
-        return partnerPointSearchCriteria;
-    }
-
-    @Override
-    public List<? extends Comparator<PartnerPoint>> getPartnerPointComparators() {
+    public List<Comparator<PartnerPoint>> getPartnerPointComparators() {
         return partnerPointComparators;
     }
 
@@ -62,12 +58,17 @@ class FilterSetImpl implements FilterSet, Serializable {
     }
 
     @Override
-    public List<? extends SearchCriterion<Partner>> getPartnerSearchCriteria() {
-        return partnerSearchCriteria;
+    public List<Comparator<Partner>> getPartnerComparators() {
+        return partnerComparators;
     }
 
     @Override
-    public List<? extends Comparator<Partner>> getPartnerComparators() {
-        return partnerComparators;
+    public SearchCriterion<Partner> getCombinedPartnerSearchCriterion() {
+        return CombinedSearchCriterion.from(partnerSearchCriteria);
+    }
+
+    @Override
+    public SearchCriterion<PartnerPoint> getCombinedPartnerPointSearchCriterion() {
+        return CombinedSearchCriterion.from(partnerPointSearchCriteria);
     }
 }

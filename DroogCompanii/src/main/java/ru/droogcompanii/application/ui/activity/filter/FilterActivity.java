@@ -1,30 +1,53 @@
 package ru.droogcompanii.application.ui.activity.filter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.fragment.filter.FilterFragment;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.helpers.YesNoDialogMaker;
 import ru.droogcompanii.application.util.Keys;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 15.01.14.
  */
 
-public class FilterActivity extends ActionBarActivityWithUpButton {
+public class FilterActivity extends ActionBarActivityWithUpButton
+                            implements FilterFragment.Callbacks {
 
     public static final int REQUEST_CODE = 14235;
 
-    private boolean isFirstLaunched;
-    private Bundle passedBundle;
-    private Filters filtersAtTheMomentOfFirstLaunch;
+    private static enum State {
+        ON_BACK_PRESSED,
+        ON_UP,
+        NORMAL
+    }
+
+    private static final String KEY_STATE = "State";
+
+    private Bundle args;
     private FilterFragment filterFragment;
+    private State state;
+
+    private final Runnable actionExitWithoutCommittingChanges = new Runnable() {
+        @Override
+        public void run() {
+            setResult(RESULT_CANCELED);
+            if (state == State.ON_UP) {
+                FilterActivity.super.onNeedToNavigateUp();
+            } else if (state == State.ON_BACK_PRESSED) {
+                FilterActivity.super.onBackPressed();;
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,71 +55,133 @@ public class FilterActivity extends ActionBarActivityWithUpButton {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        isFirstLaunched = (savedInstanceState == null);
+        if (savedInstanceState == null) {
+            initByDefault();
+        } else {
+            restore(savedInstanceState);
+        }
 
-        passedBundle = (savedInstanceState == null)
-                ? getPassedBundle() : savedInstanceState.getBundle(Keys.passedBundle);
+        filterFragment = findFilterFragment();
+    }
 
-        filterFragment = new FilterFragment();
-        filterFragment.setArguments(passedBundle);
-
-        placeFilterFragmentOnActivity();
-
-        filtersAtTheMomentOfFirstLaunch = getFiltersAtTheMomentOfFirstLaunch(savedInstanceState);
-
+    private void initByDefault() {
+        args = getPassedBundle();
+        state = State.NORMAL;
     }
 
     private Bundle getPassedBundle() {
         return getIntent().getExtras();
     }
 
-    private void placeFilterFragmentOnActivity() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        if (isFirstLaunched) {
-            transaction.add(R.id.containerOfFilterFragment, filterFragment);
-        } else {
-            transaction.replace(R.id.containerOfFilterFragment, filterFragment);
-        }
-        transaction.commit();
+    private void restore(Bundle savedInstanceState) {
+        args = savedInstanceState.getBundle(Keys.args);
+        state = (State) savedInstanceState.getSerializable(KEY_STATE);
+        restoreCautionIfNeed();
     }
 
-    private Filters getFiltersAtTheMomentOfFirstLaunch(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            return getCurrentFilters();
-        } else {
-            return readFiltersFrom(savedInstanceState);
+    private void restoreCautionIfNeed() {
+        if (state != State.NORMAL) {
+            cautionAboutExitWithoutCommittingChanges();
         }
     }
 
-    private Filters getCurrentFilters() {
-        PartnerCategory partnerCategory = filterFragment.getPartnerCategory();
-        return FilterUtils.getCurrentFilters(this, partnerCategory);
+    @Override
+    public Bundle getArguments() {
+        return args;
     }
 
-    private static Filters readFiltersFrom(Bundle savedInstanceState) {
-        return (Filters) savedInstanceState.getSerializable(Keys.filtersAtTheMomentOfFirstLaunch);
+    private FilterFragment findFilterFragment() {
+        return (FilterFragment) getSupportFragmentManager().findFragmentById(R.id.filterFragment);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            onDone();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.filter_menu, menu);
+        return true;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBundle(Keys.passedBundle, passedBundle);
-        outState.putSerializable(Keys.filtersAtTheMomentOfFirstLaunch, filtersAtTheMomentOfFirstLaunch);
+        outState.putBundle(Keys.args, args);
+        outState.putSerializable(KEY_STATE, state);
     }
 
-    @Override
-    public void finish() {
-        if (wereChangesMade()) {
+    private void onDone() {
+        Filters displayedFilters = filterFragment.getDisplayedFilters();
+        if (areDifferent(displayedFilters, getFiltersDuringFirstLaunch())) {
+            FilterUtils.shareFilters(this, displayedFilters);
             setResult(RESULT_OK);
         } else {
             setResult(RESULT_CANCELED);
         }
-        super.finish();
+        finish();
     }
 
-    private boolean wereChangesMade() {
-        Filters currentFilters = filterFragment.getFilters();
-        return !currentFilters.equals(filtersAtTheMomentOfFirstLaunch);
+    private static boolean areDifferent(Filters one, Filters two) {
+        return !Objects.equals(one, two);
+    }
+
+    private Filters getFiltersDuringFirstLaunch() {
+        return FilterUtils.getCurrentFilters(this, filterFragment.getPartnerCategory());
+    }
+
+    @Override
+    public void onBackPressed() {
+        state = State.ON_BACK_PRESSED;
+        cautionAboutExitWithoutCommittingChangesIfNeed();
+    }
+
+    @Override
+    protected void onNeedToNavigateUp() {
+        state = State.ON_UP;
+        cautionAboutExitWithoutCommittingChangesIfNeed();
+    }
+
+    private void cautionAboutExitWithoutCommittingChangesIfNeed() {
+        if (wereNotChanges()) {
+            actionExitWithoutCommittingChanges.run();
+        } else {
+            cautionAboutExitWithoutCommittingChanges();
+        }
+    }
+
+    private boolean wereNotChanges() {
+        Filters currentFilters = FilterUtils.getCurrentFilters(this, filterFragment.getPartnerCategory());
+        Filters displayedFilters = filterFragment.getDisplayedFilters();
+        return Objects.equals(currentFilters, displayedFilters);
+    }
+
+    private void cautionAboutExitWithoutCommittingChanges() {
+        YesNoDialogMaker dialogMaker = new YesNoDialogMaker(this, android.R.string.ok, android.R.string.cancel);
+        DialogInterface.OnClickListener onExitWithoutCommittingChangesListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                actionExitWithoutCommittingChanges.run();
+            }
+        };
+        DialogInterface.OnClickListener onCancelListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                onCancelReturningToPreviousActivity();
+            }
+        };
+        AlertDialog dialog = dialogMaker.make(
+                R.string.cautionExitWithoutCommittingChangesInCurrentFilters,
+                onExitWithoutCommittingChangesListener, onCancelListener);
+        dialog.setCancelable(true);
+    }
+
+    private void onCancelReturningToPreviousActivity() {
+        state = State.NORMAL;
     }
 }

@@ -16,7 +16,7 @@ import ru.droogcompanii.application.util.Objects;
 /**
  * Created by ls on 21.01.14.
  */
-class SearchFilterByDiscountType implements Filter, Serializable {
+class SearchByDiscountTypeFilter implements Filter, Serializable {
 
     private static class KeyOfDiscountType {
         public static final String BONUS = "Bonus" + getClassName();
@@ -25,7 +25,7 @@ class SearchFilterByDiscountType implements Filter, Serializable {
     }
 
     private static String getClassName() {
-        return SearchFilterByDiscountType.class.getName();
+        return SearchByDiscountTypeFilter.class.getName();
     }
 
     private static final boolean DEFAULT_BONUS = true;
@@ -36,7 +36,7 @@ class SearchFilterByDiscountType implements Filter, Serializable {
     private boolean discount;
     private boolean cashBack;
 
-    public SearchFilterByDiscountType() {
+    public SearchByDiscountTypeFilter() {
         bonus = DEFAULT_BONUS;
         discount = DEFAULT_DISCOUNT;
         cashBack = DEFAULT_CASH_BACK;
@@ -90,7 +90,7 @@ class SearchFilterByDiscountType implements Filter, Serializable {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        SearchFilterByDiscountType other = (SearchFilterByDiscountType) obj;
+        SearchByDiscountTypeFilter other = (SearchByDiscountTypeFilter) obj;
         return ((bonus == other.bonus) &&
                 (discount == other.discount) &&
                 (cashBack == other.cashBack));

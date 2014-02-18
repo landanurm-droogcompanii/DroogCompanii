@@ -8,7 +8,7 @@ import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_
 /**
  * Created by ls on 21.01.14.
  */
-class SearchFilterByWorksNow extends FilterWithOneCheckbox {
+class SearchPointsWhichWorksNowFilter extends FilterWithOneCheckbox {
     @Override
     protected boolean isNeedToIncludeByDefault() {
         return false;

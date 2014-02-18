@@ -123,6 +123,8 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     private void onTaskFinishedSuccessfully(Serializable result) {
+        LogUtils.debug("onTaskFinishedSuccessfully()");
+
         FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
         initPartnerPointsMapFragmentIfNeed((List<PartnerPoint>) result);
         FlagNeedToUpdateMap.set(false);
@@ -135,6 +137,8 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     private void onTaskCancelled() {
+        LogUtils.debug("onTaskCancelled()");
+
         finish();
     }
 

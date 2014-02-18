@@ -38,6 +38,10 @@ public class CallerHelper {
     }
 
     public void call(String title, List<String> phones) {
+        showMultiPhonesDialogFragment(title, phones);
+    }
+
+    private void callUsingNumberOfPhones(String title, List<String> phones) {
         if (phones.size() == 1) {
             String phone = phones.get(0);
             Caller.call(activity, phone);

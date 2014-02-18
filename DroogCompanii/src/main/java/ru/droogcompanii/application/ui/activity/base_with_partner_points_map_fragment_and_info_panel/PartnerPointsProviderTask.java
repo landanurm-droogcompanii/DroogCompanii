@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 30.01.14.
@@ -21,6 +22,11 @@ public class PartnerPointsProviderTask extends Task {
 
     @Override
     protected Serializable doInBackground(Void... voids) {
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            LogUtils.debug(e.getMessage());
+        }
         return (Serializable) partnerPointsProvider.getPartnerPoints(context);
     }
 }

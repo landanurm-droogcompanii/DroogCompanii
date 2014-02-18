@@ -15,13 +15,10 @@ public class StandardFiltersProvider {
         // !!! always, when this method is executed, need to use new filters
         // !!! (i.e. local array instead of static array)
         final Filter[] standardFiltersInitializedByDefault = {
-            new SearchFilterByCashlessPayments(),
-            new SearchFilterByDiscountType(),
-            new SearchFilterByWorksNow(),
-            new SearchClosestPointsFilter(),
-            new SortingFilterByDiscountSize(),
-            new SortingFilterByDistanceBasedOnCurrentLocation(),
-            new SortingFilterByTitle()
+            new SearchByCashlessPaymentsFilter(),
+            new SearchByDiscountTypeFilter(),
+            new SearchPointsWhichWorksNowFilter(),
+            new SearchClosestPointsFilter()
         };
         return Arrays.asList(standardFiltersInitializedByDefault);
     }

@@ -102,6 +102,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
             @Override
             protected MenuItemHelper[] getMenuItemHelpers() {
                 return new MenuItemHelper[] {
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
                         MenuItemHelpers.SETTINGS,
                         MenuItemHelpers.HELP
                 };

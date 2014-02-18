@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.search_result;
+package ru.droogcompanii.application.ui.fragment.search_result_list;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
@@ -20,7 +21,7 @@ import ru.droogcompanii.application.util.Keys;
 /**
  * Created by ls on 22.01.14.
  */
-public class SearchResultFragment extends ListFragment
+public class SearchResultListFragment extends ListFragment
         implements AdapterView.OnItemClickListener {
 
     public static interface Callbacks {
@@ -29,8 +30,18 @@ public class SearchResultFragment extends ListFragment
         void onNotFound();
     }
 
+    private static final Comparator<Partner> DUMMY_COMPARATOR = new Comparator<Partner>() {
+        @Override
+        public int compare(Partner partner1, Partner partner2) {
+            return 0;
+        }
+    };
+
+    private static final String KEY_CURRENT_COMPARATOR = "CurrentComparator";
+
     private boolean isSearchResultReady;
     private Callbacks callbacks;
+    private Comparator<Partner> currentComparator;
     private List<SearchResult<Partner>> searchResults;
     private PartnerSearchResultListAdapter adapter;
 
@@ -58,11 +69,13 @@ public class SearchResultFragment extends ListFragment
     }
 
     private void initSearchResultIsNotReadyState() {
+        currentComparator = DUMMY_COMPARATOR;
         isSearchResultReady = false;
         searchResults = new ArrayList<SearchResult<Partner>>();
     }
 
     private void restoreState(Bundle savedInstanceState) {
+        currentComparator = (Comparator<Partner>) savedInstanceState.getSerializable(KEY_CURRENT_COMPARATOR);
         searchResults = (List<SearchResult<Partner>>) savedInstanceState.getSerializable(Keys.partners);
         isSearchResultReady = savedInstanceState.getBoolean(Keys.isSearchResultReady);
 
@@ -86,6 +99,7 @@ public class SearchResultFragment extends ListFragment
         outState.putSerializable(Keys.partners, (Serializable) searchResults);
         outState.putBoolean(Keys.isSearchResultReady, isSearchResultReady);
         outState.putInt(Keys.visibility, getView().getVisibility());
+        outState.putSerializable(KEY_CURRENT_COMPARATOR, (Serializable) currentComparator);
     }
 
     public void setSearchResult(List<SearchResult<Partner>> searchResults) {
@@ -97,12 +111,23 @@ public class SearchResultFragment extends ListFragment
     private void updateSearchResultList() {
         getListView().setEmptyView(prepareEmptyView());
         adapter = new PartnerSearchResultListAdapter(getActivity(), searchResults);
+        sortAdapter();
         setListAdapter(adapter);
         if (adapter.isEmpty()) {
             callbacks.onNotFound();
         } else {
             callbacks.onFound();
         }
+    }
+
+    private void sortAdapter() {
+        final Comparator<Partner> comparator = currentComparator;
+        adapter.sort(new Comparator<SearchResult<Partner>>() {
+            @Override
+            public int compare(SearchResult<Partner> res1, SearchResult<Partner> res2) {
+                return comparator.compare(res1.value(), res2.value());
+            }
+        });
     }
 
     @Override
@@ -117,6 +142,12 @@ public class SearchResultFragment extends ListFragment
 
     public void hide() {
         getView().setVisibility(View.INVISIBLE);
+    }
+
+    public void updateList(Comparator<Partner> newComparator) {
+        currentComparator = newComparator;
+        sortAdapter();
+        adapter.notifyDataSetChanged();
     }
 
 }
