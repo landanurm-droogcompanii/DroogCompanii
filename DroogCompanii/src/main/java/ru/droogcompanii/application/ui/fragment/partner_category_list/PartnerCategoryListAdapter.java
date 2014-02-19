@@ -6,7 +6,7 @@ import android.os.Bundle;
 import java.io.Serializable;
 import java.util.List;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerCategoriesReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.helpers.SimpleArrayAdapter;
 import ru.droogcompanii.application.util.Keys;
@@ -53,12 +53,6 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
                 });
         this.partnerCategoriesReader = partnerCategoriesReader;
         this.partnerCategories = partnerCategories;
-    }
-
-    public void updateListFromDatabase() {
-        partnerCategories.clear();
-        partnerCategories.addAll(partnerCategoriesReader.getPartnerCategories());
-        notifyDataSetChanged();
     }
 
     public void saveStateInto(Bundle outState) {

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -21,14 +21,16 @@ public class PartnerPointsReader extends BasePartnersReaderFromDatabase {
 
     private final Context context;
 
-    private int titleColumnIndex;
-    private int addressColumnIndex;
-    private int longitudeColumnIndex;
-    private int latitudeColumnIndex;
-    private int paymentMethodsColumnIndex;
-    private int phonesColumnIndex;
-    private int workingHoursColumnIndex;
-    private int partnerIdColumnIndex;
+    private static class ColumnIndices {
+        int titleColumnIndex;
+        int addressColumnIndex;
+        int longitudeColumnIndex;
+        int latitudeColumnIndex;
+        int paymentMethodsColumnIndex;
+        int phonesColumnIndex;
+        int workingHoursColumnIndex;
+        int partnerIdColumnIndex;
+    }
 
 
     public PartnerPointsReader(Context context) {
@@ -68,40 +70,42 @@ public class PartnerPointsReader extends BasePartnersReaderFromDatabase {
         return partnerPoints;
     }
 
-    private List<PartnerPoint> getPartnerPointsFromCursor(Cursor cursor) {
+    public static List<PartnerPoint> getPartnerPointsFromCursor(Cursor cursor) {
         List<PartnerPoint> partnerPoints = new ArrayList<PartnerPoint>();
-        calculateColumnIndices(cursor);
+        ColumnIndices columnIndices = calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            partnerPoints.add(getPartnerPointFromCursor(cursor));
+            partnerPoints.add(getPartnerPointFromCursor(cursor, columnIndices));
             cursor.moveToNext();
         }
         return partnerPoints;
     }
 
-    private void calculateColumnIndices(Cursor cursor) {
-        titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_TITLE);
-        addressColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_ADDRESS);
-        longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LONGITUDE);
-        latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LATITUDE);
-        paymentMethodsColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PAYMENT_METHODS);
-        phonesColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PHONES);
-        workingHoursColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_WORKING_HOURS);
-        partnerIdColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PARTNER_ID);
+    private static ColumnIndices calculateColumnIndices(Cursor cursor) {
+        ColumnIndices columnIndices = new ColumnIndices();
+        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_TITLE);
+        columnIndices.addressColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_ADDRESS);
+        columnIndices.longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LONGITUDE);
+        columnIndices.latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LATITUDE);
+        columnIndices.paymentMethodsColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PAYMENT_METHODS);
+        columnIndices.phonesColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PHONES);
+        columnIndices.workingHoursColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_WORKING_HOURS);
+        columnIndices.partnerIdColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_PARTNER_ID);
+        return columnIndices;
     }
 
-    private PartnerPointImpl getPartnerPointFromCursor(Cursor cursor) {
+    private static PartnerPointImpl getPartnerPointFromCursor(Cursor cursor, ColumnIndices columnIndices) {
         PartnerPointImpl partnerPoint = new PartnerPointImpl();
-        partnerPoint.title = cursor.getString(titleColumnIndex);
-        partnerPoint.address = cursor.getString(addressColumnIndex);
-        partnerPoint.longitude = cursor.getDouble(longitudeColumnIndex);
-        partnerPoint.latitude = cursor.getDouble(latitudeColumnIndex);
-        partnerPoint.paymentMethods = cursor.getString(paymentMethodsColumnIndex);
-        byte[] phonesBlob = cursor.getBlob(phonesColumnIndex);
+        partnerPoint.title = cursor.getString(columnIndices.titleColumnIndex);
+        partnerPoint.address = cursor.getString(columnIndices.addressColumnIndex);
+        partnerPoint.longitude = cursor.getDouble(columnIndices.longitudeColumnIndex);
+        partnerPoint.latitude = cursor.getDouble(columnIndices.latitudeColumnIndex);
+        partnerPoint.paymentMethods = cursor.getString(columnIndices.paymentMethodsColumnIndex);
+        byte[] phonesBlob = cursor.getBlob(columnIndices.phonesColumnIndex);
         partnerPoint.phones = (List<String>) SerializationUtils.deserialize(phonesBlob);
-        byte[] weekWorkingHoursBlob = cursor.getBlob(workingHoursColumnIndex);
+        byte[] weekWorkingHoursBlob = cursor.getBlob(columnIndices.workingHoursColumnIndex);
         partnerPoint.workingHours = (WeekWorkingHours) SerializationUtils.deserialize(weekWorkingHoursBlob);
-        partnerPoint.partnerId = cursor.getInt(partnerIdColumnIndex);
+        partnerPoint.partnerId = cursor.getInt(columnIndices.partnerIdColumnIndex);
         return partnerPoint;
     }
 }

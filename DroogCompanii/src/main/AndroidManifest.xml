@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.activity.start.StartActivity"
+            android:name="ru.droogcompanii.application.ui.activity.start.StartActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,58 +37,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.synchronization.SynchronizationActivity"
+            android:name="ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity"
             android:label="@string/titleOfSynchronizationActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.main_screen.MainScreen"
+            android:name="ru.droogcompanii.application.ui.activity.main_screen.MainScreen"
             android:label="" >
         </activity>
         <activity
-            android:name=".ui.activity.search.SearchActivity"
+            android:name="ru.droogcompanii.application.ui.activity.search.SearchActivity"
             android:label="@string/titleOfSearchActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.search_result_list.SearchResultListActivity"
+            android:name="ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity"
             android:icon="@android:drawable/ic_menu_search"
             android:label="" >
         </activity>
         <activity
-            android:name=".ui.activity.search_result_map.SearchResultMapActivity"
+            android:name="ru.droogcompanii.application.ui.activity.search_result_map.SearchResultMapActivity"
             android:icon="@android:drawable/ic_menu_search"
             android:label="" >
         </activity>
         <activity
-            android:name=".ui.activity.partner_details.PartnerDetailsActivity"
+            android:name="ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity"
             android:label="" >
         </activity>
         <activity
-            android:name=".ui.activity.filter.FilterActivity"
-            android:label="@string/titleOfFilterActivity"
-            android:icon="@drawable/ic_filter" >
+            android:name="ru.droogcompanii.application.ui.activity.filter.FilterActivity"
+            android:icon="@drawable/ic_filter"
+            android:label="@string/titleOfFilterActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.personal_account.PersonalAccountActivity"
-            android:label="@string/titleOfPersonalAccountActivity"
-            android:icon="@drawable/ic_personal_account" >
+            android:name="ru.droogcompanii.application.ui.activity.personal_account.PersonalAccountActivity"
+            android:icon="@drawable/ic_personal_account"
+            android:label="@string/titleOfPersonalAccountActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.offer_list.OfferListActivity"
+            android:name="ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity"
             android:icon="@drawable/ic_offers"
             android:label="@string/titleOfOfferListActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.offer_details.OfferDetailsActivity"
+            android:name="ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity"
             android:icon="@drawable/ic_offers"
             android:label="@string/titleOfOfferListActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.settings.SettingsActivity"
+            android:name="ru.droogcompanii.application.ui.activity.settings.SettingsActivity"
             android:icon="@drawable/ic_action_settings"
             android:label="@string/titleOfSettingsActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.help.HelpActivity"
+            android:name="ru.droogcompanii.application.ui.activity.help.HelpActivity"
             android:icon="@drawable/ic_action_help"
             android:label="@string/titleOfHelpActivity" >
         </activity>
@@ -99,6 +99,12 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_v2_api_key" />
+
+        <activity
+            android:name="ru.droogcompanii.application.ui.activity.login.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
 
     </application>
 

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners;
 
 import android.content.Context;
 import android.database.Cursor;

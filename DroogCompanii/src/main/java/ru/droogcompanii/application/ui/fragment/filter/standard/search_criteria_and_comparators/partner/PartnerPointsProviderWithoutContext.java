@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerPointsReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 

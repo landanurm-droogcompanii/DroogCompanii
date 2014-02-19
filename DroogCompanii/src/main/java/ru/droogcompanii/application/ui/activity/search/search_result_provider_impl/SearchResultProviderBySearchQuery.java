@@ -9,9 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerCategoriesReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;

@@ -17,12 +17,29 @@
             android:layout_gravity="center_horizontal"
             android:id="@+id/logo" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/textSizeOfFullPartnerTitle"
-            android:textStyle="bold"
-            android:id="@+id/fullPartnerTitle" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:focusable="false"
+                android:button="@drawable/selector_is_favorite_background"
+                android:id="@+id/isFavorite" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/isFavorite"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/textSizeOfFullPartnerTitle"
+                android:textStyle="bold"
+                android:id="@+id/fullPartnerTitle" />
+
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="match_parent"

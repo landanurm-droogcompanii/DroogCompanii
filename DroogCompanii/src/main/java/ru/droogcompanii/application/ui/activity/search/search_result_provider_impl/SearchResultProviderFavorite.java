@@ -5,32 +5,27 @@ import android.content.Context;
 import java.io.Serializable;
 import java.util.List;
 
+import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteDBUtils;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 
 /**
- * Created by ls on 28.01.14.
+ * Created by ls on 19.02.14.
  */
-public class SearchResultProviderByPartnerCategory implements SearchResultProvider, Serializable {
-    private final PartnerCategory partnerCategory;
-
-    public SearchResultProviderByPartnerCategory(PartnerCategory partnerCategory) {
-        this.partnerCategory = partnerCategory;
-    }
+public class SearchResultProviderFavorite implements SearchResultProvider, Serializable {
 
     @Override
     public String getTitle(Context context) {
-        return partnerCategory.getTitle();
+        return context.getString(R.string.favorite);
     }
 
     @Override
     public List<Partner> getPartners(Context context) {
-        PartnersReader reader = new PartnersReader(context);
-        return reader.getPartnersOf(partnerCategory);
+        FavoriteDBUtils favoriteDBUtils = new FavoriteDBUtils(context);
+        return favoriteDBUtils.getFavoritePartners();
     }
 
     @Override
@@ -41,7 +36,7 @@ public class SearchResultProviderByPartnerCategory implements SearchResultProvid
 
     @Override
     public List<PartnerPoint> getAllPartnerPoints(Context context) {
-        PartnerPointsReader reader = new PartnerPointsReader(context);
-        return reader.getPartnerPointsOf(partnerCategory);
+        FavoriteDBUtils favoriteDBUtils = new FavoriteDBUtils(context);
+        return favoriteDBUtils.getAllFavoritePartnerPoints();
     }
 }

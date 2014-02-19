@@ -10,6 +10,6 @@ import ru.droogcompanii.application.ui.activity.search.SearchActivity;
 class ActionOnSearch implements MenuItemHelper.Action {
     @Override
     public void run(Activity activity) {
-        SearchActivity.start(activity, SearchActivity.UsageType.SEARCH_BY_QUERY);
+        SearchActivity.start(activity);
     }
 }

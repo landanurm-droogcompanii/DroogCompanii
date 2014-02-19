@@ -1,11 +1,13 @@
 package ru.droogcompanii.application.ui.fragment.partner_points_info_panel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -15,11 +17,12 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database.PartnersReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
+import ru.droogcompanii.application.ui.helpers.FavoriteViewUtils;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.util.RouteHelper;
@@ -34,7 +37,13 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     private boolean visible;
     private int indexOfCurrentPartnerPoint;
     private List<PartnerPoint> partnerPoints;
+    private FavoriteViewUtils favoriteViewUtils;
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        favoriteViewUtils = new FavoriteViewUtils(activity);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -218,6 +227,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         setRouteButton(partnerPoint);
         setWorkingHoursIndicator(partnerPoint);
         setGoToPartnerButton(partnerPoint);
+        setIsFavorite(partnerPoint);
     }
 
     private void setText(int idOfTextView, String text) {
@@ -292,5 +302,10 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
             ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
             return partnerPoints;
         }
+    }
+
+    private void setIsFavorite(PartnerPoint partnerPoint) {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.isFavorite);
+        favoriteViewUtils.init(checkBox, partnerPoint.getPartnerId());
     }
 }

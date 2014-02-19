@@ -3,8 +3,11 @@ package ru.droogcompanii.application.ui.activity.search;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
@@ -14,10 +17,10 @@ import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helpe
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderBySearchQuery;
+import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderFavorite;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 14.01.14.
@@ -25,23 +28,9 @@ import ru.droogcompanii.application.util.Keys;
 public class SearchActivity extends ActionBarActivityWithUpButton
                 implements PartnerCategoryListFragment.Callbacks {
 
-    public static void start(Context context, String usageType) {
-        if (isUsageTypeIllegal(usageType)) {
-            throw new IllegalArgumentException("Illegal usage type: " + usageType);
-        }
+    public static void start(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
-        intent.putExtra(Keys.usageType, usageType);
         context.startActivity(intent);
-    }
-
-    private static boolean isUsageTypeIllegal(String usageType) {
-        return ((!usageType.equals(UsageType.SEARCH_BY_QUERY)) &&
-                (!usageType.equals(UsageType.CATEGORIES)));
-    }
-
-    public static class UsageType {
-        public static final String SEARCH_BY_QUERY = "SearchByQuery";
-        public static final String CATEGORIES = "Categories";
     }
 
     private EditText searchQueryInput;
@@ -53,9 +42,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
 
         searchQueryInput = (EditText) findViewById(R.id.searchQueryInputEditText);
 
-        if (savedInstanceState == null && isUsageTypeSearchByQuery()) {
-            searchQueryInput.requestFocus();
-        }
+        initFavoriteTextView();
 
         findViewById(R.id.searchByQueryButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,11 +50,22 @@ public class SearchActivity extends ActionBarActivityWithUpButton
                 onSearch();
             }
         });
+
+        findViewById(R.id.showFavorite).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onShowFavorite();
+            }
+        });
     }
 
-    private boolean isUsageTypeSearchByQuery() {
-        String usageType = getIntent().getStringExtra(Keys.usageType);
-        return usageType.equals(UsageType.SEARCH_BY_QUERY);
+    private void initFavoriteTextView() {
+        ViewGroup favoriteContainer = (ViewGroup) findViewById(R.id.favoriteContainer);
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        TextView favoriteTextView = (TextView) layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
+        favoriteTextView.setText(R.string.favorite);
+        favoriteContainer.removeAllViews();
+        favoriteContainer.addView(favoriteTextView);
     }
 
     private void onSearch() {
@@ -94,6 +92,10 @@ public class SearchActivity extends ActionBarActivityWithUpButton
 
     private void showSearchResult(SearchResultProvider searchResultProvider) {
         SearchResultListActivity.start(this, searchResultProvider);
+    }
+
+    private void onShowFavorite() {
+        showSearchResult(new SearchResultProviderFavorite());
     }
 
     @Override

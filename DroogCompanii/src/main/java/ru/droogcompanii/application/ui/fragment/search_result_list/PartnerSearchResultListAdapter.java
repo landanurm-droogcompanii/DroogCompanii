@@ -7,15 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteUtils;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
+import ru.droogcompanii.application.ui.helpers.FavoriteViewUtils;
 
 /**
  * Created by ls on 14.01.14.
@@ -24,8 +23,12 @@ public class PartnerSearchResultListAdapter extends ArrayAdapter<SearchResult<Pa
 
     private static final int ROW_LAYOUT_ID = R.layout.view_search_result_list_item;
 
+    private final FavoriteViewUtils favoriteViewUtils;
+
+
     public PartnerSearchResultListAdapter(Context context, List<SearchResult<Partner>> partners) {
         super(context, ROW_LAYOUT_ID, partners);
+        favoriteViewUtils = new FavoriteViewUtils(context);
     }
 
     @Override
@@ -39,7 +42,8 @@ public class PartnerSearchResultListAdapter extends ArrayAdapter<SearchResult<Pa
         textView.setTextColor(textColorOf(item));
         Partner partner = item.value();
         textView.setText(partner.getTitle());
-        setIsFavorite(itemView, partner);
+        CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.isFavorite);
+        favoriteViewUtils.init(checkBox, partner.getId());
         return itemView;
     }
 
@@ -59,17 +63,5 @@ public class PartnerSearchResultListAdapter extends ArrayAdapter<SearchResult<Pa
         } else {
             return R.color.textColorOfItemWhichDoesNotMeetCriteria;
         }
-    }
-
-    private void setIsFavorite(View itemView, final Partner partner) {
-        CheckBox isFavoriteCheckBox = (CheckBox) itemView.findViewById(R.id.isFavorite);
-        final FavoriteUtils favoriteUtils = new FavoriteUtils(getContext());
-        isFavoriteCheckBox.setChecked(favoriteUtils.isFavorite(partner));
-        isFavoriteCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                favoriteUtils.setFavorite(partner, checked);
-            }
-        });
     }
 }

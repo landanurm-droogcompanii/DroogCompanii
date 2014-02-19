@@ -49,4 +49,6 @@
 
     <string name="messagePhoneCopied">Номер телефона скопирован</string>
 
+    <string name="favorite">Избранное</string>
+
 </resources>

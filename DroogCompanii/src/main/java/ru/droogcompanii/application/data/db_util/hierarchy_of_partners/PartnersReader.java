@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util.hierarchy_of_partners.readers_from_database;
+package ru.droogcompanii.application.data.db_util.hierarchy_of_partners;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
+import ru.droogcompanii.application.data.db_util.CursorHandler;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerImpl;
@@ -18,10 +18,6 @@ import ru.droogcompanii.application.util.SerializationUtils;
  * Created by Leonid on 17.12.13.
  */
 public class PartnersReader extends BasePartnersReaderFromDatabase {
-
-    public static interface CursorHandler {
-        void handle(Cursor cursor);
-    }
 
     private static final PartnersContracts.PartnersContract COLUMNS = new PartnersContracts.PartnersContract();
 
@@ -42,26 +38,19 @@ public class PartnersReader extends BasePartnersReaderFromDatabase {
         super(context);
     }
 
-    public void forEachWhere(String where, CursorHandler cursorHandler) {
+    public void handleCursorByCondition(String where, CursorHandler cursorHandler) {
         String correctedWhere = ((where == null || where.isEmpty()) ? "" : where);
         String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + " " + correctedWhere + " ;";
-
-        initDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
-
-        cursorHandler.handle(cursor);
-
-        cursor.close();
-        closeDatabase();
+        handleCursorByQuery(sql, cursorHandler);
     }
 
     public List<Partner> getPartnersOf(PartnerCategory category) {
         String where = " WHERE " +
                 PartnersContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.getId();
-        return getPartners(where);
+        return getPartnersByCondition(where);
     }
 
-    private List<Partner> getPartners(String where) {
+    List<Partner> getPartnersByCondition(String where) {
         String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + where + " ;";
 
         initDatabase();
@@ -129,7 +118,7 @@ public class PartnersReader extends BasePartnersReaderFromDatabase {
     public Partner getPartnerById(int partnerId) {
         String where = " WHERE " +
                 PartnersContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerId;
-        List<Partner> partners = getPartners(where);
+        List<Partner> partners = getPartnersByCondition(where);
         if (partners.isEmpty()) {
             throw new IllegalArgumentException("There is no partners with id: " + partnerId);
         }
@@ -137,6 +126,6 @@ public class PartnersReader extends BasePartnersReaderFromDatabase {
     }
 
     public List<Partner> getAllPartners() {
-        return getPartners("");
+        return getPartnersByCondition("");
     }
 }

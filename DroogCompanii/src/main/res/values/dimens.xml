@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="space_between_category_list_and_map">8dp</dimen>
-    <dimen name="search_activity_space_between_search_panel_and_category_list">2dp</dimen>
+    <dimen name="search_activity_vertical_space_between_elements">2dp</dimen>
     <dimen name="partner_point_item_indicator_side_length">48dp</dimen>
     <dimen name="textSizeOfFilterGroupTitle">28sp</dimen>
     <dimen name="textSizeOfSortingGroupItems">18sp</dimen>

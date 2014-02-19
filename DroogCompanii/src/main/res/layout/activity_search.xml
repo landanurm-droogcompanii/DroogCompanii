@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@android:drawable/ic_menu_search"
+            android:src="@android:drawable/ic_menu_search"
             android:id="@+id/searchByQueryButton" />
 
         <EditText
@@ -31,7 +31,38 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/search_activity_space_between_search_panel_and_category_list" />
+        android:layout_height="@dimen/search_activity_vertical_space_between_elements" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@android:drawable/list_selector_background"
+        android:id="@+id/showFavorite">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_favorite" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/favoriteContainer" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_activity_vertical_space_between_elements" />
 
     <fragment
         android:name="ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment"
