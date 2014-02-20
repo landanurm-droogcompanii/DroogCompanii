@@ -1,45 +1,46 @@
 package ru.droogcompanii.application.ui.activity.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends FragmentActivity implements TaskFragmentHolder.Callbacks {
 
-    public static void startForResult(Activity activity, String loginKey) {
+    public static final String KEY_LOGIN = "login";
+    public static final String KEY_PASSWORD = "password";
+
+    private static final String TAG_TASK_FRAGMENT_HOLDER = "SignInTask";
+
+    public static void startForResult(Activity activity, String login) {
         Intent intent = new Intent(activity, LoginActivity.class);
-        intent.putExtra(EXTRA_LOGIN_KEY, loginKey);
+        intent.putExtra(EXTRA_LOGIN, login);
         activity.startActivityForResult(intent, REQUEST_CODE);
     }
 
-
     public static final int REQUEST_CODE = 6;
-    public static final String EXTRA_LOGIN_KEY = "com.example.android.authenticatordemo.extra.LOGIN_KEY";
+    public static final String EXTRA_LOGIN = "com.example.android.authenticatordemo.extra.LOGIN";
 
-    private UserLoginTask authTask = null;
-
-    private String loginKey;
+    private String login;
     private String password;
 
-
-    private EditText loginKeyView;
-    private EditText passwordView;
-    private View loginFormView;
-    private View loginStatusView;
-    private TextView loginStatusMessageView;
+    private EditText loginInput;
+    private EditText passwordInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +48,12 @@ public class LoginActivity extends Activity {
 
         setContentView(R.layout.activity_login);
 
-        loginKey = getIntent().getStringExtra(EXTRA_LOGIN_KEY);
-        loginKeyView = (EditText) findViewById(R.id.loginKey);
-        loginKeyView.setText(loginKey);
+        login = getIntent().getStringExtra(EXTRA_LOGIN);
+        loginInput = (EditText) findViewById(R.id.login);
+        loginInput.setText(login);
 
-        passwordView = (EditText) findViewById(R.id.password);
-        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        passwordInput = (EditText) findViewById(R.id.password);
+        passwordInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -62,10 +63,6 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
-
-        loginFormView = findViewById(R.id.login_form);
-        loginStatusView = findViewById(R.id.login_status);
-        loginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,105 +81,72 @@ public class LoginActivity extends Activity {
     }
 
     public void attemptLogin() {
-        if (authTask != null) {
-            return;
-        }
 
-        loginKeyView.setError(null);
-        passwordView.setError(null);
+        loginInput.setError(null);
+        passwordInput.setError(null);
 
-        loginKey = loginKeyView.getText().toString();
-        password = passwordView.getText().toString();
+        login = loginInput.getText().toString();
+        password = passwordInput.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        CheckResult checkResult = PasswordChecker.check(password);
-        if (!checkResult.isSuccessful) {
-            passwordView.setError(getString(checkResult.errorDescriptionTextId));
-            focusView = passwordView;
-            cancel = true;
-        }
-
-        checkResult = LoginChecker.check(loginKey);
-        if (!checkResult.isSuccessful) {
-            loginKeyView.setError(getString(checkResult.errorDescriptionTextId));
-            focusView = loginKeyView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
+        if (TextUtils.isEmpty(login)) {
+            onFieldRequired(loginInput);
+        } else if (TextUtils.isEmpty(password)) {
+            onFieldRequired(passwordInput);
         } else {
-            loginStatusMessageView.setText(R.string.login_progress_signing_in);
-            showProgress(true);
-            authTask = new UserLoginTask();
-            authTask.execute((Void) null);
+            signIn();
         }
     }
 
+    private void signIn() {
+        startSignInTask();
+    }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    private void startSignInTask() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment taskFragment = new SignInTaskFragmentHolder();
+        taskFragment.setArguments(prepareArguments(login, password));
+        transaction.add(R.id.taskFragmentContainer, taskFragment, TAG_TASK_FRAGMENT_HOLDER);
+        transaction.commit();
+    }
 
-            loginStatusView.setVisibility(View.VISIBLE);
-            loginStatusView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 1 : 0)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            loginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-                        }
-                    });
+    private static Bundle prepareArguments(String login, String password) {
+        Bundle args = new Bundle();
+        args.putString(KEY_LOGIN, login);
+        args.putString(KEY_PASSWORD, password);
+        return args;
+    }
 
-            loginFormView.setVisibility(View.VISIBLE);
-            loginFormView.animate()
-                    .setDuration(shortAnimTime)
-                    .alpha(show ? 0 : 1)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                        }
-                    });
+    private void onFieldRequired(EditText fieldInput) {
+        fieldInput.setError(getString(R.string.error_field_required));
+        fieldInput.requestFocus();
+    }
+
+    @Override
+    public void onTaskFinished(int resultCode, Serializable result) {
+        if (resultCode == RESULT_CANCELED) {
+            onAuthenticationCancelled();
+        } else if (resultCode == RESULT_OK) {
+            onAuthenticationCompleted((AuthenticationResult) result);
+        }
+    }
+
+    private void onAuthenticationCancelled() {
+        // do nothing
+    }
+
+    private void onAuthenticationCompleted(AuthenticationResult result) {
+        if (result.isSuccessful()) {
+            onVerificationCompletedSuccessfully(result);
         } else {
-            loginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-            loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            onVerificationFailed(result);
         }
     }
 
-
-    public class UserLoginTask extends AsyncTask<Void, Void, VerificationResult> {
-        @Override
-        protected VerificationResult doInBackground(Void... params) {
-            PasswordVerifier passwordVerifier = new PasswordVerifier();
-            return passwordVerifier.verify(loginKey, password);
-        }
-
-        @Override
-        protected void onPostExecute(VerificationResult result) {
-            authTask = null;
-            showProgress(false);
-
-            if (result.isSuccessful) {
-                onVerificationIsSuccessful();
-            } else {
-                passwordView.setError(getString(result.errorDescriptionTextId));
-                passwordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            authTask = null;
-            showProgress(false);
-        }
+    private void onVerificationFailed(AuthenticationResult result) {
+        Toast.makeText(this, "Verification Failed", Toast.LENGTH_LONG).show();
     }
 
-    private void onVerificationIsSuccessful() {
+    private void onVerificationCompletedSuccessfully(AuthenticationResult result) {
         setResult(RESULT_OK);
         finish();
     }

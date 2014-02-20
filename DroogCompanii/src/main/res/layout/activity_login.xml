@@ -1,40 +1,22 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ru.droogcompanii.application.ui.activity.login.LoginActivity">
+    tools:context="ru.droogcompanii.application.ui.activity.login.LoginActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!-- Login progress -->
-    <LinearLayout android:id="@+id/login_status"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-        <ProgressBar style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
-        <TextView
-            android:id="@+id/login_status_message"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:fontFamily="sans-serif-light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/login_progress_signing_in" />
-    </LinearLayout>
-
-    <!-- Login form -->
-    <ScrollView
-        android:id="@+id/login_form"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout style="@style/LoginFormContainer"
-            android:orientation="vertical">
+        <LinearLayout
+            style="@style/LoginFormContainer"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
             <EditText
-                android:id="@+id/loginKey"
+                android:id="@+id/login"
                 android:singleLine="true"
                 android:maxLines="1"
                 android:layout_width="match_parent"
@@ -54,7 +36,8 @@
                 android:imeActionId="@+id/login"
                 android:imeOptions="actionUnspecified" />
 
-            <Button android:id="@+id/sign_in_button"
+            <Button
+                android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -65,5 +48,11 @@
 
         </LinearLayout>
 
-    </ScrollView>
-</merge>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/taskFragmentContainer" />
+
+    </RelativeLayout>
+
+</ScrollView>
