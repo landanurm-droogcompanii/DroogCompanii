@@ -2,7 +2,7 @@ package ru.droogcompanii.application.data.offers;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 public class OfferImpl implements Offer, Serializable {
@@ -77,7 +77,7 @@ public class OfferImpl implements Offer, Serializable {
 
     @Override
     public String toString() {
-        return ConvertorToString.buildFor(this)
+        return ConverterToString.buildFor(this)
             .withFieldNames(
                     "id", "partnerId", "duration", "shortDescription", "fullDescription", "imageUrl", "isSpecial()"
             )

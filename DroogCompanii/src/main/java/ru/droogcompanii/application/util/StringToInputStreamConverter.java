@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by ls on 07.02.14.
  */
-public class StringToInputStreamConvertor {
+public class StringToInputStreamConverter {
 
     public static InputStream convert(String str) {
         try {

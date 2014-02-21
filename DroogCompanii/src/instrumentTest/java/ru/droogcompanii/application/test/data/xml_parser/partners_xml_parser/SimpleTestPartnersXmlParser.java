@@ -19,7 +19,7 @@ import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAnd
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnBusinessDay;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
 import ru.droogcompanii.application.data.xml_parser.partners_xml_parser.PartnersXmlParser;
-import ru.droogcompanii.application.util.StringToInputStreamConvertor;
+import ru.droogcompanii.application.util.StringToInputStreamConverter;
 
 import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.Attributes;
 import static ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.DayOfWeek;
@@ -103,7 +103,7 @@ public class SimpleTestPartnersXmlParser extends TestCase {
         weekWorkingHoursOfPartnerPoint = new WeekWorkingHours(workingHoursForEachDayOfWeek);
 
         String xmlText = prepareXml();
-        xml = StringToInputStreamConvertor.convert(xmlText);
+        xml = StringToInputStreamConverter.convert(xmlText);
     }
 
     private String prepareXml() {

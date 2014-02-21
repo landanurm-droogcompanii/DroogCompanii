@@ -2,7 +2,7 @@ package ru.droogcompanii.application.data.hierarchy_of_partners;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -39,7 +39,7 @@ public class PartnerCategoryImpl implements PartnerCategory, Serializable {
 
     @Override
     public String toString() {
-        return ConvertorToString.buildFor(this)
+        return ConverterToString.buildFor(this)
                 .withFieldNames("id", "title")
                 .withFieldValues(id, title)
                 .toString();

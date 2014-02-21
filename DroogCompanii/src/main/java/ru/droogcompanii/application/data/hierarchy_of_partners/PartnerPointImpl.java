@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
-import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -100,7 +100,7 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
 
     @Override
     public String toString() {
-        return ConvertorToString.buildFor(this)
+        return ConverterToString.buildFor(this)
             .withFieldNames(
                 "title", "address", "phones", "workingHours", "paymentMethods", "longitude", "latitude", "partnerId"
             )

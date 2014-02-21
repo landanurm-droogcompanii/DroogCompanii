@@ -2,39 +2,74 @@ package ru.droogcompanii.application.ui.activity.personal_account;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v4.app.FragmentTransaction;
 
+import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.ui.activity.login.AuthenticationToken;
 import ru.droogcompanii.application.ui.activity.login.LoginActivity;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.fragment.login.LoginFragment;
+import ru.droogcompanii.application.ui.fragment.personal_details.PersonalDetailsFragment;
 
 /**
  * Created by ls on 31.01.14.
  */
-public class PersonalAccountActivity extends ActionBarActivityWithUpButton {
+public class PersonalAccountActivity extends ActivityAbleToStartTask {
+
+    private static final int REQUEST_CODE_LOGIN = 141;
+
+    public static interface Callbacks extends TaskResultReceiver {
+        void onTokenReceived(AuthenticationToken token);
+    }
+
+    private static final String TAG_FRAGMENT = "TAG_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginActivity.startForResult(this, "");
+        setContentView(R.layout.activity_personal_details);
+
+        if (savedInstanceState == null) {
+            placePersonalDetailsFragmentOnLayout();
+        }
+    }
+
+    private void placePersonalDetailsFragmentOnLayout() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        PersonalDetailsFragment fragment = new PersonalDetailsFragment();
+        transaction.add(R.id.containerOfFragment, fragment, TAG_FRAGMENT);
+        transaction.commit();
+    }
+
+    @Override
+    protected String getTagOfTaskResultReceiverFragment() {
+        return TAG_FRAGMENT;
+    }
+
+    public void requestToken() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_LOGIN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LoginActivity.REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                onLoginSuccessfully(data);
-            } else {
-                onCancelLogin();
-            }
+        if (requestCode == REQUEST_CODE_LOGIN) {
+            onReturningFromLoginActivity(resultCode, data);
         }
     }
 
-    private void onLoginSuccessfully(Intent data) {
-        Toast.makeText(this, "Login successfully", Toast.LENGTH_SHORT).show();
+    private void onReturningFromLoginActivity(int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            finish();
+            return;
+        }
+        AuthenticationToken token = (AuthenticationToken) data.getSerializableExtra(LoginFragment.KEY_TOKEN);
+        getCallbacks().onTokenReceived(token);
     }
 
-    private void onCancelLogin() {
-        finish();
+    private Callbacks getCallbacks() {
+        return (Callbacks) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
     }
 }

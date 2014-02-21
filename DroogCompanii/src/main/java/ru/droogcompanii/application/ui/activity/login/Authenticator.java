@@ -18,6 +18,6 @@ public class Authenticator {
 
     public AuthenticationResult authenticate() {
         // TODO
-        return AuthenticationResult.createDummyResult();
+        return AuthenticationResult.successful(new AuthenticationToken());
     }
 }

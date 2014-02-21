@@ -22,13 +22,13 @@ public class TaskFragment extends DialogFragment {
     public static final Integer NO_TITLE_ID = null;
 
     private boolean resultReturned;
-    private Task task;
+    private TaskNotBeInterrupted task;
 
     private int resultCode = Activity.RESULT_CANCELED;
     private Serializable result = null;
     private Integer titleId;
 
-    public void setTask(Task task) {
+    public void setTask(TaskNotBeInterrupted task) {
         task.setFragment(this);
         this.task = task;
     }

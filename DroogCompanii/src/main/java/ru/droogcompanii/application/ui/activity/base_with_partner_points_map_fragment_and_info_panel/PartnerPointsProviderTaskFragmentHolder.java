@@ -1,7 +1,7 @@
 package ru.droogcompanii.application.ui.activity.base_with_partner_points_map_fragment_and_info_panel;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 
@@ -16,7 +16,7 @@ public class PartnerPointsProviderTaskFragmentHolder extends TaskFragmentHolder 
     }
 
     @Override
-    protected Task prepareTask() {
+    protected TaskNotBeInterrupted prepareTask() {
         BaseActivityWithPartnerPointsMapFragmentAndInfoPanel activity =
                 (BaseActivityWithPartnerPointsMapFragmentAndInfoPanel) getActivity();
         PartnerPointsProvider partnerPointsProvider = activity.getPartnerPointsProvider();

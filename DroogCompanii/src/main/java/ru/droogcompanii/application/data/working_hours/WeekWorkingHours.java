@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
-import ru.droogcompanii.application.data.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertor;
-import ru.droogcompanii.application.data.working_hours.day_of_week_to_string_convertor.DayOfWeekToStringConvertorProvider;
+import ru.droogcompanii.application.data.working_hours.day_of_week_to_string_converter.DayOfWeekToStringConverter;
+import ru.droogcompanii.application.data.working_hours.day_of_week_to_string_converter.DayOfWeekToStringConverterProvider;
 import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
@@ -66,11 +66,11 @@ public class WeekWorkingHours implements Serializable {
 
     @Override
     public String toString() {
-        DayOfWeekToStringConvertor dayOfWeekToStringConvertor =
-                DayOfWeekToStringConvertorProvider.getCurrentConvertor();
+        DayOfWeekToStringConverter dayOfWeekToStringConverter =
+                DayOfWeekToStringConverterProvider.getCurrentConverter();
         List<String> lines = new ArrayList<String>();
         for (int dayOfWeek : DateTimeConstants.getDaysOfWeek()) {
-            String nameOfDay = dayOfWeekToStringConvertor.dayOfWeekToString(dayOfWeek);
+            String nameOfDay = dayOfWeekToStringConverter.dayOfWeekToString(dayOfWeek);
             WorkingHours workingHoursOfDay = workingHoursForDaysOfWeek.get(dayOfWeek);
             String line = nameOfDay + SEPARATOR_BETWEEN_DAY_AND_WORKING_HOURS + workingHoursOfDay;
             lines.add(line);

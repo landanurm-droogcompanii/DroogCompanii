@@ -78,7 +78,7 @@ public abstract class TaskFragmentHolder extends Fragment {
     }
 
     protected abstract Integer getTaskDialogTitleId();
-    protected abstract Task prepareTask();
+    protected abstract TaskNotBeInterrupted prepareTask();
 
     private void startFragment(TaskFragment taskFragment) {
         fragmentManager.beginTransaction().add(taskFragment, TAG_TASK_FRAGMENT).commit();

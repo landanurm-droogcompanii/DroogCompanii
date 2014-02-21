@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -73,7 +73,7 @@ public class PartnerImpl implements Partner, Serializable {
 
     @Override
     public String toString() {
-        return ConvertorToString.buildFor(this)
+        return ConverterToString.buildFor(this)
             .withFieldNames("id", "title",
                     "fullTitle", "discountSize",
                     "discountType", "imageUrl",

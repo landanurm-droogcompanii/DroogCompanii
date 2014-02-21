@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import ru.droogcompanii.application.util.CalendarUtils;
-import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.ConverterToString;
 
 public class CalendarRange implements Serializable {
 
@@ -53,7 +53,7 @@ public class CalendarRange implements Serializable {
 
     @Override
     public String toString() {
-        return ConvertorToString.buildFor(this)
+        return ConverterToString.buildFor(this)
                 .withFieldNames("from", "to")
                 .withFieldValues(CalendarUtils.convertToString(from), CalendarUtils.convertToString(to))
                 .toString();

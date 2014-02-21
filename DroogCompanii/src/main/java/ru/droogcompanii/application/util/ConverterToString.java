@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Leonid on 09.02.14.
  */
-public class ConvertorToString {
+public class ConverterToString {
     private static final String SEPARATOR_BETWEEN_FIELD_NAME_AND_VALUE = "=";
     private static final String SEPARATOR_BETWEEN_FIELDS = ", ";
     private static final String OPEN_FIELDS = "( ";
@@ -16,20 +16,20 @@ public class ConvertorToString {
     private String[] fieldNames;
     private Object[] fieldValues;
 
-    public static ConvertorToString buildFor(Object someObject) {
-        return new ConvertorToString(someObject.getClass().getName());
+    public static ConverterToString buildFor(Object someObject) {
+        return new ConverterToString(someObject.getClass().getName());
     }
 
-    private ConvertorToString(String className) {
+    private ConverterToString(String className) {
         this.className = className;
     }
 
-    public ConvertorToString withFieldNames(String... fieldNames) {
+    public ConverterToString withFieldNames(String... fieldNames) {
         this.fieldNames = fieldNames;
         return this;
     }
 
-    public ConvertorToString withFieldValues(Object... fields) {
+    public ConverterToString withFieldValues(Object... fields) {
         this.fieldValues = fields;
         return this;
     }

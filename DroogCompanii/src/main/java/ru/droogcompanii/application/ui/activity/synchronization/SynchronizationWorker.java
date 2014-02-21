@@ -13,7 +13,7 @@ import ru.droogcompanii.application.data.DataUpdater;
 import ru.droogcompanii.application.util.DataUrlProvider;
 import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.StringConstants;
-import ru.droogcompanii.application.util.StringToInputStreamConvertor;
+import ru.droogcompanii.application.util.StringToInputStreamConverter;
 
 /**
  * Created by ls on 17.02.14.
@@ -41,9 +41,9 @@ public class SynchronizationWorker {
         return new DataUpdater.XmlProvider() {
             @Override
             public InputStream getXml() throws Exception {
-                return StringToInputStreamConvertor.convert(
-                        "<"  + StringConstants.PartnersXmlConstants.Tags.partnerCategories + ">\n" +
-                        "</" + StringConstants.PartnersXmlConstants.Tags.partnerCategories + ">"
+                return StringToInputStreamConverter.convert(
+                        "<" + StringConstants.PartnersXmlConstants.Tags.partnerCategories + ">\n" +
+                                "</" + StringConstants.PartnersXmlConstants.Tags.partnerCategories + ">"
                 );
             }
         };

@@ -19,7 +19,7 @@ import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProviderFromPartner;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.ui.helpers.FavoriteViewUtils;
+import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
 import ru.droogcompanii.application.util.ImageDownloader;
 import ru.droogcompanii.application.util.RouteHelper;
 import ru.droogcompanii.application.util.caller_helper.CallerHelper;
@@ -36,7 +36,7 @@ public class PartnerDetailsViewHelper {
     private final CallerHelper callerHelper;
     private final ContactsViewMaker contactsViewMaker;
     private final Context context;
-    private final FavoriteViewUtils favoriteViewUtils;
+    private final IsFavoriteViewUtils isFavoriteViewUtils;
     private final ImageDownloader imageDownloader;
     private final RouteHelper routeHelper;
     private final ViewMaker viewMaker;
@@ -54,7 +54,7 @@ public class PartnerDetailsViewHelper {
         workingHoursViewMaker = new WorkingHoursViewMaker(activity);
         callerHelper = new CallerHelper(activity);
         routeHelper = new RouteHelper(activity);
-        favoriteViewUtils = new FavoriteViewUtils(activity);
+        isFavoriteViewUtils = new IsFavoriteViewUtils(activity);
         viewMaker = new ViewMaker() {
             @Override
             public View make() {
@@ -182,7 +182,7 @@ public class PartnerDetailsViewHelper {
 
     private void setIsFavorite() {
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.isFavorite);
-        favoriteViewUtils.init(checkBox, partner.getId());
+        isFavoriteViewUtils.init(checkBox, partner.getId());
     }
 
 }

@@ -29,7 +29,7 @@
     <string name="action_menu">Меню</string>
     <string name="action_go_to_map">На карту</string>
 
-    <string name="titleOfClosestPartnerPoints">Ближайшие партнеры</string>
+    <string name="titleOfAllPartnerPoints">Все партнеры</string>
 
     <string name="labelOfGoToPartnerButton">Перейти к партнеру</string>
 
@@ -50,5 +50,8 @@
     <string name="messagePhoneCopied">Номер телефона скопирован</string>
 
     <string name="favorite">Избранное</string>
+
+    <string name="firstName">Имя</string>
+    <string name="lastName">Фамилия</string>
 
 </resources>

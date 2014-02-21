@@ -15,29 +15,29 @@ import java.util.List;
  */
 public class SimpleArrayAdapter<T> extends ArrayAdapter<T> {
 
-    public static interface ItemToTitleConvertor<T> {
+    public static interface ItemToTitleConverter<T> {
         String getTitle(T item);
     }
 
-    public static interface ItemToTitleIdConvertor<T> {
+    public static interface ItemToTitleIdConverter<T> {
         int getTitleId(T item);
     }
 
-    private final ItemToTitleConvertor<T> itemToTitleConvertor;
+    private final ItemToTitleConverter<T> itemToTitleConverter;
 
     public SimpleArrayAdapter(Context context, List<T> items,
-                              ItemToTitleConvertor<T> itemToTitleConvertor) {
+                              ItemToTitleConverter<T> itemToTitleConverter) {
         super(context, android.R.layout.simple_list_item_1, items);
-        this.itemToTitleConvertor = itemToTitleConvertor;
+        this.itemToTitleConverter = itemToTitleConverter;
     }
 
     public SimpleArrayAdapter(final Context context, List<T> items,
-                              final ItemToTitleIdConvertor<T> itemToTitleIdConvertor) {
-        this(context, items, new ItemToTitleConvertor<T>() {
+                              final ItemToTitleIdConverter<T> itemToTitleIdConverter) {
+        this(context, items, new ItemToTitleConverter<T>() {
             @Override
             public String getTitle(T item) {
                 Resources res = context.getResources();
-                int titleId = itemToTitleIdConvertor.getTitleId(item);
+                int titleId = itemToTitleIdConverter.getTitleId(item);
                 return res.getString(titleId);
             }
         });
@@ -58,7 +58,7 @@ public class SimpleArrayAdapter<T> extends ArrayAdapter<T> {
     private void initItemViewByPosition(View itemView, int position) {
         T item = getItem(position);
         if (item != null) {
-            setTitle(itemView, itemToTitleConvertor.getTitle(item));
+            setTitle(itemView, itemToTitleConverter.getTitle(item));
         } else {
             setTitle(itemView, "");
         }

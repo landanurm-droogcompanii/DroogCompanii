@@ -21,7 +21,7 @@ import ru.droogcompanii.application.ui.fragment.filter.Filter;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point.PartnerPointSearchClosestPointsCriterion;
 import ru.droogcompanii.application.util.ApiVersionUtils;
-import ru.droogcompanii.application.util.ConvertorToString;
+import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.location_provider.SettingBaseLocationProvider;
 
 /**
@@ -61,9 +61,11 @@ class SearchClosestPointsFilter implements Filter, Serializable {
     );
 
     private static final String KEY_ID_OF_DISTANCE_OPTION = "IdOfDistanceOption";
-    private static final int DEFAULT_ID_OF_DISTANCE_OPTION = R.id.distanceOption_NoNeedToSearch;
+
+    private static final int DEFAULT_ID_OF_DISTANCE_OPTION = DISTANCE_OPTIONS.get(0).id;
 
     private int idOfDistanceOption;
+
 
     public SearchClosestPointsFilter() {
         idOfDistanceOption = DEFAULT_ID_OF_DISTANCE_OPTION;
@@ -194,7 +196,7 @@ class SearchClosestPointsFilter implements Filter, Serializable {
 
     @Override
     public String toString() {
-        return ConvertorToString.buildFor(this)
+        return ConverterToString.buildFor(this)
                 .withFieldNames("idOfDistanceOption")
                 .withFieldValues(idOfDistanceOption)
                 .toString();

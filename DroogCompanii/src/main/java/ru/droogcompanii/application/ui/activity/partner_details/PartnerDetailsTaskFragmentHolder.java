@@ -3,7 +3,7 @@ package ru.droogcompanii.application.ui.activity.partner_details;
 import android.app.Activity;
 import android.os.Bundle;
 
-import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 
@@ -28,7 +28,7 @@ public class PartnerDetailsTaskFragmentHolder extends TaskFragmentHolder {
     }
 
     @Override
-    protected Task prepareTask() {
+    protected TaskNotBeInterrupted prepareTask() {
         return new PartnerDetailsTask(provider, getActivity());
     }
 }

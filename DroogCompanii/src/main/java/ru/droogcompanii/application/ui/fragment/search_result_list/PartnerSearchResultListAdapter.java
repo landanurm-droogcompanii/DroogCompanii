@@ -14,7 +14,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.helpers.FavoriteViewUtils;
+import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
 
 /**
  * Created by ls on 14.01.14.
@@ -23,12 +23,12 @@ public class PartnerSearchResultListAdapter extends ArrayAdapter<SearchResult<Pa
 
     private static final int ROW_LAYOUT_ID = R.layout.view_search_result_list_item;
 
-    private final FavoriteViewUtils favoriteViewUtils;
+    private final IsFavoriteViewUtils isFavoriteViewUtils;
 
 
     public PartnerSearchResultListAdapter(Context context, List<SearchResult<Partner>> partners) {
         super(context, ROW_LAYOUT_ID, partners);
-        favoriteViewUtils = new FavoriteViewUtils(context);
+        isFavoriteViewUtils = new IsFavoriteViewUtils(context);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PartnerSearchResultListAdapter extends ArrayAdapter<SearchResult<Pa
         Partner partner = item.value();
         textView.setText(partner.getTitle());
         CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.isFavorite);
-        favoriteViewUtils.init(checkBox, partner.getId());
+        isFavoriteViewUtils.init(checkBox, partner.getId());
         return itemView;
     }
 

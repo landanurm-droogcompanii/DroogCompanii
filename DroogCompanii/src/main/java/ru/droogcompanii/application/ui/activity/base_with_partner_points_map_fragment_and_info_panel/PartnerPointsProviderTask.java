@@ -5,13 +5,13 @@ import android.content.Context;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Snorlax;
 
 /**
  * Created by ls on 30.01.14.
  */
-public class PartnerPointsProviderTask extends Task {
+public class PartnerPointsProviderTask extends TaskNotBeInterrupted {
     private final Context context;
     private final PartnerPointsProvider partnerPointsProvider;
 

@@ -7,13 +7,13 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Snorlax;
 
 /**
  * Created by ls on 13.02.14.
  */
-public class PartnerDetailsTask extends Task {
+public class PartnerDetailsTask extends TaskNotBeInterrupted {
 
     public static class Result implements Serializable {
         public Partner partner;

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.working_hours.day_of_week_to_string_convertor;
+package ru.droogcompanii.application.data.working_hours.day_of_week_to_string_converter;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -7,17 +7,17 @@ import java.util.Map;
 /**
  * Created by Leonid on 19.12.13.
  */
-public class DayOfWeekToStringConvertorProvider {
+public class DayOfWeekToStringConverterProvider {
 
-    private static DayOfWeekToStringConvertor currentConvertor = new SimpleDayOfWeekToStringConvertor();
+    private static DayOfWeekToStringConverter currentConverter = new SimpleDayOfWeekToStringConverter();
 
-    public static DayOfWeekToStringConvertor getCurrentConvertor() {
-        return currentConvertor;
+    public static DayOfWeekToStringConverter getCurrentConverter() {
+        return currentConverter;
     }
 
 }
 
-class SimpleDayOfWeekToStringConvertor implements DayOfWeekToStringConvertor {
+class SimpleDayOfWeekToStringConverter implements DayOfWeekToStringConverter {
 
     private static final Map<Integer, String> abbreviatedEnglishNames = prepareAbbreviatedEnglishNames();
 

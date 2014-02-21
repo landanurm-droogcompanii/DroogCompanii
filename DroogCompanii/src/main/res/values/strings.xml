@@ -41,7 +41,7 @@
     <string name="titleOfSynchronizationActivity">@string/menu_item_synchronization</string>
     <string name="titleOfHelpActivity">@string/menu_item_help</string>
 
-    <string name="titleOfClosestPartnerPoints">Closest partners</string>
+    <string name="titleOfAllPartnerPoints">All partners</string>
 
     <string name="labelOfGoToPartnerButton">Go to partner</string>
 
@@ -63,6 +63,9 @@
 
     <string name="messagePhoneCopied">Phone number copied</string>
     <string name="favorite">Favorite</string>
+
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
 
 
 </resources>

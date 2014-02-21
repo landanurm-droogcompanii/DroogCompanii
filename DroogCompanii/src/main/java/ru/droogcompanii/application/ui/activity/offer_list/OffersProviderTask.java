@@ -5,12 +5,12 @@ import android.content.Context;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
-import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 10.02.14.
  */
-public class OffersProviderTask extends Task {
+public class OffersProviderTask extends TaskNotBeInterrupted {
 
     private final Context context;
     private final OffersProvider offersProvider;

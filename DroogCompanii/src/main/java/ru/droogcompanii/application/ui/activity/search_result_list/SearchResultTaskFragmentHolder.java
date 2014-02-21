@@ -5,7 +5,7 @@ import android.os.Bundle;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
-import ru.droogcompanii.application.ui.helpers.task.Task;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.util.Keys;
@@ -43,7 +43,7 @@ public class SearchResultTaskFragmentHolder extends TaskFragmentHolder {
     }
 
     @Override
-    protected Task prepareTask() {
+    protected TaskNotBeInterrupted prepareTask() {
         return new SearchResultExtractorTask(searchResultProvider, getActivity());
     }
 }

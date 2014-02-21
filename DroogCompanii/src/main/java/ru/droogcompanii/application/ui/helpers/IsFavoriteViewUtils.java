@@ -9,10 +9,10 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteD
 /**
  * Created by ls on 19.02.14.
  */
-public class FavoriteViewUtils {
+public class IsFavoriteViewUtils {
     private final FavoriteDBUtils favoriteDBUtils;
 
-    public FavoriteViewUtils(Context context) {
+    public IsFavoriteViewUtils(Context context) {
         favoriteDBUtils = new FavoriteDBUtils(context);
     }
 

@@ -22,7 +22,7 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersR
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.ui.helpers.FavoriteViewUtils;
+import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.util.RouteHelper;
@@ -37,12 +37,12 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     private boolean visible;
     private int indexOfCurrentPartnerPoint;
     private List<PartnerPoint> partnerPoints;
-    private FavoriteViewUtils favoriteViewUtils;
+    private IsFavoriteViewUtils isFavoriteViewUtils;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        favoriteViewUtils = new FavoriteViewUtils(activity);
+        isFavoriteViewUtils = new IsFavoriteViewUtils(activity);
     }
 
     @Override
@@ -90,6 +90,14 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
             show();
         } else {
             hide();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (visible) {
+            updateIsFavorite();
         }
     }
 
@@ -219,15 +227,23 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void updatePartnerPointInfo() {
-        final PartnerPoint partnerPoint = partnerPoints.get(indexOfCurrentPartnerPoint);
-        setText(R.id.titleTextView, partnerPoint.getTitle());
-        setText(R.id.addressTextView, partnerPoint.getAddress());
-        setText(R.id.paymentMethodsTextView, partnerPoint.getPaymentMethods());
-        setPhones(partnerPoint);
-        setRouteButton(partnerPoint);
-        setWorkingHoursIndicator(partnerPoint);
-        setGoToPartnerButton(partnerPoint);
-        setIsFavorite(partnerPoint);
+        updateTextInfo();
+        updatePhones();
+        updateRouteButton();
+        updateWorkingHoursIndicator();
+        updateGoToPartnerButton();
+        updateIsFavorite();
+    }
+
+    private void updateTextInfo() {
+        PartnerPoint currentPartnerPoint = getCurrentPartnerPoint();
+        setText(R.id.titleTextView, currentPartnerPoint.getTitle());
+        setText(R.id.addressTextView, currentPartnerPoint.getAddress());
+        setText(R.id.paymentMethodsTextView, currentPartnerPoint.getPaymentMethods());
+    }
+
+    private PartnerPoint getCurrentPartnerPoint() {
+        return partnerPoints.get(indexOfCurrentPartnerPoint);
     }
 
     private void setText(int idOfTextView, String text) {
@@ -235,25 +251,25 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         textView.setText(text);
     }
 
-    private void setPhones(final PartnerPoint partnerPoint) {
+    private void updatePhones() {
         View phoneButton = findViewById(R.id.phoneButton);
         CallerHelper callerHelper = new CallerHelper(getActivity());
-        callerHelper.initPhoneButton(phoneButton, partnerPoint);
+        callerHelper.initPhoneButton(phoneButton, getCurrentPartnerPoint());
     }
 
-    private void setRouteButton(final PartnerPoint partnerPoint) {
+    private void updateRouteButton() {
         final RouteHelper routeHelper = new RouteHelper(getActivity());
         findViewById(R.id.routeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                routeHelper.showRouteTo(partnerPoint);
+                routeHelper.showRouteTo(getCurrentPartnerPoint());
             }
         });
     }
 
-    private void setWorkingHoursIndicator(PartnerPoint partnerPoint) {
+    private void updateWorkingHoursIndicator() {
         View indicator = findViewById(R.id.workingHoursIndicator);
-        WorkingHoursIndicatorUpdater.update(indicator, isOpened(partnerPoint));
+        WorkingHoursIndicatorUpdater.update(indicator, isOpened(getCurrentPartnerPoint()));
     }
 
     private static boolean isOpened(PartnerPoint partnerPoint) {
@@ -265,11 +281,11 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         return partnerPoint.getWorkingHours().includes(now);
     }
 
-    private void setGoToPartnerButton(final PartnerPoint partnerPoint) {
+    private void updateGoToPartnerButton() {
         findViewById(R.id.goToPartnerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToPartnerOf(partnerPoint);
+                goToPartnerOf(getCurrentPartnerPoint());
             }
         });
     }
@@ -304,8 +320,8 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         }
     }
 
-    private void setIsFavorite(PartnerPoint partnerPoint) {
+    private void updateIsFavorite() {
         CheckBox checkBox = (CheckBox) findViewById(R.id.isFavorite);
-        favoriteViewUtils.init(checkBox, partnerPoint.getPartnerId());
+        isFavoriteViewUtils.init(checkBox, getCurrentPartnerPoint().getPartnerId());
     }
 }

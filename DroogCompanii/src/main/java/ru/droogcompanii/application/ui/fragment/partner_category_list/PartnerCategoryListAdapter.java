@@ -45,7 +45,7 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
                                        PartnerCategoriesReader partnerCategoriesReader,
                                        List<PartnerCategory> partnerCategories) {
         super(context, partnerCategories,
-                new ItemToTitleConvertor<PartnerCategory>() {
+                new ItemToTitleConverter<PartnerCategory>() {
                     @Override
                     public String getTitle(PartnerCategory item) {
                         return item.getTitle();

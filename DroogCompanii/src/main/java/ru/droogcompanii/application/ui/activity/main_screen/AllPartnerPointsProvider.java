@@ -16,7 +16,7 @@ class AllPartnerPointsProvider implements PartnerPointsProvider {
 
     @Override
     public String getTitle(Context context) {
-        return context.getString(R.string.titleOfClosestPartnerPoints);
+        return context.getString(R.string.titleOfAllPartnerPoints);
     }
 
     @Override

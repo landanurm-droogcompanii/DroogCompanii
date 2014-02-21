@@ -8,7 +8,7 @@ import java.util.List;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.xml_parser.offers_xml_parser.OffersXmlParser;
 import ru.droogcompanii.application.util.DummyOfferUtils;
-import ru.droogcompanii.application.util.StringToInputStreamConvertor;
+import ru.droogcompanii.application.util.StringToInputStreamConverter;
 
 /**
  * Created by ls on 07.02.14.
@@ -17,7 +17,7 @@ public class SimpleTestOffersXmlParser extends TestCase {
 
     public void testParsing() {
         DummyOfferUtils dummyOfferUtils = new DummyOfferUtils(5);
-        InputStream inputStream = StringToInputStreamConvertor.convert(dummyOfferUtils.getXmlText());
+        InputStream inputStream = StringToInputStreamConverter.convert(dummyOfferUtils.getXmlText());
         OffersXmlParser parser = new OffersXmlParser();
         List<Offer> parsed = null;
         try {

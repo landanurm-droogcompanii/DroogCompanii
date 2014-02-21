@@ -30,4 +30,6 @@
     <dimen name="sizeOfDistanceOptionRadioButton">24sp</dimen>
     <dimen name="dividerPaddingOfDistanceOptionRadioGroup">2dp</dimen>
 
+    <dimen name="spaceBetweenNameLabelAndName">5dp</dimen>
+
 </resources>
