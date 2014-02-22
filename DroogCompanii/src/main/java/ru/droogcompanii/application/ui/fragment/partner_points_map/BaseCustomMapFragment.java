@@ -37,10 +37,12 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
     private GoogleMap map;
     private List<Marker> markers;
     private Runnable runnableOnResume;
+    private boolean isFirstUpdatingMapCamera;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isFirstUpdatingMapCamera = (savedInstanceState == null);
         runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
     }
 
@@ -126,11 +128,20 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         } else {
             tryMoveCameraToCurrentLocation();
         }
+        isFirstUpdatingMapCamera = false;
     }
 
     protected void moveCamera(LatLng center) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, getCurrentZoom());
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, defineZoom());
         getGoogleMap().animateCamera(cameraUpdate);
+    }
+
+    private float defineZoom() {
+        if (isFirstUpdatingMapCamera) {
+            return DroogCompaniiSettings.getDefaultZoom();
+        } else {
+            return getCurrentZoom();
+        }
     }
 
     private float getCurrentZoom() {

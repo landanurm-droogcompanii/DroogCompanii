@@ -9,12 +9,6 @@ import ru.droogcompanii.application.util.LogUtils;
  */
 public class EncoderBase64 implements Encoder {
 
-    private final Encoder encoderToEncodeBefore;
-
-    public EncoderBase64(Encoder encoder) {
-        encoderToEncodeBefore = encoder;
-    }
-
     @Override
     public String encodeToString(String toEncode) {
         try {
@@ -26,8 +20,6 @@ public class EncoderBase64 implements Encoder {
     }
 
     private String tryEncodeToString(String toEncode) throws Exception {
-        toEncode = encoderToEncodeBefore.encodeToString(toEncode);
-
         byte[] bytes = toEncode.getBytes(EncodingUtils.CHARSET_NAME);
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
@@ -43,8 +35,6 @@ public class EncoderBase64 implements Encoder {
     }
 
     private byte[] tryEncode(String toEncode) throws Exception {
-        toEncode = encoderToEncodeBefore.encodeToString(toEncode);
-
         byte[] bytes = toEncode.getBytes(EncodingUtils.CHARSET_NAME);
         return Base64.encode(bytes, Base64.DEFAULT);
     }

@@ -8,8 +8,12 @@ import ru.droogcompanii.application.util.location_provider.CurrentLocationProvid
  * Created by ls on 29.01.14.
  */
 public class DroogCompaniiSettings {
+
     private static final double LATITUDE_OF_KAZAN = 55.78856;
     private static final double LONGITUDE_OF_KAZAN = 49.12163;
+
+    private static final int DEFAULT_ZOOM_LEVEL = 14;
+
 
     public static Location getBaseLocation() {
         Location baseLocation = CurrentLocationProvider.get();
@@ -25,5 +29,9 @@ public class DroogCompaniiSettings {
         location.setLatitude(LATITUDE_OF_KAZAN);
         location.setLongitude(LONGITUDE_OF_KAZAN);
         return location;
+    }
+
+    public static int getDefaultZoom() {
+        return DEFAULT_ZOOM_LEVEL;
     }
 }

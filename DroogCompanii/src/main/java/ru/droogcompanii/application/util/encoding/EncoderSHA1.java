@@ -3,11 +3,7 @@ package ru.droogcompanii.application.util.encoding;
 /**
  * Created by ls on 21.02.14.
  */
-public class EncoderSHA1 extends BaseCompositeEncoder {
-
-    protected EncoderSHA1(Encoder encoder) {
-        super(encoder);
-    }
+public class EncoderSHA1 extends BaseEncoder {
 
     @Override
     protected String getAlgorithm() {
