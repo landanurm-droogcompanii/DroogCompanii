@@ -28,11 +28,13 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
 
     private static final String KEY_DETAILS = "Details";
     private static final String KEY_IS_TOKEN_REQUESTED = "IS_TOKEN_REQUESTED";
+    private static final String KEY_IS_DETAILS_REQUESTED = "IS_DETAILS_REQUESTED";;
 
     private AbleToStartTask ableToStartTask;
-    private PersonalDetails personalDetails;
     private PersonalDetailsViewHelper detailsViewHelper;
+    private Optional<PersonalDetails> optionalDetails;
 
+    private boolean isDetailsRequested;
     private boolean isTokenRequested;
 
     @Override
@@ -53,37 +55,41 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
 
         initState(savedInstanceState);
 
-        if (savedInstanceState == null) {
-            requestDetails();
-        } else {
-            personalDetails = (PersonalDetails) savedInstanceState.getSerializable(KEY_DETAILS);
-            tryDisplayDetails();
-        }
+        updateDetails();
     }
 
     private void initState(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
+            isDetailsRequested = false;
             isTokenRequested = false;
+            optionalDetails = Optional.absent();
         } else {
+            isDetailsRequested = savedInstanceState.getBoolean(KEY_IS_DETAILS_REQUESTED);
             isTokenRequested = savedInstanceState.getBoolean(KEY_IS_TOKEN_REQUESTED);
+            optionalDetails = (Optional<PersonalDetails>) savedInstanceState.getSerializable(KEY_DETAILS);
+        }
+    }
+
+    private void updateDetails() {
+        if (optionalDetails.isPresent()) {
+            detailsViewHelper.displayDetails(optionalDetails.get());
+        } else if (!isDetailsRequested) {
+            requestDetails();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_DETAILS, (Serializable) personalDetails);
-    }
-
-    private void tryDisplayDetails() {
-        if (personalDetails != null) {
-            detailsViewHelper.displayDetails(personalDetails);
-        }
+        outState.putSerializable(KEY_DETAILS, optionalDetails);
+        outState.putBoolean(KEY_IS_DETAILS_REQUESTED, isDetailsRequested);
+        outState.putBoolean(KEY_IS_TOKEN_REQUESTED, isTokenRequested);
     }
 
     private void requestDetails() {
         Optional<AuthenticationToken> optionalToken = getToken();
-        if (optionalToken.isPresent()) {
+        boolean isThereValidToken = optionalToken.isPresent() && optionalToken.get().isValid();
+        if (isThereValidToken) {
             requestDetails(optionalToken.get());
         } else if (!isTokenRequested) {
             requestToken();
@@ -96,10 +102,11 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
     }
 
     private void requestDetails(AuthenticationToken token) {
+        isDetailsRequested = true;
         Context context = getActivity();
         PersonalDetailsRequester requester = new PersonalDetailsRequesterFromInetAndDatabase(context, token);
         TaskNotBeInterrupted requestDetailsTask = new PersonalDetailsRequestTask(requester);
-        ableToStartTask.startTask(requestDetailsTask, null);
+        ableToStartTask.startTask(requestDetailsTask);
     }
 
     private void requestToken() {
@@ -118,15 +125,18 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
 
     @Override
     public void onTaskResult(int resultCode, Serializable result) {
+        onRequestedDetailsReturning(resultCode, (Optional<PersonalDetails>) result);
+    }
+
+    private void onRequestedDetailsReturning(int resultCode, Optional<PersonalDetails> optionalResult) {
         if (resultCode != Activity.RESULT_OK) {
             onDetailsAreNotReceived(resultCode);
-        }
-        Optional<PersonalDetails> optionalResult = (Optional<PersonalDetails>) result;
-        if (optionalResult.isPresent()) {
-            onReceivingDetails(optionalResult.get());
+        } else if (optionalResult.isPresent()) {
+            onReceivingDetails(optionalResult);
         } else {
             onReceivingDetailsCannotBeRepresented();
         }
+        isDetailsRequested = false;
     }
 
     private void onDetailsAreNotReceived(int resultCode) {
@@ -137,14 +147,42 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
         }
     }
 
-    private void onReceivingDetails(PersonalDetails result) {
-        this.personalDetails = result;
-        tryDisplayDetails();
+    private void onReceivingDetails(Optional<PersonalDetails> result) {
+        optionalDetails = result;
+        updateDetails();
     }
 
     private void onReceivingDetailsCannotBeRepresented() {
         String message = "Receiving details cannot be represented";
         LogUtils.debug(message);
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onLogOut() {
+        Optional<AuthenticationToken> optionalToken = getToken();
+        if (!isValidToken(optionalToken)) {
+            return;
+        }
+        Runnable runnableOnLogOut = new Runnable() {
+            @Override
+            public void run() {
+                onLogOutCompleted();
+            }
+        };
+        LogOutTask logOutTask = new LogOutTask(getActivity(), optionalToken, runnableOnLogOut);
+        logOutTask.execute();
+    }
+
+    private static boolean isValidToken(Optional<AuthenticationToken> optionalToken) {
+        return (optionalToken.isPresent() && optionalToken.get().isValid());
+    }
+
+    private void onLogOutCompleted() {
+        invalidateDetails();
+        updateDetails();
+    }
+
+    private void invalidateDetails() {
+        optionalDetails = Optional.absent();
     }
 }

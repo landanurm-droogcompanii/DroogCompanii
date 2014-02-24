@@ -36,6 +36,13 @@ public class MenuItemHelpers {
             .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM)
             .withAction(new ActionOnOffers());
 
+    public static final MenuItemHelper LOGOUT = new MenuItemHelper()
+            .withId(MenuItemIds.LOGOUT).withOrder(MenuItemIds.LOGOUT)
+            .withTitleId(R.string.menu_item_logout)
+            .withIcon(R.drawable.ic_logout)
+            .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
+            .withAction(new DummyAction());
+
     public static final MenuItemHelper PERSONAL_ACCOUNT = new MenuItemHelper()
             .withId(MenuItemIds.PERSONAL_ACCOUNT).withOrder(MenuItemIds.PERSONAL_ACCOUNT)
             .withTitleId(R.string.menu_item_personal_account)
@@ -63,5 +70,4 @@ public class MenuItemHelpers {
             .withIcon(R.drawable.ic_action_help)
             .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_NEVER)
             .withAction(new ActionOnHelp());
-
 }

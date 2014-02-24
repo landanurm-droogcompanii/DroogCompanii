@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+
 /**
  * Created by ls on 21.02.14.
  */
@@ -12,10 +14,10 @@ public class PersonalDetailsImpl implements PersonalDetails, Serializable {
     public String firstName;
     public String lastName;
 
-    private final List<Card> cards;
+    private final List<BankCard> cards;
 
     public PersonalDetailsImpl() {
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<BankCard>();
     }
 
     @Override
@@ -29,11 +31,11 @@ public class PersonalDetailsImpl implements PersonalDetails, Serializable {
     }
 
     @Override
-    public List<Card> getCards() {
+    public List<BankCard> getCards() {
         return cards;
     }
 
-    public void addCard(Card card) {
+    public void addCard(BankCard card) {
         cards.add(card);
     }
 }

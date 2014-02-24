@@ -37,7 +37,7 @@ public abstract class TaskFragmentHolder extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         if (!(activity instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+            throw new IllegalStateException("Activity must implement the TaskFragmentHolder's callbacks.");
         }
         callbacks = (Callbacks) activity;
     }

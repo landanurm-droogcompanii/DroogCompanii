@@ -1,12 +1,18 @@
 package ru.droogcompanii.application.ui.activity.personal_account;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.login.AuthenticationToken;
 import ru.droogcompanii.application.ui.activity.login.LoginActivity;
 import ru.droogcompanii.application.ui.fragment.login.LoginFragment;
@@ -71,5 +77,31 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask {
 
     private Callbacks getCallbacks() {
         return (Callbacks) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+    }
+
+    @Override
+    protected MenuHelper getMenuHelper() {
+        final MenuItemHelper logout = MenuItemHelpers.LOGOUT.withAction(new MenuItemHelper.Action() {
+            @Override
+            public void run(Activity activity) {
+                getPersonalDetailsFragment().onLogOut();
+            }
+        });
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        logout
+                };
+            }
+        };
+    }
+
+    private PersonalDetailsFragment getPersonalDetailsFragment() {
+        return (PersonalDetailsFragment) findFragment();
+    }
+
+    private Fragment findFragment() {
+        return getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
     }
 }

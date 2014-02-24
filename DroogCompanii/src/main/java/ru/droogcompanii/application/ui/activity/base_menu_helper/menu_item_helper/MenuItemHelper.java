@@ -45,7 +45,7 @@ public class MenuItemHelper {
         return this;
     }
 
-    MenuItemHelper withAction(Action action) {
+    public MenuItemHelper withAction(Action action) {
         this.action = action;
         return this;
     }

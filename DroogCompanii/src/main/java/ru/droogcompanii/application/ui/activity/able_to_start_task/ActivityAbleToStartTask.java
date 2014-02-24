@@ -22,6 +22,11 @@ public abstract class ActivityAbleToStartTask
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";
 
     @Override
+    public void startTask(TaskNotBeInterrupted task) {
+        startTask(task, null);
+    }
+
+    @Override
     public void startTask(TaskNotBeInterrupted task, Integer titleId) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

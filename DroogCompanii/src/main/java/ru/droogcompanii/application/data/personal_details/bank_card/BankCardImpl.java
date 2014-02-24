@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.personal_details;
+package ru.droogcompanii.application.data.personal_details.bank_card;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Created by ls on 21.02.14.
  */
-public class BankCard implements Card {
+public class BankCardImpl implements BankCard {
 
     public String title;
     public CardOwner owner;
 
     private List<CardTransaction> transactions;
 
-    public BankCard() {
+    public BankCardImpl() {
         title = "Default title";
         transactions = new ArrayList<CardTransaction>();
         owner = new CardOwnerImpl();

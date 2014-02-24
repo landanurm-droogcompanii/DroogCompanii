@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.google.common.base.Optional;
 
+import ru.droogcompanii.application.util.LogUtils;
+
 /**
  * Created by ls on 21.02.14.
  */
@@ -19,6 +21,7 @@ public class AuthenticationTokenSaverLoader {
 
     public Optional<AuthenticationToken> load() {
         // TODO
+        log(".load()");
         if (tokenSaved) {
             return Optional.of(new AuthenticationToken());
         } else {
@@ -29,5 +32,16 @@ public class AuthenticationTokenSaverLoader {
     public void save(AuthenticationToken token) {
         // TODO
         tokenSaved = true;
+        log(".save(token)");
+    }
+
+    public void invalidateToken(AuthenticationToken token) {
+        // TODO
+        tokenSaved = false;
+        log(".invalidateToken(token)");
+    }
+
+    private void log(final String message) {
+        LogUtils.debug(getClass().getSimpleName() + message);
     }
 }
