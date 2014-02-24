@@ -6,7 +6,7 @@ import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.data.personal_details.PersonalDetails;
 import ru.droogcompanii.application.data.personal_details.PersonalDetailsImpl;
-import ru.droogcompanii.application.ui.activity.login.AuthenticationToken;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
 
 /**
  * Created by ls on 21.02.14.

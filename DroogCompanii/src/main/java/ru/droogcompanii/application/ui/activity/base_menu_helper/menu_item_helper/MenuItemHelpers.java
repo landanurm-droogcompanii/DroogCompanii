@@ -36,10 +36,10 @@ public class MenuItemHelpers {
             .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM)
             .withAction(new ActionOnOffers());
 
-    public static final MenuItemHelper LOGOUT = new MenuItemHelper()
-            .withId(MenuItemIds.LOGOUT).withOrder(MenuItemIds.LOGOUT)
-            .withTitleId(R.string.menu_item_logout)
-            .withIcon(R.drawable.ic_logout)
+    public static final MenuItemHelper SIGNOUT = new MenuItemHelper()
+            .withId(MenuItemIds.SIGNOUT).withOrder(MenuItemIds.SIGNOUT)
+            .withTitleId(R.string.menu_item_signout)
+            .withIcon(R.drawable.ic_signout)
             .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
             .withAction(new DummyAction());
 

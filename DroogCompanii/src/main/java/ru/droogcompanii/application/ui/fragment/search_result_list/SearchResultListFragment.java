@@ -1,9 +1,8 @@
 package ru.droogcompanii.application.ui.fragment.search_result_list;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.AdapterView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -87,16 +85,6 @@ public class SearchResultListFragment extends ListFragment
         getView().setVisibility(visibility);
     }
 
-    private View prepareEmptyView() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View emptyView = layoutInflater.inflate(R.layout.view_no_search_results, null);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        getActivity().addContentView(emptyView, layoutParams);
-        return emptyView;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -113,36 +101,48 @@ public class SearchResultListFragment extends ListFragment
     }
 
     private void initSearchResultList() {
-        getListView().setEmptyView(prepareEmptyView());
-        setSortedAdapter(new Runnable() {
+        WeakReferenceWrapper.Handler<ListFragment> onAfterSort = new WeakReferenceWrapper.Handler<ListFragment>() {
             @Override
-            public void run() {
-                if (adapter.isEmpty()) {
-                    callbacks.onNotFound();
+            public void handle(ListFragment ref) {
+                SearchResultListFragment fragment = (SearchResultListFragment) ref;
+                if (fragment.adapter.isEmpty()) {
+                    fragment.callbacks.onNotFound();
+                    getListView().setEmptyView(prepareEmptyView());
                 } else {
-                    callbacks.onFound();
+                    fragment.callbacks.onFound();
                 }
             }
-        });
+        };
+        setSortedAdapter(onAfterSort);
     }
 
-    private void setSortedAdapter(final Runnable runnableOnPostExecute) {
+    private View prepareEmptyView() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        View emptyView = layoutInflater.inflate(R.layout.view_no_search_results, null);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        getActivity().addContentView(emptyView, layoutParams);
+        return emptyView;
+    }
+
+    private void setSortedAdapter(final WeakReferenceWrapper.Handler<ListFragment> handler) {
         final WeakReferenceWrapper<ListFragment> fragmentWrapper =
                 new WeakReferenceWrapper<ListFragment>(this);
-        final WeakReferenceWrapper<FragmentActivity> activityWrapper =
-                new WeakReferenceWrapper<FragmentActivity>(getActivity());
+        final WeakReferenceWrapper<Context> contextWrapper =
+                new WeakReferenceWrapper<Context>(getActivity());
         SortTask task = new SortTask(searchResults, currentComparator, new Runnable() {
             @Override
             public void run() {
-                activityWrapper.handleIfExist(new WeakReferenceWrapper.Handler<FragmentActivity>() {
+                contextWrapper.handleIfExist(new WeakReferenceWrapper.Handler<Context>() {
                     @Override
-                    public void handle(final FragmentActivity activity) {
+                    public void handle(final Context context) {
                         fragmentWrapper.handleIfExist(new WeakReferenceWrapper.Handler<ListFragment>() {
                             @Override
                             public void handle(final ListFragment fragment) {
-                                adapter = new PartnerSearchResultListAdapter(activity, searchResults);
+                                adapter = new PartnerSearchResultListAdapter(context, searchResults);
                                 fragment.setListAdapter(adapter);
-                                runnableOnPostExecute.run();
+                                handler.handle(fragment);
                             }
                         });
                     }
@@ -152,48 +152,6 @@ public class SearchResultListFragment extends ListFragment
         task.execute();
     }
 
-    private static class SortTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReferenceWrapper<List<SearchResult<Partner>>> wrapperOfListToSort;
-        private final Comparator<Partner> comparator;
-        private final Runnable runnable;
-
-        public SortTask(List<SearchResult<Partner>> searchResults,
-                        Comparator<Partner> comparator,
-                        Runnable runnableOnPostExecute) {
-            this.wrapperOfListToSort = new WeakReferenceWrapper<List<SearchResult<Partner>>>(searchResults);
-            this.comparator = comparator;
-            this.runnable = runnableOnPostExecute;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            wrapperOfListToSort.handleIfExist(
-                    new WeakReferenceWrapper.Handler<List<SearchResult<Partner>>>() {
-                        @Override
-                        public void handle(List<SearchResult<Partner>> searchResults) {
-                            Collections.sort(searchResults, new Comparator<SearchResult<Partner>>() {
-                                @Override
-                                public int compare(SearchResult<Partner> res1, SearchResult<Partner> res2) {
-                                    return comparator.compare(res1.value(), res2.value());
-                                }
-                            });
-                        }
-                    }
-            );
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            wrapperOfListToSort.handleIfExist(new WeakReferenceWrapper.Handler<List<SearchResult<Partner>>>() {
-                @Override
-                public void handle(List<SearchResult<Partner>> ref) {
-                    runnable.run();
-                }
-            });
-        }
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -215,12 +173,14 @@ public class SearchResultListFragment extends ListFragment
     }
 
     private void setSortedAdapter() {
-        setSortedAdapter(new Runnable() {
-            @Override
-            public void run() {
-                // do nothing
-            }
-        });
+        final WeakReferenceWrapper.Handler<ListFragment> dummyHandler =
+                new WeakReferenceWrapper.Handler<ListFragment>() {
+                    @Override
+                    public void handle(ListFragment ref) {
+                        // do nothing
+                    }
+                };
+        setSortedAdapter(dummyHandler);
     }
 
 }

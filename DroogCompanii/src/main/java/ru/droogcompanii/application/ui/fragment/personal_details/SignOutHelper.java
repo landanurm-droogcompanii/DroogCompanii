@@ -4,22 +4,22 @@ import android.content.Context;
 
 import com.google.common.base.Optional;
 
-import ru.droogcompanii.application.ui.activity.login.AuthenticationToken;
-import ru.droogcompanii.application.ui.activity.login.AuthenticationTokenSaverLoader;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationTokenSaverLoader;
 
 /**
  * Created by ls on 24.02.14.
  */
-public class LogOutHelper {
+public class SignOutHelper {
     private final AuthenticationTokenSaverLoader tokenSaverLoader;
     private final Optional<AuthenticationToken> optionalToken;
 
-    public LogOutHelper(Context context, Optional<AuthenticationToken> optionalToken) {
+    public SignOutHelper(Context context, Optional<AuthenticationToken> optionalToken) {
         this.tokenSaverLoader = new AuthenticationTokenSaverLoader(context);
         this.optionalToken = optionalToken;
     }
 
-    public void logout() {
+    public void signOut() {
         if (optionalToken.isPresent()) {
             tokenSaverLoader.invalidateToken(optionalToken.get());
         }

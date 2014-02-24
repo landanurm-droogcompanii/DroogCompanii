@@ -15,9 +15,9 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.data.personal_details.PersonalDetails;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.AbleToStartTask;
-import ru.droogcompanii.application.ui.activity.login.AuthenticationToken;
-import ru.droogcompanii.application.ui.activity.login.AuthenticationTokenSaverLoader;
 import ru.droogcompanii.application.ui.activity.personal_account.PersonalAccountActivity;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationTokenSaverLoader;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.LogUtils;
 
@@ -45,7 +45,8 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        detailsViewHelper = new PersonalDetailsViewHelper(inflater);
+        OnBankCardSelectedListener listener = (OnBankCardSelectedListener) getActivity();
+        detailsViewHelper = new PersonalDetailsViewHelper(inflater, listener);
         return detailsViewHelper.getView();
     }
 
@@ -55,7 +56,19 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
 
         initState(savedInstanceState);
 
+        setDefaultTitle();
+
         updateDetails();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    private void setDefaultTitle() {
+        PersonalAccountActivity activity = (PersonalAccountActivity) getActivity();
+        activity.setDefaultTitle();
     }
 
     private void initState(Bundle savedInstanceState) {
@@ -158,28 +171,27 @@ public class PersonalDetailsFragment extends Fragment implements PersonalAccount
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    public void onLogOut() {
+    public void onSignOut() {
         Optional<AuthenticationToken> optionalToken = getToken();
         if (!isValidToken(optionalToken)) {
             return;
         }
-        Runnable runnableOnLogOut = new Runnable() {
+        SignOutTask signOutTask = new SignOutTask(getActivity(), optionalToken, new Runnable() {
             @Override
             public void run() {
-                onLogOutCompleted();
+                onSignOutCompleted();
             }
-        };
-        LogOutTask logOutTask = new LogOutTask(getActivity(), optionalToken, runnableOnLogOut);
-        logOutTask.execute();
+        });
+        signOutTask.execute();
     }
 
     private static boolean isValidToken(Optional<AuthenticationToken> optionalToken) {
         return (optionalToken.isPresent() && optionalToken.get().isValid());
     }
 
-    private void onLogOutCompleted() {
+    private void onSignOutCompleted() {
         invalidateDetails();
-        updateDetails();
+        requestDetails();
     }
 
     private void invalidateDetails() {

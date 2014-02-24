@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.login;
+package ru.droogcompanii.application.ui.activity.signin;
 
 import android.content.Context;
 

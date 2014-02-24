@@ -94,7 +94,7 @@
         </activity>
 
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.login.LoginActivity"
+            android:name=".ui.activity.signin.SignInActivity"
             android:icon="@drawable/ic_personal_account"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >

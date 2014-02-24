@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.login;
+package ru.droogcompanii.application.ui.fragment.signin;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.login.AuthenticationResult;
-import ru.droogcompanii.application.ui.activity.login.SignInTask;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationResult;
+import ru.droogcompanii.application.ui.activity.signin.SignInTask;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.AbleToStartTask;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
@@ -26,7 +26,7 @@ import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 /**
  * Created by ls on 21.02.14.
  */
-public class LoginFragment extends Fragment implements TaskResultReceiver {
+public class SignInFragment extends Fragment implements TaskResultReceiver {
 
     public static final String KEY_TOKEN = "token";
 
@@ -94,18 +94,14 @@ public class LoginFragment extends Fragment implements TaskResultReceiver {
         }
     }
 
-    private void signIn() {
-        startSignInTask();
-    }
-
-    private void startSignInTask() {
-        TaskNotBeInterrupted signInTask = new SignInTask(getActivity(), login, password);
-        ableToStartTask.startTask(signInTask, R.string.login_progress_signing_in);
-    }
-
     private void onFieldRequired(EditText fieldInput) {
         fieldInput.setError(getString(R.string.error_field_required));
         fieldInput.requestFocus();
+    }
+
+    private void signIn() {
+        TaskNotBeInterrupted signInTask = new SignInTask(getActivity(), login, password);
+        ableToStartTask.startTask(signInTask, R.string.login_progress_signing_in);
     }
 
     @Override

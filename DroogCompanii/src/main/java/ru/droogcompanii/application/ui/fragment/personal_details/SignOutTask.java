@@ -5,22 +5,22 @@ import android.os.AsyncTask;
 
 import com.google.common.base.Optional;
 
-import ru.droogcompanii.application.ui.activity.login.AuthenticationToken;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
 import ru.droogcompanii.application.util.WeakReferenceWrapper;
 
 /**
  * Created by ls on 24.02.14.
  */
-public class LogOutTask extends AsyncTask<Void, Void, Void> {
+public class SignOutTask extends AsyncTask<Void, Void, Void> {
     private final WeakReferenceWrapper<Context> contextWrapper;
     private final Optional<AuthenticationToken> optionalToken;
-    private final Runnable runnableOnLogOut;
+    private final Runnable runnableOnSignOutCompleted;
 
-    public LogOutTask(Context context, Optional<AuthenticationToken> optionalToken,
-                      Runnable runnableOnLogOut) {
+    public SignOutTask(Context context, Optional<AuthenticationToken> optionalToken,
+                       Runnable runnableOnSignOutCompleted) {
         this.contextWrapper = new WeakReferenceWrapper<Context>(context);
         this.optionalToken = optionalToken;
-        this.runnableOnLogOut = runnableOnLogOut;
+        this.runnableOnSignOutCompleted = runnableOnSignOutCompleted;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class LogOutTask extends AsyncTask<Void, Void, Void> {
         contextWrapper.handleIfExist(new WeakReferenceWrapper.Handler<Context>() {
             @Override
             public void handle(Context context) {
-                LogOutHelper logOutHelper = new LogOutHelper(context, optionalToken);
-                logOutHelper.logout();
+                SignOutHelper signOutHelper = new SignOutHelper(context, optionalToken);
+                signOutHelper.signOut();
             }
         });
         return null;
@@ -41,7 +41,7 @@ public class LogOutTask extends AsyncTask<Void, Void, Void> {
         contextWrapper.handleIfExist(new WeakReferenceWrapper.Handler<Context>() {
             @Override
             public void handle(Context ref) {
-                runnableOnLogOut.run();
+                runnableOnSignOutCompleted.run();
             }
         });
     }

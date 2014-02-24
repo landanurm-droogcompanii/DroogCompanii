@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.login;
+package ru.droogcompanii.application.ui.activity.signin;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
-import ru.droogcompanii.application.ui.fragment.login.LoginFragment;
+import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
 
-public class LoginActivity extends ActivityAbleToStartTask {
+public class SignInActivity extends ActivityAbleToStartTask {
 
-    private static final String TAG_FRAGMENT = "LoginFragment";
+    private static final String TAG_FRAGMENT = "SignInFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class LoginActivity extends ActivityAbleToStartTask {
 
     private void placeLoginFragmentOnLayout() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = new LoginFragment();
+        Fragment fragment = new SignInFragment();
         transaction.add(R.id.containerOfFragment, fragment, TAG_FRAGMENT);
         transaction.commit();
     }

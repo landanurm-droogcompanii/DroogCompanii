@@ -1,10 +1,8 @@
-package ru.droogcompanii.application.ui.activity.login;
+package ru.droogcompanii.application.ui.activity.signin;
 
 import android.content.Context;
 
 import com.google.common.base.Optional;
-
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 21.02.14.
@@ -42,6 +40,6 @@ public class AuthenticationTokenSaverLoader {
     }
 
     private void log(final String message) {
-        LogUtils.debug(getClass().getSimpleName() + message);
+        //LogUtils.debug(getClass().getSimpleName() + message);
     }
 }
