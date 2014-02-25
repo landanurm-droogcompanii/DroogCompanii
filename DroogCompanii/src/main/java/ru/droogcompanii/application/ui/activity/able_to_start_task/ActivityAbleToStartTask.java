@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.ui.activity.able_to_start_task;
 
-import android.support.v4.app.Fragment;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -21,19 +21,48 @@ public abstract class ActivityAbleToStartTask
 
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";
 
+    private static final String KEY_REQUEST_CODE = "RequestCode";
+    private static final String KEY_IS_RUNNING_TASK = "IsRunningTask";
+
+
+    private boolean isRunningTask;
+    private int requestCodeOfCurrentTask;
+
     @Override
-    public void startTask(TaskNotBeInterrupted task) {
-        startTask(task, null);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            isRunningTask = false;
+        } else {
+            isRunningTask = savedInstanceState.getBoolean(KEY_IS_RUNNING_TASK);
+            requestCodeOfCurrentTask = savedInstanceState.getInt(KEY_REQUEST_CODE);
+        }
     }
 
     @Override
-    public void startTask(TaskNotBeInterrupted task, Integer titleId) {
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_REQUEST_CODE, requestCodeOfCurrentTask);
+        outState.putBoolean(KEY_IS_RUNNING_TASK, isRunningTask);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public final void startTask(int requestCode, TaskNotBeInterrupted task) {
+        Integer titleId = null;
+        startTask(requestCode, task, titleId);
+    }
+
+    @Override
+    public final void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId) {
+        isRunningTask = true;
+        requestCodeOfCurrentTask = requestCode;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         CommonTaskFragmentHolder taskFragment = new CommonTaskFragmentHolder();
         taskFragment.set(task, titleId);
         transaction.add(getIdOfTaskFragmentContainer(), taskFragment, TAG_TASK_FRAGMENT_HOLDER);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     protected int getIdOfTaskFragmentContainer() {
@@ -41,16 +70,18 @@ public abstract class ActivityAbleToStartTask
     }
 
     @Override
-    public void onTaskFinished(int resultCode, Serializable result) {
+    public final void onTaskFinished(int resultCode, Serializable result) {
+
         FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
-        getResultReceiver().onTaskResult(resultCode, result);
+
+        isRunningTask = false;
+
+        onReceiveResult(requestCodeOfCurrentTask, resultCode, result);
     }
 
-    private TaskResultReceiver getResultReceiver() {
-        String tag = getTagOfTaskResultReceiverFragment();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        return (TaskResultReceiver) fragment;
-    }
+    protected abstract void onReceiveResult(int requestCode, int resultCode, Serializable result);
 
-    protected abstract String getTagOfTaskResultReceiverFragment();
+    protected boolean isRunningTask() {
+        return isRunningTask;
+    }
 }

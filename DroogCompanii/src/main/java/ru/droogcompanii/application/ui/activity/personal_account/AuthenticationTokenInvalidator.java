@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.personal_details;
+package ru.droogcompanii.application.ui.activity.personal_account;
 
 import android.content.Context;
 
@@ -10,16 +10,14 @@ import ru.droogcompanii.application.ui.activity.signin.AuthenticationTokenSaverL
 /**
  * Created by ls on 24.02.14.
  */
-public class SignOutHelper {
+public class AuthenticationTokenInvalidator {
     private final AuthenticationTokenSaverLoader tokenSaverLoader;
-    private final Optional<AuthenticationToken> optionalToken;
 
-    public SignOutHelper(Context context, Optional<AuthenticationToken> optionalToken) {
+    public AuthenticationTokenInvalidator(Context context) {
         this.tokenSaverLoader = new AuthenticationTokenSaverLoader(context);
-        this.optionalToken = optionalToken;
     }
 
-    public void signOut() {
+    public void invalidate(Optional<AuthenticationToken> optionalToken) {
         if (optionalToken.isPresent()) {
             tokenSaverLoader.invalidateToken(optionalToken.get());
         }

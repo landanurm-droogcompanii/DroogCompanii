@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.personal_details;
+package ru.droogcompanii.application.ui.activity.personal_account;
 
 import android.content.Context;
 
@@ -13,15 +13,13 @@ import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
  */
 public class PersonalDetailsSaverLoader {
 
-    private final AuthenticationToken token;
     private final Context context;
 
-    public PersonalDetailsSaverLoader(Context context, AuthenticationToken token) {
+    public PersonalDetailsSaverLoader(Context context) {
         this.context = context;
-        this.token = token;
     }
 
-    public Optional<PersonalDetails> load() {
+    public Optional<PersonalDetails> load(AuthenticationToken token) {
         // TODO
         PersonalDetailsImpl personalDetails = new PersonalDetailsImpl();
         personalDetails.firstName = "Dummy First Name from SaverLoader";
@@ -29,13 +27,13 @@ public class PersonalDetailsSaverLoader {
         return Optional.of((PersonalDetails) personalDetails);
     }
 
-    public void save(PersonalDetails details) {
+    public void save(AuthenticationToken token, PersonalDetails details) {
         // TODO
     }
 
-    public void saveIfPresent(Optional<PersonalDetails> optionalDetails) {
+    public void saveIfPresent(AuthenticationToken token, Optional<PersonalDetails> optionalDetails) {
         if (optionalDetails.isPresent()) {
-            save(optionalDetails.get());
+            save(token, optionalDetails.get());
         }
     }
 }

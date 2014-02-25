@@ -39,7 +39,6 @@
     <string name="textMapIsLoaded">Карта загружается...</string>
 
     <string name="labelOfGoToOffersButton">Акции</string>
-    <string name="titleOfHelpActivity" />
 
     <string name="defaultMessageTextCopied">Текст скопирован</string>
     <string name="copyToClipboard">Скопировать в буфер</string>
@@ -54,5 +53,7 @@
 
     <string name="firstName">Имя</string>
     <string name="lastName">Фамилия</string>
+
+    <string name="sign_out_in_progress">Выход&#8230;</string>
 
 </resources>

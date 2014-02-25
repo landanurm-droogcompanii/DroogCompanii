@@ -10,4 +10,9 @@ public class DummyMenuHelper implements MenuHelper {
     public void init(Menu menu) {
         // do nothing
     }
+
+    @Override
+    public void prepare(Menu menu) {
+        // do nothing
+    }
 }

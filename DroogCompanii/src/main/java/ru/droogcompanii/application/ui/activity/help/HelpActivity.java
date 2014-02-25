@@ -16,7 +16,6 @@ import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
  */
 public class HelpActivity extends ActionBarActivityWithUpButton {
 
-
     private static final String TAG_OF_FRAGMENT = "TagOfHelpFragment";
 
     @Override
@@ -30,7 +29,6 @@ public class HelpActivity extends ActionBarActivityWithUpButton {
             transaction.commit();
         }
     }
-
 
     @Override
     protected MenuHelper getMenuHelper() {

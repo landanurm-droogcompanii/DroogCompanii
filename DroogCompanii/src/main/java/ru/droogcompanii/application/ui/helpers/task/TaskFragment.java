@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,14 +81,12 @@ public class TaskFragment extends DialogFragment {
         if (resultReturned) {
             return;
         }
-        if (getTaskFragmentHolder() != null) {
-            getTaskFragmentHolder().onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, resultCode, result);
+        Fragment targetFragment = getTargetFragment();
+        if (targetFragment != null) {
+            TaskFragmentHolder taskFragmentHolder = (TaskFragmentHolder) targetFragment;
+            taskFragmentHolder.onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, resultCode, result);
             resultReturned = true;
         }
-    }
-
-    private TaskFragmentHolder getTaskFragmentHolder() {
-        return (TaskFragmentHolder) getTargetFragment();
     }
 
     @Override

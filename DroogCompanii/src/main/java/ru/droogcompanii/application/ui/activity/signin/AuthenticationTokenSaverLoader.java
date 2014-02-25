@@ -36,7 +36,7 @@ public class AuthenticationTokenSaverLoader {
     public void invalidateToken(AuthenticationToken token) {
         // TODO
         tokenSaved = false;
-        log(".invalidateToken(token)");
+        log(".invalidate(token)");
     }
 
     private void log(final String message) {

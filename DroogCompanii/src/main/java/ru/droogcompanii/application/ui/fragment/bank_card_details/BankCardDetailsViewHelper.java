@@ -46,7 +46,7 @@ public class BankCardDetailsViewHelper {
         }
     }
 
-    public void fill(BankCard bankCard) {
+    public void display(BankCard bankCard) {
         makeViewIfNeed();
         setOwner(bankCard.getOwner());
         setTransactions(bankCard.getTransactions());

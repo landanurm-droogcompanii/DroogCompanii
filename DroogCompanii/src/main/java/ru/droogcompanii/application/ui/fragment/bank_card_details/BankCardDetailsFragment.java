@@ -24,31 +24,44 @@ public class BankCardDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            bankCard = extractBankCard(getArguments());
+            initStateByDefault();
         } else {
-            bankCard = extractBankCard(savedInstanceState);
+            restoreState(savedInstanceState);
         }
         changeActivityTitle();
     }
 
-    private void changeActivityTitle() {
-        getActivity().setTitle(bankCard.getTitle());
+    private void initStateByDefault() {
+        bankCard = extractBankCard(getArguments());
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        bankCard = extractBankCard(savedInstanceState);
     }
 
     private static BankCard extractBankCard(Bundle bundle) {
         return (BankCard) bundle.getSerializable(KEY_BANK_CARD);
     }
 
+    private void changeActivityTitle() {
+        String newActivityTitle = bankCard.getTitle();
+        getActivity().setTitle(newActivityTitle);
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
         outState.putSerializable(KEY_BANK_CARD, (Serializable) bankCard);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         BankCardDetailsViewHelper viewHelper = new BankCardDetailsViewHelper(getActivity(), inflater);
-        viewHelper.fill(bankCard);
+        viewHelper.display(bankCard);
         return viewHelper.getView();
     }
 }

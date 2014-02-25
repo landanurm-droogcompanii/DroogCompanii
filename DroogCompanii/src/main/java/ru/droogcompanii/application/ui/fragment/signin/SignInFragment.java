@@ -17,11 +17,9 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.signin.AuthenticationResult;
-import ru.droogcompanii.application.ui.activity.signin.SignInTask;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.AbleToStartTask;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.activity.signin.AuthenticationResult;
+import ru.droogcompanii.application.ui.activity.signin.SignInActivity;
 
 /**
  * Created by ls on 21.02.14.
@@ -29,8 +27,6 @@ import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 public class SignInFragment extends Fragment implements TaskResultReceiver {
 
     public static final String KEY_TOKEN = "token";
-
-    private AbleToStartTask ableToStartTask;
 
     private String login;
     private String password;
@@ -41,12 +37,6 @@ public class SignInFragment extends Fragment implements TaskResultReceiver {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, null);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ableToStartTask = (AbleToStartTask) activity;
     }
 
     @Override
@@ -100,8 +90,8 @@ public class SignInFragment extends Fragment implements TaskResultReceiver {
     }
 
     private void signIn() {
-        TaskNotBeInterrupted signInTask = new SignInTask(getActivity(), login, password);
-        ableToStartTask.startTask(signInTask, R.string.login_progress_signing_in);
+        SignInActivity activity = (SignInActivity) getActivity();
+        activity.startSignInTask(login, password);
     }
 
     @Override

@@ -7,7 +7,7 @@ import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
  */
 public interface AbleToStartTask {
 
-    void startTask(TaskNotBeInterrupted task);
-    void startTask(TaskNotBeInterrupted task, Integer titleId);
+    void startTask(int requestCode, TaskNotBeInterrupted task);
+    void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId);
 
 }

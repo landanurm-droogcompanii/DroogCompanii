@@ -68,7 +68,7 @@
             android:label="@string/titleOfFilterActivity" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.personal_account.PersonalAccountActivity"
+            android:name=".ui.activity.personal_account.PersonalAccountActivity"
             android:icon="@drawable/ic_personal_account"
             android:label="@string/titleOfPersonalAccountActivity" >
         </activity>

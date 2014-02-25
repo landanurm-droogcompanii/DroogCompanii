@@ -7,4 +7,5 @@ import android.view.Menu;
  */
 public interface MenuHelper {
     void init(Menu menu);
+    void prepare(Menu menu);
 }

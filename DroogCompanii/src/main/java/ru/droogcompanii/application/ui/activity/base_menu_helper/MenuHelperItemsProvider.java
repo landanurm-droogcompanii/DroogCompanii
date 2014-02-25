@@ -42,5 +42,17 @@ public abstract class MenuHelperItemsProvider implements MenuHelper {
         });
     }
 
+    @Override
+    public void prepare(Menu menu) {
+        updateEnable(menu);
+    }
+
+    private void updateEnable(Menu menu) {
+        for (MenuItemHelper each : getMenuItemHelpers()) {
+            MenuItem item = menu.findItem(each.getId());
+            item.setEnabled(each.isEnable());
+        }
+    }
+
     protected abstract MenuItemHelper[] getMenuItemHelpers();
 }

@@ -3,6 +3,8 @@ package ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_help
 import android.app.Activity;
 import android.support.v4.view.MenuItemCompat;
 
+import ru.droogcompanii.application.util.Predicate;
+
 /**
  * Created by ls on 14.02.14.
  */
@@ -12,6 +14,13 @@ public class MenuItemHelper {
         @Override
         public void run(Activity activity) {
             // do nothing
+        }
+    };
+
+    private static final Predicate ALWAYS_ENABLE_PREDICATE = new Predicate() {
+        @Override
+        public boolean isTrue() {
+            return true;
         }
     };
 
@@ -25,9 +34,11 @@ public class MenuItemHelper {
     private int titleId;
     private int iconId;
     private int showAsAction;
+    private Predicate predicateEnable;
 
     MenuItemHelper() {
         showAsAction = MenuItemCompat.SHOW_AS_ACTION_NEVER;
+        predicateEnable = ALWAYS_ENABLE_PREDICATE;
     }
 
     MenuItemHelper withId(int id) {
@@ -47,6 +58,11 @@ public class MenuItemHelper {
 
     public MenuItemHelper withAction(Action action) {
         this.action = action;
+        return this;
+    }
+
+    public MenuItemHelper withPredicateEnable(Predicate predicateEnable) {
+        this.predicateEnable = predicateEnable;
         return this;
     }
 
@@ -82,6 +98,10 @@ public class MenuItemHelper {
 
     public int getShowAsAction() {
         return showAsAction;
+    }
+
+    public boolean isEnable() {
+        return predicateEnable.isTrue();
     }
 
 }

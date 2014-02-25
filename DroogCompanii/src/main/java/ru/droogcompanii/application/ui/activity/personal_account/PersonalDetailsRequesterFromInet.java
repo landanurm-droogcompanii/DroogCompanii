@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.fragment.personal_details;
+package ru.droogcompanii.application.ui.activity.personal_account;
 
 import android.content.Context;
 
@@ -14,31 +14,33 @@ import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
  */
 public class PersonalDetailsRequesterFromInet implements PersonalDetailsRequester {
 
-    private final AuthenticationToken token;
     private final Context context;
 
-    public PersonalDetailsRequesterFromInet(Context context, AuthenticationToken token) {
+    public PersonalDetailsRequesterFromInet(Context context) {
         this.context = context;
-        this.token = token;
     }
 
     @Override
-    public Optional<PersonalDetails> requestDetails() {
+    public Optional<PersonalDetails> requestDetails(AuthenticationToken token) {
         // TODO
+        return Optional.of(createDummyPersonalDetails());
+    }
+
+    private PersonalDetails createDummyPersonalDetails() {
         PersonalDetailsImpl personalDetails = new PersonalDetailsImpl();
         personalDetails.firstName = "Dummy First Name from Inet";
         personalDetails.lastName = "Dummy Last Name from Inet";
-        addCardsTo(personalDetails);
-        return Optional.of((PersonalDetails) personalDetails);
+        addDummyCardsTo(personalDetails);
+        return personalDetails;
     }
 
-    private void addCardsTo(PersonalDetailsImpl personalDetails) {
+    private void addDummyCardsTo(PersonalDetailsImpl personalDetails) {
         for (int i = 1; i < 10; ++i) {
-            addCardTo(personalDetails, i);
+            addDummyCardTo(personalDetails, i);
         }
     }
 
-    private void addCardTo(PersonalDetailsImpl personalDetails, int index) {
+    private void addDummyCardTo(PersonalDetailsImpl personalDetails, int index) {
         BankCardImpl bankCard = new BankCardImpl();
         bankCard.title = String.valueOf(index);
         personalDetails.addCard(bankCard);

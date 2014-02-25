@@ -8,9 +8,22 @@ import android.view.Menu;
  */
 public abstract class BaseActivityMenuHelper extends ActionBarActivity {
 
+    private Menu menu;
+
+    protected Menu getMenu() {
+        return menu;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuHelper().init(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        getMenuHelper().prepare(menu);
         return true;
     }
 
