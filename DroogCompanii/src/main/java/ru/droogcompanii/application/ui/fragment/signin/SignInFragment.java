@@ -95,7 +95,7 @@ public class SignInFragment extends Fragment implements TaskResultReceiver {
     }
 
     @Override
-    public void onTaskResult(int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         if (resultCode == Activity.RESULT_CANCELED) {
             onAuthenticationCancelled();
         } else if (resultCode == Activity.RESULT_OK) {

@@ -42,12 +42,12 @@ public class SignInActivity extends ActivityAbleToStartTask {
     @Override
     protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
         if (requestCode == TASK_REQUEST_CODE_SIGNIN) {
-            onSignInCompleted(resultCode, result);
+            onSignInCompleted(requestCode, resultCode, result);
         }
     }
 
-    private void onSignInCompleted(int resultCode, Serializable result) {
-        getSignInFragment().onTaskResult(resultCode, result);
+    private void onSignInCompleted(int requestCode, int resultCode, Serializable result) {
+        getSignInFragment().onTaskResult(requestCode, resultCode, result);
     }
 
     private SignInFragment getSignInFragment() {

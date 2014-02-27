@@ -6,5 +6,5 @@ import java.io.Serializable;
  * Created by ls on 21.02.14.
  */
 public interface TaskResultReceiver {
-    void onTaskResult(int resultCode, Serializable result);
+    void onTaskResult(int requestCode, int resultCode, Serializable result);
 }

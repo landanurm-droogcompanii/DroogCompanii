@@ -10,16 +10,16 @@ import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 /**
  * Created by ls on 30.01.14.
  */
-public class SearchResultExtractorTask extends TaskNotBeInterrupted {
-    private final SearchResultExtractor searchResultExtractor;
+public class SearchResultsExtractorTask extends TaskNotBeInterrupted {
+    private final SearchResultsExtractor searchResultsExtractor;
 
-    public SearchResultExtractorTask(SearchResultProvider searchResultProvider, Context context) {
-        searchResultExtractor = new SimpleSearchResultExtractor(searchResultProvider, context);
+    public SearchResultsExtractorTask(SearchResultProvider searchResultProvider, Context context) {
+        searchResultsExtractor = new SimpleSearchResultsExtractor(searchResultProvider, context);
     }
 
     @Override
     protected Serializable doInBackground(Void... voids) {
-        return (Serializable) searchResultExtractor.extract();
+        return (Serializable) searchResultsExtractor.extract();
     }
 
 }

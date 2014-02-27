@@ -4,12 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
-import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
@@ -17,43 +13,42 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResul
 import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
 
 /**
- * Created by ls on 14.01.14.
+ * Created by Leonid on 27.02.14.
  */
-public class PartnerSearchResultListAdapter extends ArrayAdapter<SearchResult<Partner>> {
+class SearchResultListItemViewMaker {
 
-    private static final int ROW_LAYOUT_ID = R.layout.view_search_result_list_item;
-
+    private final Context context;
+    private final int rowLayoutId;
     private final IsFavoriteViewUtils isFavoriteViewUtils;
 
-
-    public PartnerSearchResultListAdapter(Context context, List<SearchResult<Partner>> partners) {
-        super(context, ROW_LAYOUT_ID, partners);
-        isFavoriteViewUtils = new IsFavoriteViewUtils(context);
+    public SearchResultListItemViewMaker(Context context, int rowLayoutId) {
+        this.context = context;
+        this.rowLayoutId = rowLayoutId;
+        this.isFavoriteViewUtils = new IsFavoriteViewUtils(context);
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View itemView = convertView;
-        if (itemView == null) {
-            itemView = inflateItemView();
-        }
-        SearchResult<Partner> item = getItem(position);
+    public View make(View convertView, SearchResult<Partner> item) {
+        View itemView = (convertView != null) ? convertView : inflateItemView();
+        fill(itemView, item);
+        return itemView;
+    }
+
+    private void fill(View itemView, SearchResult<Partner> item) {
         TextView textView = (TextView) itemView.findViewById(R.id.textView);
         textView.setTextColor(textColorOf(item));
         Partner partner = item.value();
         textView.setText(partner.getTitle());
         CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.isFavorite);
         isFavoriteViewUtils.init(checkBox, partner.getId());
-        return itemView;
     }
 
     private View inflateItemView() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        return layoutInflater.inflate(ROW_LAYOUT_ID, null);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        return layoutInflater.inflate(rowLayoutId, null);
     }
 
     private int textColorOf(SearchResult<Partner> item) {
-        Resources resources = getContext().getResources();
+        Resources resources = context.getResources();
         return resources.getColor(textColorIdOf(item));
     }
 

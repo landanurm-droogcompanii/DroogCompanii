@@ -19,11 +19,11 @@ import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 /**
  * Created by ls on 17.02.14.
  */
-public class SearchResultExtractorUsedCurrentFilters implements SearchResultExtractor {
+public class SearchResultsExtractorUsedCurrentFilters implements SearchResultsExtractor {
     private final Context context;
     private final SearchResultProvider searchResultProvider;
 
-    public SearchResultExtractorUsedCurrentFilters(SearchResultProvider searchResultProvider, Context context) {
+    public SearchResultsExtractorUsedCurrentFilters(SearchResultProvider searchResultProvider, Context context) {
         this.searchResultProvider = searchResultProvider;
         this.context = context;
     }

@@ -3,8 +3,7 @@ package ru.droogcompanii.application.ui.activity.search_result_list;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.widget.SpinnerAdapter;
 
@@ -16,6 +15,8 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
@@ -25,19 +26,23 @@ import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 import ru.droogcompanii.application.ui.activity.search_result_list.spinner_util.SpinnerAdapterPartnerImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
-import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
+public class SearchResultListActivity extends ActivityAbleToStartTask
                 implements SearchResultListFragment.Callbacks,
                            TaskFragmentHolder.Callbacks,
                            PartnerPointsProviderHolder {
+
+    private static final int TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS = 145;
+
+    public static final int LOWER_BOUND_VALID_TASK_REQUEST_CODE =
+                        TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS + 1;
 
     private boolean isGoToMapItemVisible;
     private SearchResultListFragment searchResultFragment;
@@ -63,8 +68,7 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
         initSpinnerOnActionBar();
 
         if (savedInstanceState == null) {
-            searchResultFragment.hide();
-            startTask();
+            actionsOnLaunchActivity();
         }
     }
 
@@ -120,45 +124,58 @@ public class SearchResultListActivity extends ActionBarActivityWithGoToMapItem
         searchResultFragment.setComparator(newComparator);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
-        outState.putBoolean(Keys.isGoToMapItemVisible, isGoToMapItemVisible);
+    private void actionsOnLaunchActivity() {
+        searchResultFragment.hide();
+        startTaskExtractSearchResults();
     }
 
-    private void startTask() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SearchResultTaskFragmentHolder taskFragment = new SearchResultTaskFragmentHolder();
-        Bundle args = getIntent().getExtras();
-        taskFragment.setArguments(args);
-        transaction.add(R.id.taskFragmentContainer, taskFragment);
-        transaction.commit();
+    private void startTaskExtractSearchResults() {
+        TaskNotBeInterrupted task = new SearchResultsExtractorTask(searchResultProvider, this);
+        startTask(TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS, task);
     }
 
     @Override
-    public void onTaskFinished(int resultCode, Serializable result) {
-        if (resultCode == RESULT_OK) {
-            onTaskFinishedSuccessfully(result);
-        } else {
-            onTaskCancelled();
+    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+        switch (requestCode) {
+            case TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS:
+                onReceiveResultFromExtractSearchResultsTask(resultCode, result);
+                break;
+
+            default:
+                onReceiveResultFromTaskLaunchedByFragment(requestCode, resultCode, result);
+                break;
         }
     }
 
-    private void onTaskFinishedSuccessfully(Serializable result) {
-        FragmentRemover.removeFragmentByContainerId(this, R.id.taskFragmentContainer);
-        showSearchResult(result);
-    }
-
-    private void onTaskCancelled() {
-        finish();
+    private void onReceiveResultFromExtractSearchResultsTask(int resultCode, Serializable result) {
+        if (resultCode == RESULT_OK) {
+            showSearchResult(result);
+        } else {
+            finish();
+        }
     }
 
     private void showSearchResult(Serializable result) {
         List<SearchResult<Partner>> searchResults = (List<SearchResult<Partner>>) result;
         searchResultFragment.show();
         searchResultFragment.setSearchResult(searchResults);
+    }
+
+    private void onReceiveResultFromTaskLaunchedByFragment(int requestCode,
+                                          int resultCode, Serializable result) {
+        TaskResultReceiver resultReceiver = (TaskResultReceiver) getCurrentFragment();
+        resultReceiver.onTaskResult(requestCode, resultCode, result);
+    }
+
+    private Fragment getCurrentFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.searchResultFragment);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
+        outState.putBoolean(Keys.isGoToMapItemVisible, isGoToMapItemVisible);
     }
 
     @Override

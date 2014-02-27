@@ -8,6 +8,6 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResul
 /**
  * Created by ls on 17.02.14.
  */
-public interface SearchResultExtractor {
+public interface SearchResultsExtractor {
     List<SearchResult<Partner>> extract();
 }

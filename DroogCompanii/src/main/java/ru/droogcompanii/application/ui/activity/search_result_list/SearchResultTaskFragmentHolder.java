@@ -44,6 +44,6 @@ public class SearchResultTaskFragmentHolder extends TaskFragmentHolder {
 
     @Override
     protected TaskNotBeInterrupted prepareTask() {
-        return new SearchResultExtractorTask(searchResultProvider, getActivity());
+        return new SearchResultsExtractorTask(searchResultProvider, getActivity());
     }
 }

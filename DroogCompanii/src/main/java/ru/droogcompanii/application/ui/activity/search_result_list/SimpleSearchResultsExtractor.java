@@ -13,11 +13,11 @@ import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 /**
  * Created by ls on 17.02.14.
  */
-public class SimpleSearchResultExtractor implements SearchResultExtractor {
+public class SimpleSearchResultsExtractor implements SearchResultsExtractor {
     private final Context context;
     private final SearchResultProvider searchResultProvider;
 
-    public SimpleSearchResultExtractor(SearchResultProvider searchResultProvider, Context context) {
+    public SimpleSearchResultsExtractor(SearchResultProvider searchResultProvider, Context context) {
         this.searchResultProvider = searchResultProvider;
         this.context = context;
     }

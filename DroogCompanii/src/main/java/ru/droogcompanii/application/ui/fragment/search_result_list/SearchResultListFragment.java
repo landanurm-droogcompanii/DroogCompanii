@@ -1,13 +1,14 @@
 package ru.droogcompanii.application.ui.fragment.search_result_list;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
+import com.google.common.base.Optional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,14 +18,20 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.WeakReferenceWrapper;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.AbleToStartTask;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 22.01.14.
  */
 public class SearchResultListFragment extends ListFragment
-        implements AdapterView.OnItemClickListener {
+        implements AdapterView.OnItemClickListener, TaskResultReceiver {
+
+    private static final int TASK_REQUEST_CODE_SORT_TASK =
+            SearchResultListActivity.LOWER_BOUND_VALID_TASK_REQUEST_CODE + 1;
 
     public static interface Callbacks {
         void onPartnerClick(Partner partner);
@@ -32,25 +39,25 @@ public class SearchResultListFragment extends ListFragment
         void onNotFound();
     }
 
-    private static final Comparator<Partner> DUMMY_COMPARATOR = new Comparator<Partner>() {
-        @Override
-        public int compare(Partner partner1, Partner partner2) {
-            return 0;
-        }
-    };
+    private static final String KEY_VISIBILITY = "KEY_VISIBILITY";
+    private static final String KEY_SEARCH_RESULTS = "KEY_SEARCH_RESULTS";
+    private static final String KEY_CURRENT_COMPARATOR = "KEY_CURRENT_COMPARATOR";
+    private static final String KEY_IS_SEARCH_RESULTS_READY = "KEY_IS_SEARCH_RESULTS_READY";
+    private static final String KEY_IS_SEARCH_RESULTS_SORTED = "KEY_IS_SEARCH_RESULTS_SORTED";
 
-    private static final String KEY_CURRENT_COMPARATOR = "CurrentComparator";
-
-    private boolean isSearchResultReady;
+    private AbleToStartTask ableToStartTask;
+    private boolean isSearchResultsReady;
+    private boolean isSearchResultsSorted;
     private Callbacks callbacks;
-    private Comparator<Partner> currentComparator;
     private List<SearchResult<Partner>> searchResults;
-    private PartnerSearchResultListAdapter adapter;
+    private Optional<Comparator<Partner>> currentComparator;
+    private SearchResultListAdapter adapter;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         callbacks = (Callbacks) activity;
+        ableToStartTask = (AbleToStartTask) activity;
     }
 
     @Override
@@ -58,100 +65,119 @@ public class SearchResultListFragment extends ListFragment
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState == null) {
-            initSearchResultIsNotReadyState();
+            initStateByDefault();
         } else {
             restoreState(savedInstanceState);
         }
 
-        getListView().setOnItemClickListener(this);
-
-        if (isSearchResultReady) {
+        if (isSearchResultsReady && isSearchResultsSorted) {
             initSearchResultList();
         }
+
+        getListView().setOnItemClickListener(this);
     }
 
-    private void initSearchResultIsNotReadyState() {
-        currentComparator = DUMMY_COMPARATOR;
-        isSearchResultReady = false;
+    private void initStateByDefault() {
+        currentComparator = Optional.absent();
+        isSearchResultsReady = false;
+        isSearchResultsSorted = false;
         searchResults = new ArrayList<SearchResult<Partner>>();
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        currentComparator = (Comparator<Partner>) savedInstanceState.getSerializable(KEY_CURRENT_COMPARATOR);
-        searchResults = (List<SearchResult<Partner>>) savedInstanceState.getSerializable(Keys.partners);
-        isSearchResultReady = savedInstanceState.getBoolean(Keys.isSearchResultReady);
+        currentComparator = (Optional<Comparator<Partner>>) savedInstanceState.getSerializable(KEY_CURRENT_COMPARATOR);
+        searchResults = (List<SearchResult<Partner>>) savedInstanceState.getSerializable(KEY_SEARCH_RESULTS);
+        isSearchResultsReady = savedInstanceState.getBoolean(KEY_IS_SEARCH_RESULTS_READY);
+        isSearchResultsSorted = savedInstanceState.getBoolean(KEY_IS_SEARCH_RESULTS_SORTED);
 
-        int visibility = savedInstanceState.getInt(Keys.visibility);
+        int visibility = savedInstanceState.getInt(KEY_VISIBILITY);
         getView().setVisibility(visibility);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partners, (Serializable) searchResults);
-        outState.putBoolean(Keys.isSearchResultReady, isSearchResultReady);
-        outState.putInt(Keys.visibility, getView().getVisibility());
-        outState.putSerializable(KEY_CURRENT_COMPARATOR, (Serializable) currentComparator);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
+        outState.putSerializable(KEY_CURRENT_COMPARATOR, currentComparator);
+        outState.putSerializable(KEY_SEARCH_RESULTS, (Serializable) searchResults);
+        outState.putBoolean(KEY_IS_SEARCH_RESULTS_READY, isSearchResultsReady);
+        outState.putBoolean(KEY_IS_SEARCH_RESULTS_SORTED, isSearchResultsSorted);
+
+        int visibility = getView().getVisibility();
+        outState.putInt(KEY_VISIBILITY, visibility);
     }
 
     public void setSearchResult(List<SearchResult<Partner>> searchResults) {
         this.searchResults = searchResults;
-        isSearchResultReady = true;
+        isSearchResultsReady = true;
+        isSearchResultsSorted = false;
+        if (currentComparator.isPresent()) {
+            startSortingTask();
+        } else {
+            initSearchResultList();
+        }
+    }
+
+    private void startSortingTask() {
+        TaskNotBeInterrupted task = new SortTask(searchResults, currentComparator.get());
+        ableToStartTask.startTask(TASK_REQUEST_CODE_SORT_TASK, task);
+    }
+
+    @Override
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
+        if (resultCode != Activity.RESULT_OK) {
+            getActivity().finish();
+            return;
+        }
+        if (requestCode == TASK_REQUEST_CODE_SORT_TASK) {
+            onSortingCompleted(result);
+        }
+    }
+
+    private void onSortingCompleted(Serializable result) {
+        searchResults = (List<SearchResult<Partner>>) result;
+        isSearchResultsSorted = true;
         initSearchResultList();
     }
 
     private void initSearchResultList() {
-        WeakReferenceWrapper.Handler<ListFragment> onAfterSort = new WeakReferenceWrapper.Handler<ListFragment>() {
-            @Override
-            public void handle(ListFragment ref) {
-                SearchResultListFragment fragment = (SearchResultListFragment) ref;
-                if (fragment.adapter.isEmpty()) {
-                    fragment.callbacks.onNotFound();
-                    getListView().setEmptyView(prepareEmptyView());
-                } else {
-                    fragment.callbacks.onFound();
-                }
-            }
-        };
-        setSortedAdapter(onAfterSort);
+        adapter = new SearchResultListAdapter(getActivity(), searchResults);
+        setListAdapter(adapter);
+        if (adapter.isEmpty()) {
+            callbacks.onNotFound();
+            setEmptyListView();
+        } else {
+            callbacks.onFound();
+        }
     }
 
-    private View prepareEmptyView() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+    private void setEmptyListView() {
+        Activity activity = getActivity();
+        LayoutInflater layoutInflater = LayoutInflater.from(activity);
         View emptyView = layoutInflater.inflate(R.layout.view_no_search_results, null);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
         );
-        getActivity().addContentView(emptyView, layoutParams);
-        return emptyView;
+        activity.addContentView(emptyView, layoutParams);
+        getListView().setEmptyView(emptyView);
     }
 
-    private void setSortedAdapter(final WeakReferenceWrapper.Handler<ListFragment> handler) {
-        final WeakReferenceWrapper<ListFragment> fragmentWrapper =
-                new WeakReferenceWrapper<ListFragment>(this);
-        final WeakReferenceWrapper<Context> contextWrapper =
-                new WeakReferenceWrapper<Context>(getActivity());
-        SortTask task = new SortTask(searchResults, currentComparator, new Runnable() {
-            @Override
-            public void run() {
-                contextWrapper.handleIfExist(new WeakReferenceWrapper.Handler<Context>() {
-                    @Override
-                    public void handle(final Context context) {
-                        fragmentWrapper.handleIfExist(new WeakReferenceWrapper.Handler<ListFragment>() {
-                            @Override
-                            public void handle(final ListFragment fragment) {
-                                adapter = new PartnerSearchResultListAdapter(context, searchResults);
-                                fragment.setListAdapter(adapter);
-                                handler.handle(fragment);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-        task.execute();
+    public void setComparator(Comparator<Partner> newComparator) {
+        if (newComparator == null) {
+            throw new IllegalArgumentException(SearchResultListFragment.class.getName() +
+                    ".setComparator(comparator):  comparator should be not null");
+        }
+        if (currentComparator.isPresent() && Objects.equals(currentComparator.get(), newComparator)) {
+            return;
+        }
+        currentComparator = Optional.of(newComparator);
+        if (isSearchResultsReady) {
+            startSortingTask();
+        }
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -165,22 +191,6 @@ public class SearchResultListFragment extends ListFragment
 
     public void hide() {
         getView().setVisibility(View.INVISIBLE);
-    }
-
-    public void setComparator(Comparator<Partner> newComparator) {
-        currentComparator = newComparator;
-        setSortedAdapter();
-    }
-
-    private void setSortedAdapter() {
-        final WeakReferenceWrapper.Handler<ListFragment> dummyHandler =
-                new WeakReferenceWrapper.Handler<ListFragment>() {
-                    @Override
-                    public void handle(ListFragment ref) {
-                        // do nothing
-                    }
-                };
-        setSortedAdapter(dummyHandler);
     }
 
 }

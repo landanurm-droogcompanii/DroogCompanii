@@ -7,16 +7,18 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
 import ru.droogcompanii.application.ui.helpers.FragmentRemover;
+import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 21.02.14.
  */
 public abstract class ActivityAbleToStartTask
-        extends ActionBarActivityWithUpButton
+        extends ActionBarActivityWithGoToMapItem
         implements AbleToStartTask, TaskFragmentHolder.Callbacks {
 
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";
@@ -40,6 +42,11 @@ public abstract class ActivityAbleToStartTask
     }
 
     @Override
+    protected boolean isGoToMapItemVisible() {
+        return false;
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(KEY_REQUEST_CODE, requestCodeOfCurrentTask);
         outState.putBoolean(KEY_IS_RUNNING_TASK, isRunningTask);
@@ -48,12 +55,19 @@ public abstract class ActivityAbleToStartTask
 
     @Override
     public final void startTask(int requestCode, TaskNotBeInterrupted task) {
-        Integer titleId = null;
-        startTask(requestCode, task, titleId);
+        startTask(requestCode, task, TaskFragment.NO_TITLE_ID);
     }
 
     @Override
     public final void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId) {
+        LogUtils.debug("Task Launched:  " + task.getClass().getSimpleName());
+
+        if (isRunningTask) {
+            throw new IllegalStateException(
+                    "Another task is executing. Might execute only one task at the same time."
+            );
+        }
+
         isRunningTask = true;
         requestCodeOfCurrentTask = requestCode;
 
@@ -71,6 +85,8 @@ public abstract class ActivityAbleToStartTask
 
     @Override
     public final void onTaskFinished(int resultCode, Serializable result) {
+
+        LogUtils.debug("Task finished");
 
         FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
 
