@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
@@ -18,7 +18,7 @@ import ru.droogcompanii.application.util.LogUtils;
  * Created by ls on 21.02.14.
  */
 public abstract class ActivityAbleToStartTask
-        extends ActionBarActivityWithGoToMapItem
+        extends ActionBarActivityWithUpButton
         implements AbleToStartTask, TaskFragmentHolder.Callbacks {
 
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";
@@ -39,11 +39,6 @@ public abstract class ActivityAbleToStartTask
             isRunningTask = savedInstanceState.getBoolean(KEY_IS_RUNNING_TASK);
             requestCodeOfCurrentTask = savedInstanceState.getInt(KEY_REQUEST_CODE);
         }
-    }
-
-    @Override
-    protected boolean isGoToMapItemVisible() {
-        return false;
     }
 
     @Override

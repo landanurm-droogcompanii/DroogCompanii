@@ -28,7 +28,6 @@ public class BankCardDetailsFragment extends Fragment {
         } else {
             restoreState(savedInstanceState);
         }
-        changeActivityTitle();
     }
 
     private void initStateByDefault() {
@@ -41,6 +40,12 @@ public class BankCardDetailsFragment extends Fragment {
 
     private static BankCard extractBankCard(Bundle bundle) {
         return (BankCard) bundle.getSerializable(KEY_BANK_CARD);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        changeActivityTitle();
     }
 
     private void changeActivityTitle() {

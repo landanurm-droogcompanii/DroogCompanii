@@ -7,13 +7,14 @@ import java.util.Comparator;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.location_provider.BaseLocationProvider;
 import ru.droogcompanii.application.util.MinMax;
+import ru.droogcompanii.application.util.location_provider.BaseLocationProvider;
 
 /**
  * Created by ls on 16.01.14.
  */
 public class PartnerComparatorByDistance implements Comparator<Partner>, Serializable {
+
     private final BaseLocationProvider baseLocationProvider;
 
     public PartnerComparatorByDistance(BaseLocationProvider baseLocationProvider) {
@@ -23,12 +24,15 @@ public class PartnerComparatorByDistance implements Comparator<Partner>, Seriali
     @Override
     public int compare(Partner partner1, Partner partner2) {
         Location baseLocation = baseLocationProvider.getBaseLocation();
+
         if (baseLocation == null) {
             return 0;
         }
         Float d1 = minDistanceFromPartnerToLocation(partner1, baseLocation);
         Float d2 = minDistanceFromPartnerToLocation(partner2, baseLocation);
-        return d1.compareTo(d2);
+        int result = d1.compareTo(d2);
+
+        return result;
     }
 
     private static Float minDistanceFromPartnerToLocation(Partner partner, Location location) {

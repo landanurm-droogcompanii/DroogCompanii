@@ -5,10 +5,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 
 import java.io.Serializable;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
+import ru.droogcompanii.application.util.LogUtils;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 17.01.14.
@@ -55,27 +58,51 @@ public class CurrentLocationProvider implements BaseLocationProvider, Serializab
     }
 
     private static void updateCurrentLocation() {
-        LocationManager locationManager = prepareLocationManager();
+        try {
+            currentLocation = getLastKnownLocation();
+        } catch (Throwable e) {
+            LogUtils.debug(e.getMessage());
+        }
+    }
+
+    private static Location getLastKnownLocation() {
+        final LocationManager locationManager = prepareLocationManager();
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         String enabledLocationProvider = LocationManager.GPS_PROVIDER;
         if (lastKnownLocation == null) {
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (lastKnownLocation == null) {
-                return;
-            }
             enabledLocationProvider = LocationManager.NETWORK_PROVIDER;
         }
-        if (!lastKnownLocation.equals(currentLocation)) {
-            LocationListener locationListener = new LocationListenerImpl();
+        if (lastKnownLocation != null && !Objects.equals(lastKnownLocation, currentLocation)) {
             locationManager.requestLocationUpdates(
-                    enabledLocationProvider, MIN_TIME, MIN_DISTANCE, locationListener
+                    enabledLocationProvider, MIN_TIME, MIN_DISTANCE, new LocationListenerImpl()
             );
         }
-        currentLocation = lastKnownLocation;
+        return lastKnownLocation;
     }
 
     private static LocationManager prepareLocationManager() {
         Context appContext = DroogCompaniiApplication.getContext();
         return (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    private static void requestLocationUpdates(final LocationManager locationManager, final String locationProvider) {
+        Runnable requestLocationUpdates = new Runnable() {
+            @Override
+            public void run() {
+            }
+        };
+        if (isUIThread()) {
+        } else {
+            Looper.prepare();
+            locationManager.requestLocationUpdates(
+                    locationProvider, MIN_TIME, MIN_DISTANCE, new LocationListenerImpl(), Looper.myLooper()
+            );
+            Looper.loop();
+        }
+    }
+
+    private static boolean isUIThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
     }
 }

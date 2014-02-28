@@ -7,7 +7,7 @@ public class Snorlax {
     private static final long SLEEP_TIME_IN_MILLISECONDS = 3000L;
 
     public static void sleep() {
-        actuallySleep();
+        doNotSleep();
     }
 
     private static void doNotSleep() {

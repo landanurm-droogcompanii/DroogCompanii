@@ -15,7 +15,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTaskWithGoToMapItem;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
@@ -34,7 +34,7 @@ import ru.droogcompanii.application.util.Keys;
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchResultListActivity extends ActivityAbleToStartTask
+public class SearchResultListActivity extends ActivityAbleToStartTaskWithGoToMapItem
                 implements SearchResultListFragment.Callbacks,
                            TaskFragmentHolder.Callbacks,
                            PartnerPointsProviderHolder {

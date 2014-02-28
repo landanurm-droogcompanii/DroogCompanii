@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.common.base.Optional;
@@ -50,12 +51,14 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     private static final String KEY_DETAILS = "DETAILS";
     private static final String KEY_TOKEN = "TOKEN";
     private static final String KEY_IS_DETAILS_REQUESTED = "IS_DETAILS_REQUESTED";
+    private static final String KEY_IS_SIGN_OUT_ENABLED = "KEY_IS_SIGN_OUT_ENABLED";
 
     private static final String TAG_PERSONAL_DETAILS_FRAGMENT = "PERSONAL_DETAILS";
     private static final String TAG_BANK_CARD_DETAILS_FRAGMENT = "BANK_CARD_DETAILS";
 
 
     private boolean isDetailsRequested;
+    private boolean isSignOutEnabled;
     private Optional<PersonalDetails> optionalDetails;
     private Optional<AuthenticationToken> optionalToken;
 
@@ -79,6 +82,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         logCurrentMethodName();
 
         isDetailsRequested = false;
+        isSignOutEnabled = false;
         optionalDetails = Optional.absent();
         optionalToken = Optional.absent();
     }
@@ -108,6 +112,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         logCurrentMethodName();
 
         isDetailsRequested = savedInstanceState.getBoolean(KEY_IS_DETAILS_REQUESTED);
+        isSignOutEnabled = savedInstanceState.getBoolean(KEY_IS_SIGN_OUT_ENABLED);
         optionalDetails = (Optional<PersonalDetails>) savedInstanceState.getSerializable(KEY_DETAILS);
         optionalToken = (Optional<AuthenticationToken>) savedInstanceState.getSerializable(KEY_TOKEN);
     }
@@ -124,6 +129,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         logCurrentMethodName();
 
         outState.putBoolean(KEY_IS_DETAILS_REQUESTED, isDetailsRequested);
+        outState.putBoolean(KEY_IS_SIGN_OUT_ENABLED, isSignOutEnabled);
         outState.putSerializable(KEY_DETAILS, optionalDetails);
         outState.putSerializable(KEY_TOKEN, optionalToken);
     }
@@ -278,8 +284,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         if (resultCode != RESULT_OK) {
             onUserLeaveSignInActivity();
         } else {
-            AuthenticationToken token = (AuthenticationToken) data.getSerializableExtra(SignInFragment.KEY_TOKEN);
-            onReceiveToken(token);
+            onUserSignIn(data);
         }
     }
 
@@ -287,6 +292,13 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         logCurrentMethodName();
 
         finish();
+    }
+
+    private void onUserSignIn(Intent data) {
+        logCurrentMethodName();
+
+        AuthenticationToken token = (AuthenticationToken) data.getSerializableExtra(SignInFragment.KEY_TOKEN);
+        onReceiveToken(token);
     }
 
     private void onReceiveToken(AuthenticationToken token) {
@@ -334,6 +346,8 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
 
     private void requestDetails(AuthenticationToken token) {
         logCurrentMethodName();
+
+        setEnabledSignOutAction(true);
 
         if (isInvalidToken(Optional.fromNullable(token))) {
             throw new IllegalStateException("requestDetails(token): given argument is invalid: " + token);
@@ -412,7 +426,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         Predicate signOutActionIsEnable = new Predicate() {
             @Override
             public boolean isTrue() {
-                return isValidToken(optionalToken);
+                return isSignOutEnabled;
             }
         };
         final MenuItemHelper signOutItemHelper = MenuItemHelpers.SIGNOUT
@@ -435,15 +449,23 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
             return;
         }
 
-        // setEnabledSignOutAction(false);
         startSignOutTask();
     }
 
     private void setEnabledSignOutAction(boolean enabled) {
         logCurrentMethodName();
 
-        MenuItem signOutAction = getMenu().findItem(MenuItemIds.SIGNOUT);
-        signOutAction.setEnabled(enabled);
+        isSignOutEnabled = enabled;
+
+        updateSignOutActionState();
+    }
+
+    private void updateSignOutActionState() {
+        Menu menu = getMenu();
+        if (menu != null) {
+            MenuItem signOutAction = menu.findItem(MenuItemIds.SIGNOUT);
+            signOutAction.setEnabled(isSignOutEnabled);
+        }
     }
 
     private void startSignOutTask() {
@@ -453,6 +475,9 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
             onTryingSignOutWhenCurrentTokenAlreadyIsInvalid();
             return;
         }
+
+        setEnabledSignOutAction(false);
+
         TaskNotBeInterrupted signOutTask = new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
@@ -494,7 +519,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         if (signOutWasPerformed()) {
             onSignOutCompletedSuccessfully();
         } else {
-            // setEnabledSignOutAction(true);
+            setEnabledSignOutAction(true);
         }
     }
 
@@ -510,6 +535,8 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         invalidateSession();
         removeBankCardDetailsFragmentIfItIsDisplaying();
         recreatePersonalDetailsFragment();
+
+        setEnabledSignOutAction(false);
     }
 
     private void invalidateSession() {
@@ -535,5 +562,14 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         transaction.replace(R.id.containerOfFragment, fragment, TAG_PERSONAL_DETAILS_FRAGMENT);
         transaction.commitAllowingStateLoss();
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        boolean result = super.onCreateOptionsMenu(menu);
+        updateSignOutActionState();
+        return result;
+    }
+
 
 }
