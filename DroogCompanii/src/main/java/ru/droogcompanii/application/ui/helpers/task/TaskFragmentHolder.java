@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 26.12.13.
@@ -40,12 +41,16 @@ public abstract class TaskFragmentHolder extends Fragment {
             throw new IllegalStateException("Activity must implement the TaskFragmentHolder's callbacks.");
         }
         callbacks = (Callbacks) activity;
+
+        LogUtils.debug("TaskFragmentHolder:   Attach");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         callbacks = DUMMY_CALLBACKS;
+
+        LogUtils.debug("TaskFragmentHolder:   Detach");
     }
 
     @Override

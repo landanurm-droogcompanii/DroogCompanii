@@ -31,13 +31,17 @@ import ru.droogcompanii.application.ui.fragment.personal_details.OnBankCardSelec
 import ru.droogcompanii.application.ui.fragment.personal_details.PersonalDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.util.CurrentMethodNameLogger;
 import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.Predicate;
+import ru.droogcompanii.application.util.Snorlax;
 
 /**
  * Created by ls on 25.02.14.
  */
 public class PersonalAccountActivity extends ActivityAbleToStartTask implements OnBankCardSelectedListener {
+
+    private static final CurrentMethodNameLogger LOGGER = new CurrentMethodNameLogger(PersonalAccountActivity.class);
 
     public static final String KEY_BANK_CARD = "BANK_CARD";
 
@@ -64,8 +68,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        logCurrentMethodName();
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_personal_details);
@@ -79,38 +81,13 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void initStateByDefault() {
-        logCurrentMethodName();
-
         isDetailsRequested = false;
         isSignOutEnabled = false;
         optionalDetails = Optional.absent();
         optionalToken = Optional.absent();
     }
 
-    private static void logCurrentMethodName(Object... additional) {
-        final StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        if (stackTraceElements.length > 0) {
-            String currentMethodName = stackTraceElements[3].getMethodName();
-            String className = PersonalAccountActivity.class.getSimpleName();
-            LogUtils.debug(className + "." + currentMethodName + "()" + combine(additional));
-        }
-    }
-
-    private static String combine(Object[] toCombine) {
-        if (toCombine.length == 0) {
-            return "";
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append(": ");
-        for (Object each : toCombine) {
-            builder.append(each);
-        }
-        return builder.toString();
-    }
-
     private void restoreState(Bundle savedInstanceState) {
-        logCurrentMethodName();
-
         isDetailsRequested = savedInstanceState.getBoolean(KEY_IS_DETAILS_REQUESTED);
         isSignOutEnabled = savedInstanceState.getBoolean(KEY_IS_SIGN_OUT_ENABLED);
         optionalDetails = (Optional<PersonalDetails>) savedInstanceState.getSerializable(KEY_DETAILS);
@@ -119,15 +96,11 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        logCurrentMethodName();
-
         super.onSaveInstanceState(outState);
         saveStateInto(outState);
     }
 
     private void saveStateInto(Bundle outState) {
-        logCurrentMethodName();
-
         outState.putBoolean(KEY_IS_DETAILS_REQUESTED, isDetailsRequested);
         outState.putBoolean(KEY_IS_SIGN_OUT_ENABLED, isSignOutEnabled);
         outState.putSerializable(KEY_DETAILS, optionalDetails);
@@ -135,8 +108,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void placePersonalDetailsFragmentOnLayout() {
-        logCurrentMethodName();
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         PersonalDetailsFragment fragment = new PersonalDetailsFragment();
         transaction.add(R.id.containerOfFragment, fragment, TAG_PERSONAL_DETAILS_FRAGMENT);
@@ -144,22 +115,16 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     public void setDefaultTitle() {
-        logCurrentMethodName();
-
         setTitle(R.string.titleOfPersonalAccountActivity);
     }
 
     @Override
     public void onBankCardSelected(BankCard bankCard) {
-        logCurrentMethodName();
-
         Fragment bankCardDetailsFragment = prepareBankCardDetailsFragment(bankCard);
         replaceCurrentFragmentOn(bankCardDetailsFragment, TAG_BANK_CARD_DETAILS_FRAGMENT);
     }
 
     private Fragment prepareBankCardDetailsFragment(BankCard bankCard) {
-        logCurrentMethodName();
-
         Bundle args = new Bundle();
         args.putSerializable(KEY_BANK_CARD, (Serializable) bankCard);
         Fragment bankCardDetailsFragment = new BankCardDetailsFragment();
@@ -168,8 +133,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void replaceCurrentFragmentOn(Fragment newFragment, String tag) {
-        logCurrentMethodName();
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.containerOfFragment, newFragment, tag);
         transaction.addToBackStack(null);
@@ -177,8 +140,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     public void requestDetails() {
-        logCurrentMethodName();
-
         if (isDetailsRequested) {
             return;
         }
@@ -191,8 +152,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void requestToken() {
-        logCurrentMethodName();
-
         if (isInvalidToken(optionalToken)) {
             startTaskReceivingTokenFromDB();
         } else {
@@ -201,23 +160,19 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private static boolean isInvalidToken(Optional<AuthenticationToken> optionalToken) {
-        logCurrentMethodName();
-
         return !isValidToken(optionalToken);
     }
 
     private static boolean isValidToken(Optional<AuthenticationToken> optionalToken) {
-        logCurrentMethodName();
-
         return optionalToken.isPresent() && optionalToken.get().isValid();
     }
 
     private void startTaskReceivingTokenFromDB() {
-        logCurrentMethodName();
-
         startTask(TASK_REQUEST_CODE_RECEIVE_TOKEN_FROM_DB, new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
+                Snorlax.sleep();
+
                 Context context = PersonalAccountActivity.this;
                 AuthenticationTokenSaverLoader saverLoader = new AuthenticationTokenSaverLoader(context);
                 return saverLoader.load();
@@ -227,8 +182,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
 
     @Override
     protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
-        logCurrentMethodName();
-
         if (requestCode == TASK_REQUEST_CODE_RECEIVE_TOKEN_FROM_DB) {
             onReceiveTokenFromDB(resultCode, result);
         } else if (requestCode == TASK_REQUEST_CODE_RECEIVE_DETAILS) {
@@ -241,8 +194,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onReceiveTokenFromDB(int resultCode, Serializable result) {
-        logCurrentMethodName();
-
         if (resultCode != RESULT_OK) {
             onTaskCancelled();
         } else {
@@ -256,22 +207,16 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onTaskCancelled() {
-        logCurrentMethodName();
-
         finish();
     }
 
     private void startSignInActivity() {
-        logCurrentMethodName();
-
         Intent intent = new Intent(this, SignInActivity.class);
         startActivityForResult(intent, REQUEST_CODE_SIGNIN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        logCurrentMethodName();
-
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_SIGNIN) {
             onReturningFromSignInActivity(resultCode, data);
@@ -279,8 +224,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onReturningFromSignInActivity(int resultCode, Intent data) {
-        logCurrentMethodName();
-
         if (resultCode != RESULT_OK) {
             onUserLeaveSignInActivity();
         } else {
@@ -289,30 +232,24 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onUserLeaveSignInActivity() {
-        logCurrentMethodName();
-
         finish();
     }
 
     private void onUserSignIn(Intent data) {
-        logCurrentMethodName();
-
         AuthenticationToken token = (AuthenticationToken) data.getSerializableExtra(SignInFragment.KEY_TOKEN);
         onReceiveToken(token);
     }
 
     private void onReceiveToken(AuthenticationToken token) {
-        logCurrentMethodName();
-
         startTaskSavingTokenToDb(token);
     }
 
     private void startTaskSavingTokenToDb(final AuthenticationToken token) {
-        logCurrentMethodName();
-
         startTask(TASK_REQUEST_CODE_SAVE_TOKEN_TO_DB, new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
+                Snorlax.sleep();
+
                 saveTokenToDb(token);
                 return token;
             }
@@ -320,15 +257,11 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void saveTokenToDb(AuthenticationToken token) {
-        logCurrentMethodName();
-
         AuthenticationTokenSaverLoader saverLoader = new AuthenticationTokenSaverLoader(this);
         saverLoader.save(token);
     }
 
     private void onSavingTokenToDbCompleted(int resultCode, Serializable result) {
-        logCurrentMethodName();
-
         if (resultCode != RESULT_OK) {
             onTaskCancelled();
         } else {
@@ -338,15 +271,11 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onReceiveTokenWithoutSavingToDatabase(AuthenticationToken token) {
-        logCurrentMethodName();
-
         optionalToken = Optional.of(token);
         requestDetails(token);
     }
 
     private void requestDetails(AuthenticationToken token) {
-        logCurrentMethodName();
-
         setEnabledSignOutAction(true);
 
         if (isInvalidToken(Optional.fromNullable(token))) {
@@ -357,21 +286,19 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void startTaskReceivingDetails(final AuthenticationToken token) {
-        logCurrentMethodName();
-
         final PersonalDetailsRequester requester =
                 new PersonalDetailsRequesterFromInetAndDatabase(this);
         startTask(TASK_REQUEST_CODE_RECEIVE_DETAILS, new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
+                Snorlax.sleep();
+
                 return requester.requestDetails(token);
             }
         });
     }
 
     private void onReceiveDetails(int resultCode, Serializable result) {
-        logCurrentMethodName();
-
         if (resultCode != RESULT_OK) {
             onTaskCancelled();
             return;
@@ -385,23 +312,17 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onRequestedDetailsCannotBeReceived() {
-        logCurrentMethodName();
-
         // TODO
         throw new IllegalStateException("onReceiveDetails(RESULT_OK, result): received details is absent");
     }
 
     private void onReceiveDetails(PersonalDetails personalDetails) {
-        logCurrentMethodName();
-
         DetailsReceiver detailsReceiver = (DetailsReceiver) getFragmentDisplayedAtTheMoment();
         detailsReceiver.onReceiveDetails(personalDetails);
         isDetailsRequested = false;
     }
 
     private Fragment getFragmentDisplayedAtTheMoment() {
-        logCurrentMethodName();
-
         final String[] tags = { TAG_BANK_CARD_DETAILS_FRAGMENT, TAG_PERSONAL_DETAILS_FRAGMENT };
         FragmentManager fragmentManager = getSupportFragmentManager();
         for (String tag : tags) {
@@ -415,8 +336,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
 
     @Override
     protected MenuHelper getMenuHelper() {
-        logCurrentMethodName();
-
         MenuItemHelper.Action signOutAction = new MenuItemHelper.Action() {
             @Override
             public void run(Activity activity) {
@@ -442,8 +361,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onSignOutAction() {
-        logCurrentMethodName();
-
         if (isRunningTask()) {
             LogUtils.debug("Activity has running task");
             return;
@@ -453,8 +370,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void setEnabledSignOutAction(boolean enabled) {
-        logCurrentMethodName();
-
         isSignOutEnabled = enabled;
 
         updateSignOutActionState();
@@ -469,8 +384,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void startSignOutTask() {
-        logCurrentMethodName();
-
         if (isInvalidToken(optionalToken)) {
             onTryingSignOutWhenCurrentTokenAlreadyIsInvalid();
             return;
@@ -481,6 +394,8 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         TaskNotBeInterrupted signOutTask = new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
+                Snorlax.sleep();
+
                 signOut();
                 return null;
             }
@@ -489,8 +404,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void signOut() {
-        logCurrentMethodName();
-
         Optional<AuthenticationToken> tokenToInvalidate = optionalToken;
         optionalToken = Optional.absent();
         AuthenticationTokenInvalidator tokenInvalidator = new AuthenticationTokenInvalidator(this);
@@ -498,14 +411,10 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onTryingSignOutWhenCurrentTokenAlreadyIsInvalid() {
-        logCurrentMethodName();
-
         throw new IllegalStateException("Cannot perform Sign Out because current token already is invalid");
     }
 
     private void onSignOutTaskCompleted(int resultCode, Serializable result) {
-        logCurrentMethodName();
-
         if (resultCode != RESULT_OK) {
             onSignOutCancelled();
         } else {
@@ -514,8 +423,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void onSignOutCancelled() {
-        logCurrentMethodName();
-
         if (signOutWasPerformed()) {
             onSignOutCompletedSuccessfully();
         } else {
@@ -524,14 +431,10 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private boolean signOutWasPerformed() {
-        logCurrentMethodName();
-
         return isInvalidToken(optionalToken);
     }
 
     private void onSignOutCompletedSuccessfully() {
-        logCurrentMethodName();
-
         invalidateSession();
         removeBankCardDetailsFragmentIfItIsDisplaying();
         recreatePersonalDetailsFragment();
@@ -545,8 +448,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void removeBankCardDetailsFragmentIfItIsDisplaying() {
-        logCurrentMethodName();
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag(TAG_BANK_CARD_DETAILS_FRAGMENT);
         if (fragment != null) {
@@ -555,8 +456,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void recreatePersonalDetailsFragment() {
-        logCurrentMethodName();
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = new PersonalDetailsFragment();
         transaction.replace(R.id.containerOfFragment, fragment, TAG_PERSONAL_DETAILS_FRAGMENT);
@@ -570,6 +469,5 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         updateSignOutActionState();
         return result;
     }
-
 
 }

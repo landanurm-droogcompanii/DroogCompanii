@@ -25,7 +25,9 @@ public class SignInTask extends TaskNotBeInterrupted {
     @Override
     protected Serializable doInBackground(Void... voids) {
         Authenticator authenticator = new Authenticator(context, login, password);
+
         Snorlax.sleep();
+
         return authenticator.authenticate();
     }
 

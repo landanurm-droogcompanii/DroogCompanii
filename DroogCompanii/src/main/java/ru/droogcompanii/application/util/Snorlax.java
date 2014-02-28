@@ -7,7 +7,7 @@ public class Snorlax {
     private static final long SLEEP_TIME_IN_MILLISECONDS = 3000L;
 
     public static void sleep() {
-        doNotSleep();
+        actuallySleep();
     }
 
     private static void doNotSleep() {
@@ -16,7 +16,7 @@ public class Snorlax {
 
     private static void actuallySleep() {
         try {
-            Thread.sleep(SLEEP_TIME_IN_MILLISECONDS);
+            Thread.currentThread().sleep(SLEEP_TIME_IN_MILLISECONDS);
         } catch (InterruptedException e) {
             LogUtils.debug(Snorlax.class.getName() + ".sleep():  " + e.getMessage());
         }
