@@ -2,9 +2,7 @@ package ru.droogcompanii.application.ui.activity.base_with_partner_points_map_fr
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -21,8 +19,8 @@ import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.Partne
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Keys;
 
 /**
@@ -32,8 +30,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
             extends ActionBarActivityWithUpButton
             implements PartnerPointsMapFragment.Callbacks, TaskFragmentHolder.Callbacks {
 
-    private static final String TAG_TASK_FRAGMENT_HOLDER =
-            "TaskFragmentHolder" + BaseActivityWithPartnerPointsMapFragmentAndInfoPanel.class.getName();
+    private static final int TASK_REQUEST_CODE_PARTNER_POINTS_RECEIVING = 107;
 
 
     private boolean isTaskStarted;
@@ -45,7 +42,11 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        isTaskStarted = getBooleanFlag(savedInstanceState, Keys.isTaskStarted, false);
+        if (savedInstanceState == null) {
+            initStateByDefault();
+        } else {
+            restoreState(savedInstanceState);
+        }
 
         findFragments();
 
@@ -56,16 +57,21 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
         setTitle();
     }
 
-    private boolean getBooleanFlag(Bundle bundle, String key, boolean defaultValue) {
-        if (bundle == null) {
-            return defaultValue;
-        }
-        return bundle.getBoolean(key);
+    private void initStateByDefault() {
+        isTaskStarted = false;
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        isTaskStarted = savedInstanceState.getBoolean(Keys.isTaskStarted);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
         outState.putBoolean(Keys.isTaskStarted, isTaskStarted);
     }
 
@@ -79,19 +85,57 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
 
     private void startTaskIfNotStarted() {
         if (!isTaskStarted) {
-            startTask();
+            startPartnerPointsReceivingTask();
         }
         partnerPointsMapFragment.setDoNotInitOnResume();
     }
 
-    private void startTask() {
+    private void startPartnerPointsReceivingTask() {
         isTaskStarted = true;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment taskFragment = new PartnerPointsProviderTaskFragmentHolder();
-        transaction.add(R.id.taskFragmentContainer, taskFragment, TAG_TASK_FRAGMENT_HOLDER);
-        transaction.commit();
+
+        TaskNotBeInterrupted task = new PartnerPointsProviderTask(getPartnerPointsProvider(), this);
+
+        startTask(TASK_REQUEST_CODE_PARTNER_POINTS_RECEIVING, task);
     }
+
+    @Override
+    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+        if (requestCode == TASK_REQUEST_CODE_PARTNER_POINTS_RECEIVING) {
+            onPartnerPointsReceivingTaskFinished(resultCode, result);
+        }
+    }
+
+    private void onPartnerPointsReceivingTaskFinished(int resultCode, Serializable result) {
+        isTaskStarted = false;
+        if (resultCode != RESULT_OK) {
+            finish();
+        }
+        onPartnerPointsReceivingTaskFinishedSuccessfully(result);
+    }
+
+    private void onPartnerPointsReceivingTaskFinishedSuccessfully(Serializable result) {
+        initPartnerPointsMapFragmentIfNeed((List<PartnerPoint>) result);
+        FlagNeedToUpdateMap.set(false);
+    }
+
+    private void initPartnerPointsMapFragmentIfNeed(Collection<PartnerPoint> partnerPoints) {
+        if (partnerPoints != null) {
+            initPartnerPointsMapFragment(partnerPoints);
+        }
+    }
+
+    private void initPartnerPointsMapFragment(Collection<PartnerPoint> partnerPoints) {
+        partnerPointsMapFragment.setPartnerPoints(partnerPoints);
+        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
+        partnerPointsMapFragment.setNoClickedMarker();
+    }
+
+    private void setTitle() {
+        String title = getPartnerPointsProvider().getTitle(this);
+        setTitle(title);
+    }
+
+    protected abstract PartnerPointsProvider getPartnerPointsProvider();
 
     @Override
     protected void onResume() {
@@ -104,46 +148,6 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
             startTaskIfNotStarted();
         }
     }
-
-    private void initPartnerPointsMapFragment(Collection<PartnerPoint> partnerPoints) {
-        partnerPointsMapFragment.setPartnerPoints(partnerPoints);
-        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
-        partnerPointsMapFragment.setNoClickedMarker();
-    }
-
-    @Override
-    public void onTaskFinished(int resultCode, Serializable result) {
-        isTaskStarted = false;
-        if (resultCode == RESULT_OK) {
-            onTaskFinishedSuccessfully(result);
-        } else {
-            onTaskCancelled();
-        }
-    }
-
-    private void onTaskFinishedSuccessfully(Serializable result) {
-        FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
-        initPartnerPointsMapFragmentIfNeed((List<PartnerPoint>) result);
-        FlagNeedToUpdateMap.set(false);
-    }
-
-    private void initPartnerPointsMapFragmentIfNeed(Collection<PartnerPoint> partnerPoints) {
-        if (partnerPoints != null) {
-            initPartnerPointsMapFragment(partnerPoints);
-        }
-    }
-
-    private void onTaskCancelled() {
-        finish();
-    }
-
-    private void setTitle() {
-        PartnerPointsProvider partnerPointsProvider = getPartnerPointsProvider();
-        String title = partnerPointsProvider.getTitle(this);
-        setTitle(title);
-    }
-
-    protected abstract PartnerPointsProvider getPartnerPointsProvider();
 
     @Override
     public void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow) {

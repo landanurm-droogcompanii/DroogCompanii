@@ -3,9 +3,7 @@ package ru.droogcompanii.application.ui.activity.offer_list;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import java.io.Serializable;
 
@@ -16,8 +14,8 @@ import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.AllOf
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
 import ru.droogcompanii.application.ui.fragment.offer_list.OfferListFragment;
 import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 31.01.14.
@@ -27,7 +25,7 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
 
     public static final String KEY_OFFERS_PROVIDER = "OffersProvider";
 
-    private static final String TAG_TASK_FRAGMENT_HOLDER = "TaskFragmentHolder";
+    private static final int TASK_REQUEST_CODE_OFFERS_RECEIVING = 251;
 
     private OfferListFragment offerListFragment;
 
@@ -55,36 +53,31 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
     }
 
     private void startTask() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment taskFragment = new OffersProviderTaskFragmentHolder();
-        taskFragment.setArguments(prepareTaskArguments());
-        transaction.add(R.id.taskFragmentContainer, taskFragment, TAG_TASK_FRAGMENT_HOLDER);
-        transaction.commit();
-    }
-
-    private Bundle prepareTaskArguments() {
-        Serializable offersProvider = getIntent().getSerializableExtra(KEY_OFFERS_PROVIDER);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(KEY_OFFERS_PROVIDER, offersProvider);
-        return bundle;
+        OffersProvider offersProvider = (OffersProvider) getIntent().getSerializableExtra(KEY_OFFERS_PROVIDER);
+        TaskNotBeInterrupted task = new OffersReceiverTask(offersProvider, this);
+        startTask(TASK_REQUEST_CODE_OFFERS_RECEIVING, task);
     }
 
     @Override
-    public void onTaskFinished(int resultCode, Serializable result) {
-        if (resultCode == RESULT_OK) {
-            onTaskFinishedSuccessfully(result);
-        } else {
-            onTaskCancelled();
+    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+        if (requestCode == TASK_REQUEST_CODE_OFFERS_RECEIVING) {
+            onReceivingOffersTaskFinished(resultCode, result);
         }
     }
 
-    private void onTaskFinishedSuccessfully(Serializable result) {
-        FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
+    private void onReceivingOffersTaskFinished(int resultCode, Serializable result) {
+        if (resultCode == RESULT_OK) {
+            onReceivingOffersTaskFinishedSuccessfully(result);
+        } else {
+            onReceivingOffersTaskCancelled();
+        }
+    }
+
+    private void onReceivingOffersTaskFinishedSuccessfully(Serializable result) {
         offerListFragment.setOffers(result);
     }
 
-    private void onTaskCancelled() {
+    private void onReceivingOffersTaskCancelled() {
         finish();
     }
 

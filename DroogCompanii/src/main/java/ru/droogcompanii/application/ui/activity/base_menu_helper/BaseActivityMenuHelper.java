@@ -1,12 +1,13 @@
 package ru.droogcompanii.application.ui.activity.base_menu_helper;
 
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+
+import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
 
 /**
  * Created by ls on 14.02.14.
  */
-public abstract class BaseActivityMenuHelper extends ActionBarActivity {
+public abstract class BaseActivityMenuHelper extends ActivityAbleToStartTask {
 
     private Menu menu;
 

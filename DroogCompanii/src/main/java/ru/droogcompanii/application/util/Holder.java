@@ -14,10 +14,6 @@ public class Holder<T> {
         this.value = value;
     }
 
-    public Holder() {
-        this.value = null;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

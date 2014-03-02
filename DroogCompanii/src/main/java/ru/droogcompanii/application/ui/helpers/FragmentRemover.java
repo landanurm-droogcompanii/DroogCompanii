@@ -13,14 +13,15 @@ import ru.droogcompanii.application.util.LogUtils;
  */
 public class FragmentRemover {
 
-    public static void removeFragmentByContainerId(final FragmentActivity activity, final int id) {
+    public static void removeFragmentByTag(final FragmentActivity activity, final String tag) {
         tryPost(new Runnable() {
             public void run() {
                 FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                Fragment fragment = fragmentManager.findFragmentById(id);
+                Fragment fragment = fragmentManager.findFragmentByTag(tag);
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.remove(fragment);
                 transaction.commitAllowingStateLoss();
+                fragmentManager.executePendingTransactions();
             }
         });
     }
@@ -33,18 +34,6 @@ public class FragmentRemover {
                 } catch (Exception e) {
                     LogUtils.debug(e.getMessage());
                 }
-            }
-        });
-    }
-
-    public static void removeFragmentByTag(final FragmentActivity activity, final String tag) {
-        tryPost(new Runnable() {
-            public void run() {
-                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                Fragment fragment = fragmentManager.findFragmentByTag(tag);
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.remove(fragment);
-                transaction.commitAllowingStateLoss();
             }
         });
     }

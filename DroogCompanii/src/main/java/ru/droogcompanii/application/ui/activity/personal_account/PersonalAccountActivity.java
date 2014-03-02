@@ -17,7 +17,6 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.personal_details.PersonalDetails;
 import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
@@ -30,6 +29,7 @@ import ru.droogcompanii.application.ui.fragment.bank_card_details.BankCardDetail
 import ru.droogcompanii.application.ui.fragment.personal_details.OnBankCardSelectedListener;
 import ru.droogcompanii.application.ui.fragment.personal_details.PersonalDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.CurrentMethodNameLogger;
 import ru.droogcompanii.application.util.LogUtils;
@@ -39,7 +39,7 @@ import ru.droogcompanii.application.util.Snorlax;
 /**
  * Created by ls on 25.02.14.
  */
-public class PersonalAccountActivity extends ActivityAbleToStartTask implements OnBankCardSelectedListener {
+public class PersonalAccountActivity extends ActionBarActivityWithUpButton implements OnBankCardSelectedListener {
 
     private static final CurrentMethodNameLogger LOGGER = new CurrentMethodNameLogger(PersonalAccountActivity.class);
 
@@ -181,7 +181,16 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     @Override
+    public void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId) {
+        super.startTask(requestCode, task, titleId);
+
+        setEnabledSignOutAction(false);
+    }
+
+    @Override
     protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+        setEnabledSignOutAction(true);
+
         if (requestCode == TASK_REQUEST_CODE_RECEIVE_TOKEN_FROM_DB) {
             onReceiveTokenFromDB(resultCode, result);
         } else if (requestCode == TASK_REQUEST_CODE_RECEIVE_DETAILS) {
@@ -276,8 +285,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void requestDetails(AuthenticationToken token) {
-        setEnabledSignOutAction(true);
-
         if (isInvalidToken(Optional.fromNullable(token))) {
             throw new IllegalStateException("requestDetails(token): given argument is invalid: " + token);
         } else {
@@ -286,16 +293,28 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     }
 
     private void startTaskReceivingDetails(final AuthenticationToken token) {
+        if (isRunningTask()) {
+            LogUtils.debug("RECEIVING DETAILS:  Activity has running task");
+        }
+
         final PersonalDetailsRequester requester =
                 new PersonalDetailsRequesterFromInetAndDatabase(this);
         startTask(TASK_REQUEST_CODE_RECEIVE_DETAILS, new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                Snorlax.sleep();
-
+                doMuchWork();
                 return requester.requestDetails(token);
             }
         });
+    }
+
+    private static void doMuchWork() {
+        int result = 0;
+        for (int i = 0; i < 1000; ++i) {
+            for (int j = 0; j < 10000; ++j) {
+                result += i * j;
+            }
+        }
     }
 
     private void onReceiveDetails(int resultCode, Serializable result) {
@@ -379,7 +398,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         Menu menu = getMenu();
         if (menu != null) {
             MenuItem signOutAction = menu.findItem(MenuItemIds.SIGNOUT);
-            signOutAction.setEnabled(isSignOutEnabled);
+            signOutAction.setEnabled(!isRunningTask());
         }
     }
 
@@ -388,8 +407,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
             onTryingSignOutWhenCurrentTokenAlreadyIsInvalid();
             return;
         }
-
-        setEnabledSignOutAction(false);
 
         TaskNotBeInterrupted signOutTask = new TaskNotBeInterrupted() {
             @Override
@@ -400,6 +417,7 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
                 return null;
             }
         };
+
         startTask(TASK_REQUEST_CODE_SIGN_OUT, signOutTask, R.string.sign_out_in_progress);
     }
 
@@ -425,8 +443,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
     private void onSignOutCancelled() {
         if (signOutWasPerformed()) {
             onSignOutCompletedSuccessfully();
-        } else {
-            setEnabledSignOutAction(true);
         }
     }
 
@@ -438,8 +454,6 @@ public class PersonalAccountActivity extends ActivityAbleToStartTask implements 
         invalidateSession();
         removeBankCardDetailsFragmentIfItIsDisplaying();
         recreatePersonalDetailsFragment();
-
-        setEnabledSignOutAction(false);
     }
 
     private void invalidateSession() {

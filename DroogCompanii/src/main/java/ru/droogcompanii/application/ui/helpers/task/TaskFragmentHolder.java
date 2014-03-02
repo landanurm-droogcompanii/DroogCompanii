@@ -22,7 +22,7 @@ public abstract class TaskFragmentHolder extends Fragment {
         void onTaskFinished(int resultCode, Serializable result);
     }
 
-    protected static final int REQUEST_CODE_TASK_FRAGMENT = 0;
+    protected static final int REQUEST_CODE_TASK_FRAGMENT = 2;
     protected static final String TAG_TASK_FRAGMENT = "inner_task_fragment";
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {

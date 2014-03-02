@@ -26,24 +26,20 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
     private static PartnerCategoryListAdapter createAdapter(Context context) {
         PartnerCategoriesReader partnerCategoriesReader = new PartnerCategoriesReader(context);
         List<PartnerCategory> partnerCategories = partnerCategoriesReader.getPartnerCategories();
-        return new PartnerCategoryListAdapter(context, partnerCategoriesReader, partnerCategories);
+        return new PartnerCategoryListAdapter(context, partnerCategories);
     }
 
     private static PartnerCategoryListAdapter createAdapter(Context context, Bundle savedInstanceState) {
-        PartnerCategoriesReader partnerCategoriesReader = new PartnerCategoriesReader(context);
         @SuppressWarnings("unchecked")
         List<PartnerCategory> partnerCategories =
                 (List<PartnerCategory>) savedInstanceState.getSerializable(Keys.partnerCategories);
-        return new PartnerCategoryListAdapter(context, partnerCategoriesReader, partnerCategories);
+        return new PartnerCategoryListAdapter(context, partnerCategories);
     }
 
 
     private final List<PartnerCategory> partnerCategories;
-    private final PartnerCategoriesReader partnerCategoriesReader;
 
-    private PartnerCategoryListAdapter(Context context,
-                                       PartnerCategoriesReader partnerCategoriesReader,
-                                       List<PartnerCategory> partnerCategories) {
+    private PartnerCategoryListAdapter(Context context, List<PartnerCategory> partnerCategories) {
         super(context, partnerCategories,
                 new ItemToTitleConverter<PartnerCategory>() {
                     @Override
@@ -51,7 +47,6 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
                         return item.getTitle();
                     }
                 });
-        this.partnerCategoriesReader = partnerCategoriesReader;
         this.partnerCategories = partnerCategories;
     }
 

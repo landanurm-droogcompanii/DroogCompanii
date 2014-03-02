@@ -10,12 +10,12 @@ import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 /**
  * Created by ls on 10.02.14.
  */
-public class OffersProviderTask extends TaskNotBeInterrupted {
+public class OffersReceiverTask extends TaskNotBeInterrupted {
 
     private final Context context;
     private final OffersProvider offersProvider;
 
-    public OffersProviderTask(OffersProvider offersProvider, Context context) {
+    public OffersReceiverTask(OffersProvider offersProvider, Context context) {
         super();
         this.context = context;
         this.offersProvider = offersProvider;

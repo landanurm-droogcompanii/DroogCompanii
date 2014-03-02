@@ -13,7 +13,12 @@ public class WeakReferenceWrapper<T> {
 
     private final WeakReference<T> weakReference;
 
-    public WeakReferenceWrapper(T obj) {
+
+    public static <E> WeakReferenceWrapper<E> from(E elem) {
+        return new WeakReferenceWrapper<E>(elem);
+    }
+
+    private WeakReferenceWrapper(T obj) {
         weakReference = new WeakReference<T>(obj);
     }
 

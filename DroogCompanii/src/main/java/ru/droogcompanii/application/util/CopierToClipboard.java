@@ -14,7 +14,7 @@ public class CopierToClipboard {
     private final Toast toastOnCopy;
 
     public CopierToClipboard(Context context) {
-        this(context, R.string.defaultMessageTextCopied);
+        this(context, R.string.labelOnCopiedText);
     }
 
     public CopierToClipboard(Context context, int idOfMessageTextCopied) {
@@ -23,7 +23,7 @@ public class CopierToClipboard {
     }
 
     public void copyToClipboard(String text) {
-        String defaultLabel = context.getString(R.string.defaultMessageTextCopied);
+        String defaultLabel = context.getString(R.string.labelOnCopiedText);
         copyToClipboard(defaultLabel, text);
     }
 

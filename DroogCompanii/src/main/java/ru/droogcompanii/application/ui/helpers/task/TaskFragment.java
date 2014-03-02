@@ -49,6 +49,11 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        initDialog();
+        return inflater.inflate(R.layout.fragment_task, container);
+    }
+
+    private void initDialog() {
         if (Objects.equals(titleId, NO_TITLE_ID)) {
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -56,7 +61,6 @@ public class TaskFragment extends DialogFragment {
             getDialog().setTitle(titleId);
         }
         getDialog().setCanceledOnTouchOutside(false);
-        return inflater.inflate(R.layout.fragment_task, container);
     }
 
     @Override
@@ -99,11 +103,11 @@ public class TaskFragment extends DialogFragment {
 
     public void onTaskFinished(Serializable result) {
         setResult(Activity.RESULT_OK, result);
+        returnResult();
+        task = null;
         if (isResumed()) {
             dismiss();
         }
-        task = null;
-        returnResult();
     }
 
     private void setResult(int resultCode, Serializable result) {

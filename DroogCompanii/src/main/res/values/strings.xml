@@ -23,8 +23,6 @@
         To get started you need to download the data.
         Do you want to download the data?
     </string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
 
     <string name="titleOfMultiPhonesCallerDialog">Call</string>
 
@@ -51,7 +49,7 @@
     <string name="textMapIsLoaded">Map is loaded...</string>
 
     <string name="labelOfGoToOffersButton">Offers</string>
-    <string name="defaultMessageTextCopied">Text copied</string>
+    <string name="labelOnCopiedText">Copied Text</string>
     <string name="copyToClipboard">Copy to clipboard</string>
     <string name="done">Done</string>
 

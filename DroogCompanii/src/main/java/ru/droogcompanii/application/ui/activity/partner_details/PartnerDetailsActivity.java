@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import java.io.Serializable;
@@ -20,19 +19,20 @@ import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helpe
 import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithGoToMapItem;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
+import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
+public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
                      implements PartnerPointListFragment.Callbacks,
                                 TaskFragmentHolder.Callbacks,
                                 PartnerPointsProviderHolder {
 
-    private static final String TAG_TASK_FRAGMENT_HOLDER = "TaskFragmentHolder";
+    private static final int TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING = 129;
 
     public static interface PartnerAndPartnerPointsProvider {
         Partner getPartner(Context context);
@@ -51,7 +51,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
     private static final String DETAILS_FRAGMENT_TAG = "Details Fragment Tag";
 
 
-    private PartnerDetailsTask.Result resultFromTask;
+    private PartnerDetailsReceivingTask.Result resultFromTask;
 
 
     public static void start(Context context, PartnerAndPartnerPointsProvider partnerAndPartnerPointsProvider) {
@@ -66,14 +66,14 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
         setContentView(R.layout.activity_partner);
 
         if (savedInstanceState == null) {
-            startTask();
+            startPartnerDetailsReceivingTask();
         } else {
             restoreState(savedInstanceState);
         }
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        resultFromTask = (PartnerDetailsTask.Result)
+        resultFromTask = (PartnerDetailsReceivingTask.Result)
                 savedInstanceState.getSerializable(Key.RESULT_FROM_TASK);
         initTitle();
     }
@@ -84,34 +84,27 @@ public class PartnerDetailsActivity extends ActionBarActivityWithGoToMapItem
         }
     }
 
-    private void startTask() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.taskFragmentContainer, prepareTaskFragment(), TAG_TASK_FRAGMENT_HOLDER);
-        transaction.commit();
-    }
-
-    private Fragment prepareTaskFragment() {
-        Fragment taskFragment = new PartnerDetailsTaskFragmentHolder();
-        taskFragment.setArguments(prepareArgumentsForTaskFragment());
-        return taskFragment;
-    }
-
-    private Bundle prepareArgumentsForTaskFragment() {
+    private void startPartnerDetailsReceivingTask() {
         Intent intent = getIntent();
-        Serializable provider = intent.getSerializableExtra(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER);
-        Bundle args = new Bundle();
-        args.putSerializable(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER, provider);
-        return args;
+        PartnerAndPartnerPointsProvider provider = (PartnerAndPartnerPointsProvider)
+                intent.getSerializableExtra(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER);
+        TaskNotBeInterrupted task = new PartnerDetailsReceivingTask(provider, this);
+        startTask(TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING, task);
     }
 
     @Override
-    public void onTaskFinished(int resultCode, Serializable result) {
+    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+        if (requestCode == TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING) {
+            onPartnerDetailsReceivingTaskFinished(resultCode, result);
+        }
+    }
+
+    private void onPartnerDetailsReceivingTaskFinished(int resultCode, Serializable result) {
         if (resultCode != RESULT_OK) {
             finish();
             return;
         }
-        resultFromTask = (PartnerDetailsTask.Result) result;
+        resultFromTask = (PartnerDetailsReceivingTask.Result) result;
         init();
     }
 

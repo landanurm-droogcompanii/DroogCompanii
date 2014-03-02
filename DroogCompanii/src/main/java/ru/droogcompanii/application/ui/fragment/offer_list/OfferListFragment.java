@@ -24,10 +24,6 @@ import ru.droogcompanii.application.util.Keys;
  */
 public class OfferListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-
-    private static final int ITEMS_PER_ROW_IN_LANDSCAPE = 2;
-    private static final int CELL_SPACING_IN_LANDSCAPE = 6;
-
     public static interface Callbacks {
         void onOfferItemClick(Offer offer);
     }

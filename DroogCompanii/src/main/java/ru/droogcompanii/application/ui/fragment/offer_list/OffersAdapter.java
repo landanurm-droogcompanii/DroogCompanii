@@ -54,9 +54,4 @@ public class OffersAdapter extends ArrayAdapter<Offer> {
         imageDownloader.download(offer.getImageUrl(), imageView);
     }
 
-    public ImageDownloader getImageDownloader() {
-        return imageDownloader;
-    }
-
-
 }

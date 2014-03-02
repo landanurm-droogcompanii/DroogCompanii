@@ -7,11 +7,11 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 
-public class SignInActivity extends ActivityAbleToStartTask {
+public class SignInActivity extends ActionBarActivityWithUpButton {
 
     private static final String TAG_FRAGMENT = "SignInFragment";
 

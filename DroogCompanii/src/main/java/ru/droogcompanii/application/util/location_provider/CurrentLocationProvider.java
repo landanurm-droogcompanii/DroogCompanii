@@ -86,22 +86,6 @@ public class CurrentLocationProvider implements BaseLocationProvider, Serializab
         return (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    private static void requestLocationUpdates(final LocationManager locationManager, final String locationProvider) {
-        Runnable requestLocationUpdates = new Runnable() {
-            @Override
-            public void run() {
-            }
-        };
-        if (isUIThread()) {
-        } else {
-            Looper.prepare();
-            locationManager.requestLocationUpdates(
-                    locationProvider, MIN_TIME, MIN_DISTANCE, new LocationListenerImpl(), Looper.myLooper()
-            );
-            Looper.loop();
-        }
-    }
-
     private static boolean isUIThread() {
         return Looper.myLooper() == Looper.getMainLooper();
     }

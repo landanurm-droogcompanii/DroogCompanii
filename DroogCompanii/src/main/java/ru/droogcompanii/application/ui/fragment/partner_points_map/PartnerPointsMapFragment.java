@@ -79,7 +79,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         getGoogleMap().setOnMarkerClickListener(this);
         */
 
-        super.callOnResumeFirstTime(new Runnable() {
+        super.callOnceOnResume(new Runnable() {
             @Override
             public void run() {
                 initOnFirstResume();

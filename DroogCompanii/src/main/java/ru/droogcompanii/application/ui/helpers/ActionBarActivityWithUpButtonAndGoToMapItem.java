@@ -8,7 +8,7 @@ import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helpe
 /**
  * Created by ls on 04.02.14.
  */
-public abstract class ActionBarActivityWithGoToMapItem extends ActionBarActivityWithUpButton {
+public abstract class ActionBarActivityWithUpButtonAndGoToMapItem extends ActionBarActivityWithUpButton {
     private MenuItem goToMapItem;
 
     @Override

@@ -19,13 +19,6 @@ class FilterSetImpl implements FilterSet, Serializable {
     private final List<SearchCriterion<Partner>> partnerSearchCriteria;
     private final List<Comparator<Partner>> partnerComparators;
 
-    public static FilterSetImpl from(List<Filter> filters) {
-        FilterSetImpl result = new FilterSetImpl();
-        for (Filter filter : filters) {
-            filter.includeIn(result);
-        }
-        return result;
-    }
 
     public FilterSetImpl() {
         partnerPointSearchCriteria = new ArrayList<SearchCriterion<PartnerPoint>>();

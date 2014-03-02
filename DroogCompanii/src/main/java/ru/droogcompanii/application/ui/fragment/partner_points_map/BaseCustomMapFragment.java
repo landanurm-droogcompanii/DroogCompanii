@@ -46,7 +46,7 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
     }
 
-    public final void callOnResumeFirstTime(Runnable runnable) {
+    public final void callOnceOnResume(Runnable runnable) {
         runnableOnResume = runnable;
     }
 
@@ -84,6 +84,7 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         SupportMapFragment mapFragment = getNestedSupportMapFragment();
         if (mapFragment != null) {
             map = mapFragment.getMap();
+            map.setMyLocationEnabled(true);
         }
     }
 

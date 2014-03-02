@@ -13,7 +13,7 @@ import ru.droogcompanii.application.util.Snorlax;
 /**
  * Created by ls on 13.02.14.
  */
-public class PartnerDetailsTask extends TaskNotBeInterrupted {
+public class PartnerDetailsReceivingTask extends TaskNotBeInterrupted {
 
     public static class Result implements Serializable {
         public Partner partner;
@@ -23,7 +23,7 @@ public class PartnerDetailsTask extends TaskNotBeInterrupted {
     private final Context context;
     private final PartnerDetailsActivity.PartnerAndPartnerPointsProvider provider;
 
-    public PartnerDetailsTask(PartnerDetailsActivity.PartnerAndPartnerPointsProvider provider, Context context) {
+    public PartnerDetailsReceivingTask(PartnerDetailsActivity.PartnerAndPartnerPointsProvider provider, Context context) {
         this.context = context;
         this.provider = provider;
     }

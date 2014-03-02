@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import ru.droogcompanii.application.R;
-
 /**
  * Created by ls on 31.01.14.
  */
@@ -25,7 +23,7 @@ public class YesNoDialogMaker {
     }
 
     public YesNoDialogMaker(Context context) {
-        this(context, R.string.yes, R.string.no);
+        this(context, android.R.string.yes, android.R.string.no);
     }
 
     public YesNoDialogMaker(Context context, int titleOfYesButton, int titleOfNoButton) {

@@ -20,8 +20,6 @@
         Данные, необходимые для работы, не загружены.
         Вы хотите загрузить данные?
     </string>
-    <string name="yes">Да</string>
-    <string name="no">Нет</string>
 
     <string name="titleOfMultiPhonesCallerDialog">Позвонить</string>
 
@@ -40,7 +38,7 @@
 
     <string name="labelOfGoToOffersButton">Акции</string>
 
-    <string name="defaultMessageTextCopied">Текст скопирован</string>
+    <string name="labelOnCopiedText">Копируемый текст</string>
     <string name="copyToClipboard">Скопировать в буфер</string>
 
 

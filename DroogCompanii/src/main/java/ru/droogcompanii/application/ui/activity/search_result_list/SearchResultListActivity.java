@@ -15,7 +15,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTaskWithGoToMapItem;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
@@ -26,6 +25,7 @@ import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 import ru.droogcompanii.application.ui.activity.search_result_list.spinner_util.SpinnerAdapterPartnerImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
+import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
@@ -34,7 +34,7 @@ import ru.droogcompanii.application.util.Keys;
 /**
  * Created by ls on 14.01.14.
  */
-public class SearchResultListActivity extends ActivityAbleToStartTaskWithGoToMapItem
+public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
                 implements SearchResultListFragment.Callbacks,
                            TaskFragmentHolder.Callbacks,
                            PartnerPointsProviderHolder {
