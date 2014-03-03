@@ -18,10 +18,6 @@ class SearchCriterionByQuery implements Serializable {
         this.matcherToSearchQuery = new MatcherToSearchQuery(query);
     }
 
-    public boolean meetCriterion(String text) {
-        return matcherToSearchQuery.matchToQuery(text);
-    }
-
     public boolean meetCriterion(PartnerCategory category) {
         return matcherToSearchQuery.matchToQuery(category.getTitle());
     }

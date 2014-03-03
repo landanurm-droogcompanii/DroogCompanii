@@ -2,8 +2,6 @@ package ru.droogcompanii.application.util.encoding;
 
 import android.util.Base64;
 
-import ru.droogcompanii.application.util.LogUtils;
-
 /**
  * Created by ls on 21.02.14.
  */
@@ -14,7 +12,6 @@ public class EncoderBase64 implements Encoder {
         try {
             return tryEncodeToString(toEncode);
         } catch (Exception e) {
-            LogUtils.debug(e.getMessage());
             throw new RuntimeException(e.getMessage(), e);
         }
     }
@@ -29,7 +26,6 @@ public class EncoderBase64 implements Encoder {
         try {
             return tryEncode(toEncode);
         } catch (Exception e) {
-            LogUtils.debug(e.getMessage());
             throw new RuntimeException(e.getMessage(), e);
         }
     }

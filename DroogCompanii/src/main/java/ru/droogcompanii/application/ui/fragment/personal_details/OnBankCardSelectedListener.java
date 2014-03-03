@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.ui.fragment.personal_details;
 
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+import ru.droogcompanii.application.data.personal_details.BankCard;
 
 /**
  * Created by ls on 24.02.14.

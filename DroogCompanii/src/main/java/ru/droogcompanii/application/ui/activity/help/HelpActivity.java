@@ -9,7 +9,7 @@ import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItems
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.fragment.help.HelpFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 14.02.14.

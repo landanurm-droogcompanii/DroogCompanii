@@ -19,10 +19,10 @@ import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProviderFromPartner;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
-import ru.droogcompanii.application.util.ImageDownloader;
-import ru.droogcompanii.application.util.RouteHelper;
-import ru.droogcompanii.application.util.caller_helper.CallerHelper;
+import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.ImageDownloader;
+import ru.droogcompanii.application.ui.util.Router;
+import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 
 /**
  * Created by ls on 12.02.14.
@@ -38,7 +38,7 @@ public class PartnerDetailsViewHelper {
     private final Context context;
     private final IsFavoriteViewUtils isFavoriteViewUtils;
     private final ImageDownloader imageDownloader;
-    private final RouteHelper routeHelper;
+    private final Router router;
     private final ViewMaker viewMaker;
     private final WorkingHoursViewMaker workingHoursViewMaker;
 
@@ -53,7 +53,7 @@ public class PartnerDetailsViewHelper {
         contactsViewMaker = new ContactsViewMaker(activity);
         workingHoursViewMaker = new WorkingHoursViewMaker(activity);
         callerHelper = new CallerHelper(activity);
-        routeHelper = new RouteHelper(activity);
+        router = new Router(activity);
         isFavoriteViewUtils = new IsFavoriteViewUtils(activity);
         viewMaker = new ViewMaker() {
             @Override
@@ -154,7 +154,7 @@ public class PartnerDetailsViewHelper {
         routeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                routeHelper.showRouteTo(partnerPoint);
+                router.routeTo(partnerPoint);
             }
         });
     }

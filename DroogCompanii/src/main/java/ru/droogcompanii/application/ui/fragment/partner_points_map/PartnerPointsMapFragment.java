@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -18,6 +19,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableS
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.MultiMap;
+import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 14.01.14.
@@ -33,18 +35,11 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     private boolean doNotInitOnResume;
     private boolean wasActivityCreated;
-    private Bundle savedInstanceState;
     private Callbacks callbacks;
     private ClickedMarkerHolder clickedMarkerHolder;
     private MultiMap<Marker, PartnerPoint> markersAndPartnerPoints;
     private SearchableListing<PartnerPoint> searchablePartnerPoints;
 
-
-    public PartnerPointsMapFragment() {
-        super();
-        searchablePartnerPoints = SearchableListing.newInstance(new ArrayList<PartnerPoint>());
-        clickedMarkerHolder = new ClickedMarkerHolder(this);
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -66,18 +61,16 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.savedInstanceState = savedInstanceState;
 
         wasActivityCreated = true;
 
-        clickedMarkerHolder.restoreFromIfNeed(savedInstanceState);
+        if (savedInstanceState == null) {
+            initByDefault();
+        } else {
+            restoreState(savedInstanceState);
+        }
 
-        restoreInstanceStateIfNeed(savedInstanceState);
-
-        /*
-        getGoogleMap().setOnMapClickListener(this);
-        getGoogleMap().setOnMarkerClickListener(this);
-        */
+        super.updateMapCameraAfterMapViewWillBePlacedOnLayout(clickedMarkerHolder);
 
         super.callOnceOnResume(new Runnable() {
             @Override
@@ -87,18 +80,28 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         });
     }
 
+    private void initByDefault() {
+        clickedMarkerHolder = new ClickedMarkerHolder(this);
+        setPartnerPointsIfNeed(SearchableListing.newInstance(new ArrayList<PartnerPoint>()));
+    }
+
+    private void setPartnerPointsIfNeed(SearchableListing<PartnerPoint> searchableListing) {
+        if (this.searchablePartnerPoints == null) {
+            this.searchablePartnerPoints = searchableListing;
+        }
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        clickedMarkerHolder = new ClickedMarkerHolder(this);
+        clickedMarkerHolder.restoreFrom(savedInstanceState);
+        Serializable searchablePartnerPoints = savedInstanceState.getSerializable(Keys.searchablePartnerPoints);
+        setPartnerPointsIfNeed((SearchableListing<PartnerPoint>) searchablePartnerPoints);
+    }
+
     private void initOnFirstResume() {
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
         initIfNeed();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void restoreInstanceStateIfNeed(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            searchablePartnerPoints = (SearchableListing<PartnerPoint>)
-                    savedInstanceState.getSerializable(Keys.searchablePartnerPoints);
-        }
     }
 
     private void initIfNeed() {
@@ -110,14 +113,6 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     private void init() {
         updateMap();
         clickedMarkerHolder.update();
-        super.updateMapCameraAfterMapViewWillBePlacedOnLayout(clickedMarkerHolder);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.searchablePartnerPoints, searchablePartnerPoints);
-        clickedMarkerHolder.saveInto(outState);
     }
 
     private void updateMap() {
@@ -139,12 +134,30 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         return new MarkerOptions().position(position).icon(MarkerIcons.unselected());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateCurrentLocationOnMap();
+    }
+
+    private void updateCurrentLocationOnMap() {
+        CurrentLocationProvider.updateCurrentLocation();
+        updateMapCamera(clickedMarkerHolder);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(Keys.searchablePartnerPoints, searchablePartnerPoints);
+        clickedMarkerHolder.saveInto(outState);
+    }
+
     public void setFilterSet(FilterSet filterSet) {
         searchablePartnerPoints.removeAllFilters();
         addFilterSet(filterSet);
     }
 
-    public void addFilterSet(FilterSet filterSet) {
+    private void addFilterSet(FilterSet filterSet) {
         searchablePartnerPoints.addSearchCriterion(filterSet.getCombinedPartnerPointSearchCriterion());
         updateMap();
         updateAfterFilteringIfNeed();
@@ -176,11 +189,10 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (isMarkerAlreadyClicked(marker)) {
-            return true;
+        if (!isMarkerAlreadyClicked(marker)) {
+            notifyNeedToShowPartnerPoints(marker);
+            clickedMarkerHolder.set(marker);
         }
-        notifyNeedToShowPartnerPoints(marker);
-        clickedMarkerHolder.set(marker);
         updateMapCamera(clickedMarkerHolder);
         return true;
     }

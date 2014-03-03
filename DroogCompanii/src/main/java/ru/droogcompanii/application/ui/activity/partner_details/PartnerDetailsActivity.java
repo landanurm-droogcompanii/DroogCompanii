@@ -19,9 +19,8 @@ import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helpe
 import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 
 /**
@@ -29,7 +28,6 @@ import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
  */
 public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
                      implements PartnerPointListFragment.Callbacks,
-                                TaskFragmentHolder.Callbacks,
                                 PartnerPointsProviderHolder {
 
     private static final int TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING = 129;

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+import ru.droogcompanii.application.data.personal_details.BankCard;
 import ru.droogcompanii.application.ui.activity.personal_account.PersonalAccountActivity;
 
 /**

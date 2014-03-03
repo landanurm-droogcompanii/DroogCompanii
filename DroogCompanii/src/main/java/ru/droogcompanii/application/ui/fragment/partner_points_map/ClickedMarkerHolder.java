@@ -21,17 +21,11 @@ class ClickedMarkerHolder {
         this.positionOfClickedMarker = null;
     }
 
-    public void restoreFromIfNeed(Bundle bundle) {
-        if (needToRestore(bundle)) {
-            restoreFrom(bundle);
+    public void restoreFrom(Bundle bundle) {
+        boolean isClickedMarkerExist = bundle.getBoolean(Keys.clickedMarkerIsExist);
+        if (!isClickedMarkerExist) {
+            return;
         }
-    }
-
-    private boolean needToRestore(Bundle bundle) {
-        return (bundle != null && bundle.getBoolean(Keys.clickedMarkerIsExist));
-    }
-
-    private void restoreFrom(Bundle bundle) {
         positionOfClickedMarker = readPosition(bundle);
     }
 

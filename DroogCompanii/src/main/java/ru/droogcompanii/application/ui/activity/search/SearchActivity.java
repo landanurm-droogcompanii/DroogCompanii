@@ -20,7 +20,7 @@ import ru.droogcompanii.application.ui.activity.search.search_result_provider_im
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderFavorite;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 14.01.14.

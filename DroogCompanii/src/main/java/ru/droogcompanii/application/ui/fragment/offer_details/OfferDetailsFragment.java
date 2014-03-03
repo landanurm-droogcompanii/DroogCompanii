@@ -20,7 +20,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.util.ImageDownloader;
+import ru.droogcompanii.application.ui.util.ImageDownloader;
 
 /**
  * Created by ls on 10.02.14.

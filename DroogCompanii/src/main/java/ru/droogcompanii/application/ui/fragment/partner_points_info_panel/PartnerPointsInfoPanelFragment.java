@@ -22,11 +22,11 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersR
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.ListUtils;
-import ru.droogcompanii.application.util.RouteHelper;
-import ru.droogcompanii.application.util.caller_helper.CallerHelper;
+import ru.droogcompanii.application.ui.util.Router;
+import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 
 /**
  * Created by ls on 22.01.14.
@@ -258,11 +258,11 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void updateRouteButton() {
-        final RouteHelper routeHelper = new RouteHelper(getActivity());
+        final Router router = new Router(getActivity());
         findViewById(R.id.routeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                routeHelper.showRouteTo(getCurrentPartnerPoint());
+                router.routeTo(getCurrentPartnerPoint());
             }
         });
     }

@@ -6,7 +6,7 @@ package ru.droogcompanii.application.data.time;
 public interface TimeRange {
     static final String SEPARATOR = "-";
 
-    boolean includes(TimeOfDay time);
     TimeOfDay from();
     TimeOfDay to();
+    boolean includes(TimeOfDay time);
 }

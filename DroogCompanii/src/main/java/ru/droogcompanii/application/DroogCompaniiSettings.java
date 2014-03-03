@@ -2,7 +2,9 @@ package ru.droogcompanii.application;
 
 import android.location.Location;
 
-import ru.droogcompanii.application.util.location_provider.CurrentLocationProvider;
+import com.google.common.base.Optional;
+
+import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 29.01.14.
@@ -16,18 +18,18 @@ public class DroogCompaniiSettings {
 
 
     public static Location getBaseLocation() {
-        Location baseLocation = CurrentLocationProvider.get();
-        return baseLocation != null ? baseLocation : getDefaultBaseLocation();
+        Optional<Location> baseLocation = CurrentLocationProvider.get();
+        return baseLocation.isPresent() ? baseLocation.get() : getDefaultBaseLocation();
     }
 
-    private static Location getDefaultBaseLocation() {
+    public static Location getDefaultBaseLocation() {
         return getLocationOfKazan();
     }
 
     private static Location getLocationOfKazan() {
         Location location = new Location("Kazan");
-        location.setLatitude(LATITUDE_OF_KAZAN);
-        location.setLongitude(LONGITUDE_OF_KAZAN);
+        location.setLatitude(LATITUDE_OF_KAZAN + 0.0111);
+        location.setLongitude(LONGITUDE_OF_KAZAN - 0.0111);
         return location;
     }
 

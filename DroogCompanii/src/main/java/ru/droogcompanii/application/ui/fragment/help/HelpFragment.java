@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.util.IconAndLabelItemInflater;
 import ru.droogcompanii.application.util.HotlineNumbersProvider;
-import ru.droogcompanii.application.util.NavigationToWebsiteHelper;
+import ru.droogcompanii.application.ui.util.NavigatorToWebsite;
 import ru.droogcompanii.application.util.WebsiteAddressProvider;
-import ru.droogcompanii.application.util.caller_helper.CallerHelper;
+import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 
 /**
  * Created by ls on 14.02.14.
@@ -46,7 +46,7 @@ public class HelpFragment extends Fragment {
         return inflater.inflate(R.drawable.ic_web_site, getString(R.string.website), new Runnable() {
             @Override
             public void run() {
-                NavigationToWebsiteHelper helper = new NavigationToWebsiteHelper(getActivity());
+                NavigatorToWebsite helper = new NavigatorToWebsite(getActivity());
                 helper.navigateToSite(WebsiteAddressProvider.getWebsiteAddress());
             }
         });

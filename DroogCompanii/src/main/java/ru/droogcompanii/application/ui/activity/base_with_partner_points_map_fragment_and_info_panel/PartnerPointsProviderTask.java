@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Snorlax;
 
 /**

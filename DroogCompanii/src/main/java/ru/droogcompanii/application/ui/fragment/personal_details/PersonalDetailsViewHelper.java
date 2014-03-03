@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.personal_details.PersonalDetails;
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+import ru.droogcompanii.application.data.personal_details.AccountOwner;
+import ru.droogcompanii.application.data.personal_details.BankCard;
 
 /**
  * Created by ls on 21.02.14.
@@ -59,19 +59,19 @@ public class PersonalDetailsViewHelper {
         containerOfDetails.addView(detailsView);
     }
 
-    public void displayDetails(PersonalDetails personalDetails) {
-        setTextDetails(personalDetails);
-        setCards(personalDetails);
+    public void displayDetails(AccountOwner accountOwner) {
+        setTextDetails(accountOwner);
+        setCards(accountOwner);
     }
 
-    private void setTextDetails(PersonalDetails personalDetails) {
-        setText(R.id.firstName, personalDetails.getFirstName());
-        setText(R.id.lastName, personalDetails.getLastName());
+    private void setTextDetails(AccountOwner accountOwner) {
+        setText(R.id.firstName, accountOwner.getFirstName());
+        setText(R.id.lastName, accountOwner.getLastName());
     }
 
-    private void setCards(PersonalDetails personalDetails) {
+    private void setCards(AccountOwner accountOwner) {
         Context context = detailsView.getContext();
-        List<BankCard> cards = personalDetails.getCards();
+        List<BankCard> cards = accountOwner.getBankCards();
         final BankCardAdapter adapter = new BankCardAdapter(context, cards);
         ListView cardsListView = (ListView) detailsView.findViewById(R.id.cardListView);
         cardsListView.setAdapter(adapter);

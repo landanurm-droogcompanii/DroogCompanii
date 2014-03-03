@@ -7,7 +7,6 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.xml_parser.offers_xml_parser.OffersXmlParser;
-import ru.droogcompanii.application.util.DummyOfferUtils;
 import ru.droogcompanii.application.util.StringToInputStreamConverter;
 
 /**

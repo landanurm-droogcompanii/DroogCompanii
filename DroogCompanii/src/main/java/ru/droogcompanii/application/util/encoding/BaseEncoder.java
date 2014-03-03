@@ -2,8 +2,6 @@ package ru.droogcompanii.application.util.encoding;
 
 import java.security.MessageDigest;
 
-import ru.droogcompanii.application.util.LogUtils;
-
 /**
  * Created by ls on 21.02.14.
  */
@@ -20,7 +18,6 @@ abstract class BaseEncoder implements Encoder {
         try {
             return tryEncode(toEncode);
         } catch(Exception e) {
-            LogUtils.debug(e.getMessage());
             throw new RuntimeException(e.getMessage(), e);
         }
     }

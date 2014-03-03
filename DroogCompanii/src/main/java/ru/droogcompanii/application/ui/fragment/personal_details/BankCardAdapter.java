@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+import ru.droogcompanii.application.data.personal_details.BankCard;
 
 /**
  * Created by ls on 24.02.14.

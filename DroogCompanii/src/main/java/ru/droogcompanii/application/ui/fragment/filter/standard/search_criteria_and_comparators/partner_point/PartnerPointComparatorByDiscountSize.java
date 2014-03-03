@@ -13,9 +13,10 @@ import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_
  */
 
 public class PartnerPointComparatorByDiscountSize implements Comparator<PartnerPoint>, Serializable {
+
     @Override
     public int compare(PartnerPoint partnerPoint1, PartnerPoint partnerPoint2) {
-        if (arePointsOfTheSamePartner(partnerPoint1, partnerPoint2)) {
+        if (partnerPoint1.getPartnerId() == partnerPoint2.getPartnerId()) {
             return 0;
         }
         Comparator<Partner> comparator = new PartnerComparatorByDiscountSize();
@@ -23,9 +24,5 @@ public class PartnerPointComparatorByDiscountSize implements Comparator<PartnerP
                 PartnersProviderWithoutContext.getPartnerOf(partnerPoint1),
                 PartnersProviderWithoutContext.getPartnerOf(partnerPoint2)
         );
-    }
-
-    private static boolean arePointsOfTheSamePartner(PartnerPoint partnerPoint1, PartnerPoint partnerPoint2) {
-        return partnerPoint1.getPartnerId() == partnerPoint2.getPartnerId();
     }
 }

@@ -30,14 +30,6 @@ public class FavoriteDBUtils {
         this.context = context;
     }
 
-    public boolean isFavorite(Partner partner) {
-        return isFavorite(partner.getId());
-    }
-
-    public boolean isFavorite(PartnerPoint partnerPoint) {
-        return isFavorite(partnerPoint.getPartnerId());
-    }
-
     public boolean isFavorite(int partnerId) {
         final Holder<Boolean> isFavorite = Holder.from(false);
 
@@ -55,14 +47,6 @@ public class FavoriteDBUtils {
         });
 
         return isFavorite.value;
-    }
-
-    public void setFavorite(Partner partner, boolean isFavorite) {
-        setFavorite(partner.getId(), isFavorite);
-    }
-
-    public void setFavorite(PartnerPoint partnerPoint, boolean isFavorite) {
-        setFavorite(partnerPoint.getPartnerId(), isFavorite);
     }
 
     public void setFavorite(int partnerId, boolean isFavorite) {
@@ -92,8 +76,8 @@ public class FavoriteDBUtils {
                 "( SELECT * FROM " + PARTNERS_CONTRACT.TABLE_NAME + " WHERE " +
                     PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_NAME_ID + " = " +
                     PARTNER_POINTS_CONTRACT.TABLE_NAME + "." + PARTNER_POINTS_CONTRACT.COLUMN_NAME_PARTNER_ID +
-                " AND " + PARTNERS_CONTRACT.TABLE_NAME + "." +
-                    PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE + " = 1" +
+                    " AND " +
+                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE + " = 1" +
                 " )";
 
         List<PartnerPoint> noPartnerPoints = new ArrayList<PartnerPoint>();

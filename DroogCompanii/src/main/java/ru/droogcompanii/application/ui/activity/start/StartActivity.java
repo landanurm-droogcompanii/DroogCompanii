@@ -11,7 +11,7 @@ import ru.droogcompanii.application.global_flags.SharedFlag;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
 import ru.droogcompanii.application.ui.activity.main_screen.MainScreen;
 import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
-import ru.droogcompanii.application.ui.helpers.YesNoDialogMaker;
+import ru.droogcompanii.application.ui.util.YesNoDialogMaker;
 
 /**
  * Created by ls on 31.01.14.

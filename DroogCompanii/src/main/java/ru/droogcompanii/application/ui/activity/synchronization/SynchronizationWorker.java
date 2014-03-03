@@ -12,8 +12,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.DataUpdater;
 import ru.droogcompanii.application.util.DataUrlProvider;
 import ru.droogcompanii.application.util.LogUtils;
-import ru.droogcompanii.application.util.StringConstants;
-import ru.droogcompanii.application.util.StringToInputStreamConverter;
 
 /**
  * Created by ls on 17.02.14.
@@ -33,18 +31,6 @@ public class SynchronizationWorker {
             public InputStream getXml() throws Exception {
                 Resources resources = context.getResources();
                 return resources.openRawResource(R.raw.test_data_2);
-            }
-        };
-    }
-
-    private DataUpdater.XmlProvider prepareProviderXmlWithoutData() {
-        return new DataUpdater.XmlProvider() {
-            @Override
-            public InputStream getXml() throws Exception {
-                return StringToInputStreamConverter.convert(
-                        "<" + StringConstants.PartnersXmlConstants.Tags.partnerCategories + ">\n" +
-                                "</" + StringConstants.PartnersXmlConstants.Tags.partnerCategories + ">"
-                );
             }
         };
     }

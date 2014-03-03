@@ -8,10 +8,6 @@ import android.support.v7.app.ActionBarActivity;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
-import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 21.02.14.
@@ -53,7 +49,6 @@ public class ActivityAbleToStartTask
 
     @Override
     public void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId) {
-        LogUtils.debug("Task Launched:  " + task.getClass().getSimpleName());
 
         if (isRunningTask) {
             throw new IllegalStateException(
@@ -84,8 +79,6 @@ public class ActivityAbleToStartTask
 
     @Override
     public final void onTaskFinished(int resultCode, Serializable result) {
-
-        LogUtils.debug("Task finished");
 
         isRunningTask = false;
 

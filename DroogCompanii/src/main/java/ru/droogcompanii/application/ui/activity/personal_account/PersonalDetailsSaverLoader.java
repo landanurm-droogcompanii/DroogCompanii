@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.google.common.base.Optional;
 
-import ru.droogcompanii.application.data.personal_details.PersonalDetails;
-import ru.droogcompanii.application.data.personal_details.PersonalDetailsImpl;
+import ru.droogcompanii.application.data.personal_details.AccountOwner;
+import ru.droogcompanii.application.data.personal_details.AccountOwnerImpl;
 import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
 
 /**
@@ -19,19 +19,19 @@ public class PersonalDetailsSaverLoader {
         this.context = context;
     }
 
-    public Optional<PersonalDetails> load(AuthenticationToken token) {
+    public Optional<AccountOwner> load(AuthenticationToken token) {
         // TODO
-        PersonalDetailsImpl personalDetails = new PersonalDetailsImpl();
-        personalDetails.firstName = "Dummy First Name from SaverLoader";
-        personalDetails.lastName = "Dummy Last Name from SaverLoader";
-        return Optional.of((PersonalDetails) personalDetails);
+        AccountOwnerImpl personalDetails = new AccountOwnerImpl();
+        personalDetails.setFirstName("Dummy First Name from SaverLoader");
+        personalDetails.setLastName("Dummy Last Name from SaverLoader");
+        return Optional.of((AccountOwner) personalDetails);
     }
 
-    public void save(AuthenticationToken token, PersonalDetails details) {
+    public void save(AuthenticationToken token, AccountOwner details) {
         // TODO
     }
 
-    public void saveIfPresent(AuthenticationToken token, Optional<PersonalDetails> optionalDetails) {
+    public void saveIfPresent(AuthenticationToken token, Optional<AccountOwner> optionalDetails) {
         if (optionalDetails.isPresent()) {
             save(token, optionalDetails.get());
         }

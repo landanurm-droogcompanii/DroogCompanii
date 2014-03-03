@@ -8,8 +8,8 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 
 public class SignInActivity extends ActionBarActivityWithUpButton {
 

@@ -15,8 +15,9 @@ import com.google.common.base.Optional;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.personal_details.PersonalDetails;
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+import ru.droogcompanii.application.data.personal_details.AccountOwner;
+import ru.droogcompanii.application.data.personal_details.BankCard;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
@@ -29,10 +30,7 @@ import ru.droogcompanii.application.ui.fragment.bank_card_details.BankCardDetail
 import ru.droogcompanii.application.ui.fragment.personal_details.OnBankCardSelectedListener;
 import ru.droogcompanii.application.ui.fragment.personal_details.PersonalDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
-import ru.droogcompanii.application.util.CurrentMethodNameLogger;
-import ru.droogcompanii.application.util.LogUtils;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.Predicate;
 import ru.droogcompanii.application.util.Snorlax;
 
@@ -40,8 +38,6 @@ import ru.droogcompanii.application.util.Snorlax;
  * Created by ls on 25.02.14.
  */
 public class PersonalAccountActivity extends ActionBarActivityWithUpButton implements OnBankCardSelectedListener {
-
-    private static final CurrentMethodNameLogger LOGGER = new CurrentMethodNameLogger(PersonalAccountActivity.class);
 
     public static final String KEY_BANK_CARD = "BANK_CARD";
 
@@ -63,7 +59,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
 
     private boolean isDetailsRequested;
     private boolean isSignOutEnabled;
-    private Optional<PersonalDetails> optionalDetails;
+    private Optional<AccountOwner> optionalDetails;
     private Optional<AuthenticationToken> optionalToken;
 
     @Override
@@ -90,7 +86,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     private void restoreState(Bundle savedInstanceState) {
         isDetailsRequested = savedInstanceState.getBoolean(KEY_IS_DETAILS_REQUESTED);
         isSignOutEnabled = savedInstanceState.getBoolean(KEY_IS_SIGN_OUT_ENABLED);
-        optionalDetails = (Optional<PersonalDetails>) savedInstanceState.getSerializable(KEY_DETAILS);
+        optionalDetails = (Optional<AccountOwner>) savedInstanceState.getSerializable(KEY_DETAILS);
         optionalToken = (Optional<AuthenticationToken>) savedInstanceState.getSerializable(KEY_TOKEN);
     }
 
@@ -293,10 +289,6 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     }
 
     private void startTaskReceivingDetails(final AuthenticationToken token) {
-        if (isRunningTask()) {
-            LogUtils.debug("RECEIVING DETAILS:  Activity has running task");
-        }
-
         final PersonalDetailsRequester requester =
                 new PersonalDetailsRequesterFromInetAndDatabase(this);
         startTask(TASK_REQUEST_CODE_RECEIVE_DETAILS, new TaskNotBeInterrupted() {
@@ -309,21 +301,12 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
         });
     }
 
-    private static void doMuchWork() {
-        int result = 0;
-        for (int i = 0; i < 1000; ++i) {
-            for (int j = 0; j < 10000; ++j) {
-                result += i * j;
-            }
-        }
-    }
-
     private void onReceiveDetails(int resultCode, Serializable result) {
         if (resultCode != RESULT_OK) {
             onTaskCancelled();
             return;
         }
-        optionalDetails = (Optional<PersonalDetails>) result;
+        optionalDetails = (Optional<AccountOwner>) result;
         if (optionalDetails.isPresent()) {
             onReceiveDetails(optionalDetails.get());
         } else {
@@ -336,9 +319,9 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
         throw new IllegalStateException("onReceiveDetails(RESULT_OK, result): received details is absent");
     }
 
-    private void onReceiveDetails(PersonalDetails personalDetails) {
+    private void onReceiveDetails(AccountOwner accountOwner) {
         DetailsReceiver detailsReceiver = (DetailsReceiver) getFragmentDisplayedAtTheMoment();
-        detailsReceiver.onReceiveDetails(personalDetails);
+        detailsReceiver.onReceiveDetails(accountOwner);
         isDetailsRequested = false;
     }
 
@@ -381,11 +364,6 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     }
 
     private void onSignOutAction() {
-        if (isRunningTask()) {
-            LogUtils.debug("Activity has running task");
-            return;
-        }
-
         startSignOutTask();
     }
 

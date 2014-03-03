@@ -10,7 +10,7 @@ import android.widget.TextView;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.helpers.IsFavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 
 /**
  * Created by Leonid on 27.02.14.

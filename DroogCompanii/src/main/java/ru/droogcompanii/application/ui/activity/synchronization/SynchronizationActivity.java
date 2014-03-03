@@ -1,37 +1,55 @@
 package ru.droogcompanii.application.ui.activity.synchronization;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
-import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 26.12.13.
  */
-public class SynchronizationActivity extends ActionBarActivity implements TaskFragmentHolder.Callbacks {
+public class SynchronizationActivity extends ActivityAbleToStartTask {
 
+
+    private static final int TASK_REQUEST_CODE_SYNCHRONIZATION = 244;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchronization);
+
+        if (savedInstanceState == null) {
+            startSynchronizationTask();
+        }
+    }
+
+    private void startSynchronizationTask() {
+        TaskNotBeInterrupted task = new SynchronizationTask(this);
+        Integer title = R.string.titleOfSynchronizationDialog;
+        startTask(TASK_REQUEST_CODE_SYNCHRONIZATION, task, title);
     }
 
     @Override
-    public void onTaskFinished(int resultCode, Serializable result) {
+    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+        if (requestCode == TASK_REQUEST_CODE_SYNCHRONIZATION) {
+            onSynchronizationTaskFinished(resultCode, result);
+        }
+    }
+
+    private void onSynchronizationTaskFinished(int resultCode, Serializable result) {
         if (resultCode == RESULT_OK) {
-            onTaskFinishedSuccessfully();
+            onSynchronizationTaskFinishedSuccessfully();
         }
         setResult(resultCode);
         finish();
     }
 
-    private void onTaskFinishedSuccessfully() {
+    private void onSynchronizationTaskFinishedSuccessfully() {
         VerifierDataForRelevance.setDataIsUpdated();
         FlagNeedToUpdateMap.set(true);
     }

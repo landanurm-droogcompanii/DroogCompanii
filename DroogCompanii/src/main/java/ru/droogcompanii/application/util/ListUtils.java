@@ -19,7 +19,7 @@ public class ListUtils {
     public static <T> void moveElementAtFirstPosition(T element, List<T> list) {
         int index = list.indexOf(element);
         if (index == -1) {
-            throw new IllegalArgumentException("Partner points doesn't have this point");
+            throw new IllegalArgumentException("Cannot find element <" + element + "> in list");
         }
         swap(list, 0, index);
     }

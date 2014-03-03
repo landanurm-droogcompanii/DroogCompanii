@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -19,53 +20,90 @@ import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.helpers.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.ui.util.FragmentAbleRunOnceOnResume;
+import ru.droogcompanii.application.ui.util.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 10.01.14.
  */
-class BaseCustomMapFragment extends android.support.v4.app.Fragment implements MarkersFinder {
+class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
+        implements MarkersFinder, LocationSource.OnLocationChangedListener {
 
-    private static final Runnable DUMMY_RUNNABLE_ON_RESUME = new Runnable() {
+    private static final LocationSource.OnLocationChangedListener
+            DUMMY_ON_LOCATION_CHANGED_LISTENER = new LocationSource.OnLocationChangedListener() {
         @Override
-        public void run() {
+        public void onLocationChanged(Location location) {
             // do nothing
         }
     };
 
+    private boolean isFirstUpdatingMapCamera;
     private boolean isMapViewPlacedOnLayout;
     private GoogleMap map;
     private List<Marker> markers;
-    private Runnable runnableOnResume;
-    private boolean isFirstUpdatingMapCamera;
+    private LocationSource.OnLocationChangedListener onLocationChangedListener;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        isFirstUpdatingMapCamera = (savedInstanceState == null);
-        runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
-    }
-
-    public final void callOnceOnResume(Runnable runnable) {
-        runnableOnResume = runnable;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        runnableOnResume.run();
-        runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
-    }
 
     public BaseCustomMapFragment() {
         isMapViewPlacedOnLayout = false;
         markers = new ArrayList<Marker>();
         map = null;
+        onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isFirstUpdatingMapCamera = (savedInstanceState == null);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_custom_map, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initDisplayOfCurrentLocation();
+    }
+
+    private void initDisplayOfCurrentLocation() {
+        GoogleMap googleMap = getGoogleMap();
+        if (googleMap == null) {
+            return;
+        }
+
+        googleMap.setMyLocationEnabled(true);
+        CurrentLocationProvider.setOnLocationChangedListener(this);
+
+        googleMap.setLocationSource(new LocationSource() {
+            @Override
+            public void activate(OnLocationChangedListener onLocationChangedListener) {
+                BaseCustomMapFragment.this.onLocationChangedListener = onLocationChangedListener;
+                CurrentLocationProvider.updateCurrentLocation();
+            }
+
+            @Override
+            public void deactivate() {
+                BaseCustomMapFragment.this.onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
+            }
+        });
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location == null) {
+            location = DroogCompaniiSettings.getDefaultBaseLocation();
+        }
+        onLocationChangedListener.onLocationChanged(location);
     }
 
     protected final GoogleMap getGoogleMap() {
@@ -84,7 +122,6 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         SupportMapFragment mapFragment = getNestedSupportMapFragment();
         if (mapFragment != null) {
             map = mapFragment.getMap();
-            map.setMyLocationEnabled(true);
         }
     }
 
@@ -93,7 +130,7 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
                 getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
     }
 
-    protected final View getMapView() {
+    private final View getMapView() {
         return getNestedSupportMapFragment().getView();
     }
 
@@ -132,7 +169,7 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
         isFirstUpdatingMapCamera = false;
     }
 
-    protected void moveCamera(LatLng center) {
+    private void moveCamera(LatLng center) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, defineZoom());
         getGoogleMap().animateCamera(cameraUpdate);
     }
@@ -182,6 +219,6 @@ class BaseCustomMapFragment extends android.support.v4.app.Fragment implements M
 
     @Override
     public boolean isMarkerPlacedOnMap(Marker marker) {
-        return markers.indexOf(marker) != -1;
+        return markers.contains(marker);
     }
 }

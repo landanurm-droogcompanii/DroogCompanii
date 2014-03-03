@@ -2,19 +2,19 @@ package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria
 
 import android.location.Location;
 
+import com.google.common.base.Optional;
+
 import java.io.Serializable;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
-import ru.droogcompanii.application.util.location_provider.BaseLocationProvider;
+import ru.droogcompanii.application.util.BaseLocationProvider;
 
 /**
  * Created by ls on 14.02.14.
  */
 public class PartnerPointSearchClosestPointsCriterion
         implements SearchCriterion<PartnerPoint>, Serializable {
-
-    private static final boolean IS_MEET_CRITERION_IF_BASE_LOCATION_IS_NOT_AVAILABLE = true;
 
     private final BaseLocationProvider baseLocationProvider;
     private final float radiusInMeters;
@@ -27,8 +27,8 @@ public class PartnerPointSearchClosestPointsCriterion
 
     @Override
     public boolean meetCriterion(PartnerPoint partnerPoint) {
-        Location location = baseLocationProvider.getBaseLocation();
-        float distanceInMeters = partnerPoint.distanceTo(location);
+        Optional<Location> baseLocation = baseLocationProvider.getBaseLocation();
+        float distanceInMeters = partnerPoint.distanceTo(baseLocation.get());
         return (distanceInMeters <= radiusInMeters);
     }
 }

@@ -13,15 +13,14 @@ import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivi
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.AllOffersProvider;
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
 import ru.droogcompanii.application.ui.fragment.offer_list.OfferListFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 31.01.14.
  */
 public class OfferListActivity extends ActionBarActivityWithUpButton
-                            implements OfferListFragment.Callbacks, TaskFragmentHolder.Callbacks {
+                            implements OfferListFragment.Callbacks {
 
     public static final String KEY_OFFERS_PROVIDER = "OffersProvider";
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
-import ru.droogcompanii.application.util.ImageDownloader;
+import ru.droogcompanii.application.ui.util.ImageDownloader;
 
 /**
  * Created by ls on 10.02.14.

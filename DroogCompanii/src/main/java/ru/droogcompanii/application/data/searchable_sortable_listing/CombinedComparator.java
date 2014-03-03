@@ -12,6 +12,10 @@ public class CombinedComparator<T> implements Comparator<T>, Serializable {
 
     private final List<Comparator<T>> comparators;
 
+    public static <E> CombinedComparator from(List<Comparator<E>> comparators) {
+        return new CombinedComparator<E>(comparators);
+    }
+
     public CombinedComparator() {
         comparators = new ArrayList<Comparator<T>>();
     }

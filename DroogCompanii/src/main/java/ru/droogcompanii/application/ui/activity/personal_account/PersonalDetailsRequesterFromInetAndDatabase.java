@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.common.base.Optional;
 
-import ru.droogcompanii.application.data.personal_details.PersonalDetails;
+import ru.droogcompanii.application.data.personal_details.AccountOwner;
 import ru.droogcompanii.application.ui.activity.signin.AuthenticationToken;
 import ru.droogcompanii.application.util.LogUtils;
 
@@ -22,26 +22,19 @@ public class PersonalDetailsRequesterFromInetAndDatabase implements PersonalDeta
     }
 
     @Override
-    public Optional<PersonalDetails> requestDetails(AuthenticationToken token) {
+    public Optional<AccountOwner> requestDetails(AuthenticationToken token) {
         try {
-            log("try receive details from inet");
-
             return tryReceiveDetailsFromInet(token);
         } catch (Throwable e) {
-            log("load details from database");
-
             LogUtils.debug(e.getMessage());
             return saverLoader.load(token);
         }
     }
 
-    private Optional<PersonalDetails> tryReceiveDetailsFromInet(AuthenticationToken token) {
-        Optional<PersonalDetails> optionalDetails = requesterFromInet.requestDetails(token);
+    private Optional<AccountOwner> tryReceiveDetailsFromInet(AuthenticationToken token) {
+        Optional<AccountOwner> optionalDetails = requesterFromInet.requestDetails(token);
         saverLoader.saveIfPresent(token, optionalDetails);
         return optionalDetails;
     }
 
-    private static void log(String message) {
-        LogUtils.debug(PersonalDetailsRequesterFromInetAndDatabase.class.getSimpleName() + ": " + message);
-    }
 }

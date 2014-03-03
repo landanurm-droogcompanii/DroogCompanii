@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ru.droogcompanii.application.data.personal_details.PersonalDetails;
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
+import ru.droogcompanii.application.data.personal_details.AccountOwner;
+import ru.droogcompanii.application.data.personal_details.BankCard;
 import ru.droogcompanii.application.ui.activity.personal_account.DetailsReceiver;
 import ru.droogcompanii.application.ui.activity.personal_account.PersonalAccountActivity;
 
@@ -71,7 +71,7 @@ public class PersonalDetailsFragment extends Fragment implements DetailsReceiver
     }
 
     @Override
-    public void onReceiveDetails(PersonalDetails details) {
+    public void onReceiveDetails(AccountOwner details) {
         detailsViewHelper.displayDetails(details);
     }
 }

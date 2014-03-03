@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner;
 
-import ru.droogcompanii.application.util.location_provider.SettingBaseLocationProvider;
+import ru.droogcompanii.application.ui.util.SettingBaseLocationProvider;
 
 /**
  * Created by ls on 17.01.14.

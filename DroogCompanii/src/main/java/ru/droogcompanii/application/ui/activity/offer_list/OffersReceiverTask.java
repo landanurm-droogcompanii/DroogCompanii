@@ -5,7 +5,7 @@ import android.content.Context;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 10.02.14.

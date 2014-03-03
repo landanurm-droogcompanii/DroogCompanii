@@ -7,9 +7,8 @@ import android.view.View;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.personal_details.bank_card.BankCard;
-import ru.droogcompanii.application.data.personal_details.bank_card.CardOwner;
-import ru.droogcompanii.application.data.personal_details.bank_card.CardTransaction;
+import ru.droogcompanii.application.data.personal_details.BankCard;
+import ru.droogcompanii.application.data.personal_details.CardTransaction;
 
 /**
  * Created by ls on 24.02.14.
@@ -48,15 +47,15 @@ public class BankCardDetailsViewHelper {
 
     public void display(BankCard bankCard) {
         makeViewIfNeed();
-        setOwner(bankCard.getOwner());
-        setTransactions(bankCard.getTransactions());
+        displayCardDetails(bankCard);
+        displayTransactions(bankCard.getTransactions());
     }
 
-    private void setTransactions(List<CardTransaction> transactions) {
+    private void displayCardDetails(BankCard bankCard) {
 
     }
 
-    private void setOwner(CardOwner owner) {
+    private void displayTransactions(List<CardTransaction> transactions) {
 
     }
 }

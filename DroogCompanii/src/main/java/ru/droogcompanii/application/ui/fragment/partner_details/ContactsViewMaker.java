@@ -4,22 +4,22 @@ import android.content.Context;
 import android.view.View;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.util.SenderOfEmail;
 import ru.droogcompanii.application.ui.util.IconAndLabelItemInflater;
-import ru.droogcompanii.application.util.EmailSenderHelper;
-import ru.droogcompanii.application.util.NavigationToWebsiteHelper;
+import ru.droogcompanii.application.ui.util.NavigatorToWebsite;
 
 /**
  * Created by ls on 13.02.14.
  */
 public class ContactsViewMaker {
 
-    private final EmailSenderHelper emailSenderHelper;
-    private final NavigationToWebsiteHelper navigationToWebsiteHelper;
+    private final SenderOfEmail senderOfEmail;
+    private final NavigatorToWebsite navigatorToWebsite;
     private final IconAndLabelItemInflater inflater;
 
     public ContactsViewMaker(Context context) {
-        navigationToWebsiteHelper = new NavigationToWebsiteHelper(context);
-        emailSenderHelper = new EmailSenderHelper(context);
+        navigatorToWebsite = new NavigatorToWebsite(context);
+        senderOfEmail = new SenderOfEmail(context);
         inflater = new IconAndLabelItemInflater(context);
     }
 
@@ -27,7 +27,7 @@ public class ContactsViewMaker {
         return inflater.inflate(R.drawable.ic_web_site, webSite, new Runnable() {
             @Override
             public void run() {
-                navigationToWebsiteHelper.navigateToSite(webSite);
+                navigatorToWebsite.navigateToSite(webSite);
             }
         });
     }
@@ -36,7 +36,7 @@ public class ContactsViewMaker {
         return inflater.inflate(android.R.drawable.ic_dialog_email, email, new Runnable() {
             @Override
             public void run() {
-                emailSenderHelper.sendEmailTo(email);
+                senderOfEmail.sendTo(email);
             }
         });
     }

@@ -21,7 +21,7 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResul
 import ru.droogcompanii.application.ui.activity.able_to_start_task.AbleToStartTask;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Objects;
 
 /**

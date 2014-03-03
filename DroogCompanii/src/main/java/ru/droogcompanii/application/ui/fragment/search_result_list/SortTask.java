@@ -8,7 +8,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 24.02.14.

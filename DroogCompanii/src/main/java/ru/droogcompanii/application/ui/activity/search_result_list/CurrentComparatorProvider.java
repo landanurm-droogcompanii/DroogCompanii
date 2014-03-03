@@ -17,7 +17,7 @@ public class CurrentComparatorProvider {
 
     public static Comparator<Partner> getCombinedPartnerComparator() {
         List<Comparator<Partner>> comparators = getCurrentFilterSet().getPartnerComparators();
-        return new CombinedComparator(comparators);
+        return CombinedComparator.from(comparators);
     }
 
     private static FilterSet getCurrentFilterSet() {

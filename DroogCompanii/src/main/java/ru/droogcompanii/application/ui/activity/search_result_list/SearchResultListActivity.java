@@ -25,9 +25,8 @@ import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
 import ru.droogcompanii.application.ui.activity.search_result_list.spinner_util.SpinnerAdapterPartnerImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
-import ru.droogcompanii.application.ui.helpers.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
-import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.Keys;
 
@@ -36,7 +35,6 @@ import ru.droogcompanii.application.util.Keys;
  */
 public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
                 implements SearchResultListFragment.Callbacks,
-                           TaskFragmentHolder.Callbacks,
                            PartnerPointsProviderHolder {
 
     private static final int TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS = 145;
