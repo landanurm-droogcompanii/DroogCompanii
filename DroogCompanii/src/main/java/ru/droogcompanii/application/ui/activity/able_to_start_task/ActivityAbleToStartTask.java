@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBarActivity;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.helpers.FragmentRemover;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragment;
 import ru.droogcompanii.application.ui.helpers.task.TaskFragmentHolder;
 import ru.droogcompanii.application.ui.helpers.task.TaskNotBeInterrupted;
@@ -67,14 +66,15 @@ public class ActivityAbleToStartTask
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT_HOLDER) != null) {
-            FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
-        }
-
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         CommonTaskFragmentHolder taskFragment = new CommonTaskFragmentHolder();
         taskFragment.set(task, titleId);
-        transaction.add(getIdOfTaskFragmentContainer(), taskFragment, TAG_TASK_FRAGMENT_HOLDER);
+
+        if (fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT_HOLDER) != null) {
+            transaction.replace(getIdOfTaskFragmentContainer(), taskFragment, TAG_TASK_FRAGMENT_HOLDER);
+        } else {
+            transaction.add(getIdOfTaskFragmentContainer(), taskFragment, TAG_TASK_FRAGMENT_HOLDER);
+        }
         transaction.commitAllowingStateLoss();
     }
 
@@ -86,8 +86,6 @@ public class ActivityAbleToStartTask
     public final void onTaskFinished(int resultCode, Serializable result) {
 
         LogUtils.debug("Task finished");
-
-        FragmentRemover.removeFragmentByTag(this, TAG_TASK_FRAGMENT_HOLDER);
 
         isRunningTask = false;
 

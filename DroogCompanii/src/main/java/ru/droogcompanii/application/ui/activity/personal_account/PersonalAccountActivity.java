@@ -302,7 +302,8 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
         startTask(TASK_REQUEST_CODE_RECEIVE_DETAILS, new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                doMuchWork();
+                Snorlax.sleep();
+
                 return requester.requestDetails(token);
             }
         });
