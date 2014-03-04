@@ -42,7 +42,10 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
     public static final int LOWER_BOUND_VALID_TASK_REQUEST_CODE =
                         TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS + 1;
 
+    private static final String KEY_INDEX_OF_CURRENT_COMPARATOR = "KEY_INDEX_OF_CURRENT_COMPARATOR";
+
     private boolean isGoToMapItemVisible;
+    private int indexOfCurrentComparator;
     private SearchResultListFragment searchResultFragment;
     private SearchResultProvider searchResultProvider;
 
@@ -58,7 +61,11 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
-        init(savedInstanceState);
+        if (savedInstanceState == null) {
+            initStateByDefault();
+        } else {
+            restoreState(savedInstanceState);
+        }
 
         searchResultFragment = (SearchResultListFragment)
                 getSupportFragmentManager().findFragmentById(R.id.searchResultFragment);
@@ -70,21 +77,18 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         }
     }
 
-    private void init(Bundle savedInstanceState) {
-        searchResultProvider = getSearchResultProvider(savedInstanceState);
-        updateGoToMapItemVisible(getIsGoToMapItemVisible(savedInstanceState));
+    private void initStateByDefault() {
+        indexOfCurrentComparator = 0;
+        searchResultProvider = (SearchResultProvider)
+                getIntent().getExtras().getSerializable(Keys.searchResultProvider);
+        updateGoToMapItemVisible(false);
     }
 
-    private SearchResultProvider getSearchResultProvider(Bundle savedInstanceState) {
-        Bundle bundleWithResult = (savedInstanceState != null) ? savedInstanceState : getIntent().getExtras();
-        return (SearchResultProvider) bundleWithResult.getSerializable(Keys.searchResultProvider);
-    }
-
-    private boolean getIsGoToMapItemVisible(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            return false;
-        }
-        return savedInstanceState.getBoolean(Keys.isGoToMapItemVisible);
+    private void restoreState(Bundle savedInstanceState) {
+        indexOfCurrentComparator = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_COMPARATOR);
+        searchResultProvider = (SearchResultProvider)
+                savedInstanceState.getSerializable(Keys.searchResultProvider);
+        updateGoToMapItemVisible(savedInstanceState.getBoolean(Keys.isGoToMapItemVisible));
     }
 
     private void updateGoToMapItemVisible(boolean visible) {
@@ -103,12 +107,17 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         ActionBar.OnNavigationListener onNavigationListener = new ActionBar.OnNavigationListener() {
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                Comparator<Partner> newComparator = SpinnerAdapterPartnerImpl.getComparatorByPosition(itemPosition);
-                onComparatorChanged(newComparator);
+                onComparatorChanged(itemPosition);
                 return true;
             }
         };
         initSpinnerOnActionBar(spinnerAdapter, onNavigationListener);
+    }
+
+    private void onComparatorChanged(int comparatorPosition) {
+        indexOfCurrentComparator = comparatorPosition;
+        Comparator<Partner> newComparator = SpinnerAdapterPartnerImpl.getComparatorByPosition(comparatorPosition);
+        searchResultFragment.setComparator(newComparator);
     }
 
     private void initSpinnerOnActionBar(SpinnerAdapter spinnerAdapter,
@@ -116,10 +125,7 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(spinnerAdapter, listener);
-    }
-
-    private void onComparatorChanged(Comparator<Partner> newComparator) {
-        searchResultFragment.setComparator(newComparator);
+        actionBar.setSelectedNavigationItem(indexOfCurrentComparator);
     }
 
     private void actionsOnLaunchActivity() {
@@ -174,6 +180,7 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
         outState.putBoolean(Keys.isGoToMapItemVisible, isGoToMapItemVisible);
+        outState.putInt(KEY_INDEX_OF_CURRENT_COMPARATOR, indexOfCurrentComparator);
     }
 
     @Override

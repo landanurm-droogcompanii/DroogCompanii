@@ -2,8 +2,6 @@ package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria
 
 import android.location.Location;
 
-import com.google.common.base.Optional;
-
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -25,13 +23,9 @@ public class PartnerComparatorByDistance implements Comparator<Partner>, Seriali
 
     @Override
     public int compare(Partner partner1, Partner partner2) {
-        Optional<Location> baseLocation = baseLocationProvider.getBaseLocation();
-
-        if (!baseLocation.isPresent()) {
-            return 0;
-        }
-        Float d1 = minDistanceFromPartnerToLocation(partner1, baseLocation.get());
-        Float d2 = minDistanceFromPartnerToLocation(partner2, baseLocation.get());
+        Location baseLocation = baseLocationProvider.getBaseLocation();
+        Float d1 = minDistanceFromPartnerToLocation(partner1, baseLocation);
+        Float d2 = minDistanceFromPartnerToLocation(partner2, baseLocation);
         int result = d1.compareTo(d2);
 
         return result;

@@ -47,17 +47,6 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         callbacks = (Callbacks) activity;
     }
 
-    public void setPartnerPoints(Collection<PartnerPoint> partnerPoints) {
-        searchablePartnerPoints = SearchableSortableListing.newInstance(partnerPoints);
-        if (wasActivityCreated) {
-            init();
-        }
-    }
-
-    public void setDoNotInitOnResume() {
-        doNotInitOnResume = true;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -75,7 +64,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         super.callOnceOnResume(new Runnable() {
             @Override
             public void run() {
-                initOnFirstResume();
+                initOnceOnResume();
             }
         });
     }
@@ -98,7 +87,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         setPartnerPointsIfNeed((SearchableListing<PartnerPoint>) searchablePartnerPoints);
     }
 
-    private void initOnFirstResume() {
+    private void initOnceOnResume() {
         getGoogleMap().setOnMapClickListener(this);
         getGoogleMap().setOnMarkerClickListener(this);
         initIfNeed();
@@ -124,14 +113,28 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         PartnerPointsGroupedByPosition grouped = new PartnerPointsGroupedByPosition(searchablePartnerPoints);
         markersAndPartnerPoints = new MultiMap<Marker, PartnerPoint>();
         for (LatLng position : grouped.getAllPositions()) {
-            Marker marker = addMarker(prepareMarkerOptions(position));
+            MarkerOptions options = prepareMarkerOptions(position);
+            Marker marker = addMarker(options);
             Set<PartnerPoint> partnerPoints = grouped.get(position);
             markersAndPartnerPoints.putAll(marker, partnerPoints);
         }
     }
 
     private static MarkerOptions prepareMarkerOptions(LatLng position) {
-        return new MarkerOptions().position(position).icon(MarkerIcons.unselected());
+        return new MarkerOptions()
+                .position(position)
+                .icon(MarkerIcons.unselected());
+    }
+
+    public void setPartnerPoints(Collection<PartnerPoint> partnerPoints) {
+        searchablePartnerPoints = SearchableSortableListing.newInstance(partnerPoints);
+        if (wasActivityCreated) {
+            init();
+        }
+    }
+
+    public void setDoNotInitOnResume() {
+        doNotInitOnResume = true;
     }
 
     @Override
@@ -154,22 +157,18 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     public void setFilterSet(FilterSet filterSet) {
         searchablePartnerPoints.removeAllFilters();
-        addFilterSet(filterSet);
-    }
-
-    private void addFilterSet(FilterSet filterSet) {
         searchablePartnerPoints.addSearchCriterion(filterSet.getCombinedPartnerPointSearchCriterion());
         updateMap();
         updateAfterFilteringIfNeed();
     }
 
     private void updateAfterFilteringIfNeed() {
-        if (needToUpdateAfterFiltering()) {
+        if (isNeedToUpdateAfterFiltering()) {
             updateAfterFiltering();
         }
     }
 
-    private boolean needToUpdateAfterFiltering() {
+    private boolean isNeedToUpdateAfterFiltering() {
         return clickedMarkerHolder.isPresent();
     }
 
@@ -189,7 +188,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if (!isMarkerAlreadyClicked(marker)) {
+        if (isNotClickedMarker(marker)) {
             notifyNeedToShowPartnerPoints(marker);
             clickedMarkerHolder.set(marker);
         }
@@ -197,8 +196,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         return true;
     }
 
-    private boolean isMarkerAlreadyClicked(Marker marker) {
-        return clickedMarkerHolder.isHolding(marker);
+    private boolean isNotClickedMarker(Marker marker) {
+        return !clickedMarkerHolder.isHolding(marker);
     }
 
     @Override

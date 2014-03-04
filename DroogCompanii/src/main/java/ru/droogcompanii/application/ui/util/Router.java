@@ -4,13 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Locale;
 
-import ru.droogcompanii.application.DroogCompaniiSettings;
+import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.util.CurrentLocationProvider;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 29.01.14.
@@ -23,6 +26,21 @@ public class Router {
     }
 
     public void routeTo(PartnerPoint destination) {
+        try {
+            tryRouteTo(destination);
+        } catch (Throwable e) {
+            LogUtils.debug(e.getMessage());
+            notifyUserThatShowingRouteIsNotAvailable();
+        }
+    }
+
+    private void notifyUserThatShowingRouteIsNotAvailable() {
+        int messageId = R.string.message_on_showing_route_is_not_available;
+        Toast toast = Toast.makeText(context, messageId, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void tryRouteTo(PartnerPoint destination) {
         context.startActivity(makeIntentRouteTo(destination));
     }
 
@@ -43,7 +61,7 @@ public class Router {
     }
 
     private static LatLng getPositionOfBaseLocation() {
-        Location baseLocation = DroogCompaniiSettings.getBaseLocation();
+        Location baseLocation = CurrentLocationProvider.getCurrentOrDefaultLocation();
         return new LatLng(baseLocation.getLatitude(), baseLocation.getLongitude());
     }
 }

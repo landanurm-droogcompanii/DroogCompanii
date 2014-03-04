@@ -14,8 +14,9 @@ import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCa
  * Created by ls on 30.01.14.
  */
 class MapCameraUpdater {
+
     public static void fitVisibleMarkers(GoogleMap googleMap, List<Marker> markers, int mapPadding) {
-        if (noVisibleMarkers(markers)) {
+        if (isThereNoVisibleMarkers(markers)) {
             return;
         }
         LatLngBounds bounds = LatLngBoundsCalculator.calculateBoundsOfVisibleMarkers(markers);
@@ -23,7 +24,7 @@ class MapCameraUpdater {
         googleMap.moveCamera(cameraUpdate);
     }
 
-    private static boolean noVisibleMarkers(List<Marker> markers) {
+    private static boolean isThereNoVisibleMarkers(List<Marker> markers) {
         for (Marker marker : markers) {
             if (marker.isVisible()) {
                 return false;

@@ -53,5 +53,6 @@
     <string name="lastName">Фамилия</string>
 
     <string name="sign_out_in_progress">Выход&#8230;</string>
+    <string name="message_on_showing_route_is_not_available">Google Карты недоступны. Проверьте, установлено ли это приложение.</string>
 
 </resources>

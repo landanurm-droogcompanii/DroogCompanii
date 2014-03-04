@@ -68,5 +68,7 @@
 
     <string name="sign_out_in_progress">Signing Out&#8230;</string>
 
+    <string name="message_on_showing_route_is_not_available">Google Maps is not available. Check whether it is installed.</string>
+
 
 </resources>

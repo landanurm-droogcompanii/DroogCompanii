@@ -11,6 +11,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -72,17 +73,16 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initDisplayOfCurrentLocation();
+        initShowingCurrentLocation();
     }
 
-    private void initDisplayOfCurrentLocation() {
+    private void initShowingCurrentLocation() {
         GoogleMap googleMap = getGoogleMap();
         if (googleMap == null) {
             return;
         }
 
         googleMap.setMyLocationEnabled(true);
-        CurrentLocationProvider.setOnLocationChangedListener(this);
 
         googleMap.setLocationSource(new LocationSource() {
             @Override
@@ -100,10 +100,19 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location == null) {
-            location = DroogCompaniiSettings.getDefaultBaseLocation();
-        }
         onLocationChangedListener.onLocationChanged(location);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CurrentLocationProvider.addOnLocationChangedListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CurrentLocationProvider.removeOnLocationChangedListener(this);
     }
 
     protected final GoogleMap getGoogleMap() {
@@ -130,7 +139,7 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
                 getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
     }
 
-    private final View getMapView() {
+    private View getMapView() {
         return getNestedSupportMapFragment().getView();
     }
 
@@ -164,7 +173,7 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
         if (clickedMarker.isPresent()) {
             moveCamera(clickedMarker.getPosition());
         } else {
-            tryMoveCameraToCurrentLocation();
+            updateMapCameraIfThereIsNoClickedMarker();
         }
         isFirstUpdatingMapCamera = false;
     }
@@ -183,16 +192,17 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
     }
 
     private float getCurrentZoom() {
-        return getGoogleMap().getCameraPosition().zoom;
+        CameraPosition cameraPosition = getGoogleMap().getCameraPosition();
+        return cameraPosition.zoom;
+    }
+
+    private void updateMapCameraIfThereIsNoClickedMarker() {
+        tryMoveCameraToCurrentLocation();
     }
 
     private void tryMoveCameraToCurrentLocation() {
-        Location baseLocation = DroogCompaniiSettings.getBaseLocation();
-        if (baseLocation != null) {
-            moveCamera(positionOf(baseLocation));
-        } else {
-            fitVisibleMarkersOnScreen();
-        }
+        Location baseLocation = CurrentLocationProvider.getCurrentOrDefaultLocation();
+        moveCamera(positionOf(baseLocation));
     }
 
     private static LatLng positionOf(Location location) {

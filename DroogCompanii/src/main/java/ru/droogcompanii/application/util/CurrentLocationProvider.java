@@ -11,33 +11,29 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.common.base.Optional;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
+import ru.droogcompanii.application.DroogCompaniiSettings;
 
 /**
  * Created by ls on 17.01.14.
  */
 public class CurrentLocationProvider implements BaseLocationProvider, Serializable {
 
-    public static final LocationSource.OnLocationChangedListener
-            DUMMY_ON_CURRENT_LOCATION_CHANGED_LISTENER = new LocationSource.OnLocationChangedListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    // do nothing
-                }
-            };
-
-    private static WeakReferenceWrapper<LocationSource.OnLocationChangedListener>
-            listenerWrapper = WeakReferenceWrapper.from(DUMMY_ON_CURRENT_LOCATION_CHANGED_LISTENER);
+    private static List<WeakReferenceWrapper<LocationSource.OnLocationChangedListener>>
+            listenerWrappers = new ArrayList<WeakReferenceWrapper<LocationSource.OnLocationChangedListener>>();
 
     private static Optional<Location> currentLocation = Optional.absent();
+
 
     private static class LocationListenerImpl implements LocationListener {
 
         @Override
         public void onLocationChanged(final Location location) {
             currentLocation = Optional.fromNullable(location);
-            notifyListenerIfItExists();
+            notifyListeners();
         }
 
         @Override
@@ -62,18 +58,27 @@ public class CurrentLocationProvider implements BaseLocationProvider, Serializab
     private static final float MIN_DISTANCE = 10f;
 
 
-    public static void setOnLocationChangedListener(LocationSource.OnLocationChangedListener listener) {
-        listenerWrapper = WeakReferenceWrapper.from(listener);
+    public static void addOnLocationChangedListener(LocationSource.OnLocationChangedListener listener) {
+        listenerWrappers.add(WeakReferenceWrapper.from(listener));
+    }
+
+    public static void removeOnLocationChangedListener(LocationSource.OnLocationChangedListener listener) {
+        listenerWrappers.remove(WeakReferenceWrapper.from(listener));
     }
 
     @Override
-    public Optional<Location> getBaseLocation() {
-        return CurrentLocationProvider.get();
+    public Location getBaseLocation() {
+        return getCurrentOrDefaultLocation();
     }
 
-    public static Optional<Location> get() {
+    public static Location getUpdatedCurrentOrDefaultLocation() {
         updateCurrentLocation();
-        return currentLocation;
+        return getCurrentOrDefaultLocation();
+    }
+
+    public static Location getCurrentOrDefaultLocation() {
+        Location defaultLocation = DroogCompaniiSettings.getDefaultBaseLocation();
+        return currentLocation.or(defaultLocation);
     }
 
     public static void updateCurrentLocation() {
@@ -89,16 +94,19 @@ public class CurrentLocationProvider implements BaseLocationProvider, Serializab
         if (lastKnownLocation.isPresent()) {
             currentLocation = lastKnownLocation;
         }
-        notifyListenerIfItExists();
+        notifyListeners();
     }
 
-    private static void notifyListenerIfItExists() {
-        listenerWrapper.handleIfExist(new WeakReferenceWrapper.Handler<LocationSource.OnLocationChangedListener>() {
-            @Override
-            public void handle(LocationSource.OnLocationChangedListener listener) {
-                listener.onLocationChanged(currentLocation.orNull());
-            }
-        });
+    private static void notifyListeners() {
+        final Location actualLocation = getCurrentOrDefaultLocation();
+        for (WeakReferenceWrapper<LocationSource.OnLocationChangedListener> listenerWrapper : listenerWrappers) {
+            listenerWrapper.handleIfExist(new WeakReferenceWrapper.Handler<LocationSource.OnLocationChangedListener>() {
+                @Override
+                public void handle(LocationSource.OnLocationChangedListener listener) {
+                    listener.onLocationChanged(actualLocation);
+                }
+            });
+        }
     }
 
     private static Optional<Location> getLastKnownLocation() {
@@ -118,7 +126,6 @@ public class CurrentLocationProvider implements BaseLocationProvider, Serializab
     }
 
     private static LocationManager prepareLocationManager() {
-        Context appContext = DroogCompaniiApplication.getContext();
-        return (LocationManager) appContext.getSystemService(Context.LOCATION_SERVICE);
+        return (LocationManager) DroogCompaniiApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
     }
 }

@@ -13,14 +13,14 @@ import ru.droogcompanii.application.util.MultiMap;
  * Created by ls on 22.01.14.
  */
 class PartnerPointsGroupedByPosition {
-    private final MultiMap<LatLng, PartnerPoint> multiMap;
+    private final MultiMap<LatLng, PartnerPoint> groups;
 
     public PartnerPointsGroupedByPosition(SearchableListing<PartnerPoint> searchableListing) {
         this(searchableListing.toList());
     }
 
     public PartnerPointsGroupedByPosition(Collection<PartnerPoint> partnerPoints) {
-        multiMap = new MultiMap<LatLng, PartnerPoint>();
+        groups = new MultiMap<LatLng, PartnerPoint>();
         putAll(partnerPoints);
     }
 
@@ -31,15 +31,15 @@ class PartnerPointsGroupedByPosition {
     }
 
     public void put(PartnerPoint partnerPoint) {
-        multiMap.put(partnerPoint.getPosition(), partnerPoint);
+        groups.put(partnerPoint.getPosition(), partnerPoint);
     }
 
     public Set<PartnerPoint> get(LatLng position) {
-        return multiMap.get(position);
+        return groups.get(position);
     }
 
     public Set<LatLng> getAllPositions() {
-        return multiMap.keySet();
+        return groups.keySet();
     }
 
 }
