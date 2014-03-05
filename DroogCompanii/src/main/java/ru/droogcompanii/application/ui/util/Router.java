@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.CurrentLocationProvider;
 import ru.droogcompanii.application.util.LogUtils;
 
 /**
@@ -61,7 +60,7 @@ public class Router {
     }
 
     private static LatLng getPositionOfBaseLocation() {
-        Location baseLocation = CurrentLocationProvider.getCurrentOrDefaultLocation();
+        Location baseLocation = LocationUtils.getActualLocation();
         return new LatLng(baseLocation.getLatitude(), baseLocation.getLongitude());
     }
 }

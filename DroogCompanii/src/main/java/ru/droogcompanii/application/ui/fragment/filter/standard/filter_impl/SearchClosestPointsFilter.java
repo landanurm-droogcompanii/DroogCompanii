@@ -20,8 +20,8 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
 import ru.droogcompanii.application.ui.fragment.filter.Filter;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point.PartnerPointSearchClosestPointsCriterion;
+import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.ApiVersionUtils;
-import ru.droogcompanii.application.ui.util.CurrentOrDefaultBaseLocationProvider;
 import ru.droogcompanii.application.util.ConverterToString;
 
 /**
@@ -174,7 +174,7 @@ class SearchClosestPointsFilter implements Filter, Serializable {
 
     private SearchCriterion<PartnerPoint> prepareSearchCriterion(float radiusWithinSearch) {
         return new PartnerPointSearchClosestPointsCriterion(
-                new CurrentOrDefaultBaseLocationProvider(), radiusWithinSearch);
+                new ActualBaseLocationProvider(), radiusWithinSearch);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.fragment.partner_points_map;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -17,16 +18,16 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableListing;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
+import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
+import ru.droogcompanii.application.ui.util.LocationUtils;
 import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.MultiMap;
-import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 14.01.14.
  */
 public class PartnerPointsMapFragment extends BaseCustomMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
-
 
     public static interface Callbacks {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
@@ -140,12 +141,14 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        updateCurrentLocationOnMap();
+        LocationUtils.updateCurrentLocation();
     }
 
-    private void updateCurrentLocationOnMap() {
-        CurrentLocationProvider.updateCurrentLocation();
+    @Override
+    public void onLocationChanged(Location location) {
+        super.onLocationChanged(location);
         updateMapCamera(clickedMarkerHolder);
+        updateFilterSet();
     }
 
     @Override
@@ -153,6 +156,11 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.searchablePartnerPoints, searchablePartnerPoints);
         clickedMarkerHolder.saveInto(outState);
+    }
+
+    public void updateFilterSet() {
+        FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(getActivity());
+        setFilterSet(currentFilterSet);
     }
 
     public void setFilterSet(FilterSet filterSet) {

@@ -12,14 +12,12 @@ import java.util.Set;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.activity.filter.FilterActivity;
-import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
-import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.PartnerPointsInfoPanelFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Keys;
 
 /**
@@ -125,7 +123,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
 
     private void initPartnerPointsMapFragment(Collection<PartnerPoint> partnerPoints) {
         partnerPointsMapFragment.setPartnerPoints(partnerPoints);
-        partnerPointsMapFragment.setFilterSet(FilterUtils.getCurrentFilterSet(this));
+        partnerPointsMapFragment.updateFilterSet();
         partnerPointsMapFragment.setNoClickedMarker();
     }
 
@@ -161,12 +159,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == FilterActivity.REQUEST_CODE) && (resultCode == RESULT_OK)) {
-            applyFilters();
+            partnerPointsMapFragment.updateFilterSet();
         }
-    }
-
-    private void applyFilters() {
-        FilterSet currentFilterSet = FilterUtils.getCurrentFilterSet(this);
-        partnerPointsMapFragment.setFilterSet(currentFilterSet);
     }
 }

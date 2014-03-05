@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point;
 
-import ru.droogcompanii.application.ui.util.CurrentOrDefaultBaseLocationProvider;
+import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 
 /**
  * Created by ls on 17.01.14.
@@ -8,6 +8,6 @@ import ru.droogcompanii.application.ui.util.CurrentOrDefaultBaseLocationProvider
 public class PartnerPointComparatorByDistanceBasedOnCurrentLocation extends PartnerPointComparatorByDistance {
 
     public PartnerPointComparatorByDistanceBasedOnCurrentLocation() {
-        super(new CurrentOrDefaultBaseLocationProvider());
+        super(new ActualBaseLocationProvider());
     }
 }

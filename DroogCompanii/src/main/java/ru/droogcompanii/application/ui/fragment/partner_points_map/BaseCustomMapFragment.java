@@ -22,8 +22,8 @@ import java.util.List;
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.util.FragmentAbleRunOnceOnResume;
+import ru.droogcompanii.application.ui.util.LocationUtils;
 import ru.droogcompanii.application.ui.util.ObserverOfViewWillBePlacedOnGlobalLayout;
-import ru.droogcompanii.application.util.CurrentLocationProvider;
 
 /**
  * Created by ls on 10.01.14.
@@ -88,7 +88,7 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
             @Override
             public void activate(OnLocationChangedListener onLocationChangedListener) {
                 BaseCustomMapFragment.this.onLocationChangedListener = onLocationChangedListener;
-                CurrentLocationProvider.updateCurrentLocation();
+                LocationUtils.updateCurrentLocation();
             }
 
             @Override
@@ -106,13 +106,13 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
     @Override
     public void onResume() {
         super.onResume();
-        CurrentLocationProvider.addOnLocationChangedListener(this);
+        LocationUtils.addOnLocationChangedListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CurrentLocationProvider.removeOnLocationChangedListener(this);
+        LocationUtils.removeOnLocationChangedListener(this);
     }
 
     protected final GoogleMap getGoogleMap() {
@@ -201,7 +201,7 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
     }
 
     private void tryMoveCameraToCurrentLocation() {
-        Location baseLocation = CurrentLocationProvider.getCurrentOrDefaultLocation();
+        Location baseLocation = LocationUtils.getActualLocation();
         moveCamera(positionOf(baseLocation));
     }
 
