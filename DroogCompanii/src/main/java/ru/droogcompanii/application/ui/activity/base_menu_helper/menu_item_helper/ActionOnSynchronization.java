@@ -12,6 +12,6 @@ class ActionOnSynchronization implements MenuItemHelper.Action {
     @Override
     public void run(Activity activity) {
         Intent intent = new Intent(activity, SynchronizationActivity.class);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, SynchronizationActivity.REQUEST_CODE);
     }
 }

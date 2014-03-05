@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 21.01.14.
@@ -20,7 +19,9 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         Bundle getArguments();
     }
 
-    private static final String KEY_DISPLAYED_FILTERS = "DisplayedFilters";
+    private static final String KEY_DISPLAYED_FILTERS = "KEY_DISPLAYED_FILTERS";
+
+    private static final String KEY_PARTNER_CATEGORY = "KEY_PARTNER_CATEGORY";
 
     private Callbacks callbacks;
 
@@ -74,7 +75,7 @@ public class FilterFragment extends android.support.v4.app.Fragment {
         if (args == null) {
             return null;
         } else {
-            return (PartnerCategory) args.getSerializable(Keys.partnerCategory);
+            return (PartnerCategory) args.getSerializable(KEY_PARTNER_CATEGORY);
         }
     }
 }

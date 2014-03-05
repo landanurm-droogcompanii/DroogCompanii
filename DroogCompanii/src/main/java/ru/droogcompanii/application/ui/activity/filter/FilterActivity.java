@@ -12,7 +12,6 @@ import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.util.YesNoDialogMaker;
-import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -23,6 +22,8 @@ public class FilterActivity extends ActionBarActivityWithUpButton
                             implements FilterFragment.Callbacks {
 
     public static final int REQUEST_CODE = 14235;
+
+    private static final String KEY_ARGS = "KEY_ARGS";
 
     private static enum State {
         ON_BACK_PRESSED,
@@ -73,7 +74,7 @@ public class FilterActivity extends ActionBarActivityWithUpButton
     }
 
     private void restore(Bundle savedInstanceState) {
-        args = savedInstanceState.getBundle(Keys.args);
+        args = savedInstanceState.getBundle(KEY_ARGS);
         state = (State) savedInstanceState.getSerializable(KEY_STATE);
         restoreCautionIfNeed();
     }
@@ -111,7 +112,7 @@ public class FilterActivity extends ActionBarActivityWithUpButton
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBundle(Keys.args, args);
+        outState.putBundle(KEY_ARGS, args);
         outState.putSerializable(KEY_STATE, state);
     }
 

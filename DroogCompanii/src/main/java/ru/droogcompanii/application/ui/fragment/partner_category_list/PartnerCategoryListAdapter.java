@@ -9,12 +9,13 @@ import java.util.List;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.util.SimpleArrayAdapter;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by Leonid on 17.12.13.
  */
 class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
+
+    private static final String KEY_PARTNER_CATEGORIES = "KEY_PARTNER_CATEGORIES";
 
     public static PartnerCategoryListAdapter newInstance(Context context, Bundle savedInstanceState) {
         if (savedInstanceState == null) {
@@ -32,7 +33,7 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
     private static PartnerCategoryListAdapter createAdapter(Context context, Bundle savedInstanceState) {
         @SuppressWarnings("unchecked")
         List<PartnerCategory> partnerCategories =
-                (List<PartnerCategory>) savedInstanceState.getSerializable(Keys.partnerCategories);
+                (List<PartnerCategory>) savedInstanceState.getSerializable(KEY_PARTNER_CATEGORIES);
         return new PartnerCategoryListAdapter(context, partnerCategories);
     }
 
@@ -51,6 +52,6 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
     }
 
     public void saveStateInto(Bundle outState) {
-        outState.putSerializable(Keys.partnerCategories, (Serializable) partnerCategories);
+        outState.putSerializable(KEY_PARTNER_CATEGORIES, (Serializable) partnerCategories);
     }
 }

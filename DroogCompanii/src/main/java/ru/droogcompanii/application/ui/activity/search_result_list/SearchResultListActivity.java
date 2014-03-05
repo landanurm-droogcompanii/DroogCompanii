@@ -15,6 +15,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
+import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
@@ -26,9 +27,7 @@ import ru.droogcompanii.application.ui.activity.search_result_list.spinner_util.
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 14.01.14.
@@ -43,6 +42,8 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
                         TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS + 1;
 
     private static final String KEY_INDEX_OF_CURRENT_COMPARATOR = "KEY_INDEX_OF_CURRENT_COMPARATOR";
+    private static final String KEY_SEARCH_RESULT_PROVIDER = "KEY_SEARCH_RESULT_PROVIDER";
+    private static final String KEY_IS_GO_TO_MAP_ITEM_VISIBLE = "KEY_IS_GO_TO_MAP_ITEM_VISIBLE";
 
     private boolean isGoToMapItemVisible;
     private int indexOfCurrentComparator;
@@ -52,7 +53,7 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
 
     public static void start(Context context, SearchResultProvider searchResultProvider) {
         Intent intent = new Intent(context, SearchResultListActivity.class);
-        intent.putExtra(Keys.searchResultProvider, (Serializable) searchResultProvider);
+        intent.putExtra(KEY_SEARCH_RESULT_PROVIDER, (Serializable) searchResultProvider);
         context.startActivity(intent);
     }
 
@@ -80,15 +81,15 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
     private void initStateByDefault() {
         indexOfCurrentComparator = 0;
         searchResultProvider = (SearchResultProvider)
-                getIntent().getExtras().getSerializable(Keys.searchResultProvider);
+                getIntent().getExtras().getSerializable(KEY_SEARCH_RESULT_PROVIDER);
         updateGoToMapItemVisible(false);
     }
 
     private void restoreState(Bundle savedInstanceState) {
         indexOfCurrentComparator = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_COMPARATOR);
         searchResultProvider = (SearchResultProvider)
-                savedInstanceState.getSerializable(Keys.searchResultProvider);
-        updateGoToMapItemVisible(savedInstanceState.getBoolean(Keys.isGoToMapItemVisible));
+                savedInstanceState.getSerializable(KEY_SEARCH_RESULT_PROVIDER);
+        updateGoToMapItemVisible(savedInstanceState.getBoolean(KEY_IS_GO_TO_MAP_ITEM_VISIBLE));
     }
 
     private void updateGoToMapItemVisible(boolean visible) {
@@ -178,8 +179,8 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.searchResultProvider, (Serializable) searchResultProvider);
-        outState.putBoolean(Keys.isGoToMapItemVisible, isGoToMapItemVisible);
+        outState.putSerializable(KEY_SEARCH_RESULT_PROVIDER, (Serializable) searchResultProvider);
+        outState.putBoolean(KEY_IS_GO_TO_MAP_ITEM_VISIBLE, isGoToMapItemVisible);
         outState.putInt(KEY_INDEX_OF_CURRENT_COMPARATOR, indexOfCurrentComparator);
     }
 

@@ -55,4 +55,8 @@
     <string name="sign_out_in_progress">Выход&#8230;</string>
     <string name="message_on_showing_route_is_not_available">Google Карты недоступны. Проверьте, установлено ли это приложение.</string>
 
+    <string name="message_on_custom_base_location_changed">Базовое местоположение изменено</string>
+
+    <string name="message_on_no_offers">Акции не найдены</string>
+
 </resources>

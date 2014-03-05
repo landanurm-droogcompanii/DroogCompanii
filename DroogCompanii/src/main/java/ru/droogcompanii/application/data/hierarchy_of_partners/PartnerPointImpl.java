@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
+import ru.droogcompanii.application.ui.util.LocationBuilder;
 import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
@@ -84,10 +85,7 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
 
     @Override
     public Location toLocation() {
-        Location location = new Location(title);
-        location.setLatitude(latitude);
-        location.setLongitude(longitude);
-        return location;
+        return LocationBuilder.fromLatitudeLongitude(title, latitude, longitude);
     }
 
     @Override

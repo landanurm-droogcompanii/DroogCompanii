@@ -19,20 +19,23 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableL
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
+import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
 import ru.droogcompanii.application.ui.util.LocationUtils;
-import ru.droogcompanii.application.util.Keys;
 import ru.droogcompanii.application.util.MultiMap;
 
 /**
  * Created by ls on 14.01.14.
  */
 public class PartnerPointsMapFragment extends BaseCustomMapFragment
-        implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
+        implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
     public static interface Callbacks {
         void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow);
         void onNoLongerNeedToShowPartnerPoints();
+        void onCustomBaseLocationIsSet();
     }
+
+    private static final String KEY_SEARCHABLE_PARTNER_POINTS = "KEY_SEARCHABLE_PARTNER_POINTS";
 
     private boolean doNotInitOnResume;
     private boolean wasActivityCreated;
@@ -84,14 +87,19 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     private void restoreState(Bundle savedInstanceState) {
         clickedMarkerHolder = new ClickedMarkerHolder(this);
         clickedMarkerHolder.restoreFrom(savedInstanceState);
-        Serializable searchablePartnerPoints = savedInstanceState.getSerializable(Keys.searchablePartnerPoints);
+        Serializable searchablePartnerPoints = savedInstanceState.getSerializable(KEY_SEARCHABLE_PARTNER_POINTS);
         setPartnerPointsIfNeed((SearchableListing<PartnerPoint>) searchablePartnerPoints);
     }
 
     private void initOnceOnResume() {
-        getGoogleMap().setOnMapClickListener(this);
-        getGoogleMap().setOnMarkerClickListener(this);
+        initMapListeners(getGoogleMap());
         initIfNeed();
+    }
+
+    private void initMapListeners(GoogleMap googleMap) {
+        googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapClickListener(this);
+        googleMap.setOnMapLongClickListener(this);
     }
 
     private void initIfNeed() {
@@ -154,7 +162,7 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.searchablePartnerPoints, searchablePartnerPoints);
+        outState.putSerializable(KEY_SEARCHABLE_PARTNER_POINTS, searchablePartnerPoints);
         clickedMarkerHolder.saveInto(outState);
     }
 
@@ -217,4 +225,11 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
         callbacks.onNoLongerNeedToShowPartnerPoints();
         clickedMarkerHolder.unset();
     }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        CustomBaseLocationUtils.updateBasePosition(latLng);
+        callbacks.onCustomBaseLocationIsSet();
+    }
+
 }

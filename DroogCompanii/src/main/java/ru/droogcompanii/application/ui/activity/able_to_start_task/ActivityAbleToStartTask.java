@@ -27,6 +27,7 @@ public class ActivityAbleToStartTask
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState == null) {
             isRunningTask = false;
         } else {

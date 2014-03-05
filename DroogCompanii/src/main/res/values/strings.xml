@@ -70,5 +70,9 @@
 
     <string name="message_on_showing_route_is_not_available">Google Maps is not available. Check whether it is installed.</string>
 
+    <string name="message_on_custom_base_location_changed">Base location changed</string>
+
+    <string name="message_on_no_offers">Offers not found</string>
+
 
 </resources>

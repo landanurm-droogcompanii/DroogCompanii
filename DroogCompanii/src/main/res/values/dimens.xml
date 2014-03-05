@@ -31,5 +31,6 @@
     <dimen name="dividerPaddingOfDistanceOptionRadioGroup">2dp</dimen>
 
     <dimen name="spaceBetweenNameLabelAndName">5dp</dimen>
+    <dimen name="textSizeOfEmptyOfferListView">28sp</dimen>
 
 </resources>

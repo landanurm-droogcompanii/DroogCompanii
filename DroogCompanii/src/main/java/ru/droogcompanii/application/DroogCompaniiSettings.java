@@ -2,13 +2,15 @@ package ru.droogcompanii.application;
 
 import android.location.Location;
 
+import ru.droogcompanii.application.ui.util.LocationBuilder;
+
 /**
  * Created by ls on 29.01.14.
  */
 public class DroogCompaniiSettings {
 
-    private static final double LATITUDE_OF_KAZAN = 55.78856;
-    private static final double LONGITUDE_OF_KAZAN = 49.12163;
+    private static final double LATITUDE_OF_KAZAN = 55.79966;
+    private static final double LONGITUDE_OF_KAZAN = 49.11053;
 
     private static final int DEFAULT_ZOOM_LEVEL = 14;
 
@@ -19,10 +21,7 @@ public class DroogCompaniiSettings {
     }
 
     private static Location getLocationOfKazan() {
-        Location location = new Location("Kazan");
-        location.setLatitude(LATITUDE_OF_KAZAN + 0.0111);
-        location.setLongitude(LONGITUDE_OF_KAZAN - 0.0111);
-        return location;
+        return LocationBuilder.fromLatitudeLongitude("Kazan", LATITUDE_OF_KAZAN, LONGITUDE_OF_KAZAN);
     }
 
     public static int getDefaultZoom() {

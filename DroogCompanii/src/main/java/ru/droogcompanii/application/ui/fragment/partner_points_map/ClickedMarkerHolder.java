@@ -5,12 +5,15 @@ import android.os.Bundle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import ru.droogcompanii.application.util.Keys;
-
 /**
  * Created by ls on 28.01.14.
  */
 class ClickedMarkerHolder {
+
+    private static final String KEY_LATITUDE = "KEY_LATITUDE";
+    private static final String KEY_LONGITUDE = "KEY_LONGITUDE";
+    private static final String KEY_IS_CLICKED_MARKER_EXIST = "KEY_IS_CLICKED_MARKER_EXIST";
+
     private final MarkersFinder markersFinder;
     private Marker clickedMarker;
     private LatLng positionOfClickedMarker;
@@ -22,7 +25,7 @@ class ClickedMarkerHolder {
     }
 
     public void restoreFrom(Bundle bundle) {
-        boolean isClickedMarkerExist = bundle.getBoolean(Keys.clickedMarkerIsExist);
+        boolean isClickedMarkerExist = bundle.getBoolean(KEY_IS_CLICKED_MARKER_EXIST);
         if (!isClickedMarkerExist) {
             return;
         }
@@ -30,23 +33,23 @@ class ClickedMarkerHolder {
     }
 
     private static LatLng readPosition(Bundle bundle) {
-        double latitude = bundle.getDouble(Keys.latitude);
-        double longitude = bundle.getDouble(Keys.longitude);
+        double latitude = bundle.getDouble(KEY_LATITUDE);
+        double longitude = bundle.getDouble(KEY_LONGITUDE);
         return new LatLng(latitude, longitude);
     }
 
     public void saveInto(Bundle outState) {
         if (isAbsent()) {
-            outState.putBoolean(Keys.clickedMarkerIsExist, false);
+            outState.putBoolean(KEY_IS_CLICKED_MARKER_EXIST, false);
         } else {
-            outState.putBoolean(Keys.clickedMarkerIsExist, true);
+            outState.putBoolean(KEY_IS_CLICKED_MARKER_EXIST, true);
             savePosition(outState, positionOfClickedMarker);
         }
     }
 
     private static void savePosition(Bundle bundle, LatLng position) {
-        bundle.putDouble(Keys.latitude, position.latitude);
-        bundle.putDouble(Keys.longitude, position.longitude);
+        bundle.putDouble(KEY_LATITUDE, position.latitude);
+        bundle.putDouble(KEY_LONGITUDE, position.longitude);
     }
 
     public boolean isAbsent() {

@@ -17,7 +17,6 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProvider;
-import ru.droogcompanii.application.util.Keys;
 
 /**
  * Created by ls on 10.02.14.
@@ -29,6 +28,8 @@ public class OfferListFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     private static final List<Offer> NO_OFFERS = new ArrayList<Offer>();
+
+    private static final String KEY_OFFERS = "KEY_OFFERS";
 
     private ArrayAdapter<Offer> adapter;
     private Callbacks callbacks;
@@ -51,30 +52,43 @@ public class OfferListFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        adapter = prepareAdapter(savedInstanceState);
-        gridView.setOnItemClickListener(this);
-        setListAdapter(adapter);
+
+        if (savedInstanceState == null) {
+            initStateByDefault();
+        } else {
+            restoreState(savedInstanceState);
+        }
+
+        initList();
     }
 
-    private void setListAdapter(ArrayAdapter<Offer> adapter) {
+    private void initStateByDefault() {
+        offers = NO_OFFERS;
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        offers = (List<Offer>) savedInstanceState.getSerializable(KEY_OFFERS);
+    }
+
+    private void initList() {
+        adapter = new OffersAdapter(getActivity(), offers);
+        gridView.setOnItemClickListener(this);
+        gridView.setEmptyView(prepareEmptyListView());
         gridView.setAdapter(adapter);
     }
 
-    private ArrayAdapter<Offer> prepareAdapter(Bundle savedInstanceState) {
-        List<Offer> newOffers = (savedInstanceState == null)
-                ? NO_OFFERS : (List<Offer>) savedInstanceState.getSerializable(Keys.offers);
-        return prepareAdapter(newOffers);
-    }
-
-    private ArrayAdapter<Offer> prepareAdapter(List<Offer> newOffers) {
-        this.offers = newOffers;
-        return new OffersAdapter(getActivity(), newOffers);
+    private View prepareEmptyListView() {
+        return getActivity().findViewById(R.id.noOffersView);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.offers, (Serializable) offers);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
+        outState.putSerializable(KEY_OFFERS, (Serializable) offers);
     }
 
     public void setOffers(Serializable result) {
@@ -83,8 +97,8 @@ public class OfferListFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     private void setOffers(List<Offer> newOffers) {
-        adapter = prepareAdapter(newOffers);
-        setListAdapter(adapter);
+        this.offers = newOffers;
+        initList();
     }
 
     @Override

@@ -2,26 +2,28 @@ package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria
 
 import android.location.Location;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.InitializedByLocationProvider;
 import ru.droogcompanii.application.util.BaseLocationProvider;
 import ru.droogcompanii.application.util.MinMax;
 
 /**
  * Created by ls on 16.01.14.
  */
-public class PartnerComparatorByDistance extends InitializedByLocationProvider implements Comparator<Partner> {
+public class PartnerComparatorByDistance implements Comparator<Partner>, Serializable {
+
+    private final BaseLocationProvider baseLocationProvider;
 
     public PartnerComparatorByDistance(BaseLocationProvider baseLocationProvider) {
-        super(baseLocationProvider);
+        this.baseLocationProvider = baseLocationProvider;
     }
 
     @Override
     public int compare(Partner partner1, Partner partner2) {
-        Location baseLocation = super.getLocation();
+        Location baseLocation = baseLocationProvider.getBaseLocation();
         Float d1 = minDistanceFromPartnerToLocation(partner1, baseLocation);
         Float d2 = minDistanceFromPartnerToLocation(partner2, baseLocation);
         return d1.compareTo(d2);

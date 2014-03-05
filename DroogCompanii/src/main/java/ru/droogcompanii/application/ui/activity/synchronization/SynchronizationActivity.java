@@ -5,7 +5,6 @@ import android.os.Bundle;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.global_flags.FlagNeedToUpdateMap;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
 import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
@@ -15,6 +14,7 @@ import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInte
  */
 public class SynchronizationActivity extends ActivityAbleToStartTask {
 
+    public static final int REQUEST_CODE = 157;
 
     private static final int TASK_REQUEST_CODE_SYNCHRONIZATION = 244;
 
@@ -51,6 +51,5 @@ public class SynchronizationActivity extends ActivityAbleToStartTask {
 
     private void onSynchronizationTaskFinishedSuccessfully() {
         VerifierDataForRelevance.setDataIsUpdated();
-        FlagNeedToUpdateMap.set(true);
     }
 }

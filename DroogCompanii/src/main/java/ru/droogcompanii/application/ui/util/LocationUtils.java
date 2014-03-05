@@ -8,6 +8,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.LocationSource;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
 import java.io.Serializable;
@@ -96,8 +97,16 @@ public class LocationUtils implements BaseLocationProvider, Serializable {
     }
 
     public static Location getActualLocation() {
+        if (CustomBaseLocationUtils.isBasePositionSet()) {
+            return getCustomBaseLocation();
+        }
         Location defaultLocation = DroogCompaniiSettings.getDefaultBaseLocation();
         return currentLocation.or(defaultLocation);
+    }
+
+    private static Location getCustomBaseLocation() {
+        LatLng basePosition = CustomBaseLocationUtils.getBasePosition();
+        return LocationBuilder.fromLatLng("custom", basePosition);
     }
 
     public static Optional<Location> getCurrentLocation() {
@@ -113,7 +122,6 @@ public class LocationUtils implements BaseLocationProvider, Serializable {
     }
 
     private static void tryUpdateCurrentLocation() {
-        Optional<Location> currentLocationBeforeUpdating = currentLocation;
         Optional<Location> lastKnownLocation = getLastKnownLocation();
         if (lastKnownLocation.isPresent()) {
             currentLocation = lastKnownLocation;

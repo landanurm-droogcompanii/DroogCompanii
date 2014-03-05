@@ -23,16 +23,20 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
-import ru.droogcompanii.application.util.Keys;
-import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.ui.util.Router;
 import ru.droogcompanii.application.ui.util.caller.CallerHelper;
+import ru.droogcompanii.application.util.ListUtils;
 
 /**
  * Created by ls on 22.01.14.
  */
 public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragment {
+
     private static final int NO_INDEX = -1;
+
+    private static final String KEY_PARTNER_POINTS = "KEY_PARTNER_POINTS";
+    private static final String KEY_INDEX_OF_CURRENT_PARTNER_POINT = "KEY_INDEX_OF_CURRENT_PARTNER_POINT";
+    private static final String KEY_VISIBLE = "KEY_VISIBLE";
 
     private boolean visible;
     private int indexOfCurrentPartnerPoint;
@@ -54,22 +58,13 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initCatchingTouchEvents();
-
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
             restoreStateFrom(savedInstanceState);
         }
-    }
 
-    private void initCatchingTouchEvents() {
-        getView().setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return true;
-            }
-        });
+        initCatchingTouchEvents();
     }
 
     private void initStateByDefault() {
@@ -78,14 +73,19 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         hide();
     }
 
+    public void hide() {
+        visible = false;
+        getView().setVisibility(View.INVISIBLE);
+    }
+
     private void restoreStateFrom(Bundle savedInstanceState) {
-        partnerPoints = (List<PartnerPoint>) savedInstanceState.getSerializable(Keys.partnerPoints);
-        indexOfCurrentPartnerPoint = savedInstanceState.getInt(Keys.indexOfCurrentPartnerPoint);
+        partnerPoints = (List<PartnerPoint>) savedInstanceState.getSerializable(KEY_PARTNER_POINTS);
+        indexOfCurrentPartnerPoint = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_PARTNER_POINT);
         restoreVisibilityFrom(savedInstanceState);
     }
 
     private void restoreVisibilityFrom(Bundle savedInstanceState) {
-        boolean isNeedToShow = savedInstanceState.getBoolean(Keys.visible);
+        boolean isNeedToShow = savedInstanceState.getBoolean(KEY_VISIBLE);
         if (isNeedToShow) {
             show();
         } else {
@@ -93,60 +93,10 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (visible) {
-            updateIsFavorite();
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(Keys.partnerPoints, (Serializable) partnerPoints);
-        outState.putInt(Keys.indexOfCurrentPartnerPoint, indexOfCurrentPartnerPoint);
-        outState.putBoolean(Keys.visible, visible);
-    }
-
     public void show() {
         visible = true;
         getView().setVisibility(View.VISIBLE);
         updateUI();
-    }
-
-    public void hide() {
-        visible = false;
-        getView().setVisibility(View.INVISIBLE);
-    }
-
-    public void setPartnerPoints(Collection<PartnerPoint> partnerPointsToSet) {
-        if (partnerPointsToSet == null) {
-            throw new IllegalArgumentException("partnerPointsToSet should be not null");
-        }
-        if (partnerPoints.equals(partnerPointsToSet)) {
-            return;
-        }
-        List<PartnerPoint> newPartnerPoints = new ArrayList<PartnerPoint>(partnerPointsToSet);
-        setPartnerPoints(partnerPoints, newPartnerPoints);
-        show();
-    }
-
-    private void setPartnerPoints(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
-        indexOfCurrentPartnerPoint = defineIndex(oldPartnerPoints, newPartnerPoints);
-        partnerPoints = newPartnerPoints;
-    }
-
-    private int defineIndex(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
-        if ((indexOfCurrentPartnerPoint == NO_INDEX) || !visible) {
-            return 0;
-        }
-        PartnerPoint partnerPointDisplayedNow = oldPartnerPoints.get(indexOfCurrentPartnerPoint);
-        int index = newPartnerPoints.indexOf(partnerPointDisplayedNow);
-        if (index == -1) {
-            return 0;
-        }
-        return index;
     }
 
     private void updateUI() {
@@ -295,6 +245,49 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
                 new PartnerAndPartnerPointsProviderImpl(partnerPoint));
     }
 
+    private void updateIsFavorite() {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.isFavorite);
+        isFavoriteViewUtils.init(checkBox, getCurrentPartnerPoint().getPartnerId());
+    }
+
+    private void initCatchingTouchEvents() {
+        getView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+    }
+
+    public void setPartnerPoints(Collection<PartnerPoint> partnerPointsToSet) {
+        if (partnerPointsToSet == null) {
+            throw new IllegalArgumentException("partnerPointsToSet should be not null");
+        }
+        if (partnerPoints.equals(partnerPointsToSet)) {
+            return;
+        }
+        List<PartnerPoint> newPartnerPoints = new ArrayList<PartnerPoint>(partnerPointsToSet);
+        setPartnerPoints(partnerPoints, newPartnerPoints);
+        show();
+    }
+
+    private void setPartnerPoints(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
+        indexOfCurrentPartnerPoint = defineIndex(oldPartnerPoints, newPartnerPoints);
+        partnerPoints = newPartnerPoints;
+    }
+
+    private int defineIndex(List<PartnerPoint> oldPartnerPoints, List<PartnerPoint> newPartnerPoints) {
+        if ((indexOfCurrentPartnerPoint == NO_INDEX) || !visible) {
+            return 0;
+        }
+        PartnerPoint partnerPointDisplayedNow = oldPartnerPoints.get(indexOfCurrentPartnerPoint);
+        int index = newPartnerPoints.indexOf(partnerPointDisplayedNow);
+        if (index == -1) {
+            return 0;
+        }
+        return index;
+    }
+
     private static class PartnerAndPartnerPointsProviderImpl
             implements PartnerDetailsActivity.PartnerAndPartnerPointsProvider, Serializable {
 
@@ -320,8 +313,23 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
         }
     }
 
-    private void updateIsFavorite() {
-        CheckBox checkBox = (CheckBox) findViewById(R.id.isFavorite);
-        isFavoriteViewUtils.init(checkBox, getCurrentPartnerPoint().getPartnerId());
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (visible) {
+            updateIsFavorite();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
+        outState.putSerializable(KEY_PARTNER_POINTS, (Serializable) partnerPoints);
+        outState.putInt(KEY_INDEX_OF_CURRENT_PARTNER_POINT, indexOfCurrentPartnerPoint);
+        outState.putBoolean(KEY_VISIBLE, visible);
     }
 }
