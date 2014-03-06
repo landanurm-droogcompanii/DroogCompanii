@@ -2,6 +2,7 @@
 
 
 
+    <!-- Special Offers have not <duration> entry -->
     <offer>
         <id>1</id>
         <partnerId>1001</partnerId>
@@ -11,10 +12,6 @@
             СПЕЦПРЕДЛОЖЕНИЕ
             Подключите услугу «Помощь на дорогах» на свою карту «Друг компании».
         </fullDescription>
-        <duration>
-            <from>22.01.14</from>
-            <to>23.02.14</to>
-        </duration>
     </offer>
 
 
@@ -61,8 +58,8 @@
             и ТРК «Тандем» ждут Вас!
         </fullDescription>
         <duration>
-            <from>22.01.14</from>
-            <to>23.02.14</to>
+            <from>22.02.14</from>
+            <to>23.04.14</to>
         </duration>
     </offer>
 
@@ -85,7 +82,7 @@
         </fullDescription>
         <duration>
             <from>22.01.14</from>
-            <to>23.02.14</to>
+            <to>23.05.14</to>
         </duration>
     </offer>
 
@@ -122,7 +119,7 @@
         </fullDescription>
         <duration>
             <from>22.01.14</from>
-            <to>23.02.14</to>
+            <to>23.01.14</to>
         </duration>
     </offer>
 
@@ -166,8 +163,8 @@
             Чтобы забрать подарок, победителю акции необходимо предъявить 4 чека с АЗС «Татнефтепродукт» на 20 и более литров топлива в период с  27 января  до  7 марта 2014 года.
         </fullDescription>
         <duration>
-            <from>22.01.14</from>
-            <to>23.02.14</to>
+            <from>17.02.14</from>
+            <to>28.03.14</to>
         </duration>
     </offer>
 
@@ -192,8 +189,8 @@
             Подробности в ресторане «Фиолет» и на сайте http://fiolet-kzn.ru/.
         </fullDescription>
         <duration>
-            <from>22.01.14</from>
-            <to>23.02.14</to>
+            <from>27.01.14</from>
+            <to>21.04.14</to>
         </duration>
     </offer>
 

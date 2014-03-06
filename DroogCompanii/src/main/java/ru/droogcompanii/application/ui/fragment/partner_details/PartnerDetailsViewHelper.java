@@ -16,11 +16,10 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
-import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.OffersProviderFromPartner;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
-import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.ImageDownloader;
+import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.Router;
 import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 
@@ -105,13 +104,13 @@ public class PartnerDetailsViewHelper {
         findViewById(R.id.goToOffersButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onNeedGoToOffersOfPartner(partner);
+                onGoToOffersOfPartner(partner);
             }
         });
     }
 
-    private void onNeedGoToOffersOfPartner(Partner partner) {
-        OfferListActivity.start(context, new OffersProviderFromPartner(partner));
+    private void onGoToOffersOfPartner(Partner partner) {
+        OfferListActivity.start(context, partner);
     }
 
     private void setContacts() {

@@ -182,7 +182,7 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
     }
 
     protected void updateMapCamera(ClickedMarkerHolder clickedMarker) {
-        if (clickedMarker.isPresent()) {
+        if (clickedMarker.isShowing()) {
             moveCamera(clickedMarker.getPosition());
         } else {
             updateMapCameraIfThereIsNoClickedMarker();

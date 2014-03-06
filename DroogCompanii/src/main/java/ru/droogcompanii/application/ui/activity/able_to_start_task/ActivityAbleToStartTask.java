@@ -3,17 +3,17 @@ package ru.droogcompanii.application.ui.activity.able_to_start_task;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.util.ActivityTrackedLifecycle;
 
 /**
  * Created by ls on 21.02.14.
  */
 public class ActivityAbleToStartTask
-        extends ActionBarActivity implements AbleToStartTask, TaskFragmentHolder.Callbacks {
+        extends ActivityTrackedLifecycle implements AbleToStartTask, FragmentStartedTaskOnCreate.Callbacks {
 
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";
 
@@ -63,7 +63,7 @@ public class ActivityAbleToStartTask
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        CommonTaskFragmentHolder taskFragment = new CommonTaskFragmentHolder();
+        CommonFragmentStartedTaskOnCreate taskFragment = new CommonFragmentStartedTaskOnCreate();
         taskFragment.set(task, titleId);
 
         if (fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT_HOLDER) != null) {

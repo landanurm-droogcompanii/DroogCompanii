@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.view.Window;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.CurrentMethodNameLogger;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -20,9 +20,12 @@ import ru.droogcompanii.application.util.Objects;
  */
 public class TaskFragment extends DialogFragment {
 
+    private final CurrentMethodNameLogger LOGGER = new CurrentMethodNameLogger(getClass());
+
     public static final Integer NO_TITLE_ID = null;
 
-    private boolean resultReturned;
+    private boolean isNeedToReturnResult = false;
+    private boolean isResultReturned = false;
     private TaskNotBeInterrupted task;
 
     private int resultCode = Activity.RESULT_CANCELED;
@@ -40,6 +43,8 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        LOGGER.log();
+
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         if (task != null) {
@@ -49,6 +54,8 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LOGGER.log();
+
         initDialog();
         return inflater.inflate(R.layout.fragment_task, container);
     }
@@ -65,6 +72,8 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public void onDestroyView() {
+        LOGGER.log();
+
         if ((getDialog() != null) && getRetainInstance()) {
             getDialog().setDismissMessage(null);
         }
@@ -74,27 +83,46 @@ public class TaskFragment extends DialogFragment {
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        LOGGER.log();
+
         super.onDismiss(dialog);
         if (task != null) {
             task.cancel(false);
         }
-        returnResult();
+        tryReturnResult();
+    }
+
+    private void tryReturnResult() {
+        task = null;
+        if (isResultReturned) {
+            return;
+        }
+        if (getTargetFragment() != null) {
+            returnResult();
+        }
     }
 
     private void returnResult() {
-        if (resultReturned) {
-            return;
+        FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
+        isResultReturned = true;
+        if (ableToStartTask.isAbleToReceiveResult()) {
+            ableToStartTask.onResult(FragmentAbleToStartTask.REQUEST_CODE_TASK_FRAGMENT, resultCode, result);
+            finishFragment();
+        } else {
+            isNeedToReturnResult = true;
         }
-        Fragment targetFragment = getTargetFragment();
-        if (targetFragment != null) {
-            TaskFragmentHolder taskFragmentHolder = (TaskFragmentHolder) targetFragment;
-            taskFragmentHolder.onResult(TaskFragmentHolder.REQUEST_CODE_TASK_FRAGMENT, resultCode, result);
-            resultReturned = true;
+    }
+
+    private void finishFragment() {
+        if (isResumed()) {
+            dismiss();
         }
     }
 
     @Override
     public void onResume() {
+        LOGGER.log();
+
         super.onResume();
         if (task == null) {
             dismiss();
@@ -102,16 +130,21 @@ public class TaskFragment extends DialogFragment {
     }
 
     public void onTaskFinished(Serializable result) {
+        LOGGER.log();
+
         setResult(Activity.RESULT_OK, result);
-        returnResult();
-        task = null;
-        if (isResumed()) {
-            dismiss();
-        }
+        tryReturnResult();
     }
 
     private void setResult(int resultCode, Serializable result) {
         this.resultCode = resultCode;
         this.result = result;
+    }
+
+    public void checkWhetherIsResultReturnedDuringDisactivity() {
+        if (isNeedToReturnResult) {
+            isNeedToReturnResult = false;
+            returnResult();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,5 +23,26 @@ public class ListUtils {
             throw new IllegalArgumentException("Cannot find element <" + element + "> in list");
         }
         swap(list, 0, index);
+    }
+
+
+    public static <T> List<T> combineLists(List<T>... listsToCombine) {
+        List<T> combined = new ArrayList<T>(totalSizeOf(listsToCombine));
+        for (List<T> each : listsToCombine) {
+            combined.addAll(each);
+        }
+        return combined;
+    }
+
+    public static int totalSizeOf(List<?>... lists) {
+        int totalSize = 0;
+        for (List<?> each : lists) {
+            totalSize += each.size();
+        }
+        return totalSize;
+    }
+
+    public static <T> List<T> copyOf(List<T> listToCopy) {
+        return new ArrayList<T>(listToCopy);
     }
 }

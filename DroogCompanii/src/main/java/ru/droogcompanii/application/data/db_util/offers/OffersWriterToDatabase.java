@@ -8,6 +8,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
+import ru.droogcompanii.application.data.offers.Offers;
 
 /**
  * Created by ls on 11.02.14.
@@ -20,7 +21,7 @@ public class OffersWriterToDatabase {
         this.context = context;
     }
 
-    public void write(List<Offer> offers) {
+    public void write(Offers offers) {
         OffersDbHelper dbHelper = new OffersDbHelper(context);
         db = dbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -35,9 +36,9 @@ public class OffersWriterToDatabase {
         dbHelper.close();
     }
 
-    private void tryExecuteTransaction(List<Offer> offers) {
+    private void tryExecuteTransaction(Offers offers) {
         clearOldData();
-        writeOffers(offers);
+        writeOffers(offers.getAllOffers());
     }
 
     private void clearOldData() {
@@ -65,15 +66,23 @@ public class OffersWriterToDatabase {
         insertStatement.clearBindings();
         insertStatement.bindLong(1, offer.getId());
         insertStatement.bindLong(2, offer.getPartnerId());
-        CalendarRange duration = offer.getDuration();
-        long from = (duration == null) ? 0L : duration.from().getTimeInMillis();
-        long to = (duration == null) ? 0L : duration.to().getTimeInMillis();
-        insertStatement.bindLong(3, from);
-        insertStatement.bindLong(4, to);
+        insertDuration(insertStatement, offer, 3, 4);
         insertStatement.bindString(5, offer.getShortDescription());
         insertStatement.bindString(6, offer.getFullDescription());
         insertStatement.bindString(7, offer.getImageUrl());
         insertStatement.executeInsert();
+    }
+
+    private void insertDuration(SQLiteStatement insertStatement, Offer offer, int indexOfFromColumn, int indexOfToColumn) {
+        long from = SpecialOffersDBUtils.getFrom();
+        long to = SpecialOffersDBUtils.getTo();
+        if (!offer.isSpecial()) {
+            CalendarRange duration = offer.getDuration();
+            from = duration.from().getTimeInMillis();
+            to = duration.to().getTimeInMillis();
+        }
+        insertStatement.bindLong(indexOfFromColumn, from);
+        insertStatement.bindLong(indexOfToColumn, to);
     }
 
 

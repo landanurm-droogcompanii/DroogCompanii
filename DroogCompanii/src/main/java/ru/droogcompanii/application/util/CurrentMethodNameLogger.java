@@ -4,7 +4,7 @@ package ru.droogcompanii.application.util;
  * Created by ls on 28.02.14.
  */
 public class CurrentMethodNameLogger {
-    private static final int INDEX_OF_INVOKER_METHOD = 3;
+    private static final int INDEX_OF_INVOKER_METHOD = 4;
 
     private final String className;
 

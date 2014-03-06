@@ -59,4 +59,6 @@
 
     <string name="message_on_no_offers">Акции не найдены</string>
 
+    <string name="special_offer">Специальное предложение</string>
+
 </resources>

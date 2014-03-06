@@ -1,23 +1,21 @@
 package ru.droogcompanii.application.ui.activity.offer_list.offers_provider;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import ru.droogcompanii.application.data.offers.Offer;
+import ru.droogcompanii.application.data.offers.Offers;
 
 /**
  * Created by ls on 11.02.14.
  */
 public class OffersResultImpl implements OffersProvider.Result, Serializable {
 
-    private final List<Offer> offers;
+    private final Offers offers;
 
     public static OffersResultImpl noOffers() {
-        return new OffersResultImpl(new ArrayList<Offer>());
+        return new OffersResultImpl(new Offers());
     }
 
-    public OffersResultImpl(List<Offer> offers) {
+    public OffersResultImpl(Offers offers) {
         this.offers = offers;
     }
 
@@ -32,7 +30,7 @@ public class OffersResultImpl implements OffersProvider.Result, Serializable {
     }
 
     @Override
-    public List<Offer> getOffers() {
+    public Offers getOffers() {
         return offers;
     }
 }

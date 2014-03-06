@@ -33,8 +33,8 @@ public class CalendarRange implements Serializable {
 	public Calendar to() {
 		return to;
 	}
-	
-	@Override
+
+    @Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;

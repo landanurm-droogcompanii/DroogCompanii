@@ -34,4 +34,8 @@ public class CalendarUtils {
     private static String toTwoDigitString(int value) {
         return ((value < 10) ? "0" : "") + value;
     }
+
+    public static Calendar now() {
+        return Calendar.getInstance();
+    }
 }

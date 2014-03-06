@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,6 +24,7 @@ import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsAc
 import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.Router;
 import ru.droogcompanii.application.ui.util.caller.CallerHelper;
+import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.ListUtils;
 
 /**
@@ -227,8 +227,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private static boolean isOpenedNow(PartnerPoint partnerPoint) {
-        Calendar now = Calendar.getInstance();
-        return partnerPoint.getWorkingHours().includes(now);
+        return partnerPoint.getWorkingHours().includes(CalendarUtils.now());
     }
 
     private void updateGoToPartnerButton() {

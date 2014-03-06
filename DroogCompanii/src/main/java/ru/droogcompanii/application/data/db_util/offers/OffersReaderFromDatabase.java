@@ -4,15 +4,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.BaseReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
+import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.util.CalendarUtils;
 
 /**
@@ -37,30 +36,38 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         return new OffersDbHelper(context);
     }
 
-    public List<Offer> getOffers() {
+    public Offers getOffers() {
         return getOffersFromDatabase("");
     }
 
-    public List<Offer> getOffersOf(Partner partner) {
+    public Offers getOffersOf(Partner partner) {
         return getOffersFromDatabase(
                 " WHERE " + OffersContract.COLUMN_NAME_PARTNER_ID + " = " + partner.getId()
         );
     }
 
-    private List<Offer> getOffersFromDatabase(String where) {
+    private Offers getOffersFromDatabase(String where) {
         initDatabase();
 
-        String sql = "SELECT * FROM " + OffersContract.TABLE_NAME + where + " ;";
-        Cursor cursor = db.rawQuery(sql, null);
-        List<Offer> offers = getOffersFromCursor(cursor);
+        Cursor cursor = db.rawQuery(prepareSqlUsedSorting(where), null);
+        Offers offers = getOffersFromCursor(cursor);
         cursor.close();
 
         closeDatabase();
         return offers;
     }
 
-    private List<Offer> getOffersFromCursor(Cursor cursor) {
-        List<Offer> offers = new ArrayList<Offer>();
+    private static String prepareSql(String where) {
+        return "SELECT * FROM " + OffersContract.TABLE_NAME + where + " ;";
+    }
+
+    private static String prepareSqlUsedSorting(String where) {
+        return "SELECT * FROM " + OffersContract.TABLE_NAME + where +
+                " ORDER BY " + OffersContract.COLUMN_NAME_TO + " DESC ;";
+    }
+
+    private Offers getOffersFromCursor(Cursor cursor) {
+        Offers offers = new Offers();
         calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -84,18 +91,19 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         OfferImpl offer = new OfferImpl();
         offer.id = cursor.getInt(idColumnIndex);
         offer.partnerId = cursor.getInt(partnerIdColumnIndex);
-        offer.duration = durationFrom(cursor);
         offer.shortDescription = cursor.getString(shortDescriptionColumnIndex);
         offer.fullDescription = cursor.getString(fullDescriptionColumnIndex);
         offer.imageUrl = cursor.getString(imageUrlColumnIndex);
+        setDuration(offer, cursor.getLong(fromColumnIndex), cursor.getLong(toColumnIndex));
         return offer;
     }
 
-    private CalendarRange durationFrom(Cursor cursor) {
-        long fromInMilliseconds = cursor.getLong(fromColumnIndex);
-        long toInMilliseconds = cursor.getLong(toColumnIndex);
+    private void setDuration(OfferImpl offer, long fromInMilliseconds, long toInMilliseconds) {
+        if (SpecialOffersDBUtils.isDurationOfSpecialOffers(fromInMilliseconds, toInMilliseconds)) {
+            return;
+        }
         Calendar from = CalendarUtils.createByMilliseconds(fromInMilliseconds);
         Calendar to = CalendarUtils.createByMilliseconds(toInMilliseconds);
-        return new CalendarRange(from, to);
+        offer.duration = new CalendarRange(from, to);
     }
 }

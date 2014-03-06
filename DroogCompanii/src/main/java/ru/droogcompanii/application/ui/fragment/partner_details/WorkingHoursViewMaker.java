@@ -6,11 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Calendar;
-
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
+import ru.droogcompanii.application.util.CalendarUtils;
 
 /**
  * Created by ls on 12.02.14.
@@ -55,11 +54,7 @@ public class WorkingHoursViewMaker {
     }
 
     private boolean isOpenNow() {
-        return workingHours.includes(now());
-    }
-
-    private static Calendar now() {
-        return Calendar.getInstance();
+        return workingHours.includes(CalendarUtils.now());
     }
 
     private void setOpeningWorkingHoursText() {
@@ -69,7 +64,7 @@ public class WorkingHoursViewMaker {
     }
 
     private WorkingHours nowWorkingHours() {
-        return workingHours.getWorkingHoursOf(now());
+        return workingHours.getWorkingHoursOf(CalendarUtils.now());
     }
 
     private void setLunchBreakHours() {

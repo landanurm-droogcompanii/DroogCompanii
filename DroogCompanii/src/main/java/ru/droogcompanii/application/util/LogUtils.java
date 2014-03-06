@@ -14,4 +14,8 @@ public class LogUtils {
     public static String getTag() {
         return "droogcompanii";
     }
+
+    public static void exception(String message) {
+        Log.e(getTag(), message);
+    }
 }

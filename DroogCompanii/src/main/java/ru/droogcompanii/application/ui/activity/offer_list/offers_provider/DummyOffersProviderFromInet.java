@@ -5,10 +5,9 @@ import android.content.res.Resources;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.offers.Offer;
+import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.data.xml_parser.offers_xml_parser.OffersXmlParser;
 import ru.droogcompanii.application.util.LogUtils;
 
@@ -29,7 +28,7 @@ public class DummyOffersProviderFromInet implements OffersProvider, Serializable
     private Result tryGetOffers(Context context) throws Exception {
         OffersXmlParser parser = new OffersXmlParser();
         InputStream inputStream = prepareInputStream(context);
-        List<Offer> parsedOffers = parser.parse(inputStream);
+        Offers parsedOffers = parser.parse(inputStream);
         return new OffersResultImpl(parsedOffers);
     }
 

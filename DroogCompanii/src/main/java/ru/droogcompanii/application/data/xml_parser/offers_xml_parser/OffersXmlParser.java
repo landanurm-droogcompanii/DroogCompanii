@@ -3,15 +3,14 @@ package ru.droogcompanii.application.data.xml_parser.offers_xml_parser;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.List;
 
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
+import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.data.xml_parser.XmlParserUtils;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.StringConstants;
@@ -35,12 +34,12 @@ public class OffersXmlParser {
 
     private static final String NAMESPACE = null;
 
-    private List<Offer> outOffers;
+    private Offers outOffers;
 
 
-    public List<Offer> parse(InputStream in) throws Exception {
+    public Offers parse(InputStream in) throws Exception {
         try {
-            outOffers = new ArrayList<Offer>();
+            outOffers = new Offers();
             parseOffers(XmlParserUtils.prepareParser(in));
             return outOffers;
         } finally {

@@ -2,6 +2,7 @@ package ru.droogcompanii.application.data.offers;
 
 import java.io.Serializable;
 
+import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
@@ -44,7 +45,13 @@ public class OfferImpl implements Offer, Serializable {
 		return duration == null;
 	}
 
-	@Override
+    @Override
+    public boolean isActual() {
+        return !CalendarUtils.now()
+                .after(duration.to());
+    }
+
+    @Override
 	public String getImageUrl() {
 		return imageUrl;
 	}

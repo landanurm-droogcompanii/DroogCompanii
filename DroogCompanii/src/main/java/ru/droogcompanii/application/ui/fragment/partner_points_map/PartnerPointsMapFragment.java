@@ -155,8 +155,8 @@ public class PartnerPointsMapFragment extends BaseCustomMapFragment
     @Override
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
-        updateMapCamera(clickedMarkerHolder);
         updateFilterSet();
+        updateMapCamera(clickedMarkerHolder);
     }
 
     @Override

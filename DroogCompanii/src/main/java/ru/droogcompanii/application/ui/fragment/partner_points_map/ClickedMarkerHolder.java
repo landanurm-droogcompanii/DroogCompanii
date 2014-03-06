@@ -126,4 +126,8 @@ class ClickedMarkerHolder {
     public boolean isOwnerOfMarker() {
         return getMarker() != null;
     }
+
+    public boolean isShowing() {
+        return isPresent() && markersFinder.isMarkerPlacedOnMap(clickedMarker) && clickedMarker.isVisible();
+    }
 }
