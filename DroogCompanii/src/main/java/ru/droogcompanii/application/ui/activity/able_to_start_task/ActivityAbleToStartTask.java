@@ -63,7 +63,7 @@ public class ActivityAbleToStartTask
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        CommonFragmentStartedTaskOnCreate taskFragment = new CommonFragmentStartedTaskOnCreate();
+        FragmentStartedTaskOnCreate taskFragment = new FragmentStartedTaskOnCreate();
         taskFragment.set(task, titleId);
 
         if (fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT_HOLDER) != null) {

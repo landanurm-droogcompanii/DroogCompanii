@@ -8,26 +8,19 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.ui.util.ActivityTrackedLifecycle;
-import ru.droogcompanii.application.util.CurrentMethodNameLogger;
 
 /**
  * Created by ls on 06.03.14.
  */
 public abstract class FragmentAbleToStartTask extends Fragment {
 
-    private final CurrentMethodNameLogger LOGGER = new CurrentMethodNameLogger(getClass());
-
     protected static final int REQUEST_CODE_TASK_FRAGMENT = 2;
     protected static final String TAG_TASK_FRAGMENT = FragmentAbleToStartTask.class.getName() + "TAG_TASK_FRAGMENT";
-
-    private static final String KEY_TASK_RESULT = "KEY_TASK_RESULT";
 
     private FragmentManager fragmentManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        LOGGER.log();
-
         super.onCreate(savedInstanceState);
 
         fragmentManager = getFragmentManager();
@@ -61,15 +54,9 @@ public abstract class FragmentAbleToStartTask extends Fragment {
     }
 
     public final void onResult(int requestCode, int resultCode, Serializable result) {
-        LOGGER.log(": requestCode, resultCode, result");
-
         if ((requestCode == REQUEST_CODE_TASK_FRAGMENT)) {
-            onTaskFinished(resultCode, result);
+            onResult(resultCode, result);
         }
-    }
-
-    private void onTaskFinished(int resultCode, Serializable result) {
-        onResult(resultCode, result);
     }
 
     public boolean isAbleToReceiveResult() {
@@ -79,12 +66,10 @@ public abstract class FragmentAbleToStartTask extends Fragment {
 
     @Override
     public void onResume() {
-        LOGGER.log();
-
         super.onResume();
         TaskFragment taskFragment = getTaskFragment();
         if (taskFragment != null) {
-            taskFragment.checkWhetherIsResultReturnedDuringDisactivity();
+            taskFragment.getTaskResultIfItReturnedDuringDisactivity();
         }
     }
 

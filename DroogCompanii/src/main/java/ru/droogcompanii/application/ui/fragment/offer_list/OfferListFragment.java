@@ -27,6 +27,10 @@ import ru.droogcompanii.application.ui.activity.offer_list.offers_provider.Offer
  */
 public class OfferListFragment extends FragmentAbleToStartTask implements AdapterView.OnItemClickListener {
 
+    public static interface Callbacks {
+        void onOfferItemClick(Offer offer);
+    }
+
     private static final String KEY_OFFERS = "KEY_OFFERS";
 
 
@@ -36,10 +40,6 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
         args.putSerializable(OfferListActivity.KEY_OFFERS_PROVIDER, (Serializable) offersProvider);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public static interface Callbacks {
-        void onOfferItemClick(Offer offer);
     }
 
     private ArrayAdapter<Offer> adapter;

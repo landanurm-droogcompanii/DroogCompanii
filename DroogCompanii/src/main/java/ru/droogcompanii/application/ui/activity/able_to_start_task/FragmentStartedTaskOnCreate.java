@@ -13,13 +13,11 @@ import ru.droogcompanii.application.R;
 /**
  * Created by ls on 26.12.13.
  */
-public abstract class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
+public class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
 
     public interface Callbacks {
         void onTaskFinished(int resultCode, Serializable result);
     }
-
-    protected static final String TAG_TASK_FRAGMENT = "inner_task_fragment";
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         public void onTaskFinished(int resultCode, Serializable result) {
@@ -27,7 +25,10 @@ public abstract class FragmentStartedTaskOnCreate extends FragmentAbleToStartTas
         }
     };
 
+
     private Callbacks callbacks = DUMMY_CALLBACKS;
+    private Integer titleId;
+    private TaskNotBeInterrupted task;
 
     @Override
     public void onAttach(Activity activity) {
@@ -49,12 +50,14 @@ public abstract class FragmentStartedTaskOnCreate extends FragmentAbleToStartTas
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            startTask(getTask(), getTaskDialogTitleId());
+            startTask(task, titleId);
         }
     }
 
-    protected abstract Integer getTaskDialogTitleId();
-    protected abstract TaskNotBeInterrupted getTask();
+    public void set(TaskNotBeInterrupted task, Integer titleId) {
+        this.task = task;
+        this.titleId = titleId;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
