@@ -15,8 +15,8 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
@@ -140,7 +140,7 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
     }
 
     @Override
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         switch (requestCode) {
             case TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS:
                 onReceiveResultFromExtractSearchResultsTask(resultCode, result);

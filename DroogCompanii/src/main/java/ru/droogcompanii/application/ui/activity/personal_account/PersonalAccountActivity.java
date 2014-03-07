@@ -17,7 +17,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.personal_details.AccountOwner;
 import ru.droogcompanii.application.data.personal_details.BankCard;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
@@ -184,7 +184,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     }
 
     @Override
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         setEnabledSignOutAction(true);
 
         if (requestCode == TASK_REQUEST_CODE_RECEIVE_TOKEN_FROM_DB) {

@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.ActivityAbleToStartTask;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 26.12.13.
@@ -35,7 +35,7 @@ public class SynchronizationActivity extends ActivityAbleToStartTask {
     }
 
     @Override
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         if (requestCode == TASK_REQUEST_CODE_SYNCHRONIZATION) {
             onSynchronizationTaskFinished(resultCode, result);
         }

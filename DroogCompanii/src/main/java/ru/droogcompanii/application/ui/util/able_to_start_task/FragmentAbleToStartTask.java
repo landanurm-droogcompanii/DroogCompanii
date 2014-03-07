@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.able_to_start_task;
+package ru.droogcompanii.application.ui.util.able_to_start_task;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,8 @@ import ru.droogcompanii.application.ui.util.ActivityTrackedLifecycle;
 /**
  * Created by ls on 06.03.14.
  */
-public abstract class FragmentAbleToStartTask extends Fragment {
+public abstract class FragmentAbleToStartTask extends Fragment
+        implements AbleToStartTask, TaskResultReceiver {
 
     protected static final int REQUEST_CODE_TASK_FRAGMENT = 2;
     protected static final String TAG_TASK_FRAGMENT = FragmentAbleToStartTask.class.getName() + "TAG_TASK_FRAGMENT";
@@ -35,12 +36,12 @@ public abstract class FragmentAbleToStartTask extends Fragment {
         return (TaskFragment) fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT);
     }
 
-    protected void startTask(TaskNotBeInterrupted task) {
-        startTask(task, TaskFragment.NO_TITLE_ID);
+    public void startTask(int requestCode, TaskNotBeInterrupted task) {
+        startTask(requestCode, task, TaskFragment.NO_TITLE_ID);
     }
 
-    protected void startTask(TaskNotBeInterrupted task, Integer title) {
-        TaskFragment taskFragment = new TaskFragment();
+    public void startTask(int requestCode, TaskNotBeInterrupted task, Integer title) {
+        TaskFragment taskFragment = TaskFragment.newInstance(requestCode);
         taskFragment.setTitle(title);
         taskFragment.setTask(task);
         taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
@@ -53,16 +54,12 @@ public abstract class FragmentAbleToStartTask extends Fragment {
         transaction.commit();
     }
 
-    public final void onResult(int requestCode, int resultCode, Serializable result) {
-        if ((requestCode == REQUEST_CODE_TASK_FRAGMENT)) {
-            onResult(resultCode, result);
-        }
-    }
-
     public boolean isAbleToReceiveResult() {
         ActivityTrackedLifecycle activity = (ActivityTrackedLifecycle) getActivity();
-        return (activity != null) && activity.isActivityStarted();
+        return (activity != null) && activity.isActivityResumed();
     }
+
+    public abstract void onTaskResult(int requestCode, int resultCode, Serializable result);
 
     @Override
     public void onResume() {
@@ -72,7 +69,5 @@ public abstract class FragmentAbleToStartTask extends Fragment {
             taskFragment.getTaskResultIfItReturnedDuringDisactivity();
         }
     }
-
-    protected abstract void onResult(int resultCode, Serializable result);
 
 }

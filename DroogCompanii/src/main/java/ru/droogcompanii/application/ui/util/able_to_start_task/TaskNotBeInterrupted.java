@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.able_to_start_task;
+package ru.droogcompanii.application.ui.util.able_to_start_task;
 
 import android.os.AsyncTask;
 
@@ -11,12 +11,12 @@ public abstract class TaskNotBeInterrupted extends AsyncTask<Void, Void, Seriali
 
     private TaskFragment fragment;
 
-    public void setFragment(TaskFragment fragment) {
+    final void setFragment(TaskFragment fragment) {
         this.fragment = fragment;
     }
 
     @Override
-    protected void onPostExecute(Serializable result) {
+    protected final void onPostExecute(Serializable result) {
         if (fragment != null) {
             fragment.onTaskFinished(result);
         }

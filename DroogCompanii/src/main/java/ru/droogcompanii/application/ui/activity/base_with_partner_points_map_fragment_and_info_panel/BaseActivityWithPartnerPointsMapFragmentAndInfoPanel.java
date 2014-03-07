@@ -12,7 +12,7 @@ import java.util.Set;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.activity.filter.FilterActivity;
 import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.PartnerPointsInfoPanelFragment;
@@ -116,7 +116,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     }
 
     @Override
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         if (requestCode == TASK_REQUEST_CODE_PARTNER_POINTS_RECEIVING) {
             onPartnerPointsReceivingTaskFinished(resultCode, result);
         }

@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.able_to_start_task;
+package ru.droogcompanii.application.ui.util.able_to_start_task;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -19,16 +19,26 @@ import ru.droogcompanii.application.R;
 public class TaskFragment extends DialogFragment {
 
     public static final Integer NO_TITLE_ID = null;
+    private static final String KEY_REQUEST_CODE = "KEY_REQUEST_CODE";
 
-    private boolean isNeedToReturnResult;
+    private boolean isResultReturnedDuringDisactivity;
     private boolean isResultReturned;
     private int resultCode;
+    private int requestCode;
     private Serializable result;
     private TaskNotBeInterrupted task;
     private Integer titleId;
 
+    public static TaskFragment newInstance(int requestCode) {
+        Bundle args = new Bundle();
+        args.putInt(KEY_REQUEST_CODE, requestCode);
+        TaskFragment fragment = new TaskFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public TaskFragment() {
-        isNeedToReturnResult = false;
+        isResultReturnedDuringDisactivity = false;
         isResultReturned = false;
         resultCode = Activity.RESULT_CANCELED;
         result = null;
@@ -46,10 +56,17 @@ public class TaskFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null) {
+            extractRequestCodeFromArguments();
+        }
         setRetainInstance(true);
         if (task != null) {
             task.execute();
         }
+    }
+
+    private void extractRequestCodeFromArguments() {
+        requestCode = getArguments().getInt(KEY_REQUEST_CODE);
     }
 
     @Override
@@ -108,10 +125,10 @@ public class TaskFragment extends DialogFragment {
         FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
         isResultReturned = true;
         if (ableToStartTask.isAbleToReceiveResult()) {
-            ableToStartTask.onResult(FragmentAbleToStartTask.REQUEST_CODE_TASK_FRAGMENT, resultCode, result);
+            ableToStartTask.onTaskResult(requestCode, resultCode, result);
             finishFragment();
         } else {
-            isNeedToReturnResult = true;
+            isResultReturnedDuringDisactivity = true;
         }
     }
 
@@ -140,8 +157,8 @@ public class TaskFragment extends DialogFragment {
     }
 
     public void getTaskResultIfItReturnedDuringDisactivity() {
-        if (isNeedToReturnResult) {
-            isNeedToReturnResult = false;
+        if (isResultReturnedDuringDisactivity) {
+            isResultReturnedDuringDisactivity = false;
             returnTaskResult();
         }
     }

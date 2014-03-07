@@ -17,7 +17,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.ui.activity.signin.AuthenticationResult;
 import ru.droogcompanii.application.ui.activity.signin.SignInActivity;
 

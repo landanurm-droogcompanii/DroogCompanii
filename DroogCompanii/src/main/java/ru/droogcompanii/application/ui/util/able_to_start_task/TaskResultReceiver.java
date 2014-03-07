@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.able_to_start_task;
+package ru.droogcompanii.application.ui.util.able_to_start_task;
 
 import java.io.Serializable;
 

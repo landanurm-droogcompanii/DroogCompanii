@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.able_to_start_task;
+package ru.droogcompanii.application.ui.util.able_to_start_task;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -12,8 +12,8 @@ import ru.droogcompanii.application.ui.util.ActivityTrackedLifecycle;
 /**
  * Created by ls on 21.02.14.
  */
-public class ActivityAbleToStartTask
-        extends ActivityTrackedLifecycle implements AbleToStartTask, FragmentStartedTaskOnCreate.Callbacks {
+public class ActivityAbleToStartTask extends ActivityTrackedLifecycle
+        implements AbleToStartTask, TaskResultReceiver, FragmentStartedTaskOnCreate.Callbacks {
 
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";
 
@@ -27,20 +27,31 @@ public class ActivityAbleToStartTask
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState == null) {
-            isRunningTask = false;
+            initStateByDefault();
         } else {
-            isRunningTask = savedInstanceState.getBoolean(KEY_IS_RUNNING_TASK);
-            requestCodeOfCurrentTask = savedInstanceState.getInt(KEY_REQUEST_CODE_OF_RUNNING_TASK);
+            restoreState(savedInstanceState);
         }
+    }
+
+    private void initStateByDefault() {
+        isRunningTask = false;
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        isRunningTask = savedInstanceState.getBoolean(KEY_IS_RUNNING_TASK);
+        requestCodeOfCurrentTask = savedInstanceState.getInt(KEY_REQUEST_CODE_OF_RUNNING_TASK);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
         outState.putInt(KEY_REQUEST_CODE_OF_RUNNING_TASK, requestCodeOfCurrentTask);
         outState.putBoolean(KEY_IS_RUNNING_TASK, isRunningTask);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -83,14 +94,15 @@ public class ActivityAbleToStartTask
 
         isRunningTask = false;
 
-        onReceiveResult(requestCodeOfCurrentTask, resultCode, result);
+        onTaskResult(requestCodeOfCurrentTask, resultCode, result);
     }
 
-    protected boolean isRunningTask() {
+    public boolean isRunningTask() {
         return isRunningTask;
     }
 
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    @Override
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         // Inheritors should override this method
     }
 }

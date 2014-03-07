@@ -1,5 +1,7 @@
 package ru.droogcompanii.application.ui.activity.offer_list;
 
+import android.content.Context;
+
 import java.util.List;
 
 import ru.droogcompanii.application.data.offers.Offer;
@@ -8,5 +10,5 @@ import ru.droogcompanii.application.data.offers.Offer;
  * Created by ls on 06.03.14.
  */
 public interface OffersReceiver {
-    List<Offer> getOffers();
+    List<Offer> getOffers(Context context);
 }

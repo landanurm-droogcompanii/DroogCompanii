@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.able_to_start_task;
+package ru.droogcompanii.application.ui.util.able_to_start_task;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import ru.droogcompanii.application.R;
  * Created by ls on 26.12.13.
  */
 public class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
+
+    private static final int TASK_REQUEST_CODE = 156;
 
     public interface Callbacks {
         void onTaskFinished(int resultCode, Serializable result);
@@ -50,7 +52,7 @@ public class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            startTask(task, titleId);
+            startTask(TASK_REQUEST_CODE, task, titleId);
         }
     }
 
@@ -64,7 +66,8 @@ public class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
         return inflater.inflate(R.layout.empty_layout, container, false);
     }
 
-    public void onResult(int resultCode, Serializable result) {
+    @Override
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         callbacks.onTaskFinished(resultCode, result);
     }
 

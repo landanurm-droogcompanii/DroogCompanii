@@ -20,7 +20,7 @@ import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFr
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
 
 /**
@@ -91,7 +91,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoTo
     }
 
     @Override
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         if (requestCode == TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING) {
             onPartnerDetailsReceivingTaskFinished(resultCode, result);
         }

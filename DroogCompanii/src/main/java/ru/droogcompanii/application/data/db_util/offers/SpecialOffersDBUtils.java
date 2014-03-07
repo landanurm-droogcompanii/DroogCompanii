@@ -3,7 +3,7 @@ package ru.droogcompanii.application.data.db_util.offers;
 /**
  * Created by ls on 06.03.14.
  */
-class SpecialOffersDBUtils {
+public class SpecialOffersDBUtils {
 
     public static long getFrom() {
         return 0L;

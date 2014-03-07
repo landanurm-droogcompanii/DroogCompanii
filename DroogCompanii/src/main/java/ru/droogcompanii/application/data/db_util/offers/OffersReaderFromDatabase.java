@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.BaseReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
@@ -13,6 +15,7 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
 import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.util.CalendarUtils;
+import ru.droogcompanii.application.util.Holder;
 
 /**
  * Created by ls on 11.02.14.
@@ -47,22 +50,35 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
     }
 
     private Offers getOffersFromDatabase(String where) {
+        final Holder<Offers> result = Holder.from(null);
+        handleCursorByCondition(where, new CursorHandler() {
+            @Override
+            public void handle(Cursor cursor) {
+                result.value = getOffersFromCursor(cursor);
+            }
+        });
+        return result.value;
+    }
+
+    private static interface CursorHandler {
+        void handle(Cursor cursor);
+    }
+
+    private void handleCursorByCondition(String where, CursorHandler cursorHandler) {
         initDatabase();
-
+        where = where.trim().isEmpty() ? where : ("WHERE " + where);
         Cursor cursor = db.rawQuery(prepareSqlUsedSorting(where), null);
-        Offers offers = getOffersFromCursor(cursor);
+        cursorHandler.handle(cursor);
         cursor.close();
-
         closeDatabase();
-        return offers;
     }
 
     private static String prepareSql(String where) {
-        return "SELECT * FROM " + OffersContract.TABLE_NAME + where + " ;";
+        return "SELECT * FROM " + OffersContract.TABLE_NAME + " " + where + " ;";
     }
 
     private static String prepareSqlUsedSorting(String where) {
-        return "SELECT * FROM " + OffersContract.TABLE_NAME + where +
+        return "SELECT * FROM " + OffersContract.TABLE_NAME + " " + where +
                 " ORDER BY " + OffersContract.COLUMN_NAME_TO + " DESC ;";
     }
 
@@ -105,5 +121,27 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         Calendar from = CalendarUtils.createByMilliseconds(fromInMilliseconds);
         Calendar to = CalendarUtils.createByMilliseconds(toInMilliseconds);
         offer.duration = new CalendarRange(from, to);
+    }
+
+    public List<Offer> getOfferList(String where) {
+        final Holder<List<Offer>> result = Holder.from(null);
+        handleCursorByCondition(where, new CursorHandler() {
+            @Override
+            public void handle(Cursor cursor) {
+                result.value = getOfferListFromCursor(cursor);
+            }
+        });
+        return result.value;
+    }
+
+    private List<Offer> getOfferListFromCursor(Cursor cursor) {
+        List<Offer> offerList = new ArrayList<Offer>();
+        calculateColumnIndices(cursor);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            offerList.add(getOfferFromCursor(cursor));
+            cursor.moveToNext();
+        }
+        return offerList;
     }
 }

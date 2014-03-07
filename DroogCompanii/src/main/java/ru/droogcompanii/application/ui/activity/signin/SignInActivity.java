@@ -9,7 +9,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.activity.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 
 public class SignInActivity extends ActionBarActivityWithUpButton {
 
@@ -40,7 +40,7 @@ public class SignInActivity extends ActionBarActivityWithUpButton {
     }
 
     @Override
-    protected void onReceiveResult(int requestCode, int resultCode, Serializable result) {
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         if (requestCode == TASK_REQUEST_CODE_SIGNIN) {
             onSignInCompleted(requestCode, resultCode, result);
         }

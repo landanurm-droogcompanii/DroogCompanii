@@ -8,10 +8,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
-import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.ui.util.ImageDownloader;
 import ru.droogcompanii.application.util.CalendarUtils;
 
@@ -24,8 +25,8 @@ public class OffersAdapter extends ArrayAdapter<Offer> {
 
     private final ImageDownloader imageDownloader;
 
-    public OffersAdapter(Context context, Offers offers) {
-        super(context, ROW_RESOURCE_ID, offers.getAllOffers());
+    public OffersAdapter(Context context, List offers) {
+        super(context, ROW_RESOURCE_ID, offers);
         imageDownloader = new ImageDownloader();
     }
 
