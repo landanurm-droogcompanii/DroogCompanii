@@ -21,6 +21,11 @@ public class Offers implements Serializable {
         pastOffers = noOffers();
     }
 
+    public Offers(List<Offer> offers) {
+        this();
+        addAll(offers);
+    }
+
     private static List<Offer> noOffers() {
         return new ArrayList<Offer>();
     }
@@ -32,6 +37,12 @@ public class Offers implements Serializable {
             actualOffers.add(offer);
         } else {
             pastOffers.add(offer);
+        }
+    }
+
+    public void addAll(Iterable<Offer> offers) {
+        for (Offer each : offers) {
+            add(each);
         }
     }
 

@@ -9,15 +9,34 @@ import android.support.v4.app.FragmentTransaction;
 import ru.droogcompanii.application.util.LogUtils;
 
 /**
- * Created by ls on 31.01.14.
+ * Created by Leonid on 08.03.14.
  */
-public class FragmentRemover {
+public class FragmentUtils {
+
+    public static void placeFragmentOnLayout(FragmentActivity fragmentActivity,
+                                             int containerId,
+                                             Fragment fragment,
+                                             String tag) {
+
+        FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (fragmentManager.findFragmentByTag(tag) == null) {
+            transaction.add(containerId, fragment, tag);
+        } else {
+            transaction.replace(containerId, fragment, tag);
+        }
+        transaction.commitAllowingStateLoss();
+    }
+
 
     public static void removeFragmentByTag(final FragmentActivity activity, final String tag) {
         tryPost(new Runnable() {
             public void run() {
                 FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 Fragment fragment = fragmentManager.findFragmentByTag(tag);
+                if (fragment == null) {
+                    return;
+                }
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.remove(fragment);
                 transaction.commitAllowingStateLoss();

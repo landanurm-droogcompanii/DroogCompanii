@@ -15,21 +15,39 @@ import ru.droogcompanii.application.ui.util.ActivityTrackedLifecycle;
 public abstract class FragmentAbleToStartTask extends Fragment
         implements AbleToStartTask, TaskResultReceiver {
 
-    protected static final int REQUEST_CODE_TASK_FRAGMENT = 2;
+    public static final int TASK_FRAGMENT_TARGET = 123;
+
     protected static final String TAG_TASK_FRAGMENT = FragmentAbleToStartTask.class.getName() + "TAG_TASK_FRAGMENT";
 
+    private static final String KEY_TASK_REQUEST_CODE = "KEY_TASK_REQUEST_CODE";
+
     private FragmentManager fragmentManager;
+    private int taskRequestCode;
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_TASK_REQUEST_CODE, taskRequestCode);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
+
         fragmentManager = getFragmentManager();
 
         TaskFragment taskFragment = getTaskFragment();
         if (taskFragment != null) {
-            taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
+            taskFragment.setTargetFragment(this, TASK_FRAGMENT_TARGET);
         }
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        taskRequestCode = savedInstanceState.getInt(KEY_TASK_REQUEST_CODE);
     }
 
     private TaskFragment getTaskFragment() {
@@ -41,32 +59,43 @@ public abstract class FragmentAbleToStartTask extends Fragment
     }
 
     public void startTask(int requestCode, TaskNotBeInterrupted task, Integer title) {
-        TaskFragment taskFragment = TaskFragment.newInstance(requestCode);
+        this.taskRequestCode = requestCode;
+        TaskFragment taskFragment = new TaskFragment();
         taskFragment.setTitle(title);
         taskFragment.setTask(task);
-        taskFragment.setTargetFragment(this, REQUEST_CODE_TASK_FRAGMENT);
+        taskFragment.setTargetFragment(this, TASK_FRAGMENT_TARGET);
         startFragment(taskFragment);
     }
 
     private void startFragment(TaskFragment taskFragment) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment previousTaskFragment = fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT);
+        if (previousTaskFragment != null) {
+            transaction.remove(previousTaskFragment);
+        }
         transaction.add(taskFragment, TAG_TASK_FRAGMENT);
         transaction.commit();
     }
 
-    public boolean isAbleToReceiveResult() {
-        ActivityTrackedLifecycle activity = (ActivityTrackedLifecycle) getActivity();
-        return (activity != null) && activity.isActivityResumed();
+    public final void onResult(int requestCode, int resultCode, Serializable result) {
+        if ((requestCode == TASK_FRAGMENT_TARGET)) {
+            onTaskResult(this.taskRequestCode, resultCode, result);
+        }
     }
 
     public abstract void onTaskResult(int requestCode, int resultCode, Serializable result);
+
+    public boolean isAbleToReceiveResult() {
+        ActivityTrackedLifecycle activity = (ActivityTrackedLifecycle) getActivity();
+        return (activity != null) && activity.isActivityStarted();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         TaskFragment taskFragment = getTaskFragment();
         if (taskFragment != null) {
-            taskFragment.getTaskResultIfItReturnedDuringDisactivity();
+            taskFragment.getResultIfItReturnedDuringDisactivity();
         }
     }
 

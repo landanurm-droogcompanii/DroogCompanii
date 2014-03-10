@@ -20,8 +20,6 @@ import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
  */
 public class SpinnerAdapterPartnerImpl extends ArrayAdapter<String> {
 
-    private static final int ROW_LAYOUT_ID = android.R.layout.simple_list_item_1;
-
     private static final List<SpinnerItem<Partner>> ITEMS = Arrays.asList(
             new SpinnerItem<Partner>(R.string.labelOfSortByTitleCheckBox,
                                      new PartnerComparatorByTitle()),
@@ -36,7 +34,7 @@ public class SpinnerAdapterPartnerImpl extends ArrayAdapter<String> {
     }
 
     public SpinnerAdapterPartnerImpl(Context context) {
-        super(context, ROW_LAYOUT_ID, getItemTitles(context));
+        super(context, android.R.layout.simple_list_item_1, getItemTitles(context));
     }
 
     private static List<String> getItemTitles(Context context) {

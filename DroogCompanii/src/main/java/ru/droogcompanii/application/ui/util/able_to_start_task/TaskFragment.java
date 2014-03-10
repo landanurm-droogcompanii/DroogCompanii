@@ -12,6 +12,7 @@ import android.view.Window;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 26.12.13.
@@ -19,30 +20,17 @@ import ru.droogcompanii.application.R;
 public class TaskFragment extends DialogFragment {
 
     public static final Integer NO_TITLE_ID = null;
-    private static final String KEY_REQUEST_CODE = "KEY_REQUEST_CODE";
 
-    private boolean isResultReturnedDuringDisactivity;
-    private boolean isResultReturned;
-    private int resultCode;
-    private int requestCode;
-    private Serializable result;
+    private static final String KEY_TASK_REQUEST_CODE = "KEY_TASK_REQUEST_CODE";
+
+    private boolean isNeedToReturnResult = false;
+    private boolean isResultReturned = false;
     private TaskNotBeInterrupted task;
+
+    private int resultCode = Activity.RESULT_CANCELED;
+    private Serializable result = null;
     private Integer titleId;
 
-    public static TaskFragment newInstance(int requestCode) {
-        Bundle args = new Bundle();
-        args.putInt(KEY_REQUEST_CODE, requestCode);
-        TaskFragment fragment = new TaskFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public TaskFragment() {
-        isResultReturnedDuringDisactivity = false;
-        isResultReturned = false;
-        resultCode = Activity.RESULT_CANCELED;
-        result = null;
-    }
 
     public void setTask(TaskNotBeInterrupted task) {
         task.setFragment(this);
@@ -56,17 +44,10 @@ public class TaskFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            extractRequestCodeFromArguments();
-        }
         setRetainInstance(true);
         if (task != null) {
             task.execute();
         }
-    }
-
-    private void extractRequestCodeFromArguments() {
-        requestCode = getArguments().getInt(KEY_REQUEST_CODE);
     }
 
     @Override
@@ -76,21 +57,13 @@ public class TaskFragment extends DialogFragment {
     }
 
     private void initDialog() {
-        initTitle();
-        getDialog().setCanceledOnTouchOutside(false);
-    }
-
-    private void initTitle() {
-        if (titleId != NO_TITLE_ID) {
-            getDialog().setTitle(titleId);
+        if (Objects.equals(titleId, NO_TITLE_ID)) {
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         } else {
-            hideTitleBar();
+            getDialog().setTitle(titleId);
         }
-    }
-
-    private void hideTitleBar() {
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        getDialog().setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -108,27 +81,28 @@ public class TaskFragment extends DialogFragment {
         if (task != null) {
             task.cancel(false);
         }
-        tryReturnTaskResult();
+        tryReturnResult();
     }
 
-    private void tryReturnTaskResult() {
+    private void tryReturnResult() {
         task = null;
         if (isResultReturned) {
             return;
         }
         if (getTargetFragment() != null) {
-            returnTaskResult();
+            returnResult();
         }
     }
 
-    private void returnTaskResult() {
+    private void returnResult() {
         FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
         isResultReturned = true;
         if (ableToStartTask.isAbleToReceiveResult()) {
-            ableToStartTask.onTaskResult(requestCode, resultCode, result);
+            ableToStartTask.onResult(FragmentAbleToStartTask.TASK_FRAGMENT_TARGET, resultCode, result);
+            isNeedToReturnResult = false;
             finishFragment();
         } else {
-            isResultReturnedDuringDisactivity = true;
+            isNeedToReturnResult = true;
         }
     }
 
@@ -147,19 +121,18 @@ public class TaskFragment extends DialogFragment {
     }
 
     public void onTaskFinished(Serializable result) {
-        setTaskResult(Activity.RESULT_OK, result);
-        tryReturnTaskResult();
+        setResult(Activity.RESULT_OK, result);
+        tryReturnResult();
     }
 
-    private void setTaskResult(int resultCode, Serializable result) {
+    private void setResult(int resultCode, Serializable result) {
         this.resultCode = resultCode;
         this.result = result;
     }
 
-    public void getTaskResultIfItReturnedDuringDisactivity() {
-        if (isResultReturnedDuringDisactivity) {
-            isResultReturnedDuringDisactivity = false;
-            returnTaskResult();
+    public void getResultIfItReturnedDuringDisactivity() {
+        if (isNeedToReturnResult) {
+            returnResult();
         }
     }
 }

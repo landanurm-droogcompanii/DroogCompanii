@@ -45,8 +45,8 @@ public class ActivityAbleToStartTask extends ActivityTrackedLifecycle
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         saveStateInto(outState);
+        super.onSaveInstanceState(outState);
     }
 
     private void saveStateInto(Bundle outState) {

@@ -7,9 +7,8 @@ import java.util.List;
 import ru.droogcompanii.application.data.offers.Offer;
 
 /**
- * Created by ls on 10.02.14.
+ * Created by Leonid on 08.03.14.
  */
-public interface OffersProvider {
-    List<Offer> getAllOffers(Context context);
-    List<Offer> getOffersByCondition(Context context, String where);
+public interface OffersDownloader {
+    List<Offer> downloadOffers(Context context);
 }

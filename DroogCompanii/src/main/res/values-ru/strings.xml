@@ -61,4 +61,9 @@
 
     <string name="special_offer">Специальное предложение</string>
 
+    <string name="offer_type_all">Все акции</string>
+    <string name="offer_type_special">Специальные предложения</string>
+    <string name="offer_type_actual">Действующие акции</string>
+    <string name="offer_type_past">Прошедшие акции</string>
+
 </resources>

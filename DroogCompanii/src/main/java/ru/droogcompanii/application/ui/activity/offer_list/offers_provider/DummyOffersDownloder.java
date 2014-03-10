@@ -5,31 +5,33 @@ import android.content.res.Resources;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.offers.Offers;
+import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.xml_parser.offers_xml_parser.OffersXmlParser;
+import ru.droogcompanii.application.util.DownloadingFailedException;
 import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 10.02.14.
  */
-public class DummyOffersProviderFromInet implements OffersProvider, Serializable {
+public class DummyOffersDownloder implements OffersDownloader, Serializable {
 
-    public Result getOffers(Context context) {
+    @Override
+    public List<Offer> downloadOffers(Context context) {
         try {
-            return tryGetOffers(context);
+            return tryDownloadOffers(context);
         } catch (Exception e) {
             LogUtils.debug(e.getMessage());
-            return OffersResultImpl.noOffers();
+            throw new DownloadingFailedException(e.getMessage(), e);
         }
     }
 
-    private Result tryGetOffers(Context context) throws Exception {
+    private List<Offer> tryDownloadOffers(Context context) throws Exception {
         OffersXmlParser parser = new OffersXmlParser();
         InputStream inputStream = prepareInputStream(context);
-        Offers parsedOffers = parser.parse(inputStream);
-        return new OffersResultImpl(parsedOffers);
+        return parser.parse(inputStream);
     }
 
     private static InputStream prepareInputStream(Context context) {

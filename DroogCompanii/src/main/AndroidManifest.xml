@@ -75,7 +75,7 @@
         <activity
             android:name="ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity"
             android:icon="@drawable/ic_offers"
-            android:label="@string/titleOfOfferListActivity" >
+            android:label="" >
         </activity>
         <activity
             android:name="ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity"

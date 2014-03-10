@@ -8,7 +8,6 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
-import ru.droogcompanii.application.data.offers.Offers;
 
 /**
  * Created by ls on 11.02.14.
@@ -21,7 +20,7 @@ public class OffersWriterToDatabase {
         this.context = context;
     }
 
-    public void write(Offers offers) {
+    public void write(List<Offer> offers) {
         OffersDbHelper dbHelper = new OffersDbHelper(context);
         db = dbHelper.getWritableDatabase();
         db.beginTransaction();
@@ -36,9 +35,9 @@ public class OffersWriterToDatabase {
         dbHelper.close();
     }
 
-    private void tryExecuteTransaction(Offers offers) {
+    private void tryExecuteTransaction(List<Offer> offers) {
         clearOldData();
-        writeOffers(offers.getAllOffers());
+        writeOffers(offers);
     }
 
     private void clearOldData() {
