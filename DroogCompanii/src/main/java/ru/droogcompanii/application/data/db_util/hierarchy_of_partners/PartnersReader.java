@@ -17,7 +17,7 @@ import ru.droogcompanii.application.util.SerializationUtils;
 /**
  * Created by Leonid on 17.12.13.
  */
-public class PartnersReader extends BasePartnersReaderFromDatabase {
+public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
     private static final PartnersContracts.PartnersContract COLUMNS = new PartnersContracts.PartnersContract();
 

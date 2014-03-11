@@ -4,14 +4,14 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import ru.droogcompanii.application.ui.activity.base_menu_helper.BaseActivityMenuHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.DummyMenuHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.ActivityMenuHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.DummyMenuHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
 
 /**
  * Created by ls on 24.12.13.
  */
-public abstract class ActionBarActivityWithUpButton extends BaseActivityMenuHelper {
+public abstract class ActionBarActivityWithUpButton extends ActivityMenuHelper {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

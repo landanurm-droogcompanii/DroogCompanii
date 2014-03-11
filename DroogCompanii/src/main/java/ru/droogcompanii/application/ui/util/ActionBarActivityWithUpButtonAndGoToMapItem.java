@@ -3,7 +3,7 @@ package ru.droogcompanii.application.ui.util;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemIds;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemIds;
 
 /**
  * Created by ls on 04.02.14.

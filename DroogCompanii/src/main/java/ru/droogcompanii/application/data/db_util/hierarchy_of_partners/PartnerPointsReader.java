@@ -17,7 +17,7 @@ import ru.droogcompanii.application.util.SerializationUtils;
 /**
  * Created by Leonid on 17.12.13.
  */
-public class PartnerPointsReader extends BasePartnersReaderFromDatabase {
+public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
 
     private final Context context;
 

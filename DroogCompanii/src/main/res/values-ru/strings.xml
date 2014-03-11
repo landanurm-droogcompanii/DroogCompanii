@@ -66,4 +66,8 @@
     <string name="offer_type_actual">Действующие акции</string>
     <string name="offer_type_past">Прошедшие акции</string>
 
+    <string name="categories">Категории</string>
+    <string name="partners">Партнеры</string>
+    <string name="partner_points">Точки партнеров</string>
+
 </resources>

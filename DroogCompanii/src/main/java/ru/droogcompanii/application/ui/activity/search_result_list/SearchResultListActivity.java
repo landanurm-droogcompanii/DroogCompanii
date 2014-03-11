@@ -4,258 +4,72 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.widget.SpinnerAdapter;
-
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.ui.activity.search.SearchResultProvider;
-import ru.droogcompanii.application.ui.activity.search_result_list.spinner_util.SpinnerAdapterPartnerImpl;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
+import ru.droogcompanii.application.ui.util.FragmentUtils;
 
 /**
- * Created by ls on 14.01.14.
+ * Created by ls on 11.03.14.
  */
-public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
-                implements SearchResultListFragment.Callbacks,
-                           PartnerPointsProviderHolder {
+public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGoToMapItem {
 
-    private static final int TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS = 145;
+    private static final String TAG_SEARCH_RESULT_LIST_FRAGMENT = "TAG_SEARCH_RESULT_LIST_FRAGMENT";
 
-    public static final int LOWER_BOUND_VALID_TASK_REQUEST_CODE =
-                        TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS + 1;
-
-    private static final String KEY_INDEX_OF_CURRENT_COMPARATOR = "KEY_INDEX_OF_CURRENT_COMPARATOR";
-    private static final String KEY_SEARCH_RESULT_PROVIDER = "KEY_SEARCH_RESULT_PROVIDER";
-    private static final String KEY_IS_GO_TO_MAP_ITEM_VISIBLE = "KEY_IS_GO_TO_MAP_ITEM_VISIBLE";
-
-    private boolean isGoToMapItemVisible;
-    private int indexOfCurrentComparator;
-    private SearchResultListFragment searchResultFragment;
-    private SearchResultProvider searchResultProvider;
+    private static final String KEY_QUERY = "KEY_QUERY";
 
 
-    public static void start(Context context, SearchResultProvider searchResultProvider) {
+    private String query;
+
+
+    public static void start(Context context, String query) {
         Intent intent = new Intent(context, SearchResultListActivity.class);
-        intent.putExtra(KEY_SEARCH_RESULT_PROVIDER, (Serializable) searchResultProvider);
+        intent.putExtra(KEY_QUERY, query);
         context.startActivity(intent);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
-
+        setContentView(R.layout.activity_search_result_list);
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
             restoreState(savedInstanceState);
         }
-
-        searchResultFragment = (SearchResultListFragment)
-                getSupportFragmentManager().findFragmentById(R.id.searchResultFragment);
-
-        initSpinnerOnActionBar();
-
-        if (savedInstanceState == null) {
-            actionsOnLaunchActivity();
-        }
+        setTitle(query);
     }
 
     private void initStateByDefault() {
-        indexOfCurrentComparator = 0;
-        searchResultProvider = (SearchResultProvider)
-                getIntent().getExtras().getSerializable(KEY_SEARCH_RESULT_PROVIDER);
-        updateGoToMapItemVisible(false);
+        query = getIntent().getStringExtra(KEY_QUERY);
+        placeFragmentOnLayout();
+    }
+
+    private void placeFragmentOnLayout() {
+        Fragment fragment = SearchResultListFragment.newInstance(query);
+        FragmentUtils.placeFragmentOnLayout(this,
+                R.id.containerOfSearchResultList, fragment, TAG_SEARCH_RESULT_LIST_FRAGMENT);
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        indexOfCurrentComparator = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_COMPARATOR);
-        searchResultProvider = (SearchResultProvider)
-                savedInstanceState.getSerializable(KEY_SEARCH_RESULT_PROVIDER);
-        updateGoToMapItemVisible(savedInstanceState.getBoolean(KEY_IS_GO_TO_MAP_ITEM_VISIBLE));
-    }
-
-    private void updateGoToMapItemVisible(boolean visible) {
-        isGoToMapItemVisible = visible;
-        updateGoToMapItemVisible();
-    }
-
-    @Override
-    protected boolean isGoToMapItemVisible() {
-        return isGoToMapItemVisible;
-    }
-
-
-    private void initSpinnerOnActionBar() {
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapterPartnerImpl(this);
-        ActionBar.OnNavigationListener onNavigationListener = new ActionBar.OnNavigationListener() {
-            @Override
-            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                onComparatorChanged(itemPosition);
-                return true;
-            }
-        };
-        initSpinnerOnActionBar(spinnerAdapter, onNavigationListener);
-    }
-
-    private void onComparatorChanged(int comparatorPosition) {
-        indexOfCurrentComparator = comparatorPosition;
-        Comparator<Partner> newComparator = SpinnerAdapterPartnerImpl.getComparatorByPosition(comparatorPosition);
-        searchResultFragment.setComparator(newComparator);
-    }
-
-    private void initSpinnerOnActionBar(SpinnerAdapter spinnerAdapter,
-                                        ActionBar.OnNavigationListener listener) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setListNavigationCallbacks(spinnerAdapter, listener);
-        actionBar.setSelectedNavigationItem(indexOfCurrentComparator);
-    }
-
-    private void actionsOnLaunchActivity() {
-        searchResultFragment.hide();
-        startTaskExtractSearchResults();
-    }
-
-    private void startTaskExtractSearchResults() {
-        TaskNotBeInterrupted task = new SearchResultsExtractorTask(searchResultProvider, this);
-        startTask(TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS, task);
-    }
-
-    @Override
-    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        switch (requestCode) {
-            case TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS:
-                onReceiveResultFromExtractSearchResultsTask(resultCode, result);
-                break;
-
-            default:
-                onReceiveResultFromTaskLaunchedByFragment(requestCode, resultCode, result);
-                break;
-        }
-    }
-
-    private void onReceiveResultFromExtractSearchResultsTask(int resultCode, Serializable result) {
-        if (resultCode == RESULT_OK) {
-            showSearchResult(result);
-        } else {
-            finish();
-        }
-    }
-
-    private void showSearchResult(Serializable result) {
-        List<SearchResult<Partner>> searchResults = (List<SearchResult<Partner>>) result;
-        searchResultFragment.show();
-        searchResultFragment.setSearchResult(searchResults);
-    }
-
-    private void onReceiveResultFromTaskLaunchedByFragment(int requestCode,
-                                          int resultCode, Serializable result) {
-        TaskResultReceiver resultReceiver = (TaskResultReceiver) getCurrentFragment();
-        resultReceiver.onTaskResult(requestCode, resultCode, result);
-    }
-
-    private Fragment getCurrentFragment() {
-        return getSupportFragmentManager().findFragmentById(R.id.searchResultFragment);
+        query = savedInstanceState.getString(KEY_QUERY);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_SEARCH_RESULT_PROVIDER, (Serializable) searchResultProvider);
-        outState.putBoolean(KEY_IS_GO_TO_MAP_ITEM_VISIBLE, isGoToMapItemVisible);
-        outState.putInt(KEY_INDEX_OF_CURRENT_COMPARATOR, indexOfCurrentComparator);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
+        outState.putString(KEY_QUERY, query);
     }
 
     @Override
-    public void onPartnerClick(Partner partner) {
-        PartnerDetailsActivity.start(this, new PartnerAndPartnerPointsProviderImpl(partner, searchResultProvider));
-    }
-
-    private static class PartnerAndPartnerPointsProviderImpl
-            implements PartnerDetailsActivity.PartnerAndPartnerPointsProvider, Serializable{
-        private final Partner partner;
-        private final SearchResultProvider searchResultProvider;
-
-        PartnerAndPartnerPointsProviderImpl(Partner partner, SearchResultProvider searchResultProvider) {
-            this.partner = partner;
-            this.searchResultProvider = searchResultProvider;
-        }
-
-        @Override
-        public Partner getPartner(Context context) {
-            return partner;
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            return searchResultProvider.getPointsOfPartner(context, partner);
-        }
-    }
-
-    @Override
-    public void onNotFound() {
-        updateGoToMapItemVisible(false);
-    }
-
-    @Override
-    public void onFound() {
-        updateGoToMapItemVisible(true);
-    }
-
-    @Override
-    protected MenuHelper getMenuHelper() {
-        return new MenuHelperItemsProvider(this) {
-            @Override
-            protected MenuItemHelper[] getMenuItemHelpers() {
-                return new MenuItemHelper[] {
-                        MenuItemHelpers.GO_TO_MAP,
-                        MenuItemHelpers.PERSONAL_ACCOUNT,
-                        MenuItemHelpers.SETTINGS,
-                        MenuItemHelpers.HELP
-                };
-            }
-        };
-    }
-
-    @Override
-    public PartnerPointsProvider getPartnerPointsProvider() {
-        return new AllPartnerPointsFromSearchResultProvider(searchResultProvider);
-    }
-
-    private static class AllPartnerPointsFromSearchResultProvider implements PartnerPointsProvider, Serializable {
-        private final SearchResultProvider searchResultProvider;
-
-        AllPartnerPointsFromSearchResultProvider(SearchResultProvider searchResultProvider) {
-            this.searchResultProvider = searchResultProvider;
-        }
-
-        @Override
-        public String getTitle(Context context) {
-            return searchResultProvider.getTitle(context);
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            return searchResultProvider.getAllPartnerPoints(context);
-        }
+    protected boolean isGoToMapItemVisible() {
+        return true;
     }
 
 }

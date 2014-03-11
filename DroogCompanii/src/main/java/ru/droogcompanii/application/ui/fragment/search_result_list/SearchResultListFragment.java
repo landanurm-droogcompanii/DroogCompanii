@@ -1,97 +1,127 @@
 package ru.droogcompanii.application.ui.fragment.search_result_list;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.google.common.base.Optional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.searchable_sortable_listing.SearchResult;
-import ru.droogcompanii.application.ui.util.able_to_start_task.AbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
-import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.ui.fragment.search_result_list.adapter.SearchResultListAdapter;
+import ru.droogcompanii.application.ui.fragment.search_result_list.adapter.SearchResultListItem;
+import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
-import ru.droogcompanii.application.util.Objects;
 
 /**
- * Created by ls on 22.01.14.
+ * Created by ls on 11.03.14.
  */
-public class SearchResultListFragment extends ListFragment
-        implements AdapterView.OnItemClickListener, TaskResultReceiver {
+public class SearchResultListFragment extends FragmentAbleToStartTask {
 
-    private static final int TASK_REQUEST_CODE_SORT_TASK =
-            SearchResultListActivity.LOWER_BOUND_VALID_TASK_REQUEST_CODE + 1;
+    private static final int TASK_REQUEST_CODE_INPUT_RECEIVER = 140;
 
-    public static interface Callbacks {
-        void onPartnerClick(Partner partner);
-        void onFound();
-        void onNotFound();
+    public static interface InputProvider {
+        String getTitle(Context context);
+        List<Input> getInput(Context context);
     }
 
-    private static final String KEY_VISIBILITY = "KEY_VISIBILITY";
-    private static final String KEY_SEARCH_RESULTS = "KEY_SEARCH_RESULTS";
-    private static final String KEY_CURRENT_COMPARATOR = "KEY_CURRENT_COMPARATOR";
-    private static final String KEY_IS_SEARCH_RESULTS_READY = "KEY_IS_SEARCH_RESULTS_READY";
-    private static final String KEY_IS_SEARCH_RESULTS_SORTED = "KEY_IS_SEARCH_RESULTS_SORTED";
+    public static class Input implements Serializable {
+        public final List<PartnerCategory> categories = new ArrayList<PartnerCategory>();
+        public final List<Partner> partners = new ArrayList<Partner>();
+        public final List<PartnerPoint> points = new ArrayList<PartnerPoint>();
+    }
 
-    private AbleToStartTask ableToStartTask;
-    private boolean isSearchResultsReady;
-    private boolean isSearchResultsSorted;
-    private Callbacks callbacks;
-    private List<SearchResult<Partner>> searchResults;
-    private Optional<Comparator<Partner>> currentComparator;
-    private SearchResultListAdapter adapter;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        callbacks = (Callbacks) activity;
-        ableToStartTask = (AbleToStartTask) activity;
+    private static final String KEY_INPUT_PROVIDER = "KEY_INPUT_PROVIDER";
+    private static final String KEY_INPUT = "KEY_INPUT";
+
+
+    private InputProvider inputProvider;
+    private Optional<Input> input;
+
+
+    public static SearchResultListFragment newInstance(String query) {
+        SearchResultListFragment fragment = new SearchResultListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_INPUT_PROVIDER, new InputProviderBySearchQuery(query));
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
             restoreState(savedInstanceState);
         }
-
-        if (isSearchResultsReady && isSearchResultsSorted) {
-            initSearchResultList();
-        }
-
-        getListView().setOnItemClickListener(this);
     }
 
     private void initStateByDefault() {
-        currentComparator = Optional.absent();
-        isSearchResultsReady = false;
-        isSearchResultsSorted = false;
-        searchResults = new ArrayList<SearchResult<Partner>>();
+        inputProvider = (InputProvider) getArguments().getSerializable(KEY_INPUT_PROVIDER);
+        input = Optional.absent();
+        startInputReceiverTask();
+    }
+
+    private void startInputReceiverTask() {
+        startTask(TASK_REQUEST_CODE_INPUT_RECEIVER, new TaskNotBeInterrupted() {
+            @Override
+            protected Serializable doInBackground(Void... voids) {
+                return (Serializable) inputProvider.getInput(getActivity());
+            }
+        });
+    }
+
+    @Override
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
+        if (requestCode == TASK_REQUEST_CODE_INPUT_RECEIVER) {
+            onInputReceivingFinished(resultCode, result);
+        }
+    }
+
+    private void onInputReceivingFinished(int resultCode, Serializable result) {
+        if (resultCode != Activity.RESULT_OK) {
+            getActivity().finish();
+            return;
+        }
+        input = Optional.of((Input) result);
+        updateSearchResultList();
+    }
+
+    private void updateSearchResultList() {
+        ListView searchResultListView = (ListView) getView().findViewById(R.id.searchResultList);
+        final SearchResultListAdapter adapter = new SearchResultListAdapter(getActivity(), input.get());
+        searchResultListView.setAdapter(adapter);
+        searchResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                onSearchResultListItemClicked(adapter.getItem(position));
+            }
+        });
+    }
+
+    private void onSearchResultListItemClicked(SearchResultListItem item) {
+        item.onClick(getActivity());
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        currentComparator = (Optional<Comparator<Partner>>) savedInstanceState.getSerializable(KEY_CURRENT_COMPARATOR);
-        searchResults = (List<SearchResult<Partner>>) savedInstanceState.getSerializable(KEY_SEARCH_RESULTS);
-        isSearchResultsReady = savedInstanceState.getBoolean(KEY_IS_SEARCH_RESULTS_READY);
-        isSearchResultsSorted = savedInstanceState.getBoolean(KEY_IS_SEARCH_RESULTS_SORTED);
-
-        int visibility = savedInstanceState.getInt(KEY_VISIBILITY);
-        getView().setVisibility(visibility);
+        inputProvider = (InputProvider) savedInstanceState.getSerializable(KEY_INPUT_PROVIDER);
+        input = (Optional<Input>) savedInstanceState.getSerializable(KEY_INPUT);
+        if (input.isPresent()) {
+            updateSearchResultList();
+        }
     }
 
     @Override
@@ -101,96 +131,12 @@ public class SearchResultListFragment extends ListFragment
     }
 
     private void saveStateInto(Bundle outState) {
-        outState.putSerializable(KEY_CURRENT_COMPARATOR, currentComparator);
-        outState.putSerializable(KEY_SEARCH_RESULTS, (Serializable) searchResults);
-        outState.putBoolean(KEY_IS_SEARCH_RESULTS_READY, isSearchResultsReady);
-        outState.putBoolean(KEY_IS_SEARCH_RESULTS_SORTED, isSearchResultsSorted);
-
-        int visibility = getView().getVisibility();
-        outState.putInt(KEY_VISIBILITY, visibility);
-    }
-
-    public void setSearchResult(List<SearchResult<Partner>> searchResults) {
-        this.searchResults = searchResults;
-        isSearchResultsReady = true;
-        isSearchResultsSorted = false;
-        if (currentComparator.isPresent()) {
-            startSortingTask();
-        } else {
-            initSearchResultList();
-        }
-    }
-
-    private void startSortingTask() {
-        TaskNotBeInterrupted task = new SortTask(searchResults, currentComparator.get());
-        ableToStartTask.startTask(TASK_REQUEST_CODE_SORT_TASK, task);
+        outState.putSerializable(KEY_INPUT_PROVIDER, (Serializable) inputProvider);
+        outState.putSerializable(KEY_INPUT, input);
     }
 
     @Override
-    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        if (resultCode != Activity.RESULT_OK) {
-            getActivity().finish();
-            return;
-        }
-        if (requestCode == TASK_REQUEST_CODE_SORT_TASK) {
-            onSortingCompleted(result);
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search_result_list, null);
     }
-
-    private void onSortingCompleted(Serializable result) {
-        searchResults = (List<SearchResult<Partner>>) result;
-        isSearchResultsSorted = true;
-        initSearchResultList();
-    }
-
-    private void initSearchResultList() {
-        adapter = new SearchResultListAdapter(getActivity(), searchResults);
-        setListAdapter(adapter);
-        if (adapter.isEmpty()) {
-            callbacks.onNotFound();
-            setEmptyListView();
-        } else {
-            callbacks.onFound();
-        }
-    }
-
-    private void setEmptyListView() {
-        Activity activity = getActivity();
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
-        View emptyView = layoutInflater.inflate(R.layout.view_no_search_results, null);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        activity.addContentView(emptyView, layoutParams);
-        getListView().setEmptyView(emptyView);
-    }
-
-    public void setComparator(Comparator<Partner> newComparator) {
-        if (newComparator == null) {
-            throw new IllegalArgumentException(SearchResultListFragment.class.getName() +
-                    ".setComparator(comparator):  comparator should be not null");
-        }
-        if (currentComparator.isPresent() && Objects.equals(currentComparator.get(), newComparator)) {
-            return;
-        }
-        currentComparator = Optional.of(newComparator);
-        if (isSearchResultsReady) {
-            startSortingTask();
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Partner partner = adapter.getItem(position).value();
-        callbacks.onPartnerClick(partner);
-    }
-
-    public void show() {
-        getView().setVisibility(View.VISIBLE);
-    }
-
-    public void hide() {
-        getView().setVisibility(View.INVISIBLE);
-    }
-
 }

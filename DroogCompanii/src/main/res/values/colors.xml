@@ -6,4 +6,5 @@
     <color name="backgroundOfOffersLayout">#cf272f20</color>
     <color name="backgroundOfOfferRow">#ddcccccc</color>
     <color name="textColorOfOfferRow">@color/backgroundOfOffersLayout</color>
+    <color name="textColorOfPartnerSearchResultListItemDiscountSize">#444444</color>
 </resources>

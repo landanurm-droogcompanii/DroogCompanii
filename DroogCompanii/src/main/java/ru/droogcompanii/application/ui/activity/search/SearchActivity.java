@@ -11,14 +11,12 @@ import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderBySearchQuery;
-import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderFavorite;
-import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 
@@ -42,7 +40,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
 
         searchQueryInput = (EditText) findViewById(R.id.searchQueryInputEditText);
 
-        initFavoriteTextView();
+        initFavoriteItem();
 
         findViewById(R.id.searchByQueryButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +57,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
         });
     }
 
-    private void initFavoriteTextView() {
+    private void initFavoriteItem() {
         ViewGroup favoriteContainer = (ViewGroup) findViewById(R.id.favoriteContainer);
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         TextView favoriteTextView = (TextView) layoutInflater.inflate(android.R.layout.simple_list_item_1, null);
@@ -91,11 +89,11 @@ public class SearchActivity extends ActionBarActivityWithUpButton
     }
 
     private void showSearchResult(SearchResultProvider searchResultProvider) {
-        SearchResultListActivity.start(this, searchResultProvider);
+        //PartnerListActivity.start(this, searchResultProvider);
     }
 
     private void onShowFavorite() {
-        showSearchResult(new SearchResultProviderFavorite());
+        //showSearchResult(new FavoritePartnersProvider());
     }
 
     @Override

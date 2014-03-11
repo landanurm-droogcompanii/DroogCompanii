@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.MenuHelperItemsProvider;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelper;
-import ru.droogcompanii.application.ui.activity.base_menu_helper.menu_item_helper.MenuItemHelpers;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.fragment.help.HelpFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 

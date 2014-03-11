@@ -16,8 +16,8 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
-import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
-import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
+import ru.droogcompanii.application.ui.activity.partner_list.PartnerListActivity;
+import ru.droogcompanii.application.ui.activity.search_2.InputProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.util.ImageDownloader;
 import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.Router;
@@ -176,7 +176,7 @@ public class PartnerDetailsViewHelper {
     }
 
     private void goToCategory(PartnerCategory category) {
-        SearchResultListActivity.start(context, new SearchResultProviderByPartnerCategory(category));
+        PartnerListActivity.start(context, new InputProviderByPartnerCategory(category));
     }
 
     private void setIsFavorite() {

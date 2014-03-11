@@ -49,6 +49,15 @@
             android:label="@string/titleOfSearchActivity" >
         </activity>
         <activity
+            android:name="ru.droogcompanii.application.ui.activity.search_2.SearchActivity2"
+            android:label="@string/titleOfSearchActivity" >
+        </activity>
+        <activity
+            android:name=".ui.activity.partner_list.PartnerListActivity"
+            android:icon="@android:drawable/ic_menu_search"
+            android:label="" >
+        </activity>
+        <activity
             android:name="ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity"
             android:icon="@android:drawable/ic_menu_search"
             android:label="" >

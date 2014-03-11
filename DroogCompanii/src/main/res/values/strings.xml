@@ -81,5 +81,9 @@
     <string name="offer_type_actual">Actual Offers</string>
     <string name="offer_type_past">Past Offers</string>
 
+    <string name="categories">Categories</string>
+    <string name="partners">Partners</string>
+    <string name="partner_points">Partner points</string>
+
 
 </resources>

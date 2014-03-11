@@ -83,7 +83,7 @@ public class FavoriteDBUtils {
         List<PartnerPoint> noPartnerPoints = new ArrayList<PartnerPoint>();
         final Holder<List<PartnerPoint>> resultHolder = Holder.from(noPartnerPoints);
 
-        BasePartnersReaderFromDatabase reader = new BasePartnersReaderFromDatabase(context);
+        PartnersHierarchyReaderFromDatabase reader = new PartnersHierarchyReaderFromDatabase(context);
         reader.handleCursorByQuery(sql, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
