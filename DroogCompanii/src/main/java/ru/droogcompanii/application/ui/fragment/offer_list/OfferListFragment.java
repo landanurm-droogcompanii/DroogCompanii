@@ -25,6 +25,7 @@ import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrup
  */
 public class OfferListFragment extends FragmentAbleToStartTask implements AdapterView.OnItemClickListener {
 
+
     public static interface Callbacks {
         void onOfferItemClick(Offer offer);
     }
@@ -78,9 +79,9 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
     }
 
     private void startTaskReceivingOffers() {
-        OffersReceiverByOfferType offersProvider = (OffersReceiverByOfferType)
+        OffersReceiverByOfferType offersReceiver = (OffersReceiverByOfferType)
                 getArguments().getSerializable(KEY_OFFERS_PROVIDER);
-        TaskNotBeInterrupted task = new OffersReceiverTask(offersProvider, getActivity());
+        TaskNotBeInterrupted task = new OffersReceiverTask(offersReceiver, getActivity());
         startTask(TASK_REQUEST_CODE_RECEIVING_OFFERS, task);
     }
 
@@ -105,16 +106,15 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        saveStateInto(outState);
+    }
+
+    private void saveStateInto(Bundle outState) {
         outState.putSerializable(KEY_OFFERS, optionalOffers);
     }
 
-    public void setOffers(Serializable result) {
-        List<Offer> offers = (List<Offer>) result;
-        setOffers(offers);
-    }
-
     private void setOffers(List<Offer> offers) {
-        this.optionalOffers = Optional.of(offers);
+        optionalOffers = Optional.of(offers);
         initList();
     }
 
@@ -132,10 +132,11 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
     }
 
     private void onReceivingOffersTaskResult(int resultCode, Serializable result) {
-        if (resultCode == Activity.RESULT_OK) {
-            setOffers(result);
-        } else {
+        if (resultCode != Activity.RESULT_OK) {
             getActivity().finish();
+        } else {
+            List<Offer> offers = (List<Offer>) result;
+            setOffers(offers);
         }
     }
 }

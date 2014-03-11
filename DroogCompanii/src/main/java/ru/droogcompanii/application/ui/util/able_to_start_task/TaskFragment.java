@@ -45,7 +45,7 @@ public class TaskFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        if (task != null) {
+        if (savedInstanceState == null && task != null) {
             task.execute();
         }
     }

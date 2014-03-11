@@ -6,11 +6,11 @@ package ru.droogcompanii.application.data.db_util.offers;
 public class SpecialOffersDBUtils {
 
     public static long getFrom() {
-        return 0L;
+        return Long.MAX_VALUE;
     }
 
     public static long getTo() {
-        return 0L;
+        return Long.MAX_VALUE;
     }
 
     public static boolean isDurationOfSpecialOffers(long from, long to) {

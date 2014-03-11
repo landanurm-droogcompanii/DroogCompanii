@@ -73,9 +73,12 @@ public class OffersWriterToDatabase {
     }
 
     private void insertDuration(SQLiteStatement insertStatement, Offer offer, int indexOfFromColumn, int indexOfToColumn) {
-        long from = SpecialOffersDBUtils.getFrom();
-        long to = SpecialOffersDBUtils.getTo();
-        if (!offer.isSpecial()) {
+        long from;
+        long to;
+        if (offer.isSpecial()) {
+            from = SpecialOffersDBUtils.getFrom();
+            to = SpecialOffersDBUtils.getTo();
+        } else {
             CalendarRange duration = offer.getDuration();
             from = duration.from().getTimeInMillis();
             to = duration.to().getTimeInMillis();

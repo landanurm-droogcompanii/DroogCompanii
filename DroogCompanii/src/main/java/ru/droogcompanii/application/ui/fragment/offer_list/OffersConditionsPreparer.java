@@ -18,7 +18,7 @@ class OffersConditionsPreparer {
     public static Optional<String> prepare(OfferType offerType, Optional<String> where) {
         Optional<String> offerTypeCondition = getConditionByOfferType(offerType);
         if (where.isPresent()) {
-            String condition = CONDITIONS_COMBINER.combine(where.or(""), offerTypeCondition.or(""));
+            String condition = CONDITIONS_COMBINER.combine(where.get(), offerTypeCondition.or(""));
             return Optional.of(condition);
         } else {
             return offerTypeCondition;

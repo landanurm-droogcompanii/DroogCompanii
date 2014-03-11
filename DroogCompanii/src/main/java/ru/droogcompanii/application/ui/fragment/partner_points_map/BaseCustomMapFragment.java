@@ -24,7 +24,6 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.util.FragmentAbleRunOnceOnResume;
 import ru.droogcompanii.application.ui.util.LocationUtils;
 import ru.droogcompanii.application.ui.util.ObserverOfViewWillBePlacedOnGlobalLayout;
-import ru.droogcompanii.application.ui.util.ToastUtils;
 
 /**
  * Created by ls on 10.01.14.
@@ -40,7 +39,6 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
         }
     };
 
-    private boolean isFirstLocationChangeAfterOnResume;
     private boolean isFirstUpdatingMapCamera;
     private boolean isMapViewPlacedOnLayout;
     private GoogleMap map;
@@ -103,21 +101,11 @@ class BaseCustomMapFragment extends FragmentAbleRunOnceOnResume
     @Override
     public void onLocationChanged(Location location) {
         onLocationChangedListener.onLocationChanged(location);
-
-        if (!isFirstLocationChangeAfterOnResume) {
-            notifyAboutLocationChange();
-        }
-        isFirstLocationChangeAfterOnResume = false;
-    }
-
-    private void notifyAboutLocationChange() {
-        ToastUtils.SHORT.show(getActivity(), R.string.message_on_custom_base_location_changed);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        isFirstLocationChangeAfterOnResume = true;
         LocationUtils.addOnLocationChangedListener(this);
     }
 
