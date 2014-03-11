@@ -28,12 +28,9 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
 
     private static final String KEY_WHERE = "KEY_WHERE";
     private static final String KEY_INDEX_OF_CURRENT_OFFER_TYPE = "KEY_INDEX_OF_CURRENT_OFFER_TYPE";
-    private static final String KEY_OFFER_TYPE = "KEY_OFFER_TYPE";
 
     private static final String TAG_OFFER_LIST_FRAGMENT = "TAG_OFFER_LIST_FRAGMENT";
 
-
-    private Optional<OfferType> currentOfferType;
     private Optional<Integer> indexOfCurrentOfferType;
     private Optional<String> where;
 
@@ -70,14 +67,12 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
 
     private void initStateByDefault() {
         where = (Optional<String>) getIntent().getSerializableExtra(KEY_WHERE);
-        indexOfCurrentOfferType = 0;
-        currentOfferType = Optional.absent();
+        indexOfCurrentOfferType = Optional.absent();
     }
 
     private void restoreState(Bundle savedInstanceState) {
         where = (Optional<String>) savedInstanceState.getSerializable(KEY_WHERE);
-        indexOfCurrentOfferType = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_OFFER_TYPE);
-        currentOfferType = (Optional<OfferType>) savedInstanceState.getSerializable(KEY_OFFER_TYPE);
+        indexOfCurrentOfferType = (Optional<Integer>) savedInstanceState.getSerializable(KEY_INDEX_OF_CURRENT_OFFER_TYPE);
     }
 
     private void initSpinnerOnActionBar() {
@@ -92,32 +87,28 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
                 return true;
             }
         };
-        actionBar.setSelectedNavigationItem(indexOfCurrentOfferType);
+        final int defaultSelectedIndex = 0;
+        actionBar.setSelectedNavigationItem(indexOfCurrentOfferType.or(defaultSelectedIndex));
         actionBar.setListNavigationCallbacks(spinnerAdapter, onNavigationListener);
     }
 
     private void onOfferTypeChanged(int index) {
-        this.indexOfCurrentOfferType = index;
+        if (indexOfCurrentOfferType.isPresent() && indexOfCurrentOfferType.get() == index) {
+            return;
+        }
+        this.indexOfCurrentOfferType = Optional.of(index);
         refreshOfferList();
     }
 
     private void refreshOfferList() {
-        OfferType selectedOfferType = SpinnerAdapterOfferType.getOfferTypeByPosition(indexOfCurrentOfferType);
-        if (currentOfferType.isPresent() && currentOfferType.get() == selectedOfferType) {
-            return;
-        }
-        currentOfferType = Optional.of(selectedOfferType);
-        resetOfferListFragment();
-    }
-
-    private void resetOfferListFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment previousFragment = fragmentManager.findFragmentByTag(TAG_OFFER_LIST_FRAGMENT);
         if (previousFragment != null) {
             transaction.remove(previousFragment);
         }
-        Fragment actualFragment = OfferListFragment.newInstance(currentOfferType.get(), where);
+        OfferType offerType = SpinnerAdapterOfferType.getOfferTypeByPosition(indexOfCurrentOfferType.get());
+        Fragment actualFragment = OfferListFragment.newInstance(offerType, where);
         transaction.add(R.id.containerOfOfferListFragment, actualFragment, TAG_OFFER_LIST_FRAGMENT);
         transaction.commit();
     }
@@ -130,8 +121,7 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
 
     private void saveStateInto(Bundle outState) {
         outState.putSerializable(KEY_WHERE, where);
-        outState.putInt(KEY_INDEX_OF_CURRENT_OFFER_TYPE, indexOfCurrentOfferType);
-        outState.putSerializable(KEY_OFFER_TYPE, currentOfferType);
+        outState.putSerializable(KEY_INDEX_OF_CURRENT_OFFER_TYPE, indexOfCurrentOfferType);
     }
 
     @Override
