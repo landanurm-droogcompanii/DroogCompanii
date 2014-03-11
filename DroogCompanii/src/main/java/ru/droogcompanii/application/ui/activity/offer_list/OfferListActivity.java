@@ -87,17 +87,20 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
                 return true;
             }
         };
-        final int defaultSelectedIndex = 0;
-        actionBar.setSelectedNavigationItem(indexOfCurrentOfferType.or(defaultSelectedIndex));
+        actionBar.setSelectedNavigationItem(indexOfCurrentOfferType.or(0));
         actionBar.setListNavigationCallbacks(spinnerAdapter, onNavigationListener);
     }
 
     private void onOfferTypeChanged(int index) {
-        if (indexOfCurrentOfferType.isPresent() && indexOfCurrentOfferType.get() == index) {
+        if (isIndexOfCurrentOfferType(index)) {
             return;
         }
-        this.indexOfCurrentOfferType = Optional.of(index);
+        indexOfCurrentOfferType = Optional.of(index);
         refreshOfferList();
+    }
+
+    private boolean isIndexOfCurrentOfferType(int index) {
+        return indexOfCurrentOfferType.isPresent() && (indexOfCurrentOfferType.get() == index);
     }
 
     private void refreshOfferList() {
