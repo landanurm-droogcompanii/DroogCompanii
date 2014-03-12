@@ -20,6 +20,11 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
     private int idColumnIndex;
     private int titleColumnIndex;
 
+    private static class ColumnIndices {
+        int idColumnIndex;
+        int titleColumnIndex;
+    }
+
     public PartnerCategoriesReader(Context context) {
         super(context);
     }
@@ -38,27 +43,29 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
         return partnerCategories;
     }
 
-    private List<PartnerCategory> getPartnerCategoriesFromCursor(Cursor cursor) {
+    public static List<PartnerCategory> getPartnerCategoriesFromCursor(Cursor cursor) {
         List<PartnerCategory> partnerCategories = new ArrayList<PartnerCategory>();
-        calculateColumnIndices(cursor);
+        ColumnIndices columnIndices = calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            PartnerCategory partnerCategory = getPartnerCategoryFromCursor(cursor);
+            PartnerCategory partnerCategory = getPartnerCategoryFromCursor(cursor, columnIndices);
             partnerCategories.add(partnerCategory);
             cursor.moveToNext();
         }
         return partnerCategories;
     }
 
-    private void calculateColumnIndices(Cursor cursor) {
-        idColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_ID);
-        titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_TITLE);
+    private static ColumnIndices calculateColumnIndices(Cursor cursor) {
+        ColumnIndices columnIndices = new ColumnIndices();
+        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_ID);
+        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_TITLE);
+        return columnIndices;
     }
 
-    private PartnerCategory getPartnerCategoryFromCursor(Cursor cursor) {
+    private static PartnerCategory getPartnerCategoryFromCursor(Cursor cursor, ColumnIndices columnIndices) {
         PartnerCategoryImpl partnerCategory = new PartnerCategoryImpl();
-        partnerCategory.id = cursor.getInt(idColumnIndex);
-        partnerCategory.title = cursor.getString(titleColumnIndex);
+        partnerCategory.id = cursor.getInt(columnIndices.idColumnIndex);
+        partnerCategory.title = cursor.getString(columnIndices.titleColumnIndex);
         return partnerCategory;
     }
 

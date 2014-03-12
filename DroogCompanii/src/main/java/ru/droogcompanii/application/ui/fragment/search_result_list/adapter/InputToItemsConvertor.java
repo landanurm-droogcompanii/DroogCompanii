@@ -14,26 +14,67 @@ import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultL
  */
 class InputToItemsConvertor {
 
+    private final SearchResultListFragment.Input input;
+    private List<SearchResultListItem> items;
+
+
     public static List<SearchResultListItem> convert(SearchResultListFragment.Input input) {
-        List<SearchResultListItem> items = new ArrayList<SearchResultListItem>();
-        if (!input.categories.isEmpty()) {
-            items.add(new GroupTitleSearchResultListItem(R.string.categories));
-            for (PartnerCategory eachCategory : input.categories) {
-                items.add(new PartnerCategorySearchResultListItem(eachCategory));
-            }
-        }
-        if (!input.partners.isEmpty()) {
-            items.add(new GroupTitleSearchResultListItem(R.string.partners));
-            for (Partner eachPartner : input.partners) {
-                items.add(new PartnerSearchResultListItem(eachPartner));
-            }
-        }
-        if (!input.points.isEmpty()) {
-            items.add(new GroupTitleSearchResultListItem(R.string.partner_points));
-            for (PartnerPoint eachPoint : input.points) {
-                items.add(new PartnerPointSearchResultListItem(eachPoint));
-            }
-        }
+        return new InputToItemsConvertor(input).convert();
+    }
+
+    private InputToItemsConvertor(SearchResultListFragment.Input input) {
+        this.input = input;
+    }
+
+    private List<SearchResultListItem> convert() {
+        items = new ArrayList<SearchResultListItem>();
+        includeCategories();
+        includePartners();
+        includePoints();
         return items;
+    }
+
+    private void includeCategories() {
+        include(input.categories, R.string.categories, new ConvertorToItem<PartnerCategory>() {
+            @Override
+            public SearchResultListItem convert(PartnerCategory toConvert) {
+                return new PartnerCategorySearchResultListItem(toConvert);
+            }
+        });
+    }
+
+    private static interface ConvertorToItem<T> {
+        SearchResultListItem convert(T toConvert);
+    }
+
+    private <E> void include(List<E> listToInclude, int groupTitleId, ConvertorToItem<E> convertorToItem) {
+        if (listToInclude.isEmpty()) {
+            return;
+        }
+        if (!items.isEmpty()) {
+            items.add(new DividerSearchResultListItem());
+        }
+        items.add(new GroupTitleSearchResultListItem(groupTitleId));
+        for (E each : listToInclude) {
+            items.add(convertorToItem.convert(each));
+        }
+    }
+
+    private void includePartners() {
+        include(input.partners, R.string.partners, new ConvertorToItem<Partner>() {
+            @Override
+            public SearchResultListItem convert(Partner toConvert) {
+                return new PartnerSearchResultListItem(toConvert);
+            }
+        });
+    }
+
+    private void includePoints() {
+        include(input.points, R.string.partner_points, new ConvertorToItem<PartnerPoint>() {
+            @Override
+            public SearchResultListItem convert(PartnerPoint toConvert) {
+                return new PartnerPointSearchResultListItem(toConvert);
+            }
+        });
     }
 }

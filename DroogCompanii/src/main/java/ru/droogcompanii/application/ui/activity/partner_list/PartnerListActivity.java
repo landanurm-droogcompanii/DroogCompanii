@@ -12,7 +12,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
@@ -194,27 +193,7 @@ public class PartnerListActivity extends ActionBarActivityWithUpButtonAndGoToMap
 
     @Override
     public void onPartnerClick(Partner partner) {
-        PartnerDetailsActivity.start(this, new PartnerAndPartnerPointsProviderImpl(partner));
-    }
-
-    private static class PartnerAndPartnerPointsProviderImpl
-            implements PartnerDetailsActivity.PartnerAndPartnerPointsProvider, Serializable{
-        private final Partner partner;
-
-        PartnerAndPartnerPointsProviderImpl(Partner partner) {
-            this.partner = partner;
-        }
-
-        @Override
-        public Partner getPartner(Context context) {
-            return partner;
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            PartnerPointsReader reader = new PartnerPointsReader(context);
-            return reader.getPartnerPointsOf(partner);
-        }
+        PartnerDetailsActivity.start(this, partner);
     }
 
     @Override

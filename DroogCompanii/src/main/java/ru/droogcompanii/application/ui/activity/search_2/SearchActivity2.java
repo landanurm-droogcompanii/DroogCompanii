@@ -14,6 +14,7 @@ import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvi
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.partner_list.PartnerListActivity;
+import ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity;
 import ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 
@@ -74,8 +75,7 @@ public class SearchActivity2 extends ActionBarActivityWithUpButton
     }
 
     private void onSearch(String searchQuery) {
-        //showSearchResult(new SearchResultProviderBySearchQuery(searchQuery));
-        // TODO
+        SearchResultListActivity.start(this, searchQuery);
     }
 
     @Override

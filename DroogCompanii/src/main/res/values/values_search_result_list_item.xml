@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textColorOfSearchResultListItemGroupTitle">#030303</color>
+    <color name="primaryTextColorOfSearchResultListItem">#101010</color>
+    <color name="secondaryTextColorOfSearchResultListItem">#505050</color>
+
+    <color name="backgroundOfPartnersCounterSearchResultListItem">#1944cc</color>
+    <color name="textColorOfPartnersCounterSearchResultListItem">#c5dbc3</color>
+
+    <color name="colorOfDividersOfSearchResultListItem">#b9e4e5</color>
+
+    <dimen name="horizontalPaddingOfSearchResultListItem">4dp</dimen>
+    <dimen name="minWidthOfPartnersCounterSearchResultListItem">32dp</dimen>
+    <dimen name="minHeightOfGroupTitleOfSearchResultListItem">64dp</dimen>
+    <dimen name="spaceBetweenCategoryTitleAndCounter">8sp</dimen>
+    <dimen name="textSizeOfSearchResultListGroupTitle">48sp</dimen>
+    <dimen name="textSizeOfSearchResultListItemPrimary">24sp</dimen>
+    <dimen name="textSizeOfSearchResultListItemSecondary">20sp</dimen>
+</resources>

@@ -49,8 +49,12 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
     }
 
     public List<PartnerPoint> getPartnerPointsOf(Partner partner) {
+        return getPartnerPointsByPartnerId(partner.getId());
+    }
+
+    public List<PartnerPoint> getPartnerPointsByPartnerId(int partnerId) {
         return getPartnerPointsFromDatabase(
-                " WHERE " + PartnerPointsContract.COLUMN_NAME_PARTNER_ID + " = " + partner.getId()
+                " WHERE " + PartnerPointsContract.COLUMN_NAME_PARTNER_ID + " = " + partnerId
         );
     }
 

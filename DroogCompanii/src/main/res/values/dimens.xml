@@ -32,16 +32,6 @@
 
     <dimen name="spaceBetweenNameLabelAndName">5dp</dimen>
     <dimen name="textSizeOfEmptyOfferListView">28sp</dimen>
-    <dimen name="textSizeOfCategoryCounter">28sp</dimen>
-    <dimen name="textSizeOfCategorySearchResultItem">24sp</dimen>
-    <dimen name="spaceBetweenCategoryTitleAndCounter">8sp</dimen>
-    <dimen name="textSizeOfSearchResultListGroupTitle">32sp</dimen>
-    <dimen name="textSizeOfPartnerSearchResultListItem">22sp</dimen>
-    <dimen name="textSizeOfPartnerSearchResultListItemDiscountSize">18sp</dimen>
-    <dimen name="textSizeOfPartnerPointSearchResultListItem">21sp</dimen>
-    <dimen name="textSizeOfPartnerPointSearchResultListItemAddress">19sp</dimen>
 
-    <dimen name="textSizeOfSearchResultListItemPrimary">24sp</dimen>
-    <dimen name="textSizeOfSearchResultListItemSecondary">20sp</dimen>
 
 </resources>

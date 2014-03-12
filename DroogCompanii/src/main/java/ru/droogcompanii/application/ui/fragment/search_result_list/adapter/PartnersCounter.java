@@ -13,6 +13,7 @@ import ru.droogcompanii.application.util.Holder;
  * Created by ls on 11.03.14.
  */
 class PartnersCounter {
+
     public static int countPartnersInCategory(Context context, PartnerCategory category) {
         PartnersHierarchyReaderFromDatabase reader = new PartnersHierarchyReaderFromDatabase(context);
         String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + " WHERE " +
@@ -21,7 +22,11 @@ class PartnersCounter {
         reader.handleCursorByQuery(sql, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
-                counterHolder.value += 1;
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    counterHolder.value += 1;
+                    cursor.moveToNext();
+                }
             }
         });
         return counterHolder.value;

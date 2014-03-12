@@ -8,4 +8,13 @@
         android:layout_width="match_parent"
         android:id="@+id/searchResultList" />
 
+    <TextView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:text="@string/no_search_results"
+        android:textSize="@dimen/textSizeOfNoSearchResultsLabel"
+        android:gravity="center"
+        android:id="@+id/noSearchResults"/>
+
 </RelativeLayout>

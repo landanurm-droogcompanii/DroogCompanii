@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.util.FragmentUtils;
@@ -39,7 +43,14 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         } else {
             restoreState(savedInstanceState);
         }
-        setTitle(query);
+        setTitle();
+    }
+
+    private void setTitle() {
+        final String openQuote = "\u201C";
+        final String closeQuote = "\u201D";
+        String title = openQuote + query + closeQuote;
+        setTitle(title);
     }
 
     private void initStateByDefault() {
@@ -61,6 +72,18 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveStateInto(outState);
+    }
+
+    @Override
+    protected MenuHelper getMenuHelper() {
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        MenuItemHelpers.GO_TO_MAP
+                };
+            }
+        };
     }
 
     private void saveStateInto(Bundle outState) {

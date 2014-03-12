@@ -7,6 +7,7 @@ import java.util.List;
  * Created by ls on 16.01.14.
  */
 public class ListUtils {
+
     public static <T> void swap(List<T> list, int index1, int index2) {
         if (index1 == index2) {
             return;

@@ -31,15 +31,19 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
 
     private static final int TASK_REQUEST_CODE_INPUT_RECEIVER = 140;
 
-    public static interface InputProvider {
-        String getTitle(Context context);
-        List<Input> getInput(Context context);
-    }
-
     public static class Input implements Serializable {
         public final List<PartnerCategory> categories = new ArrayList<PartnerCategory>();
         public final List<Partner> partners = new ArrayList<Partner>();
         public final List<PartnerPoint> points = new ArrayList<PartnerPoint>();
+
+        public final boolean isEmpty() {
+            return categories.isEmpty() && partners.isEmpty() && points.isEmpty();
+        }
+    }
+
+    public static interface InputProvider {
+        String getTitle(Context context);
+        Input getInput(Context context);
     }
 
 
@@ -57,6 +61,11 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
         args.putSerializable(KEY_INPUT_PROVIDER, new InputProviderBySearchQuery(query));
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search_result_list, null);
     }
 
     @Override
@@ -79,7 +88,7 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
         startTask(TASK_REQUEST_CODE_INPUT_RECEIVER, new TaskNotBeInterrupted() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                return (Serializable) inputProvider.getInput(getActivity());
+                return inputProvider.getInput(getActivity());
             }
         });
     }
@@ -101,15 +110,43 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
     }
 
     private void updateSearchResultList() {
-        ListView searchResultListView = (ListView) getView().findViewById(R.id.searchResultList);
+        if (isInputEmpty()) {
+            initEmptyListView();
+        } else {
+            initListView();
+        }
+    }
+
+    private boolean isInputEmpty() {
+        if (input.isPresent()) {
+            return input.get().isEmpty();
+        }
+        return true;
+    }
+
+    private void initListView() {
+        ListView listView = (ListView) getView().findViewById(R.id.searchResultList);
         final SearchResultListAdapter adapter = new SearchResultListAdapter(getActivity(), input.get());
-        searchResultListView.setAdapter(adapter);
-        searchResultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 onSearchResultListItemClicked(adapter.getItem(position));
             }
         });
+        setPadding(listView);
+    }
+
+    private void setPadding(ListView listView) {
+        int horizontalPadding = getActivity().getResources()
+                .getDimensionPixelSize(R.dimen.horizontalPaddingOfSearchResultListItem);
+        listView.setPadding(horizontalPadding, 0, horizontalPadding, 0);
+    }
+
+    private void initEmptyListView() {
+        ListView listView = (ListView) getView().findViewById(R.id.searchResultList);
+        View emptyListView = getView().findViewById(R.id.noSearchResults);
+        listView.setEmptyView(emptyListView);
     }
 
     private void onSearchResultListItemClicked(SearchResultListItem item) {
@@ -119,6 +156,10 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
     private void restoreState(Bundle savedInstanceState) {
         inputProvider = (InputProvider) savedInstanceState.getSerializable(KEY_INPUT_PROVIDER);
         input = (Optional<Input>) savedInstanceState.getSerializable(KEY_INPUT);
+        updateSearchResultListIfInputIsPresent();
+    }
+
+    private void updateSearchResultListIfInputIsPresent() {
         if (input.isPresent()) {
             updateSearchResultList();
         }
@@ -133,10 +174,5 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
     private void saveStateInto(Bundle outState) {
         outState.putSerializable(KEY_INPUT_PROVIDER, (Serializable) inputProvider);
         outState.putSerializable(KEY_INPUT, input);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search_result_list, null);
     }
 }

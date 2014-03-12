@@ -2,20 +2,13 @@ package ru.droogcompanii.application.ui.fragment.search_result_list.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
 
 /**
- * Created by ls on 11.03.14.
+ * Created by ls on 12.03.14.
  */
-class GroupTitleSearchResultListItem implements SearchResultListItem {
-    private final int titleId;
-
-    public GroupTitleSearchResultListItem(int titleId) {
-        this.titleId = titleId;
-    }
-
+public class DividerSearchResultListItem implements SearchResultListItem {
     @Override
     public boolean isEnabled() {
         return false;
@@ -23,13 +16,12 @@ class GroupTitleSearchResultListItem implements SearchResultListItem {
 
     @Override
     public int getLayoutId() {
-        return R.layout.view_search_result_list_item_group_title;
+        return R.layout.view_search_result_list_item_divider;
     }
 
     @Override
     public void init(View itemView) {
-        TextView titleTextView = (TextView) itemView.findViewById(R.id.title);
-        titleTextView.setText(titleId);
+        // do nothing
     }
 
     @Override

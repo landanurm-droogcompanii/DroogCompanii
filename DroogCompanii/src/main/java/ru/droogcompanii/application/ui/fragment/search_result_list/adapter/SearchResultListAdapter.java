@@ -48,4 +48,11 @@ public class SearchResultListAdapter extends ArrayAdapter<SearchResultListItem> 
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         return layoutInflater.inflate(R.layout.empty_frame_layout, null);
     }
+
+    @Override
+    public boolean isEnabled(int position) {
+        SearchResultListItem item = getItem(position);
+        return item.isEnabled();
+    }
+
 }

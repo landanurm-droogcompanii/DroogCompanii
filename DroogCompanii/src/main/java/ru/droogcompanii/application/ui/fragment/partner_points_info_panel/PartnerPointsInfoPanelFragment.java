@@ -1,7 +1,6 @@
 package ru.droogcompanii.application.ui.fragment.partner_points_info_panel;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,16 +15,12 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
-import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.Router;
 import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
-import ru.droogcompanii.application.util.ListUtils;
 
 /**
  * Created by ls on 22.01.14.
@@ -240,8 +235,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void goToPartnerOf(PartnerPoint partnerPoint) {
-        PartnerDetailsActivity.start(getActivity(),
-                new PartnerAndPartnerPointsProviderImpl(partnerPoint));
+        PartnerDetailsActivity.start(getActivity(), partnerPoint);
     }
 
     private void updateIsFavorite() {
@@ -285,31 +279,6 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
             return 0;
         }
         return index;
-    }
-
-    private static class PartnerAndPartnerPointsProviderImpl
-            implements PartnerDetailsActivity.PartnerAndPartnerPointsProvider, Serializable {
-
-        private final PartnerPoint partnerPoint;
-
-        PartnerAndPartnerPointsProviderImpl(PartnerPoint partnerPoint) {
-            this.partnerPoint = partnerPoint;
-        }
-
-        @Override
-        public Partner getPartner(Context context) {
-            PartnersReader partnersReader = new PartnersReader(context);
-            return partnersReader.getPartnerOf(partnerPoint);
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-            PartnerPointsReader partnerPointsReader = new PartnerPointsReader(context);
-            Partner partner = getPartner(context);
-            List<PartnerPoint> partnerPoints = partnerPointsReader.getPartnerPointsOf(partner);
-            ListUtils.moveElementAtFirstPosition(partnerPoint, partnerPoints);
-            return partnerPoints;
-        }
     }
 
     @Override

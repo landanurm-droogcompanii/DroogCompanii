@@ -21,6 +21,20 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
     private static final PartnersContracts.PartnersContract COLUMNS = new PartnersContracts.PartnersContract();
 
+    private static class ColumnIndices {
+        int idColumnIndex;
+        int titleColumnIndex;
+        int fullTitleColumnIndex;
+        int discountTypeColumnIndex;
+        int discountSizeColumnIndex;
+        int categoryIdColumnIndex;
+        int imageUrlColumnIndex;
+        int descriptionColumnIndex;
+        int webSitesColumnIndex;
+        int emailsColumnIndex;
+        int isFavoriteColumnIndex;
+    }
+
     private int idColumnIndex;
     private int titleColumnIndex;
     private int fullTitleColumnIndex;
@@ -64,45 +78,47 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         return partners;
     }
 
-    private List<Partner> getPartnersFromCursor(Cursor cursor) {
+    public static List<Partner> getPartnersFromCursor(Cursor cursor) {
         List<Partner> partners = new ArrayList<Partner>();
-        calculateColumnIndices(cursor);
+        ColumnIndices columnIndices = calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            partners.add(getPartnerFromCursor(cursor));
+            partners.add(getPartnerFromCursor(cursor, columnIndices));
             cursor.moveToNext();
         }
         return partners;
     }
 
-    private void calculateColumnIndices(Cursor cursor) {
-        idColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_ID);
-        titleColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_TITLE);
-        fullTitleColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_FULL_TITLE);
-        discountTypeColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DISCOUNT_TYPE);
-        discountSizeColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DISCOUNT_SIZE);
-        categoryIdColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_CATEGORY_ID);
-        imageUrlColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_IMAGE_URL);
-        descriptionColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DESCRIPTION);
-        webSitesColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_WEB_SITES);
-        emailsColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_EMAILS);
-        isFavoriteColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_IS_FAVORITE);
+    private static ColumnIndices calculateColumnIndices(Cursor cursor) {
+        ColumnIndices columnIndices = new ColumnIndices();
+        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_ID);
+        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_TITLE);
+        columnIndices.fullTitleColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_FULL_TITLE);
+        columnIndices.discountTypeColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DISCOUNT_TYPE);
+        columnIndices.discountSizeColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DISCOUNT_SIZE);
+        columnIndices.categoryIdColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_CATEGORY_ID);
+        columnIndices.imageUrlColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_IMAGE_URL);
+        columnIndices.descriptionColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_DESCRIPTION);
+        columnIndices.webSitesColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_WEB_SITES);
+        columnIndices.emailsColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_EMAILS);
+        columnIndices.isFavoriteColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_NAME_IS_FAVORITE);
+        return columnIndices;
     }
 
     @SuppressWarnings("unchecked")
-    private Partner getPartnerFromCursor(Cursor cursor) {
+    private static Partner getPartnerFromCursor(Cursor cursor, ColumnIndices columnIndices) {
         PartnerImpl partner = new PartnerImpl();
-        partner.id = cursor.getInt(idColumnIndex);
-        partner.title = cursor.getString(titleColumnIndex);
-        partner.fullTitle = cursor.getString(fullTitleColumnIndex);
-        partner.discountType = cursor.getString(discountTypeColumnIndex);
-        partner.discountSize = cursor.getInt(discountSizeColumnIndex);
-        partner.categoryId = cursor.getInt(categoryIdColumnIndex);
-        partner.imageUrl = cursor.getString(imageUrlColumnIndex);
-        partner.description = cursor.getString(descriptionColumnIndex);
-        byte[] webSitesBlob = cursor.getBlob(webSitesColumnIndex);
+        partner.id = cursor.getInt(columnIndices.idColumnIndex);
+        partner.title = cursor.getString(columnIndices.titleColumnIndex);
+        partner.fullTitle = cursor.getString(columnIndices.fullTitleColumnIndex);
+        partner.discountType = cursor.getString(columnIndices.discountTypeColumnIndex);
+        partner.discountSize = cursor.getInt(columnIndices.discountSizeColumnIndex);
+        partner.categoryId = cursor.getInt(columnIndices.categoryIdColumnIndex);
+        partner.imageUrl = cursor.getString(columnIndices.imageUrlColumnIndex);
+        partner.description = cursor.getString(columnIndices.descriptionColumnIndex);
+        byte[] webSitesBlob = cursor.getBlob(columnIndices.webSitesColumnIndex);
         partner.webSites = (List<String>) SerializationUtils.deserialize(webSitesBlob);
-        byte[] emailsBlob = cursor.getBlob(emailsColumnIndex);
+        byte[] emailsBlob = cursor.getBlob(columnIndices.emailsColumnIndex);
         partner.emails = (List<String>) SerializationUtils.deserialize(emailsBlob);
         return partner;
     }

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_marginLeft="@dimen/horizontalPaddingOfSearchResultListItem"
+    android:layout_marginRight="@dimen/horizontalPaddingOfSearchResultListItem"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/textSizeOfSearchResultListItemPrimary"
         android:singleLine="true"
-        android:textColor="@android:color/primary_text_dark"
+        android:textColor="@color/primaryTextColorOfSearchResultListItem"
         android:id="@+id/title" />
 
     <TextView
@@ -17,7 +20,7 @@
         android:layout_below="@id/title"
         android:textSize="@dimen/textSizeOfSearchResultListItemSecondary"
         android:singleLine="true"
-        android:textColor="@android:color/secondary_text_dark"
+        android:textColor="@color/secondaryTextColorOfSearchResultListItem"
         android:id="@+id/address" />
 
 </RelativeLayout>

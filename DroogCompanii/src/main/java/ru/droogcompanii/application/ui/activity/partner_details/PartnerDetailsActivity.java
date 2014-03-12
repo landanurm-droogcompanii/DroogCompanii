@@ -20,8 +20,8 @@ import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFr
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 
 /**
  * Created by ls on 15.01.14.
@@ -51,6 +51,14 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoTo
 
     private PartnerDetailsReceivingTask.Result resultFromTask;
 
+
+    public static void start(Context context, Partner partner) {
+        start(context, new PartnerAndPartnerPointsProviderByPartner(partner));
+    }
+
+    public static void start(Context context, PartnerPoint partnerPoint) {
+        start(context, new PartnerAndPartnerPointsProviderByPartnerPoint(partnerPoint));
+    }
 
     public static void start(Context context, PartnerAndPartnerPointsProvider partnerAndPartnerPointsProvider) {
         Intent intent = new Intent(context, PartnerDetailsActivity.class);
