@@ -30,7 +30,7 @@ public class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
 
     private Callbacks callbacks = DUMMY_CALLBACKS;
     private Integer titleId;
-    private TaskNotBeInterrupted task;
+    private TaskNotBeInterruptedDuringConfigurationChange task;
 
     @Override
     public void onAttach(Activity activity) {
@@ -56,7 +56,7 @@ public class FragmentStartedTaskOnCreate extends FragmentAbleToStartTask {
         }
     }
 
-    public void set(TaskNotBeInterrupted task, Integer titleId) {
+    public void set(TaskNotBeInterruptedDuringConfigurationChange task, Integer titleId) {
         this.task = task;
         this.titleId = titleId;
     }

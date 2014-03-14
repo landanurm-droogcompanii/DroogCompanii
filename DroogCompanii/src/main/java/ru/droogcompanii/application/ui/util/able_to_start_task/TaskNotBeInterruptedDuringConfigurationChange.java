@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by ls on 26.12.13.
  */
-public abstract class TaskNotBeInterrupted extends AsyncTask<Void, Void, Serializable> {
+public abstract class TaskNotBeInterruptedDuringConfigurationChange extends AsyncTask<Void, Void, Serializable> {
 
     private TaskFragment fragment;
 

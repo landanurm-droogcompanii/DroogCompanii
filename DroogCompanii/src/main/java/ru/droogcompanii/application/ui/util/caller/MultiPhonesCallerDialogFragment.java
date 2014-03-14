@@ -22,7 +22,7 @@ public class MultiPhonesCallerDialogFragment extends DialogFragment {
         Bundle args = new Bundle();
         args.putString(KEY_TITLE, title);
         args.putSerializable(KEY_PHONES, (Serializable) phones);
-        DialogFragment dialogFragment = MultiPhonesCallerDialogFragment.newInstance(title, phones);
+        DialogFragment dialogFragment = new MultiPhonesCallerDialogFragment();
         dialogFragment.setArguments(args);
         return dialogFragment;
     }

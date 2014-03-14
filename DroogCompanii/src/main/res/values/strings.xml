@@ -84,6 +84,9 @@
     <string name="categories">Categories</string>
     <string name="partners">Partners</string>
     <string name="partner_points">Partner points</string>
+    <string name="drawer_open">drawer open</string>
+    <string name="drawer_close">drawer close</string>
+    <string name="all_partners">All Partners</string>
 
 
 </resources>

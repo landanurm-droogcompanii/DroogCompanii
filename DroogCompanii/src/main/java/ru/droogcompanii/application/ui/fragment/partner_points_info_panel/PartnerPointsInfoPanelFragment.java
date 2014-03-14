@@ -17,7 +17,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.FavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.Router;
 import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
@@ -36,12 +36,12 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     private boolean visible;
     private int indexOfCurrentPartnerPoint;
     private List<PartnerPoint> partnerPoints;
-    private IsFavoriteViewUtils isFavoriteViewUtils;
+    private FavoriteViewUtils favoriteViewUtils;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        isFavoriteViewUtils = new IsFavoriteViewUtils(activity);
+        favoriteViewUtils = new FavoriteViewUtils(activity);
     }
 
     @Override
@@ -240,7 +240,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
 
     private void updateIsFavorite() {
         CheckBox checkBox = (CheckBox) findViewById(R.id.isFavorite);
-        isFavoriteViewUtils.init(checkBox, getCurrentPartnerPoint().getPartnerId());
+        favoriteViewUtils.init(checkBox, getCurrentPartnerPoint().getPartnerId());
     }
 
     private void initCatchingTouchEvents() {

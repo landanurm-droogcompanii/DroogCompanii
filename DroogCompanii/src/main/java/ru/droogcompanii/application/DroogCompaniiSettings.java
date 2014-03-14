@@ -2,6 +2,8 @@ package ru.droogcompanii.application;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import ru.droogcompanii.application.ui.util.LocationBuilder;
 
 /**
@@ -15,6 +17,13 @@ public class DroogCompaniiSettings {
     private static final int DEFAULT_ZOOM_LEVEL = 14;
 
 
+    public static LatLng getDefaultBasePosition() {
+        return getPositionOfKazan();
+    }
+
+    private static LatLng getPositionOfKazan() {
+        return new LatLng(LATITUDE_OF_KAZAN, LONGITUDE_OF_KAZAN);
+    }
 
     public static Location getDefaultBaseLocation() {
         return getLocationOfKazan();

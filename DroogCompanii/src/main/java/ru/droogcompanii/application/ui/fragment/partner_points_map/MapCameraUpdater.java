@@ -6,7 +6,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
-import java.util.List;
+import java.util.Collection;
 
 import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCalculator;
 
@@ -15,7 +15,7 @@ import ru.droogcompanii.application.util.latlng_bounds_calculator.LatLngBoundsCa
  */
 class MapCameraUpdater {
 
-    public static void fitVisibleMarkers(GoogleMap googleMap, List<Marker> markers, int mapPadding) {
+    public static void fitVisibleMarkers(GoogleMap googleMap, Collection<Marker> markers, int mapPadding) {
         if (isThereNoVisibleMarkers(markers)) {
             return;
         }
@@ -24,7 +24,7 @@ class MapCameraUpdater {
         googleMap.moveCamera(cameraUpdate);
     }
 
-    private static boolean isThereNoVisibleMarkers(List<Marker> markers) {
+    private static boolean isThereNoVisibleMarkers(Collection<Marker> markers) {
         for (Marker marker : markers) {
             if (marker.isVisible()) {
                 return false;

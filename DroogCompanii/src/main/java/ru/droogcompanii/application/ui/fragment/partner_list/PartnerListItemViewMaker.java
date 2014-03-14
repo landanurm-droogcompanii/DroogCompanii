@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.FavoriteViewUtils;
 
 /**
  * Created by Leonid on 27.02.14.
@@ -16,12 +16,12 @@ import ru.droogcompanii.application.ui.util.IsFavoriteViewUtils;
 class PartnerListItemViewMaker {
     private final Context context;
     private final int rowLayoutId;
-    private final IsFavoriteViewUtils isFavoriteViewUtils;
+    private final FavoriteViewUtils favoriteViewUtils;
 
     public PartnerListItemViewMaker(Context context, int rowLayoutId) {
         this.context = context;
         this.rowLayoutId = rowLayoutId;
-        this.isFavoriteViewUtils = new IsFavoriteViewUtils(context);
+        this.favoriteViewUtils = new FavoriteViewUtils(context);
     }
 
     public View make(View convertView, Partner item) {
@@ -34,7 +34,7 @@ class PartnerListItemViewMaker {
         TextView textView = (TextView) itemView.findViewById(R.id.textView);
         textView.setText(partner.getTitle());
         CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.isFavorite);
-        isFavoriteViewUtils.init(checkBox, partner.getId());
+        favoriteViewUtils.init(checkBox, partner.getId());
     }
 
     private View inflateItemView() {

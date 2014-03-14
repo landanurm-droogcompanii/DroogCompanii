@@ -17,7 +17,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.personal_details.AccountOwner;
 import ru.droogcompanii.application.data.personal_details.BankCard;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
@@ -164,7 +164,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     }
 
     private void startTaskReceivingTokenFromDB() {
-        startTask(TASK_REQUEST_CODE_RECEIVE_TOKEN_FROM_DB, new TaskNotBeInterrupted() {
+        startTask(TASK_REQUEST_CODE_RECEIVE_TOKEN_FROM_DB, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 Snorlax.sleep();
@@ -177,7 +177,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     }
 
     @Override
-    public void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId) {
+    public void startTask(int requestCode, TaskNotBeInterruptedDuringConfigurationChange task, Integer titleId) {
         super.startTask(requestCode, task, titleId);
 
         setEnabledSignOutAction(false);
@@ -250,7 +250,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     }
 
     private void startTaskSavingTokenToDb(final AuthenticationToken token) {
-        startTask(TASK_REQUEST_CODE_SAVE_TOKEN_TO_DB, new TaskNotBeInterrupted() {
+        startTask(TASK_REQUEST_CODE_SAVE_TOKEN_TO_DB, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 Snorlax.sleep();
@@ -291,7 +291,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
     private void startTaskReceivingDetails(final AuthenticationToken token) {
         final PersonalDetailsRequester requester =
                 new PersonalDetailsRequesterFromInetAndDatabase(this);
-        startTask(TASK_REQUEST_CODE_RECEIVE_DETAILS, new TaskNotBeInterrupted() {
+        startTask(TASK_REQUEST_CODE_RECEIVE_DETAILS, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 Snorlax.sleep();
@@ -387,7 +387,7 @@ public class PersonalAccountActivity extends ActionBarActivityWithUpButton imple
             return;
         }
 
-        TaskNotBeInterrupted signOutTask = new TaskNotBeInterrupted() {
+        TaskNotBeInterruptedDuringConfigurationChange signOutTask = new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 Snorlax.sleep();

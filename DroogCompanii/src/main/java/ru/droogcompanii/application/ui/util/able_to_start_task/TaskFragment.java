@@ -21,18 +21,16 @@ public class TaskFragment extends DialogFragment {
 
     public static final Integer NO_TITLE_ID = null;
 
-    private static final String KEY_TASK_REQUEST_CODE = "KEY_TASK_REQUEST_CODE";
-
     private boolean isNeedToReturnResult = false;
     private boolean isResultReturned = false;
-    private TaskNotBeInterrupted task;
+    private TaskNotBeInterruptedDuringConfigurationChange task;
 
     private int resultCode = Activity.RESULT_CANCELED;
     private Serializable result = null;
     private Integer titleId;
 
 
-    public void setTask(TaskNotBeInterrupted task) {
+    public void setTask(TaskNotBeInterruptedDuringConfigurationChange task) {
         task.setFragment(this);
         this.task = task;
     }
@@ -95,8 +93,8 @@ public class TaskFragment extends DialogFragment {
     }
 
     private void returnResult() {
-        FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
         isResultReturned = true;
+        FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
         if (ableToStartTask.isAbleToReceiveResult()) {
             ableToStartTask.onResult(FragmentAbleToStartTask.TASK_FRAGMENT_TARGET, resultCode, result);
             isNeedToReturnResult = false;
@@ -130,7 +128,7 @@ public class TaskFragment extends DialogFragment {
         this.result = result;
     }
 
-    public void getResultIfItReturnedDuringDisactivity() {
+    public void getResultIfItReturnedDuringPause() {
         if (isNeedToReturnResult) {
             returnResult();
         }

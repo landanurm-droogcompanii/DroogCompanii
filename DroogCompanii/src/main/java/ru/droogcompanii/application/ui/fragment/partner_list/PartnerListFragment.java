@@ -19,8 +19,8 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.ui.activity.partner_list.PartnerListActivity;
 import ru.droogcompanii.application.ui.util.able_to_start_task.AbleToStartTask;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -121,7 +121,7 @@ public class PartnerListFragment extends ListFragment
     }
 
     private void startSortingTask() {
-        TaskNotBeInterrupted task = new SortTask(searchResults, currentComparator.get());
+        TaskNotBeInterruptedDuringConfigurationChange task = new SortTask(searchResults, currentComparator.get());
         ableToStartTask.startTask(TASK_REQUEST_CODE_SORT_TASK, task);
     }
 

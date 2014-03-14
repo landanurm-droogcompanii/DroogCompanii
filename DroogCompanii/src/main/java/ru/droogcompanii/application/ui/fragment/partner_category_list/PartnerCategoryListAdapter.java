@@ -26,7 +26,7 @@ class PartnerCategoryListAdapter extends SimpleArrayAdapter<PartnerCategory> {
 
     private static PartnerCategoryListAdapter createAdapter(Context context) {
         PartnerCategoriesReader partnerCategoriesReader = new PartnerCategoriesReader(context);
-        List<PartnerCategory> partnerCategories = partnerCategoriesReader.getPartnerCategories();
+        List<PartnerCategory> partnerCategories = partnerCategoriesReader.getAllPartnerCategories();
         return new PartnerCategoryListAdapter(context, partnerCategories);
     }
 

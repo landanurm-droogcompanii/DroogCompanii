@@ -1,5 +1,6 @@
 package ru.droogcompanii.application.ui.activity.search_result_list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +18,8 @@ import ru.droogcompanii.application.ui.util.FragmentUtils;
 /**
  * Created by ls on 11.03.14.
  */
-public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGoToMapItem {
+public class SearchResultListActivity
+        extends ActionBarActivityWithUpButtonAndGoToMapItem {
 
     private static final String TAG_SEARCH_RESULT_LIST_FRAGMENT = "TAG_SEARCH_RESULT_LIST_FRAGMENT";
 
@@ -80,7 +82,12 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
             @Override
             protected MenuItemHelper[] getMenuItemHelpers() {
                 return new MenuItemHelper[] {
-                        MenuItemHelpers.GO_TO_MAP
+                        MenuItemHelpers.GO_TO_MAP.withAction(new MenuItemHelper.Action() {
+                            @Override
+                            public void run(Activity activity) {
+                                onGoToMap();
+                            }
+                        })
                 };
             }
         };
@@ -95,4 +102,7 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButtonAndGo
         return true;
     }
 
+    private void onGoToMap() {
+
+    }
 }

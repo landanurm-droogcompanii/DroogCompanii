@@ -26,7 +26,7 @@ import ru.droogcompanii.application.util.MultiMap;
 /**
  * Created by ls on 14.01.14.
  */
-public class PartnerPointsMapFragment extends BaseCustomMapFragment
+public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
         implements GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
     public static interface Callbacks {

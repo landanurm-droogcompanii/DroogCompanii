@@ -37,6 +37,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.main_screen_2.MainScreen2"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="ru.droogcompanii.application.ui.activity.learn_maps_utility.marker_clustering.LearnMarkerClusteringActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity"
             android:label="@string/titleOfSynchronizationActivity" >
         </activity>

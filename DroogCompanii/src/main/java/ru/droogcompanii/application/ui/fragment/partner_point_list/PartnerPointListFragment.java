@@ -24,6 +24,13 @@ public class PartnerPointListFragment extends ListFragment
         void onPartnerPointClick(PartnerPoint partnerPoint);
     }
 
+    private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
+        @Override
+        public void onPartnerPointClick(PartnerPoint partnerPoint) {
+            // do nothing
+        }
+    };
+
 
     private Callbacks callbacks;
     private List<PartnerPoint> partnerPoints;
@@ -34,6 +41,12 @@ public class PartnerPointListFragment extends ListFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         callbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = DUMMY_CALLBACKS;
     }
 
     @Override

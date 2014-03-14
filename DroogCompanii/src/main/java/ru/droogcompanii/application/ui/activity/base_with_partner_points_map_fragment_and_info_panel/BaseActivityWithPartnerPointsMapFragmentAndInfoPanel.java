@@ -21,7 +21,7 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPoints
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
 import ru.droogcompanii.application.ui.util.LocationUtils;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 22.01.14.
@@ -112,7 +112,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     private void startPartnerPointsReceivingTask() {
         isTaskStarted = true;
 
-        TaskNotBeInterrupted task = new PartnerPointsProviderTask(getPartnerPointsProvider(), this);
+        TaskNotBeInterruptedDuringConfigurationChange task = new PartnerPointsProviderTask(getPartnerPointsProvider(), this);
 
         startTask(TASK_REQUEST_CODE_PARTNER_POINTS_RECEIVING, task);
     }

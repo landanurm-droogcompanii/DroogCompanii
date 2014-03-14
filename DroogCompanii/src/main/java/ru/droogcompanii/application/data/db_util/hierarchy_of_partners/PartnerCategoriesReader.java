@@ -29,7 +29,7 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
         super(context);
     }
 
-    public List<PartnerCategory> getPartnerCategories() {
+    public List<PartnerCategory> getAllPartnerCategories() {
         return getPartnerCategoriesFromDatabase("");
     }
 

@@ -23,7 +23,7 @@ import ru.droogcompanii.application.ui.fragment.partner_list.PartnerListFragment
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
 
 /**
@@ -137,7 +137,7 @@ public class PartnerListActivity extends ActionBarActivityWithUpButtonAndGoToMap
     }
 
     private void startTaskExtractSearchResults() {
-        TaskNotBeInterrupted task = new TaskNotBeInterrupted() {
+        TaskNotBeInterruptedDuringConfigurationChange task = new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 return (Serializable) inputProvider.getPartners(PartnerListActivity.this);

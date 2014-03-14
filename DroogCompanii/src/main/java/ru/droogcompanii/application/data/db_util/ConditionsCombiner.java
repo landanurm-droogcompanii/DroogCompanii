@@ -19,7 +19,7 @@ public class ConditionsCombiner {
         builder.append(conditions[0]);
         for (int i = 1; i < numberOfConditions; ++i) {
             builder.append(combineOperator);
-            builder.append(conditions[i]);
+            builder.append("(" + conditions[i] + ")");
         }
         return builder.toString();
     }

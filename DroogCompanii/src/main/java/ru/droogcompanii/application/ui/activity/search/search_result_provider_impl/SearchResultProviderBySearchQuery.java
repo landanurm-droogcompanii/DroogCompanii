@@ -42,7 +42,7 @@ public class SearchResultProviderBySearchQuery implements SearchResultProvider, 
     public List<Partner> getPartners(Context context) {
         PartnerCategoriesReader partnerCategoriesReader = new PartnerCategoriesReader(context);
         Set<Partner> partners = new HashSet<Partner>();
-        for (PartnerCategory category : partnerCategoriesReader.getPartnerCategories()) {
+        for (PartnerCategory category : partnerCategoriesReader.getAllPartnerCategories()) {
             partners.addAll(getPartnersOfCategoryWhichMeetCriterion(context, category));
         }
         return new ArrayList<Partner>(partners);

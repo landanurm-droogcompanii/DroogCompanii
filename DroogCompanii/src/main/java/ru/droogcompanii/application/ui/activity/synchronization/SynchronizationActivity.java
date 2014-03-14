@@ -7,7 +7,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
 import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 26.12.13.
@@ -29,7 +29,7 @@ public class SynchronizationActivity extends ActivityAbleToStartTask {
     }
 
     private void startSynchronizationTask() {
-        TaskNotBeInterrupted task = new SynchronizationTask(this);
+        TaskNotBeInterruptedDuringConfigurationChange task = new SynchronizationTask(this);
         Integer title = R.string.titleOfSynchronizationDialog;
         startTask(TASK_REQUEST_CODE_SYNCHRONIZATION, task, title);
     }

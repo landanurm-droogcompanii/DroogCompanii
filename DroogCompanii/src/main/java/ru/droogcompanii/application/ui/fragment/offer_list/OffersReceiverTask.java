@@ -4,13 +4,13 @@ import android.content.Context;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.Snorlax;
 
 /**
  * Created by ls on 10.02.14.
  */
-public class OffersReceiverTask extends TaskNotBeInterrupted {
+public class OffersReceiverTask extends TaskNotBeInterruptedDuringConfigurationChange {
     private final Context context;
     private final OffersReceiverByOfferType offersReceiver;
 

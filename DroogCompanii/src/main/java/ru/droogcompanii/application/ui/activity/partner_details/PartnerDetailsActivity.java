@@ -21,7 +21,7 @@ import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointL
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 15.01.14.
@@ -76,12 +76,12 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoTo
         } else {
             restoreState(savedInstanceState);
         }
+        initTitle();
     }
 
     private void restoreState(Bundle savedInstanceState) {
         resultFromTask = (PartnerDetailsReceivingTask.Result)
                 savedInstanceState.getSerializable(Key.RESULT_FROM_TASK);
-        initTitle();
     }
 
     private void initTitle() {
@@ -94,7 +94,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoTo
         Intent intent = getIntent();
         PartnerAndPartnerPointsProvider provider = (PartnerAndPartnerPointsProvider)
                 intent.getSerializableExtra(Key.PARTNER_AND_PARTNER_POINTS_PROVIDER);
-        TaskNotBeInterrupted task = new PartnerDetailsReceivingTask(provider, this);
+        TaskNotBeInterruptedDuringConfigurationChange task = new PartnerDetailsReceivingTask(provider, this);
         startTask(TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING, task);
     }
 

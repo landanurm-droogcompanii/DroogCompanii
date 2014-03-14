@@ -65,9 +65,13 @@ public class FavoriteDBUtils {
     }
 
     public List<Partner> getFavoritePartners() {
-        String where = " WHERE " + PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE + " = 1 ";
+        String where = " WHERE " + getIsFavoriteCondition();
         PartnersReader partnersReader = new PartnersReader(context);
         return partnersReader.getPartnersByCondition(where);
+    }
+
+    public static String getIsFavoriteCondition() {
+        return PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE + " = 1 ";
     }
 
     public List<PartnerPoint> getAllFavoritePartnerPoints() {

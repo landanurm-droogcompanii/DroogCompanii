@@ -9,7 +9,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 public class SignInActivity extends ActionBarActivityWithUpButton {
 
@@ -35,7 +35,7 @@ public class SignInActivity extends ActionBarActivityWithUpButton {
     }
 
     public void startSignInTask(String login, String password) {
-        TaskNotBeInterrupted signInTask = new SignInTask(this, login, password);
+        TaskNotBeInterruptedDuringConfigurationChange signInTask = new SignInTask(this, login, password);
         startTask(TASK_REQUEST_CODE_SIGNIN, signInTask, R.string.login_progress_signing_in);
     }
 

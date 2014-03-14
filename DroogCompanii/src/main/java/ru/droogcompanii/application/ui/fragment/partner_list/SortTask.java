@@ -7,12 +7,12 @@ import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrupted;
+import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 24.02.14.
  */
-public class SortTask extends TaskNotBeInterrupted {
+public class SortTask extends TaskNotBeInterruptedDuringConfigurationChange {
     private final Comparator<Partner> comparator;
     private final List<Partner> listToSort;
 

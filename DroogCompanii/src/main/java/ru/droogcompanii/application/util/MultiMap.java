@@ -10,6 +10,29 @@ import java.util.Set;
  * Created by ls on 22.01.14.
  */
 public class MultiMap<K,V> {
+
+    public static class Entry<K, V> {
+        private final K key;
+        private final Set<V> values;
+
+        private Entry(K key, Set<V> values) {
+            this.key = key;
+            this.values = values;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public Set<V> getValues() {
+            return values;
+        }
+    }
+
+    public static interface OnEachHandler<K, V> {
+        void onEach(Entry<K, V> entry);
+    }
+
     private Map<K, Set<V>> map;
 
     public MultiMap() {
@@ -39,6 +62,12 @@ public class MultiMap<K,V> {
 
     public Set<K> keySet() {
         return map.keySet();
+    }
+
+    public void forEach(OnEachHandler<K, V> onEachHandler) {
+        for (Map.Entry<K, Set<V>> each : map.entrySet()) {
+            onEachHandler.onEach(new Entry<K, V>(each.getKey(), each.getValue()));
+        }
     }
 
     @Override

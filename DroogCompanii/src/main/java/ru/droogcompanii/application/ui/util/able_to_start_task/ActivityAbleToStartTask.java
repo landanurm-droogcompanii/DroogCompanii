@@ -55,12 +55,12 @@ public class ActivityAbleToStartTask extends ActivityTrackedLifecycle
     }
 
     @Override
-    public void startTask(int requestCode, TaskNotBeInterrupted task) {
+    public void startTask(int requestCode, TaskNotBeInterruptedDuringConfigurationChange task) {
         startTask(requestCode, task, TaskFragment.NO_TITLE_ID);
     }
 
     @Override
-    public void startTask(int requestCode, TaskNotBeInterrupted task, Integer titleId) {
+    public void startTask(int requestCode, TaskNotBeInterruptedDuringConfigurationChange task, Integer titleId) {
 
         if (isRunningTask) {
             throw new IllegalStateException(

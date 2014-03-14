@@ -9,7 +9,7 @@ import ru.droogcompanii.application.ActionsOnApplicationLaunch;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.global_flags.SharedFlag;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
-import ru.droogcompanii.application.ui.activity.main_screen.MainScreen;
+import ru.droogcompanii.application.ui.activity.main_screen_2.MainScreen2;
 import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
 import ru.droogcompanii.application.ui.util.YesNoDialogMaker;
 
@@ -22,6 +22,10 @@ public class StartActivity extends FragmentActivity {
         public static final int SYNCHRONIZATION = 11111;
         public static final int MAIN_SCREEN = 22222;
     }
+
+
+    private static final Class<?> FIRST_SCREEN = MainScreen2.class;
+
 
     private static final SharedFlag IS_MAIN_SCREEN_STARTED = SharedFlag.from("IS_MAIN_SCREEN_STARTED");
 
@@ -56,7 +60,7 @@ public class StartActivity extends FragmentActivity {
 
     private void startMainScreen() {
         IS_MAIN_SCREEN_STARTED.set(true);
-        startActivityForResult(RequestCode.MAIN_SCREEN, MainScreen.class);
+        startActivityForResult(RequestCode.MAIN_SCREEN, FIRST_SCREEN);
     }
 
     private void startActivityForResult(int requestCode, Class<?> activityClass) {
