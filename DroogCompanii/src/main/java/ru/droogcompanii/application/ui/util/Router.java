@@ -60,7 +60,7 @@ public class Router {
     }
 
     private static LatLng getPositionOfBaseLocation() {
-        Location baseLocation = LocationUtils.getActualLocation();
+        Location baseLocation = ActualBaseLocationProvider.getActualBaseLocation();
         return new LatLng(baseLocation.getLatitude(), baseLocation.getLongitude());
     }
 }

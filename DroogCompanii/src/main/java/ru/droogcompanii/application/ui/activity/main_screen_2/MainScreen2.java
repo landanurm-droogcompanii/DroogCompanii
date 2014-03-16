@@ -17,8 +17,8 @@ import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToSta
  */
 public class MainScreen2 extends ActivityAbleToStartTask implements CategoryListFragment.Callbacks {
 
-    private static final String TAG_LEFT_DRAWER = "TAG_LEFT_DRAWER";
-    private static final String TAG_CONTENT = "TAG_CONTENT";
+    private static final String TAG_CATEGORY_LIST = "TAG_CATEGORY_LIST";
+    private static final String TAG_MAP = "TAG_MAP";
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -31,19 +31,18 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen_2);
         initNavigationDrawer();
+        openNavigationDrawer();
         if (savedInstanceState == null) {
             placeFragmentsOnLayout();
-            openNavigationDrawer();
         } else {
-            openNavigationDrawer();
             closeNavigationDrawer();
         }
     }
 
     private void placeFragmentsOnLayout() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.contentFrame, new NewPartnerPointsMapFragment(), TAG_CONTENT);
-        transaction.add(R.id.leftDrawer, new CategoryListFragment(), TAG_LEFT_DRAWER);
+        transaction.add(R.id.contentFrame, new NewPartnerPointsMapFragment(), TAG_MAP);
+        transaction.add(R.id.leftDrawer, new CategoryListFragment(), TAG_CATEGORY_LIST);
         transaction.commit();
     }
 
@@ -109,9 +108,30 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
     }
 
     @Override
-    public void onCurrentCategoryChanged(String conditionToReceivePartners) {
-        NewPartnerPointsMapFragment fragment = (NewPartnerPointsMapFragment)
-                getSupportFragmentManager().findFragmentByTag(TAG_CONTENT);
-        fragment.updateCondition(conditionToReceivePartners);
+    public void onReceivingCategoriesTaskCompleted() {
+        updateMapFragment();
+    }
+
+    @Override
+    public void onListInitialized() {
+        // skip
+    }
+
+    @Override
+    public void onCurrentCategoryChanged() {
+        updateMapFragment();
+    }
+
+    private void updateMapFragment() {
+        String condition = findCategoryListFragment().getConditionToReceivePartners();
+        findMapFragment().updateCondition(condition);
+    }
+
+    private CategoryListFragment findCategoryListFragment() {
+        return (CategoryListFragment) getSupportFragmentManager().findFragmentByTag(TAG_CATEGORY_LIST);
+    }
+
+    private NewPartnerPointsMapFragment findMapFragment() {
+        return (NewPartnerPointsMapFragment) getSupportFragmentManager().findFragmentByTag(TAG_MAP);
     }
 }

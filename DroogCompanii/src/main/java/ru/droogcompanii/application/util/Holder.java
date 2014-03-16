@@ -1,10 +1,16 @@
 package ru.droogcompanii.application.util;
 
+import com.google.common.base.Optional;
+
 /**
  * Created by ls on 18.02.14.
  */
 public class Holder<T> {
     public T value;
+
+    public static <T> Holder<T> absent() {
+        return new Holder<T>(null);
+    }
 
     public static <T> Holder<T> from(T value) {
         return new Holder<T>(value);

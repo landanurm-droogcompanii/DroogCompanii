@@ -8,7 +8,6 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
 import java.io.Serializable;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
-import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.util.BaseLocationProvider;
 import ru.droogcompanii.application.util.Holder;
 import ru.droogcompanii.application.util.LogUtils;
@@ -93,20 +91,7 @@ public class LocationUtils implements BaseLocationProvider, Serializable {
 
     @Override
     public Location getBaseLocation() {
-        return getActualLocation();
-    }
-
-    public static Location getActualLocation() {
-        if (CustomBaseLocationUtils.isBasePositionSet()) {
-            return getCustomBaseLocation();
-        }
-        Location defaultLocation = DroogCompaniiSettings.getDefaultBaseLocation();
-        return currentLocation.or(defaultLocation);
-    }
-
-    private static Location getCustomBaseLocation() {
-        LatLng basePosition = CustomBaseLocationUtils.getBasePosition();
-        return LocationBuilder.fromLatLng("custom", basePosition);
+        return ActualBaseLocationProvider.getActualBaseLocation();
     }
 
     public static Optional<Location> getCurrentLocation() {
@@ -130,7 +115,7 @@ public class LocationUtils implements BaseLocationProvider, Serializable {
     }
 
     public static void notifyListeners() {
-        final Location actualLocation = getActualLocation();
+        final Location actualLocation = ActualBaseLocationProvider.getActualBaseLocation();
         for (WeakReferenceWrapper<LocationSource.OnLocationChangedListener> listenerWrapper : listenerWrappers) {
             listenerWrapper.handleIfExist(new WeakReferenceWrapper.Handler<LocationSource.OnLocationChangedListener>() {
                 @Override

@@ -16,6 +16,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.LocationUtils;
 import ru.droogcompanii.application.ui.util.ObserverOfViewWillBePlacedOnGlobalLayout;
 
@@ -155,7 +156,7 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void tryMoveCameraToCurrentLocation() {
-        Location baseLocation = LocationUtils.getActualLocation();
+        Location baseLocation = ActualBaseLocationProvider.getActualBaseLocation();
         moveCamera(positionOf(baseLocation));
     }
 
