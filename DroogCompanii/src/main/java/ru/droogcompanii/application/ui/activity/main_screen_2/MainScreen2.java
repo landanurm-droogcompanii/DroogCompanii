@@ -20,10 +20,10 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
     private static final String TAG_CATEGORY_LIST = "TAG_CATEGORY_LIST";
     private static final String TAG_MAP = "TAG_MAP";
 
-    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private CharSequence title;
     private CharSequence drawerTitle;
+    private CharSequence title;
+    private DrawerLayout drawerLayout;
 
 
     @Override
@@ -60,27 +60,24 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
         title = drawerTitle = getTitle();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                drawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_navigation_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
+                this,
+                drawerLayout,
+                R.drawable.ic_navigation_drawer,
+                R.string.drawer_open,
+                R.string.drawer_close
         ) {
 
-            /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(title);
             }
 
-            /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 getSupportActionBar().setTitle(drawerTitle);
             }
         };
 
-        // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(drawerToggle);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,12 +106,12 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
 
     @Override
     public void onReceivingCategoriesTaskCompleted() {
-        updateMapFragment();
+        // skip
     }
 
     @Override
     public void onListInitialized() {
-        // skip
+        updateMapFragment();
     }
 
     @Override

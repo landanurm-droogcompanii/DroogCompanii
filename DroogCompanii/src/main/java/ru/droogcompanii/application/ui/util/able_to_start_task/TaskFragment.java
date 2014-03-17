@@ -21,6 +21,9 @@ public class TaskFragment extends DialogFragment {
 
     public static final Integer NO_TITLE_ID = null;
 
+    private static final String KEY_REQUEST_CODE = "KEY_REQUEST_CODE";
+
+
     private boolean isNeedToReturnResult = false;
     private boolean isResultReturned = false;
     private TaskNotBeInterruptedDuringConfigurationChange task;
@@ -28,7 +31,16 @@ public class TaskFragment extends DialogFragment {
     private int resultCode = Activity.RESULT_CANCELED;
     private Serializable result = null;
     private Integer titleId;
+    private int requestCode;
 
+
+    public static TaskFragment newInstance(int requestCode) {
+        TaskFragment fragment = new TaskFragment();
+        Bundle args = new Bundle();
+        args.putInt(KEY_REQUEST_CODE, requestCode);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public void setTask(TaskNotBeInterruptedDuringConfigurationChange task) {
         task.setFragment(this);
@@ -43,6 +55,8 @@ public class TaskFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        requestCode = getArguments().getInt(KEY_REQUEST_CODE);
         if (savedInstanceState == null && task != null) {
             task.execute();
         }
@@ -96,7 +110,7 @@ public class TaskFragment extends DialogFragment {
         isResultReturned = true;
         FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
         if (ableToStartTask.isAbleToReceiveResult()) {
-            ableToStartTask.onResult(FragmentAbleToStartTask.TASK_FRAGMENT_TARGET, resultCode, result);
+            ableToStartTask.onTaskFinished(requestCode, resultCode, result);
             isNeedToReturnResult = false;
             finishFragment();
         } else {
@@ -128,7 +142,7 @@ public class TaskFragment extends DialogFragment {
         this.result = result;
     }
 
-    public void getResultIfItReturnedDuringPause() {
+    public void getResultIfItReturnedWhenResultReceiverDisabledToReceiveIt() {
         if (isNeedToReturnResult) {
             returnResult();
         }

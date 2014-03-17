@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Created by ls on 06.03.14.
@@ -13,19 +15,16 @@ import java.io.Serializable;
 public abstract class FragmentAbleToStartTask extends Fragment
         implements AbleToStartTask, TaskResultReceiver {
 
-    public static final int TASK_FRAGMENT_TARGET = 123;
-
     protected static final String TAG_TASK_FRAGMENT = FragmentAbleToStartTask.class.getName() + "TAG_TASK_FRAGMENT";
 
-    private static final String KEY_TASK_REQUEST_CODE = "KEY_TASK_REQUEST_CODE";
+    private static final String KEY_REQUEST_CODES = "KEY_REQUEST_CODES";
 
+    private Collection<Integer> requestCodes;
     private FragmentManager fragmentManager;
-    private int taskRequestCode;
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(KEY_TASK_REQUEST_CODE, taskRequestCode);
+
+    public FragmentAbleToStartTask() {
+        requestCodes = new HashSet<Integer>();
     }
 
     @Override
@@ -38,18 +37,31 @@ public abstract class FragmentAbleToStartTask extends Fragment
 
         fragmentManager = getFragmentManager();
 
-        TaskFragment taskFragment = getTaskFragment();
-        if (taskFragment != null) {
-            taskFragment.setTargetFragment(this, TASK_FRAGMENT_TARGET);
+        setTargetForTaskFragments();
+    }
+
+    private void setTargetForTaskFragments() {
+        for (Integer eachRequestCode : requestCodes) {
+            TaskFragment taskFragment = getTaskFragment(eachRequestCode);
+            if (taskFragment != null) {
+                taskFragment.setTargetFragment(this, eachRequestCode);
+            }
         }
     }
 
-    private void restoreState(Bundle savedInstanceState) {
-        taskRequestCode = savedInstanceState.getInt(KEY_TASK_REQUEST_CODE);
+    private TaskFragment getTaskFragment(int requestCode) {
+        String tag = tagByRequestCode(requestCode);
+        return (TaskFragment) fragmentManager.findFragmentByTag(tag);
     }
 
-    private TaskFragment getTaskFragment() {
-        return (TaskFragment) fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT);
+    private void restoreState(Bundle savedInstanceState) {
+        requestCodes = (Collection<Integer>) savedInstanceState.getSerializable(KEY_REQUEST_CODES);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_REQUEST_CODES, (Serializable) requestCodes);
     }
 
     public void startTask(int requestCode, TaskNotBeInterruptedDuringConfigurationChange task) {
@@ -57,28 +69,32 @@ public abstract class FragmentAbleToStartTask extends Fragment
     }
 
     public void startTask(int requestCode, TaskNotBeInterruptedDuringConfigurationChange task, Integer title) {
-        this.taskRequestCode = requestCode;
-        TaskFragment taskFragment = new TaskFragment();
+        requestCodes.add(requestCode);
+        TaskFragment taskFragment = TaskFragment.newInstance(requestCode);
         taskFragment.setTitle(title);
         taskFragment.setTask(task);
-        taskFragment.setTargetFragment(this, TASK_FRAGMENT_TARGET);
-        startFragment(taskFragment);
+        taskFragment.setTargetFragment(this, requestCode);
+        startFragment(requestCode, taskFragment);
     }
 
-    private void startFragment(TaskFragment taskFragment) {
+    private void startFragment(int requestCode, TaskFragment taskFragment) {
+        String tag = tagByRequestCode(requestCode);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment previousTaskFragment = fragmentManager.findFragmentByTag(TAG_TASK_FRAGMENT);
+        Fragment previousTaskFragment = fragmentManager.findFragmentByTag(tag);
         if (previousTaskFragment != null) {
             transaction.remove(previousTaskFragment);
         }
-        transaction.add(taskFragment, TAG_TASK_FRAGMENT);
+        transaction.add(taskFragment, tag);
         transaction.commit();
     }
 
-    public final void onResult(int requestCode, int resultCode, Serializable result) {
-        if ((requestCode == TASK_FRAGMENT_TARGET)) {
-            onTaskResult(this.taskRequestCode, resultCode, result);
-        }
+    private static String tagByRequestCode(int requestCode) {
+        return TAG_TASK_FRAGMENT + " " + requestCode;
+    }
+
+    public void onTaskFinished(int requestCode, int resultCode, Serializable result) {
+        requestCodes.remove(requestCode);
+        onTaskResult(requestCode, resultCode, result);
     }
 
     public abstract void onTaskResult(int requestCode, int resultCode, Serializable result);
@@ -90,9 +106,15 @@ public abstract class FragmentAbleToStartTask extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        TaskFragment taskFragment = getTaskFragment();
-        if (taskFragment != null) {
-            taskFragment.getResultIfItReturnedDuringPause();
+        getResultsWhichReturnedDuringDisabilityToReceiveIt();
+    }
+
+    private void getResultsWhichReturnedDuringDisabilityToReceiveIt() {
+        for (int eachRequestCode : requestCodes) {
+            TaskFragment taskFragment = getTaskFragment(eachRequestCode);
+            if (taskFragment != null) {
+                taskFragment.getResultIfItReturnedWhenResultReceiverDisabledToReceiveIt();
+            }
         }
     }
 
