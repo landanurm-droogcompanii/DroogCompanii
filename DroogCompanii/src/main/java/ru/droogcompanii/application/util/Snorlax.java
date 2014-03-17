@@ -15,8 +15,12 @@ public class Snorlax {
     }
 
     private static void actuallySleep() {
+        sleep(SLEEP_TIME_IN_MILLISECONDS);
+    }
+
+    public static void sleep(long delay) {
         try {
-            Thread.currentThread().sleep(SLEEP_TIME_IN_MILLISECONDS);
+            Thread.currentThread().sleep(delay);
         } catch (InterruptedException e) {
             LogUtils.debug(Snorlax.class.getName() + ".sleep():  " + e.getMessage());
         }

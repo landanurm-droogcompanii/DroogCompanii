@@ -9,8 +9,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
@@ -18,7 +23,7 @@ import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToSta
 /**
  * Created by ls on 14.03.14.
  */
-public class CustomMapFragment extends FragmentAbleToStartTask {
+public class CustomMapFragment extends FragmentAbleToStartTask implements GoogleMapProvider {
 
     private static final Runnable DUMMY_RUNNABLE_ON_RESUME = new Runnable() {
         @Override
@@ -29,10 +34,12 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
 
     private Runnable runnableOnResume;
 
+    private Collection<Marker> markers;
     private GoogleMap map;
 
     public CustomMapFragment() {
         map = null;
+        markers = new ArrayList<Marker>();
         runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
     }
 
@@ -52,7 +59,8 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
         runnableOnResume = DUMMY_RUNNABLE_ON_RESUME;
     }
 
-    protected final GoogleMap getGoogleMap() {
+    @Override
+    public final GoogleMap getGoogleMap() {
         if (isNeedToInitMap()) {
             initMap();
         }
@@ -62,6 +70,10 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
     private boolean isNeedToInitMap() {
         return (map == null) && (getActivity() != null) &&
                 (getActivity().getSupportFragmentManager() != null);
+    }
+
+    public final LatLngBounds getBounds() {
+        return getGoogleMap().getProjection().getVisibleRegion().latLngBounds;
     }
 
     private void initMap() {
@@ -76,25 +88,46 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
                 getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
     }
 
-    protected final View getMapView() {
+    public final View getMapView() {
         return getNestedSupportMapFragment().getView();
     }
 
-    protected final float getCurrentZoom() {
+    public final float getCurrentZoom() {
         return getGoogleMap().getCameraPosition().zoom;
     }
 
-    protected final LatLng getCurrentCenter() {
+    public final LatLng getCurrentCenter() {
         return getGoogleMap().getCameraPosition().target;
     }
 
-    protected final void moveCamera(LatLng center, float zoom) {
+    public final void moveCamera(LatLng center, float zoom) {
+        getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
+    }
+
+    public final void animateCamera(LatLng center, float zoom) {
         getGoogleMap().animateCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }
 
     @Override
     public void onTaskResult(int requestCode, int resultCode, Serializable result) {
         // do nothing
+    }
+
+
+
+    public final Marker addMarker(MarkerOptions markerOptions) {
+        Marker marker = getGoogleMap().addMarker(markerOptions);
+        markers.add(marker);
+        return marker;
+    }
+
+    protected final void removeAllMarkers() {
+        getGoogleMap().clear();
+        markers.clear();
+    }
+
+    public final Collection<Marker> getMarkers() {
+        return new ArrayList<Marker>(markers);
     }
 
 }

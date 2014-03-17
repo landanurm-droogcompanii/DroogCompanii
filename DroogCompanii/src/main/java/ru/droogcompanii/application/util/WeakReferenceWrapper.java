@@ -30,4 +30,12 @@ public class WeakReferenceWrapper<T> {
             }
         }
     }
+
+    public boolean isPresent() {
+        return (weakReference != null) && (weakReference.get() != null);
+    }
+
+    public T get() {
+        return weakReference.get();
+    }
 }

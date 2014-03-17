@@ -17,6 +17,10 @@ public class ObserverOfViewWillBePlacedOnGlobalLayout {
         if (!viewTreeObserver.isAlive()) {
             return;
         }
+        if (view.isInLayout()) {
+            runnable.run();
+            return;
+        }
         viewTreeObserver.addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override

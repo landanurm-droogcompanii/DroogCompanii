@@ -9,10 +9,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
@@ -36,13 +32,11 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
 
     private boolean isFirstUpdatingMapCamera;
     private boolean isMapViewPlacedOnLayout;
-    private List<Marker> markers;
     private LocationSource.OnLocationChangedListener onLocationChangedListener;
 
 
     public BasePartnerPointsMapFragment() {
         isMapViewPlacedOnLayout = false;
-        markers = new ArrayList<Marker>();
         onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
     }
 
@@ -103,17 +97,6 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
         LocationUtils.removeOnLocationChangedListener(this);
     }
 
-    public final Marker addMarker(MarkerOptions markerOptions) {
-        Marker marker = getGoogleMap().addMarker(markerOptions);
-        markers.add(marker);
-        return marker;
-    }
-
-    protected final void removeAllMarkers() {
-        getGoogleMap().clear();
-        markers.clear();
-    }
-
     protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(
             final ClickedMarkerHolder clickedMarker) {
         if (isMapViewPlacedOnLayout) {
@@ -165,7 +148,7 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void fitVisibleMarkersOnScreen() {
-        MapCameraUpdater.fitVisibleMarkers(getGoogleMap(), markers, getMapPadding());
+        MapCameraUpdater.fitVisibleMarkers(getGoogleMap(), getMarkers(), getMapPadding());
     }
 
     private int getMapPadding() {
@@ -174,7 +157,7 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
 
     @Override
     public Marker findMarkerByPosition(LatLng position) {
-        for (Marker marker : markers) {
+        for (Marker marker : getMarkers()) {
             if (position.equals(marker.getPosition())) {
                 return marker;
             }
@@ -184,6 +167,6 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
 
     @Override
     public boolean isMarkerPlacedOnMap(Marker marker) {
-        return markers.contains(marker);
+        return getMarkers().contains(marker);
     }
 }

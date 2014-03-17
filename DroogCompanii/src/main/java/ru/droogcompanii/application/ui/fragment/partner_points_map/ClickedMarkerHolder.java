@@ -87,25 +87,17 @@ class ClickedMarkerHolder {
 
     public void set(Marker marker) {
         unset();
-        selectMarker(marker);
+        MarkerSelector.selectMarker(marker);
         this.clickedMarker = marker;
         this.positionOfClickedMarker = marker.getPosition();
     }
 
-    private static void selectMarker(Marker marker) {
-        marker.setIcon(MarkerIcons.selected());
-    }
-
     public void unset() {
         if (isOwnerOfMarker() && markersFinder.isMarkerPlacedOnMap(getMarker())) {
-            unselectMarker(getMarker());
+            MarkerSelector.unselectMarker(getMarker());
         }
         clickedMarker = null;
         positionOfClickedMarker = null;
-    }
-
-    private static void unselectMarker(Marker marker) {
-        marker.setIcon(MarkerIcons.unselected());
     }
 
     public boolean isHolding(Marker marker) {

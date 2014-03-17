@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.common.base.Optional;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
@@ -30,14 +32,15 @@ import ru.droogcompanii.application.util.SerializableLatLng;
  */
 public class NewPartnerPointsMapFragment extends CustomMapFragment
         implements ClusterManager.OnClusterClickListener<NewPartnerPointsMapFragment.PartnerPointClusterItem>,
-                   ClusterManager.OnClusterItemClickListener<NewPartnerPointsMapFragment.PartnerPointClusterItem> {
+                   ClusterManager.OnClusterItemClickListener<NewPartnerPointsMapFragment.PartnerPointClusterItem>,
+                   GoogleMap.OnMapClickListener {
 
     private static final PartnersContracts.PartnerPointsContract PARTNER_POINTS = new PartnersContracts.PartnerPointsContract();
     private static final PartnersContracts.PartnersContract PARTNERS = new PartnersContracts.PartnersContract();
 
-    private static final String KEY_CENTER = "KEY_CENTER";
-    private static final String KEY_ZOOM = "KEY_ZOOM";
+    private static final String KEY_BOUNDS = "KEY_BOUNDS";
     private static final String KEY_CONDITION = "KEY_CONDITION";
+    private static final String KEY_IS_FIRST_DISPLAYING = "KEY_IS_FIRST_DISPLAYING";
 
     private static final int TASK_REQUEST_CODE_DISPLAYING_PARTNER_POINTS = 34316;
 
@@ -58,33 +61,43 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         }
     }
 
-    private Optional<String> conditionToReceivePartners;
+
+    private boolean isFirstDisplaying;
     private ClusterManager<PartnerPointClusterItem> clusterManager;
+    private Optional<String> conditionToReceivePartners;
+
+    private ClickedPositionHelper clickedPositionHelper;
+    private LatLngBounds bounds;
+    private MapCameraStateSaverLoader mapCameraStateSaverLoader;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
+
+        mapCameraStateSaverLoader = new MapCameraStateSaverLoader(this);
+
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
             restoreState(savedInstanceState);
         }
+        bounds = getBounds();
+        init();
     }
 
     private void initStateByDefault() {
+        clickedPositionHelper = new ClickedPositionHelper(this);
+        isFirstDisplaying = true;
         conditionToReceivePartners = Optional.absent();
     }
 
     private void restoreState(Bundle savedInstanceState) {
+        clickedPositionHelper = new ClickedPositionHelper(this);
+        clickedPositionHelper.restoreFrom(savedInstanceState);
+        isFirstDisplaying = savedInstanceState.getBoolean(KEY_IS_FIRST_DISPLAYING);
         conditionToReceivePartners = (Optional<String>) savedInstanceState.getSerializable(KEY_CONDITION);
-        restoreCameraState(savedInstanceState);
-    }
-
-    private void restoreCameraState(Bundle savedInstanceState) {
-        LatLng center = savedInstanceState.getParcelable(KEY_CENTER);
-        float zoom = savedInstanceState.getFloat(KEY_ZOOM);
-        moveCamera(center, zoom);
+        mapCameraStateSaverLoader.restoreFrom(savedInstanceState);
     }
 
     @Override
@@ -94,13 +107,10 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void saveStateInto(Bundle outState) {
+        clickedPositionHelper.saveInto(outState);
+        outState.putBoolean(KEY_IS_FIRST_DISPLAYING, isFirstDisplaying);
         outState.putSerializable(KEY_CONDITION, conditionToReceivePartners);
-        saveCameraStateInto(outState);
-    }
-
-    private void saveCameraStateInto(Bundle outState) {
-        outState.putParcelable(KEY_CENTER, getCurrentCenter());
-        outState.putFloat(KEY_ZOOM, getCurrentZoom());
+        mapCameraStateSaverLoader.saveInto(outState);
     }
 
     private void init() {
@@ -112,14 +122,29 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         getGoogleMap().setOnCameraChangeListener(clusterManager);
         getGoogleMap().setOnMarkerClickListener(clusterManager);
         getGoogleMap().setOnInfoWindowClickListener(clusterManager);
+        getGoogleMap().setOnMapClickListener(this);
 
         clusterManager.setOnClusterItemClickListener(this);
         clusterManager.setOnClusterClickListener(this);
     }
 
     @Override
+    public void onMapClick(LatLng latLng) {
+        removeClickedPosition();
+    }
+
+    private void removeClickedPosition() {
+        clickedPositionHelper.remove();
+    }
+
+    @Override
     public boolean onClusterItemClick(PartnerPointClusterItem clusterItem) {
+        setClickedPosition(clusterItem.getPosition());
         return false;
+    }
+
+    private void setClickedPosition(LatLng position) {
+        clickedPositionHelper.set(position);
     }
 
     @Override
@@ -145,6 +170,12 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         clusterManager.cluster();
     }
 
+    private static class TaskResult implements Serializable {
+        boolean isBoundsDoesNotContainMarkers;
+        boolean isNeedToRemoveClickedPosition;
+        Optional<SerializableLatLng> nearestPosition;
+    }
+
     private void startTaskDisplayingPartnerPoints() {
         startTask(TASK_REQUEST_CODE_DISPLAYING_PARTNER_POINTS, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
@@ -154,11 +185,17 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         });
     }
 
-    private Optional<SerializableLatLng> displayPartnerPointsAndGetNearestPosition() {
+    private TaskResult displayPartnerPointsAndGetNearestPosition() {
+        final TaskResult taskResult = new TaskResult();
+
         PartnersHierarchyReaderFromDatabase reader = new PartnersHierarchyReaderFromDatabase(getActivity());
 
         LatLng actualBaseLocation = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
         final NearestPositionCalculator nearestCalculator = new NearestPositionCalculator(actualBaseLocation);
+
+        final ClickedPositionHelperUpdater helperUpdater = new ClickedPositionHelperUpdater(clickedPositionHelper);
+
+        taskResult.isBoundsDoesNotContainMarkers = true;
 
         reader.handleCursorByQuery(prepareSql(), new CursorHandler() {
             @Override
@@ -168,11 +205,19 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
                     PartnerPoint partnerPoint = readPartnerPoint(cursor);
                     clusterManager.addItem(new PartnerPointClusterItem(partnerPoint));
                     cursor.moveToNext();
+
                     nearestCalculator.add(partnerPoint.getPosition());
+                    helperUpdater.add(partnerPoint.getPosition());
+
+                    if (taskResult.isBoundsDoesNotContainMarkers && bounds.contains(partnerPoint.getPosition())) {
+                        taskResult.isBoundsDoesNotContainMarkers = false;
+                    }
                 }
             }
         });
-        return nearestCalculator.getSerializableNearestPosition();
+        taskResult.isNeedToRemoveClickedPosition = helperUpdater.isNeedToRemoveClickedPosition();
+        taskResult.nearestPosition = nearestCalculator.getSerializableNearestPosition();
+        return taskResult;
     }
 
     private String prepareSql() {
@@ -213,9 +258,34 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
 
     private void onPartnerPointsDisplayed(Serializable result) {
         clusterManager.cluster();
-        Optional<SerializableLatLng> nearestPosition = (Optional<SerializableLatLng>) result;
-        if (nearestPosition.isPresent()) {
-            moveCamera(nearestPosition.get().toParcelable(), getCurrentZoom());
+        TaskResult taskResult = (TaskResult) result;
+        updateMapCamera(taskResult);
+        if (taskResult.isNeedToRemoveClickedPosition) {
+            clickedPositionHelper.remove();
         }
+    }
+
+    private void updateMapCamera(TaskResult taskResult) {
+        if (isFirstDisplaying) {
+            isFirstDisplaying = false;
+            moveToPosition(taskResult.nearestPosition);
+        } else if (taskResult.isBoundsDoesNotContainMarkers) {
+            if (clickedPositionHelper.isClickedPositionPresent()) {
+                moveToPosition(clickedPositionHelper.getClickedPosition());
+            } else {
+                moveToPosition(taskResult.nearestPosition);
+            }
+        }
+    }
+
+    private void moveToPosition(Optional<SerializableLatLng> optionalSerializablePosition) {
+        if (optionalSerializablePosition.isPresent()) {
+            LatLng position = optionalSerializablePosition.get().toParcelable();
+            moveToPosition(position);
+        }
+    }
+
+    private void moveToPosition(LatLng position) {
+        moveCamera(position, getCurrentZoom());
     }
 }
