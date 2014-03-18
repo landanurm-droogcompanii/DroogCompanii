@@ -1,14 +1,12 @@
 package ru.droogcompanii.application.ui.activity.main_screen_2;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
-import ru.droogcompanii.application.ui.fragment.partner_points_map.GoogleMapProvider;
+import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
 
 /**
  * Created by ls on 17.03.14.
@@ -16,14 +14,13 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map.GoogleMapProv
 public class ClickedPositionHelper {
 
     private static final String KEY_CENTER = "KEY_CENTER";
-    private static final double RADIUS = 50.0;
 
-    private final GoogleMapProvider googleMapProvider;
+    private final CustomMapFragment mapFragment;
     private LatLng center;
     private Circle circle;
 
-    public ClickedPositionHelper(GoogleMapProvider googleMapProvider) {
-        this.googleMapProvider = googleMapProvider;
+    public ClickedPositionHelper(CustomMapFragment mapFragment) {
+        this.mapFragment = mapFragment;
         this.center = null;
         this.circle = null;
     }
@@ -56,11 +53,14 @@ public class ClickedPositionHelper {
     }
 
     private Circle prepareCircle() {
-        return googleMapProvider.getGoogleMap().addCircle(new CircleOptions()
-                .center(center)
-                .radius(RADIUS)
-                .strokeColor(Color.RED)
-                .fillColor(Color.BLUE));
+        return CircleIncluder.includeIn(
+                mapFragment.getGoogleMap(), center, defineRadius()
+        );
+    }
+
+    private double defineRadius() {
+        return ClickedCircleRadiusCalculator.calculate(
+                mapFragment.getCurrentZoom(), mapFragment.getMaxZoom());
     }
 
     public void remove() {
@@ -81,5 +81,11 @@ public class ClickedPositionHelper {
 
     public boolean isClickedPositionPresent() {
         return center != null;
+    }
+
+    public void updateOnCameraChange() {
+        if (circle != null) {
+            circle.setRadius(defineRadius());
+        }
     }
 }

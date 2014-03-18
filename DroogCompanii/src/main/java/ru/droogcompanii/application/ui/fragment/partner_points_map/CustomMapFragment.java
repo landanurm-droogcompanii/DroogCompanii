@@ -92,6 +92,10 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
         return getNestedSupportMapFragment().getView();
     }
 
+    public final float getMaxZoom() {
+        return getGoogleMap().getMaxZoomLevel();
+    }
+
     public final float getCurrentZoom() {
         return getGoogleMap().getCameraPosition().zoom;
     }

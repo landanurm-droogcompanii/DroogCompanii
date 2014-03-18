@@ -12,6 +12,7 @@ import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
  * Created by ls on 13.02.14.
  */
 public interface PartnerPoint {
+    int getId();
     String getTitle();
     double getLatitude();
     double getLongitude();

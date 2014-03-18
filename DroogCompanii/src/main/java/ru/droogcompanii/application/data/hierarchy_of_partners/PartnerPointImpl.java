@@ -19,6 +19,7 @@ import ru.droogcompanii.application.util.Objects;
 public class PartnerPointImpl implements PartnerPoint, Serializable {
     public double latitude;
     public double longitude;
+    public int id;
     public int partnerId;
     public List<String> phones;
     public String address;
@@ -28,6 +29,7 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
 
 
     public PartnerPointImpl() {
+        id = 0;
         title = "";
         address = "";
         latitude = 0.0;
@@ -51,7 +53,8 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
         }
 
         PartnerPoint other = (PartnerPoint) obj;
-        return (Objects.equals(title, other.getTitle()) &&
+        return (Objects.equals(id, other.getId()) &&
+                Objects.equals(title, other.getTitle()) &&
                 Objects.equals(address, other.getAddress()) &&
                 Objects.equals(phones, other.getPhones()) &&
                 Objects.equals(workingHours, other.getWorkingHours()) &&
@@ -64,7 +67,7 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(
-            title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
+            id, title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
         );
     }
 
@@ -100,12 +103,17 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
     public String toString() {
         return ConverterToString.buildFor(this)
             .withFieldNames(
-                "title", "address", "phones", "workingHours", "paymentMethods", "longitude", "latitude", "partnerId"
+                "id", "title", "address", "phones", "workingHours", "paymentMethods", "longitude", "latitude", "partnerId"
             )
             .withFieldValues(
-                title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
+                id, title, address, phones, workingHours, paymentMethods, longitude, latitude, partnerId
             )
             .toString();
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override

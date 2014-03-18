@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.common.base.Optional;
@@ -148,13 +149,23 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
 
     private void init() {
         clusterManager = new ClusterManager<PartnerPointClusterItem>(getActivity(), getGoogleMap());
-        getGoogleMap().setOnCameraChangeListener(clusterManager);
+        getGoogleMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                clusterManager.onCameraChange(cameraPosition);
+                NewPartnerPointsMapFragment.this.onCameraChange();
+            }
+        });
         getGoogleMap().setOnMarkerClickListener(clusterManager);
         getGoogleMap().setOnInfoWindowClickListener(clusterManager);
         getGoogleMap().setOnMapClickListener(this);
 
         clusterManager.setOnClusterItemClickListener(this);
         clusterManager.setOnClusterClickListener(this);
+    }
+
+    private void onCameraChange() {
+        clickedPositionHelper.updateOnCameraChange();
     }
 
     @Override
@@ -190,9 +201,8 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void increaseZoom(LatLng position) {
-        final float MAX_ZOOM = 15.0f;
-        float increasedZoom = Math.min(getCurrentZoom() + 1.0f, MAX_ZOOM);
-        moveCamera(position, increasedZoom);
+        float increasedZoom = Math.min(getCurrentZoom() + 1.0f, getMaxZoom());
+        animateCamera(position, increasedZoom);
     }
 
     public void updateCondition(String conditionToReceivePartners) {

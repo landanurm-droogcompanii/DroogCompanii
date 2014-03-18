@@ -30,7 +30,7 @@ public class SynchronizationWorker {
             @Override
             public InputStream getXml() throws Exception {
                 Resources resources = context.getResources();
-                return resources.openRawResource(R.raw.test_data_2);
+                return resources.openRawResource(R.raw.test_data);
             }
         };
     }

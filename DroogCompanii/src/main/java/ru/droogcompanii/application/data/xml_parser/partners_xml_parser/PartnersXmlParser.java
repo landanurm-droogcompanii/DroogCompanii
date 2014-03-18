@@ -242,7 +242,9 @@ public class PartnersXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals(TAGS.title)) {
+            if (tag.equals(TAGS.id)) {
+                partnerPoint.id = XmlParserUtils.parseIntegerByTag(parser, tag);
+            } else if (tag.equals(TAGS.title)) {
                 partnerPoint.title = XmlParserUtils.parseTextByTag(parser, tag);
             } else if (tag.equals(TAGS.address)) {
                 partnerPoint.address = XmlParserUtils.parseTextByTag(parser, tag);
