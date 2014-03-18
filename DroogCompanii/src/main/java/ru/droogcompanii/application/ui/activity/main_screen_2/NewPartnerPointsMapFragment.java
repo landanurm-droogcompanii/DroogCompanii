@@ -14,6 +14,7 @@ import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.db_util.CursorHandler;
@@ -22,9 +23,13 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersH
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
+import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
 import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.ConverterToString;
+import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.NearestPositionCalculator;
+import ru.droogcompanii.application.util.Objects;
 import ru.droogcompanii.application.util.SerializableLatLng;
 
 /**
@@ -59,30 +64,51 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         public PartnerPoint getPartnerPoint() {
             return partnerPoint;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            PartnerPointClusterItem other = (PartnerPointClusterItem) obj;
+            return Objects.equals(partnerPoint, other.partnerPoint);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(partnerPoint);
+        }
+
+        @Override
+        public String toString() {
+            return ConverterToString.buildFor(this)
+                    .withFieldNames("partnerPoint")
+                    .withFieldValues(partnerPoint)
+                    .toString();
+        }
     }
 
 
     private boolean isFirstDisplaying;
+    private ClickedPositionHelper clickedPositionHelper;
     private ClusterManager<PartnerPointClusterItem> clusterManager;
     private Optional<String> conditionToReceivePartners;
 
-    private ClickedPositionHelper clickedPositionHelper;
-    private LatLngBounds bounds;
-    private MapCameraStateSaverLoader mapCameraStateSaverLoader;
+    private PartnerPointsGroupedByPosition partnerPointsGroupedByPosition;
 
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mapCameraStateSaverLoader = new MapCameraStateSaverLoader(this);
-
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
             restoreState(savedInstanceState);
         }
-        bounds = getBounds();
         init();
     }
 
@@ -90,6 +116,14 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         clickedPositionHelper = new ClickedPositionHelper(this);
         isFirstDisplaying = true;
         conditionToReceivePartners = Optional.absent();
+        moveCameraToDefaultPosition();
+    }
+
+    private void moveCameraToDefaultPosition() {
+        getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
+                ActualBaseLocationProvider.getPositionOfActualBaseLocation(),
+                DroogCompaniiSettings.getDefaultZoom()
+        ));
     }
 
     private void restoreState(Bundle savedInstanceState) {
@@ -97,7 +131,6 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         clickedPositionHelper.restoreFrom(savedInstanceState);
         isFirstDisplaying = savedInstanceState.getBoolean(KEY_IS_FIRST_DISPLAYING);
         conditionToReceivePartners = (Optional<String>) savedInstanceState.getSerializable(KEY_CONDITION);
-        mapCameraStateSaverLoader.restoreFrom(savedInstanceState);
     }
 
     @Override
@@ -110,14 +143,10 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         clickedPositionHelper.saveInto(outState);
         outState.putBoolean(KEY_IS_FIRST_DISPLAYING, isFirstDisplaying);
         outState.putSerializable(KEY_CONDITION, conditionToReceivePartners);
-        mapCameraStateSaverLoader.saveInto(outState);
+        outState.putParcelable(KEY_BOUNDS, getBounds());
     }
 
     private void init() {
-        getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
-                DroogCompaniiSettings.getDefaultBasePosition(),
-                DroogCompaniiSettings.getDefaultZoom()
-        ));
         clusterManager = new ClusterManager<PartnerPointClusterItem>(getActivity(), getGoogleMap());
         getGoogleMap().setOnCameraChangeListener(clusterManager);
         getGoogleMap().setOnMarkerClickListener(clusterManager);
@@ -140,7 +169,14 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     @Override
     public boolean onClusterItemClick(PartnerPointClusterItem clusterItem) {
         setClickedPosition(clusterItem.getPosition());
+        logNumberOfPartnerPointsAtItem(clusterItem);
         return false;
+    }
+
+    private void logNumberOfPartnerPointsAtItem(PartnerPointClusterItem clusterItem) {
+        LatLng position = clusterItem.getPosition();
+        Set<PartnerPoint> partnerPointsAtPosition = partnerPointsGroupedByPosition.get(position);
+        LogUtils.debug("Number of partner points: " + partnerPointsAtPosition.size());
     }
 
     private void setClickedPosition(LatLng position) {
@@ -171,21 +207,24 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     }
 
     private static class TaskResult implements Serializable {
-        boolean isBoundsDoesNotContainMarkers;
+        boolean isBoundsNotContainMarkers;
         boolean isNeedToRemoveClickedPosition;
         Optional<SerializableLatLng> nearestPosition;
     }
 
     private void startTaskDisplayingPartnerPoints() {
+
+        final LatLngBounds bounds = getBounds();
+
         startTask(TASK_REQUEST_CODE_DISPLAYING_PARTNER_POINTS, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                return displayPartnerPointsAndGetNearestPosition();
+                return displayPartnerPointsAndGetNearestPosition(bounds);
             }
         });
     }
 
-    private TaskResult displayPartnerPointsAndGetNearestPosition() {
+    private TaskResult displayPartnerPointsAndGetNearestPosition(final LatLngBounds bounds) {
         final TaskResult taskResult = new TaskResult();
 
         PartnersHierarchyReaderFromDatabase reader = new PartnersHierarchyReaderFromDatabase(getActivity());
@@ -193,9 +232,11 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         LatLng actualBaseLocation = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
         final NearestPositionCalculator nearestCalculator = new NearestPositionCalculator(actualBaseLocation);
 
-        final ClickedPositionHelperUpdater helperUpdater = new ClickedPositionHelperUpdater(clickedPositionHelper);
+        taskResult.isBoundsNotContainMarkers = true;
 
-        taskResult.isBoundsDoesNotContainMarkers = true;
+        final PositionMatcher clickedPositionMatcher = new PositionMatcher(clickedPositionHelper.getOptionalClickedPosition());
+
+        partnerPointsGroupedByPosition = new PartnerPointsGroupedByPosition();
 
         reader.handleCursorByQuery(prepareSql(), new CursorHandler() {
             @Override
@@ -203,39 +244,48 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     PartnerPoint partnerPoint = readPartnerPoint(cursor);
-                    clusterManager.addItem(new PartnerPointClusterItem(partnerPoint));
+                    LatLng position = partnerPoint.getPosition();
+
+                    if (!partnerPointsGroupedByPosition.isContainPosition(position)) {
+                        clusterManager.addItem(new PartnerPointClusterItem(partnerPoint));
+                        nearestCalculator.add(position);
+                        clickedPositionMatcher.makeOut(position);
+
+                        if (taskResult.isBoundsNotContainMarkers && bounds.contains(position)) {
+                            taskResult.isBoundsNotContainMarkers = false;
+                        }
+                    }
+
+                    partnerPointsGroupedByPosition.put(partnerPoint);
                     cursor.moveToNext();
 
-                    nearestCalculator.add(partnerPoint.getPosition());
-                    helperUpdater.add(partnerPoint.getPosition());
-
-                    if (taskResult.isBoundsDoesNotContainMarkers && bounds.contains(partnerPoint.getPosition())) {
-                        taskResult.isBoundsDoesNotContainMarkers = false;
-                    }
                 }
             }
         });
-        taskResult.isNeedToRemoveClickedPosition = helperUpdater.isNeedToRemoveClickedPosition();
+        taskResult.isNeedToRemoveClickedPosition =
+                clickedPositionHelper.isClickedPositionPresent() && !clickedPositionMatcher.isMet();
         taskResult.nearestPosition = nearestCalculator.getSerializableNearestPosition();
         return taskResult;
     }
 
     private String prepareSql() {
-        String where;
-        String condition = conditionToReceivePartners.get();
-        if (condition.isEmpty()) {
-            where = "";
-        } else {
-            where = "WHERE " + PARTNER_POINTS.COLUMN_NAME_PARTNER_ID + " IN ( " +
-                        "SELECT " + PARTNERS.COLUMN_NAME_ID + " FROM " + PARTNERS.TABLE_NAME +
-                            " WHERE " + condition +
-                    " )";
-        }
         return "SELECT " +
                 PARTNER_POINTS.COLUMN_NAME_LATITUDE + ", " +
                 PARTNER_POINTS.COLUMN_NAME_LONGITUDE + ", " +
                 PARTNER_POINTS.COLUMN_NAME_TITLE +
-                " FROM " + PARTNER_POINTS.TABLE_NAME + " " + where + ";";
+                " FROM " + PARTNER_POINTS.TABLE_NAME + " " + getPartnerPointsWhereExpression() + ";";
+    }
+
+    private String getPartnerPointsWhereExpression() {
+        String condition = conditionToReceivePartners.get().trim();
+        if (condition.isEmpty()) {
+            return "";
+        }
+        return "WHERE " + PARTNER_POINTS.COLUMN_NAME_PARTNER_ID + " IN (" +
+                " SELECT " + PARTNERS.COLUMN_NAME_ID +
+                " FROM " + PARTNERS.TABLE_NAME +
+                " WHERE " + condition +
+                ")";
     }
 
     private static PartnerPoint readPartnerPoint(Cursor cursor) {
@@ -259,17 +309,17 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     private void onPartnerPointsDisplayed(Serializable result) {
         clusterManager.cluster();
         TaskResult taskResult = (TaskResult) result;
-        updateMapCamera(taskResult);
         if (taskResult.isNeedToRemoveClickedPosition) {
             clickedPositionHelper.remove();
         }
+        updateMapCamera(taskResult);
     }
 
     private void updateMapCamera(TaskResult taskResult) {
         if (isFirstDisplaying) {
             isFirstDisplaying = false;
             moveToPosition(taskResult.nearestPosition);
-        } else if (taskResult.isBoundsDoesNotContainMarkers) {
+        } else if (taskResult.isBoundsNotContainMarkers) {
             if (clickedPositionHelper.isClickedPositionPresent()) {
                 moveToPosition(clickedPositionHelper.getClickedPosition());
             } else {

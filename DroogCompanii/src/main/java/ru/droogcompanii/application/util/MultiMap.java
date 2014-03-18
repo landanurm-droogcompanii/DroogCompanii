@@ -60,6 +60,10 @@ public class MultiMap<K,V> {
         return new HashSet<V>();
     }
 
+    public boolean isContainKey(K key) {
+        return !get(key).isEmpty();
+    }
+
     public Set<K> keySet() {
         return map.keySet();
     }

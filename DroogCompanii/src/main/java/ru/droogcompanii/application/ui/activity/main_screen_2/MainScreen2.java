@@ -17,8 +17,13 @@ import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToSta
  */
 public class MainScreen2 extends ActivityAbleToStartTask implements CategoryListFragment.Callbacks {
 
+    private static final int DRAWER_GRAVITY = Gravity.START;
+
+
     private static final String TAG_CATEGORY_LIST = "TAG_CATEGORY_LIST";
     private static final String TAG_MAP = "TAG_MAP";
+
+    private static final String KEY_IS_DRAWER_OPEN = "KEY_IS_DRAWER_OPEN";
 
     private ActionBarDrawerToggle drawerToggle;
     private CharSequence drawerTitle;
@@ -35,8 +40,24 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
         if (savedInstanceState == null) {
             placeFragmentsOnLayout();
         } else {
+            restoreNavigationDrawerState(savedInstanceState);
+        }
+    }
+
+    private void restoreNavigationDrawerState(Bundle savedInstanceState) {
+        boolean isNeedToOpenDrawer = savedInstanceState.getBoolean(KEY_IS_DRAWER_OPEN);
+        if (isNeedToOpenDrawer) {
+            openNavigationDrawer();
+        } else {
             closeNavigationDrawer();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        boolean isDrawerOpen = drawerLayout.isDrawerOpen(DRAWER_GRAVITY);
+        outState.putBoolean(KEY_IS_DRAWER_OPEN, isDrawerOpen);
     }
 
     private void placeFragmentsOnLayout() {
@@ -47,11 +68,11 @@ public class MainScreen2 extends ActivityAbleToStartTask implements CategoryList
     }
 
     private void openNavigationDrawer() {
-        drawerLayout.openDrawer(Gravity.START);
+        drawerLayout.openDrawer(DRAWER_GRAVITY);
     }
 
     private void closeNavigationDrawer() {
-        drawerLayout.closeDrawer(Gravity.START);
+        drawerLayout.closeDrawer(DRAWER_GRAVITY);
     }
 
 

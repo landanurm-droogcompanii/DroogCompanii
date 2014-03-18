@@ -34,13 +34,17 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
     }
 
     private List<PartnerCategory> getPartnerCategoriesFromDatabase(String where) {
-        String sql = "SELECT * FROM " + PartnerCategoriesContract.TABLE_NAME + " " + where + ";";
+        String sql = "SELECT * FROM " + PartnerCategoriesContract.TABLE_NAME + " " + where + " " + getDefaultOrder() + ";";
         initDatabase();
         Cursor cursor = db.rawQuery(sql, new String[]{});
         List<PartnerCategory> partnerCategories = getPartnerCategoriesFromCursor(cursor);
         cursor.close();
         closeDatabase();
         return partnerCategories;
+    }
+
+    public static String getDefaultOrder() {
+        return "ORDER BY " + PartnerCategoriesContract.COLUMN_NAME_TITLE;
     }
 
     public static List<PartnerCategory> getPartnerCategoriesFromCursor(Cursor cursor) {

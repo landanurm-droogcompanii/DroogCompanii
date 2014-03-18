@@ -3,6 +3,7 @@ package ru.droogcompanii.application.ui.fragment.partner_points_map;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
@@ -12,7 +13,7 @@ import ru.droogcompanii.application.util.MultiMap;
 /**
  * Created by ls on 22.01.14.
  */
-class PartnerPointsGroupedByPosition {
+public class PartnerPointsGroupedByPosition {
 
     private final MultiMap<LatLng, PartnerPoint> groups;
 
@@ -23,6 +24,10 @@ class PartnerPointsGroupedByPosition {
     public PartnerPointsGroupedByPosition(Collection<PartnerPoint> partnerPoints) {
         groups = new MultiMap<LatLng, PartnerPoint>();
         putAll(partnerPoints);
+    }
+
+    public PartnerPointsGroupedByPosition() {
+        this(Collections.EMPTY_LIST);
     }
 
     public void putAll(Collection<PartnerPoint> partnerPoints) {
@@ -41,6 +46,10 @@ class PartnerPointsGroupedByPosition {
 
     public Set<LatLng> getAllPositions() {
         return groups.keySet();
+    }
+
+    public boolean isContainPosition(LatLng position) {
+        return groups.isContainKey(position);
     }
 
     public static interface OnEachPositionHandler {

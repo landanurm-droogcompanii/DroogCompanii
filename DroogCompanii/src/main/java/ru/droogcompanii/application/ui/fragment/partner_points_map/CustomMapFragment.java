@@ -104,6 +104,10 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }
 
+    public final void moveCamera(LatLngBounds bounds) {
+        getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 1));
+    }
+
     public final void animateCamera(LatLng center, float zoom) {
         getGoogleMap().animateCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }
