@@ -28,6 +28,6 @@ public class PartnersHierarchyReaderFromDatabase extends BaseReaderFromDatabase 
 
     @Override
     protected SQLiteOpenHelper prepareDbHelper(Context context) {
-        return new PartnersDbHelper(context);
+        return new PartnerHierarchyDbHelper(context);
     }
 }

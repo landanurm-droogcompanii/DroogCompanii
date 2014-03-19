@@ -4,14 +4,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerCategoriesContract;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerPointsContract;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnersContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts.PartnerCategoriesContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts.PartnersContract;
 
 /**
  * Created by Leonid on 09.12.13.
  */
-public class PartnersDbHelper extends SQLiteOpenHelper {
+public class PartnerHierarchyDbHelper extends SQLiteOpenHelper {
 
     private static final String INTEGER_TYPE = " INTEGER ";
     private static final String TEXT_TYPE = " TEXT ";
@@ -47,6 +47,7 @@ public class PartnersDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_PARTNER_POINTS_TABLE =
             "CREATE TABLE " + PartnerPointsContract.TABLE_NAME + " (" +
                     PartnerPointsContract._ID + INTEGER_TYPE + PRIMARY_KEY_TYPE_AUTOINCREMENT + COMMA +
+                    PartnerPointsContract.COLUMN_NAME_ID + INTEGER_TYPE + COMMA +
                     PartnerPointsContract.COLUMN_NAME_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
                     PartnerPointsContract.COLUMN_NAME_ADDRESS + TEXT_TYPE + NOT_NULL + COMMA +
                     PartnerPointsContract.COLUMN_NAME_LONGITUDE + REAL_TYPE + NOT_NULL + COMMA +
@@ -70,7 +71,7 @@ public class PartnersDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Partners.db";
 
-    public PartnersDbHelper(Context context) {
+    public PartnerHierarchyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -6,28 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <FrameLayout
-        android:id="@+id/contentFrame"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/containerOfMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/containerOfPartnerPointDetailsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/leftDrawer"
-        android:layout_width="240dp"
+        android:layout_width="@dimen/widthOfMainScreenNavigationDrawer"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="@android:color/transparent" >
-
-        <!--
-        <fragment
-            android:name="ru.droogcompanii.application.ui.activity.main_screen_2.CategoryListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        -->
-
-    </FrameLayout>
+        android:background="@android:color/transparent" />
 
 </android.support.v4.widget.DrawerLayout>

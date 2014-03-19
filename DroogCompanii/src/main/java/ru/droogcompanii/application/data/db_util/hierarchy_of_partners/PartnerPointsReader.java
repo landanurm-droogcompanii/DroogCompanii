@@ -6,7 +6,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
@@ -22,6 +22,7 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
     private final Context context;
 
     private static class ColumnIndices {
+        int idColumnIndex;
         int titleColumnIndex;
         int addressColumnIndex;
         int longitudeColumnIndex;
@@ -53,19 +54,19 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
     }
 
     public List<PartnerPoint> getPartnerPointsByPartnerId(int partnerId) {
-        return getPartnerPointsFromDatabase(
+        return getPartnerPointsByWhere(
                 " WHERE " + PartnerPointsContract.COLUMN_NAME_PARTNER_ID + " = " + partnerId
         );
     }
 
     public List<PartnerPoint> getAllPartnerPoints() {
-        return getPartnerPointsFromDatabase("");
+        return getPartnerPointsByWhere("");
     }
 
-    private List<PartnerPoint> getPartnerPointsFromDatabase(String where) {
+    private List<PartnerPoint> getPartnerPointsByWhere(String where) {
         initDatabase();
 
-        String sql = "SELECT * FROM " + PartnerPointsContract.TABLE_NAME + where + " ;";
+        String sql = "SELECT * FROM " + PartnerPointsContract.TABLE_NAME + " " + where + " ;";
         Cursor cursor = db.rawQuery(sql, null);
         List<PartnerPoint> partnerPoints = getPartnerPointsFromCursor(cursor);
         cursor.close();
@@ -87,6 +88,7 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
 
     private static ColumnIndices calculateColumnIndices(Cursor cursor) {
         ColumnIndices columnIndices = new ColumnIndices();
+        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_ID);
         columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_TITLE);
         columnIndices.addressColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_ADDRESS);
         columnIndices.longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_NAME_LONGITUDE);
@@ -100,6 +102,7 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
 
     private static PartnerPointImpl getPartnerPointFromCursor(Cursor cursor, ColumnIndices columnIndices) {
         PartnerPointImpl partnerPoint = new PartnerPointImpl();
+        partnerPoint.id = cursor.getInt(columnIndices.idColumnIndex);
         partnerPoint.title = cursor.getString(columnIndices.titleColumnIndex);
         partnerPoint.address = cursor.getString(columnIndices.addressColumnIndex);
         partnerPoint.longitude = cursor.getDouble(columnIndices.longitudeColumnIndex);
@@ -111,5 +114,21 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
         partnerPoint.workingHours = (WeekWorkingHours) SerializationUtils.deserialize(weekWorkingHoursBlob);
         partnerPoint.partnerId = cursor.getInt(columnIndices.partnerIdColumnIndex);
         return partnerPoint;
+    }
+
+    public PartnerPoint getPartnerPointById(int idOfPartnerPoint) {
+        List<PartnerPoint> singlePartnerPoint = getPartnerPointsByWhere(
+                "WHERE " + PartnerPointsContract.COLUMN_NAME_ID + "=" + idOfPartnerPoint
+        );
+        if (singlePartnerPoint.isEmpty()) {
+            throw new IllegalArgumentException("There is no partner point with id: " + idOfPartnerPoint);
+        }
+        if (singlePartnerPoint.size() > 1) {
+            throw new IllegalStateException(
+                    "There is several partner points with id: " + idOfPartnerPoint + ". " +
+                    "But <id> must be unique."
+            );
+        }
+        return singlePartnerPoint.get(0);
     }
 }

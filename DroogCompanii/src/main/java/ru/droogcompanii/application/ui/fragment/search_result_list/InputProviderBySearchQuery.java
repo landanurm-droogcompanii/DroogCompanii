@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.data.db_util.CursorHandler;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
 
@@ -16,12 +16,12 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersR
  * Created by ls on 11.03.14.
  */
 public class InputProviderBySearchQuery implements SearchResultListFragment.InputProvider, Serializable {
-    private static final PartnersContracts.PartnerCategoriesContract
-            CATEGORIES = new PartnersContracts.PartnerCategoriesContract();
-    private static final PartnersContracts.PartnersContract
-            PARTNERS = new PartnersContracts.PartnersContract();
-    private static final PartnersContracts.PartnerPointsContract
-            POINTS = new PartnersContracts.PartnerPointsContract();
+    private static final PartnerHierarchyContracts.PartnerCategoriesContract
+            CATEGORIES = new PartnerHierarchyContracts.PartnerCategoriesContract();
+    private static final PartnerHierarchyContracts.PartnersContract
+            PARTNERS = new PartnerHierarchyContracts.PartnersContract();
+    private static final PartnerHierarchyContracts.PartnerPointsContract
+            POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
 
     private final String searchQuery;
     private final String sqlCategoriesReceiver;

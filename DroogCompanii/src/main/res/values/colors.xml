@@ -6,5 +6,7 @@
     <color name="backgroundOfOffersLayout">#cf272f20</color>
     <color name="backgroundOfOfferRow">#ddcccccc</color>
     <color name="textColorOfOfferRow">@color/backgroundOfOffersLayout</color>
-    <color name="backgroundColorCategoryList">#80eeeeee</color>
+    <color name="backgroundColorOfCategoryList">#c4eeeeee</color>
+
+    <color name="backgroundOfCheckedCategoryListItem">#67113ae5</color>
 </resources>

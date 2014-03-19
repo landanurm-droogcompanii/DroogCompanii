@@ -2,6 +2,7 @@ package ru.droogcompanii.application.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ls on 16.01.14.
@@ -45,5 +46,9 @@ public class ListUtils {
 
     public static <T> List<T> copyOf(List<T> listToCopy) {
         return new ArrayList<T>(listToCopy);
+    }
+
+    public static <T> List<T> listFromSet(Set<T> set) {
+        return new ArrayList<T>(set);
     }
 }

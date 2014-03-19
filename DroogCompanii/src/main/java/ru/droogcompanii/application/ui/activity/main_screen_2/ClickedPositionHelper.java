@@ -59,8 +59,7 @@ public class ClickedPositionHelper {
     }
 
     private double defineRadius() {
-        return ClickedCircleRadiusCalculator.calculate(
-                mapFragment.getCurrentZoom(), mapFragment.getMaxZoom());
+        return ClickedCircleRadiusCalculator.calculate(mapFragment.getCurrentZoom());
     }
 
     public void remove() {

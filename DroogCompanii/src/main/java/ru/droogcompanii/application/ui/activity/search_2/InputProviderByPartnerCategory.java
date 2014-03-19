@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.CursorHandler;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
@@ -36,8 +36,8 @@ public class InputProviderByPartnerCategory implements PartnerListActivity.Input
 
     @Override
     public List<PartnerPoint> getAllPartnerPoints(Context context) {
-        final PartnersContracts.PartnersContract PARTNERS = new PartnersContracts.PartnersContract();
-        final PartnersContracts.PartnerPointsContract PARTNER_POINTS = new PartnersContracts.PartnerPointsContract();
+        final PartnerHierarchyContracts.PartnersContract PARTNERS = new PartnerHierarchyContracts.PartnersContract();
+        final PartnerHierarchyContracts.PartnerPointsContract PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
         PartnersHierarchyReaderFromDatabase reader = new PartnersHierarchyReaderFromDatabase(context);
 
         String sql = "SELECT " + PARTNER_POINTS.TABLE_NAME + ".* FROM " + PARTNER_POINTS.TABLE_NAME +

@@ -14,8 +14,8 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.db_util.CursorHandler;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
@@ -134,12 +134,12 @@ public class LearnMarkerClusteringFragment extends CustomMapFragment {
     }
 
     private static void displayPartnerPoints(Context context, final ClusterManager<PartnerPointClusterItem> clusterManager) {
-        final PartnersContracts.PartnerPointsContract PARTNER_POINTS = new PartnersContracts.PartnerPointsContract();
+        final PartnerHierarchyContracts.PartnerPointsContract PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
         PartnersHierarchyReaderFromDatabase reader = new PartnerPointsReader(context);
         final String sql = "SELECT " +
-                PartnersContracts.PartnerPointsContract.COLUMN_NAME_LATITUDE + ", " +
-                PartnersContracts.PartnerPointsContract.COLUMN_NAME_LONGITUDE + ", " +
-                PartnersContracts.PartnerPointsContract.COLUMN_NAME_TITLE +
+                PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_LATITUDE + ", " +
+                PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_LONGITUDE + ", " +
+                PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_TITLE +
                 " FROM " + PARTNER_POINTS.TABLE_NAME + ";";
         reader.handleCursorByQuery(sql, new CursorHandler() {
             @Override
@@ -155,9 +155,9 @@ public class LearnMarkerClusteringFragment extends CustomMapFragment {
     }
 
     private static PartnerPoint readPartnerPoint(Cursor cursor) {
-        int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnerPointsContract.COLUMN_NAME_LATITUDE);
-        int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnerPointsContract.COLUMN_NAME_LONGITUDE);
-        int titleColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnerPointsContract.COLUMN_NAME_TITLE);
+        int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_LATITUDE);
+        int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_LONGITUDE);
+        int titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_TITLE);
         PartnerPointImpl partnerPoint = new PartnerPointImpl();
         partnerPoint.latitude = cursor.getDouble(latitudeColumnIndex);
         partnerPoint.longitude = cursor.getDouble(longitudeColumnIndex);
@@ -166,8 +166,8 @@ public class LearnMarkerClusteringFragment extends CustomMapFragment {
     }
 
     private static LatLng readPosition(Cursor cursor) {
-        int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnerPointsContract.COLUMN_NAME_LATITUDE);
-        int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContracts.PartnerPointsContract.COLUMN_NAME_LONGITUDE);
+        int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_LATITUDE);
+        int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_LONGITUDE);
         double latitude = cursor.getDouble(latitudeColumnIndex);
         double longitude = cursor.getDouble(longitudeColumnIndex);
         return new LatLng(latitude, longitude);

@@ -5,9 +5,9 @@ import android.provider.BaseColumns;
 /**
  * Created by Leonid on 09.12.13.
  */
-public final class PartnersContracts {
+public final class PartnerHierarchyContracts {
 
-    public PartnersContracts() { }
+    public PartnerHierarchyContracts() { }
 
     public static class PartnerCategoriesContract implements BaseColumns {
         public static final String TABLE_NAME = "partner_categories";
@@ -35,6 +35,7 @@ public final class PartnersContracts {
     public static class PartnerPointsContract implements BaseColumns {
         public static final String TABLE_NAME = "partner_points";
 
+        public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_ADDRESS = "address";
         public static final String COLUMN_NAME_LONGITUDE = "longitude";

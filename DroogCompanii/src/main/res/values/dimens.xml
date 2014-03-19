@@ -35,6 +35,7 @@
     <dimen name="textSizeOfCategoryListItem">18sp</dimen>
     <dimen name="spaceBetweenIconAndTextInListItem">5dp</dimen>
     <dimen name="minHeightOfCategoryListItem">36dp</dimen>
+    <dimen name="widthOfMainScreenNavigationDrawer">240dp</dimen>
 
 
 </resources>

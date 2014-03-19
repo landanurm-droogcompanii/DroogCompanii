@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.common.base.Optional;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteDBUtils;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
@@ -58,25 +60,31 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
     private static interface ListItemHelper {
         View makeView(Context context, View convertView);
+        String getTitle(Context context);
         String getConditionToReceivePartners();
     }
 
     private static abstract class ListItemHelperImpl implements ListItemHelper, Serializable {
 
+        public static final int ROW_LAYOUT_ID = R.layout.view_list_item_category;
+
         public View makeView(Context context, View convertView) {
             View itemView = (convertView != null) ? convertView : inflateView(context);
             TextView textView = (TextView) itemView.findViewById(R.id.text);
+            textView.setText(getTitle(context));
             ImageView imageView = (ImageView) itemView.findViewById(R.id.icon);
-            init(textView, imageView);
+            init(imageView);
             return itemView;
         }
 
         private View inflateView(Context context) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            return inflater.inflate(R.layout.view_list_item_category, null);
+            return inflater.inflate(ROW_LAYOUT_ID, null);
         }
 
-        protected abstract void init(TextView textView, ImageView imageView);
+        public abstract String getTitle(Context context);
+
+        protected abstract void init(ImageView imageView);
 
         public abstract String getConditionToReceivePartners();
     }
@@ -86,8 +94,12 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         public static ListItemHelper getFavoriteListItemHelper() {
             return new ListItemHelperImpl() {
                 @Override
-                protected void init(TextView textView, ImageView imageView) {
-                    textView.setText(R.string.favorite);
+                public String getTitle(Context context) {
+                    return context.getString(R.string.favorite);
+                }
+
+                @Override
+                protected void init(ImageView imageView) {
                     imageView.setImageResource(R.drawable.ic_favorite);
                 }
 
@@ -101,14 +113,18 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         public static ListItemHelper getPartnerCategoryListItemHelper(final PartnerCategory partnerCategory) {
             return new ListItemHelperImpl() {
                 @Override
-                protected void init(TextView textView, ImageView imageView) {
-                    textView.setText(partnerCategory.getTitle());
+                public String getTitle(Context context) {
+                    return partnerCategory.getTitle();
+                }
+
+                @Override
+                protected void init(ImageView imageView) {
                     imageView.setImageDrawable(null);
                 }
 
                 @Override
                 public String getConditionToReceivePartners() {
-                    return PartnersContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID +
+                    return PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID +
                             " = " + partnerCategory.getId();
                 }
             };
@@ -117,8 +133,12 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         public static ListItemHelper getAllPartnersListItemHelper() {
             return new ListItemHelperImpl() {
                 @Override
-                protected void init(TextView textView, ImageView imageView) {
-                    textView.setText(R.string.all_partners);
+                public String getTitle(Context context) {
+                    return context.getString(R.string.all_partners);
+                }
+
+                @Override
+                protected void init(ImageView imageView) {
                     imageView.setImageDrawable(null);
                 }
 
@@ -132,14 +152,21 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
     private static class CategoryListAdapter extends ArrayAdapter<ListItemHelper> {
 
-        public CategoryListAdapter(Context context, List<ListItemHelper> items) {
-            super(context, R.layout.view_list_item_category, items);
+        private final CategoryListFragment fragment;
+
+        public CategoryListAdapter(CategoryListFragment fragment, int rowLayoutId, List<ListItemHelper> items) {
+            super(fragment.getActivity(), rowLayoutId, items);
+            this.fragment = fragment;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ListItemHelper itemHelper = getItem(position);
-            return itemHelper.makeView(getContext(), convertView);
+            View itemView = itemHelper.makeView(getContext(), convertView);
+            if (fragment.currentSelection == position) {
+                itemView.setSelected(true);
+            }
+            return itemView;
         }
     }
 
@@ -173,6 +200,7 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState == null) {
             initStateByDefault();
         } else {
@@ -181,7 +209,7 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     }
 
     private void initStateByDefault() {
-        currentSelection = 0;
+        currentSelection = ListView.INVALID_POSITION;
         listItemHelpers = null;
     }
 
@@ -200,7 +228,16 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         listView = (ListView) inflater.inflate(R.layout.fragment_category_list, null);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        listView.setOnItemClickListener(this);
         return listView;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View itemView, int position, long id) {
+        itemView.setSelected(true);
+        currentSelection = position;
+        callbacks.onCurrentCategoryChanged();
     }
 
     @Override
@@ -265,27 +302,35 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     }
 
     private void initList() {
-        adapter = new CategoryListAdapter(getActivity(), listItemHelpers);
+        adapter = new CategoryListAdapter(this, ListItemHelperImpl.ROW_LAYOUT_ID, listItemHelpers);
         listView.setAdapter(adapter);
-        listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        initSelection();
-        listView.setOnItemClickListener(this);
         callbacks.onListInitialized();
     }
 
-    private void initSelection() {
-        listView.setItemChecked(currentSelection, true);
-        listView.smoothScrollToPosition(currentSelection);
-    }
-
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        currentSelection = position;
-        callbacks.onCurrentCategoryChanged();
+    public void onResume() {
+        super.onResume();
+        restoreSelectionIfNeed();
     }
 
-    public String getConditionToReceivePartners() {
+    private void restoreSelectionIfNeed() {
+        if (currentSelection != ListView.INVALID_POSITION && listView.getSelectedItemPosition() != currentSelection) {
+            listView.smoothScrollToPosition(currentSelection);
+            listView.setSelection(currentSelection);
+        }
+    }
+
+    public Optional<String> getConditionToReceivePartners() {
+        if (currentSelection == ListView.INVALID_POSITION) {
+            return Optional.absent();
+        }
         ListItemHelper item = listItemHelpers.get(currentSelection);
-        return item.getConditionToReceivePartners();
+        String condition = item.getConditionToReceivePartners();
+        return Optional.of(condition);
+    }
+
+    public String getSelectedCategoryName() {
+        ListItemHelper item = listItemHelpers.get(currentSelection);
+        return item.getTitle(getActivity());
     }
 }

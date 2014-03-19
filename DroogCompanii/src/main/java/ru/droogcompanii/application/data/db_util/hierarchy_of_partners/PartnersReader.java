@@ -19,7 +19,7 @@ import ru.droogcompanii.application.util.SerializationUtils;
  */
 public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
-    private static final PartnersContracts.PartnersContract COLUMNS = new PartnersContracts.PartnersContract();
+    private static final PartnerHierarchyContracts.PartnersContract COLUMNS = new PartnerHierarchyContracts.PartnersContract();
 
     private static class ColumnIndices {
         int idColumnIndex;
@@ -54,18 +54,18 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
     public void handleCursorByCondition(String where, CursorHandler cursorHandler) {
         String correctedWhere = ((where == null || where.isEmpty()) ? "" : where);
-        String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + " " + correctedWhere + " ;";
+        String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " " + correctedWhere + " ;";
         handleCursorByQuery(sql, cursorHandler);
     }
 
     public List<Partner> getPartnersOf(PartnerCategory category) {
         String where = " WHERE " +
-                PartnersContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.getId();
+                PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.getId();
         return getPartnersByCondition(where);
     }
 
     List<Partner> getPartnersByCondition(String where) {
-        String sql = "SELECT * FROM " + PartnersContracts.PartnersContract.TABLE_NAME + where + " ;";
+        String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + where + " ;";
 
         initDatabase();
 
@@ -133,7 +133,7 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
     public Partner getPartnerById(int partnerId) {
         String where = " WHERE " +
-                PartnersContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerId;
+                PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerId;
         List<Partner> partners = getPartnersByCondition(where);
         if (partners.isEmpty()) {
             throw new IllegalArgumentException("There is no partners with id: " + partnerId);

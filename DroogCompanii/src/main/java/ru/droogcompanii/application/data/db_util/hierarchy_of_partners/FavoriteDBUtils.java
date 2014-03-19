@@ -18,11 +18,11 @@ import ru.droogcompanii.application.util.Holder;
  */
 public class FavoriteDBUtils {
 
-    private static final PartnersContracts.PartnersContract
-            PARTNERS_CONTRACT = new PartnersContracts.PartnersContract();
+    private static final PartnerHierarchyContracts.PartnersContract
+            PARTNERS_CONTRACT = new PartnerHierarchyContracts.PartnersContract();
 
-    private static final PartnersContracts.PartnerPointsContract
-            PARTNER_POINTS_CONTRACT = new PartnersContracts.PartnerPointsContract();
+    private static final PartnerHierarchyContracts.PartnerPointsContract
+            PARTNER_POINTS_CONTRACT = new PartnerHierarchyContracts.PartnerPointsContract();
 
     private final Context context;
 
@@ -50,7 +50,7 @@ public class FavoriteDBUtils {
     }
 
     public void setFavorite(int partnerId, boolean isFavorite) {
-        PartnersDbHelper dbHelper = new PartnersDbHelper(context);
+        PartnerHierarchyDbHelper dbHelper = new PartnerHierarchyDbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         setFavorite(db, partnerId, isFavorite);
         db.close();

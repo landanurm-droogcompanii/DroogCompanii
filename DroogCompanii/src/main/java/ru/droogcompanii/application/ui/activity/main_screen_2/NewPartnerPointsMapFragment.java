@@ -15,11 +15,11 @@ import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.db_util.CursorHandler;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersContracts;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
@@ -28,6 +28,7 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPoints
 import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.ConverterToString;
+import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.NearestPositionCalculator;
 import ru.droogcompanii.application.util.Objects;
@@ -41,8 +42,26 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
                    ClusterManager.OnClusterItemClickListener<NewPartnerPointsMapFragment.PartnerPointClusterItem>,
                    GoogleMap.OnMapClickListener {
 
-    private static final PartnersContracts.PartnerPointsContract PARTNER_POINTS = new PartnersContracts.PartnerPointsContract();
-    private static final PartnersContracts.PartnersContract PARTNERS = new PartnersContracts.PartnersContract();
+    public static interface Callbacks {
+        void onDisplayDetails(List<PartnerPoint> partnerPoints);
+        void onHideDetails();
+    }
+
+    private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
+        @Override
+        public void onDisplayDetails(List<PartnerPoint> partnerPoints) {
+            LogUtils.debug("DUMMY_CALLBACKS: onDisplayDetails()");
+        }
+
+        @Override
+        public void onHideDetails() {
+            LogUtils.debug("DUMMY_CALLBACKS: onHideDetails()");
+        }
+    };
+
+
+    private static final PartnerHierarchyContracts.PartnerPointsContract PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
+    private static final PartnerHierarchyContracts.PartnersContract PARTNERS = new PartnerHierarchyContracts.PartnersContract();
 
     private static final String KEY_BOUNDS = "KEY_BOUNDS";
     private static final String KEY_CONDITION = "KEY_CONDITION";
@@ -94,12 +113,28 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
 
 
     private boolean isFirstDisplaying;
+    private Callbacks callbacks;
     private ClickedPositionHelper clickedPositionHelper;
     private ClusterManager<PartnerPointClusterItem> clusterManager;
     private Optional<String> conditionToReceivePartners;
 
     private PartnerPointsGroupedByPosition partnerPointsGroupedByPosition;
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        callbacks = DUMMY_CALLBACKS;
+        super.onDetach();
+    }
+
+    public NewPartnerPointsMapFragment() {
+        clickedPositionHelper = new ClickedPositionHelper(this);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -114,13 +149,12 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void initStateByDefault() {
-        clickedPositionHelper = new ClickedPositionHelper(this);
         isFirstDisplaying = true;
         conditionToReceivePartners = Optional.absent();
-        moveCameraToDefaultPosition();
+        moveCameraToBasePosition();
     }
 
-    private void moveCameraToDefaultPosition() {
+    private void moveCameraToBasePosition() {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
                 ActualBaseLocationProvider.getPositionOfActualBaseLocation(),
                 DroogCompaniiSettings.getDefaultZoom()
@@ -128,7 +162,6 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void restoreState(Bundle savedInstanceState) {
-        clickedPositionHelper = new ClickedPositionHelper(this);
         clickedPositionHelper.restoreFrom(savedInstanceState);
         isFirstDisplaying = savedInstanceState.getBoolean(KEY_IS_FIRST_DISPLAYING);
         conditionToReceivePartners = (Optional<String>) savedInstanceState.getSerializable(KEY_CONDITION);
@@ -173,25 +206,16 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         removeClickedPosition();
     }
 
-    private void removeClickedPosition() {
-        clickedPositionHelper.remove();
-    }
-
     @Override
     public boolean onClusterItemClick(PartnerPointClusterItem clusterItem) {
-        setClickedPosition(clusterItem.getPosition());
-        logNumberOfPartnerPointsAtItem(clusterItem);
+        clickedPositionHelper.set(clusterItem.getPosition());
+        callbacks.onDisplayDetails(getPartnerPointsAtClickedPosition());
         return false;
     }
 
-    private void logNumberOfPartnerPointsAtItem(PartnerPointClusterItem clusterItem) {
-        LatLng position = clusterItem.getPosition();
-        Set<PartnerPoint> partnerPointsAtPosition = partnerPointsGroupedByPosition.get(position);
-        LogUtils.debug("Number of partner points: " + partnerPointsAtPosition.size());
-    }
-
-    private void setClickedPosition(LatLng position) {
-        clickedPositionHelper.set(position);
+    private List<PartnerPoint> getPartnerPointsAtClickedPosition() {
+        LatLng position = clickedPositionHelper.getClickedPosition();
+        return ListUtils.listFromSet(partnerPointsGroupedByPosition.get(position));
     }
 
     @Override
@@ -205,13 +229,20 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         animateCamera(position, increasedZoom);
     }
 
-    public void updateCondition(String conditionToReceivePartners) {
-        this.conditionToReceivePartners = Optional.of(conditionToReceivePartners);
-        clearMap();
-        startTaskDisplayingPartnerPoints();
+    public void updateCondition(Optional<String> condition) {
+        clearClusterManager();
+        this.conditionToReceivePartners = condition;
+        if (conditionToReceivePartners.isPresent()) {
+            startTaskDisplayingPartnerPoints();
+        }
     }
 
-    private void clearMap() {
+    public void clearMap() {
+        clearClusterManager();
+        clickedPositionHelper.remove();
+    }
+
+    private void clearClusterManager() {
         clusterManager.clearItems();
         clusterManager.cluster();
     }
@@ -280,6 +311,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
 
     private String prepareSql() {
         return "SELECT " +
+                PARTNER_POINTS.COLUMN_NAME_ID + ", " +
                 PARTNER_POINTS.COLUMN_NAME_LATITUDE + ", " +
                 PARTNER_POINTS.COLUMN_NAME_LONGITUDE + ", " +
                 PARTNER_POINTS.COLUMN_NAME_TITLE +
@@ -299,10 +331,12 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     }
 
     private static PartnerPoint readPartnerPoint(Cursor cursor) {
+        int idColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_NAME_ID);
         int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_NAME_LATITUDE);
         int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_NAME_LONGITUDE);
         int titleColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_NAME_TITLE);
         PartnerPointImpl partnerPoint = new PartnerPointImpl();
+        partnerPoint.id = cursor.getInt(idColumnIndex);
         partnerPoint.latitude = cursor.getDouble(latitudeColumnIndex);
         partnerPoint.longitude = cursor.getDouble(longitudeColumnIndex);
         partnerPoint.title = cursor.getString(titleColumnIndex);
@@ -320,9 +354,14 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         clusterManager.cluster();
         TaskResult taskResult = (TaskResult) result;
         if (taskResult.isNeedToRemoveClickedPosition) {
-            clickedPositionHelper.remove();
+            removeClickedPosition();
         }
         updateMapCamera(taskResult);
+    }
+
+    private void removeClickedPosition() {
+        clickedPositionHelper.remove();
+        callbacks.onHideDetails();
     }
 
     private void updateMapCamera(TaskResult taskResult) {
