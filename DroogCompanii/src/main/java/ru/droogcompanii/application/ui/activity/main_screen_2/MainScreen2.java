@@ -148,7 +148,8 @@ public class MainScreen2 extends ActivityAbleToStartTask
     private void updateMapFragment() {
         CategoryListFragment categoryListFragment = findCategoryListFragment();
         Optional<String> condition = categoryListFragment.getConditionToReceivePartners();
-        findMapFragment().updateCondition(condition);
+        NewPartnerPointsMapFragment mapFragment = findMapFragment();
+        mapFragment.updateCondition(condition);
         if (condition.isPresent()) {
             setTitle(categoryListFragment.getSelectedCategoryName());
         }

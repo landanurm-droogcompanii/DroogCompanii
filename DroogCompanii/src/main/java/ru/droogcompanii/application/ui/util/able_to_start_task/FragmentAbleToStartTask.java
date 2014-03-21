@@ -92,6 +92,10 @@ public abstract class FragmentAbleToStartTask extends Fragment
         return TAG_TASK_FRAGMENT + " " + requestCode;
     }
 
+    public boolean isTaskStarted(int requestCode) {
+        return requestCodes.contains(requestCode);
+    }
+
     public void onTaskFinished(int requestCode, int resultCode, Serializable result) {
         requestCodes.remove(requestCode);
         onTaskResult(requestCode, resultCode, result);

@@ -90,14 +90,21 @@ public class TaskFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (task != null) {
-            task.cancel(false);
-        }
+        cancelTaskIfNeed();
         tryReturnResult();
     }
 
+    private void cancelTaskIfNeed() {
+        if (task != null) {
+            if (!task.isCancelled()) {
+                task.cancel(false);
+            }
+            task = null;
+        }
+    }
+
     private void tryReturnResult() {
-        task = null;
+        cancelTaskIfNeed();
         if (isResultReturned) {
             return;
         }

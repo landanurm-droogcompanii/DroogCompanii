@@ -36,6 +36,9 @@
     <dimen name="spaceBetweenIconAndTextInListItem">5dp</dimen>
     <dimen name="minHeightOfCategoryListItem">36dp</dimen>
     <dimen name="widthOfMainScreenNavigationDrawer">240dp</dimen>
+    <dimen name="categoryListHorizontalPadding">6dp</dimen>
+    <dimen name="categoryListTopPadding">10dp</dimen>
+    <dimen name="categoryListBottomPadding">8dp</dimen>
 
 
 </resources>
