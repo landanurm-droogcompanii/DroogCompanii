@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.main_screen_2;
+package ru.droogcompanii.application.ui.activity.main_screen_2.map.clicked_position_helper;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -8,10 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by ls on 18.03.14.
  */
-public class CircleIncluder {
-
-    private static final int STROKE_COLOR = 0xff9a2020;
-    private static final int FILL_COLOR = 0x77a399a6;
+class CircleIncluder {
 
     public static Circle includeIn(GoogleMap googleMap, LatLng center, double radius) {
         return googleMap.addCircle(prepareCircleOptions(center, radius));
@@ -21,7 +18,7 @@ public class CircleIncluder {
         return new CircleOptions()
                 .center(center)
                 .radius(radius)
-                .strokeColor(STROKE_COLOR)
-                .fillColor(FILL_COLOR);
+                .strokeColor(ClickedPositionCircleProperties.STROKE_COLOR)
+                .fillColor(ClickedPositionCircleProperties.FILL_COLOR);
     }
 }

@@ -1,6 +1,8 @@
 package ru.droogcompanii.application.data.hierarchy_of_partners;
 
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,7 +18,7 @@ import ru.droogcompanii.application.util.Objects;
 /**
  * Created by Leonid on 02.12.13.
  */
-public class PartnerPointImpl implements PartnerPoint, Serializable {
+public class PartnerPointImpl implements PartnerPoint, Serializable, Parcelable {
     public double latitude;
     public double longitude;
     public int id;
@@ -154,5 +156,50 @@ public class PartnerPointImpl implements PartnerPoint, Serializable {
     @Override
     public int getPartnerId() {
         return partnerId;
+    }
+
+
+
+    public static final Parcelable.Creator<PartnerPointImpl> CREATOR = new Parcelable.Creator<PartnerPointImpl>() {
+
+        public PartnerPointImpl createFromParcel(Parcel in) {
+            return new PartnerPointImpl(in);
+        }
+
+        public PartnerPointImpl[] newArray(int size) {
+            return new PartnerPointImpl[size];
+        }
+
+    };
+
+
+    public PartnerPointImpl(Parcel in) {
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        id = in.readInt();
+        partnerId = in.readInt();
+        phones = (List<String>) in.readSerializable();
+        address = in.readString();
+        paymentMethods = in.readString();
+        title = in.readString();
+        workingHours = (WeekWorkingHours) in.readSerializable();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeInt(id);
+        parcel.writeInt(partnerId);
+        parcel.writeSerializable((Serializable) phones);
+        parcel.writeString(address);
+        parcel.writeString(paymentMethods);
+        parcel.writeString(title);
+        parcel.writeSerializable(workingHours);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }

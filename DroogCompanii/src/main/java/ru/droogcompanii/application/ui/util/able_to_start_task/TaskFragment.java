@@ -24,6 +24,7 @@ public class TaskFragment extends DialogFragment {
     private static final String KEY_REQUEST_CODE = "KEY_REQUEST_CODE";
 
 
+    private boolean shouldNotReturnResult = false;
     private boolean isNeedToReturnResult = false;
     private boolean isResultReturned = false;
     private TaskNotBeInterruptedDuringConfigurationChange task;
@@ -114,6 +115,9 @@ public class TaskFragment extends DialogFragment {
     }
 
     private void returnResult() {
+        if (shouldNotReturnResult) {
+            return;
+        }
         isResultReturned = true;
         FragmentAbleToStartTask ableToStartTask = (FragmentAbleToStartTask) getTargetFragment();
         if (ableToStartTask.isAbleToReceiveResult()) {
@@ -153,5 +157,10 @@ public class TaskFragment extends DialogFragment {
         if (isNeedToReturnResult) {
             returnResult();
         }
+    }
+
+    public void detachTask() {
+        shouldNotReturnResult = true;
+        cancelTaskIfNeed();
     }
 }

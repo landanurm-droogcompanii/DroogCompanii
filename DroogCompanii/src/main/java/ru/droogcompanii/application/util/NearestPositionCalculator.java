@@ -4,6 +4,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 import com.google.maps.android.SphericalUtil;
 
+import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
+
 /**
  * Created by Leonid on 16.03.14.
  */
@@ -37,5 +39,9 @@ public class NearestPositionCalculator {
         } else {
             return Optional.absent();
         }
+    }
+
+    public static NearestPositionCalculator fromActualBaseLocation() {
+        return new NearestPositionCalculator(ActualBaseLocationProvider.getPositionOfActualBaseLocation());
     }
 }

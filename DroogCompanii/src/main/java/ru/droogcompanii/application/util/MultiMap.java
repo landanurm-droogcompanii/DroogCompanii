@@ -33,7 +33,7 @@ public class MultiMap<K,V> {
         void onEach(Entry<K, V> entry);
     }
 
-    private Map<K, Set<V>> map;
+    protected final Map<K, Set<V>> map;
 
     public MultiMap() {
         map = new HashMap<K, Set<V>>();

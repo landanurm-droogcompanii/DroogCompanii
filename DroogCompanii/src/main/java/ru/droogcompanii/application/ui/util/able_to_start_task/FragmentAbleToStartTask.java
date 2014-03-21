@@ -80,16 +80,36 @@ public abstract class FragmentAbleToStartTask extends Fragment
     private void startFragment(int requestCode, TaskFragment taskFragment) {
         String tag = tagByRequestCode(requestCode);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment previousTaskFragment = fragmentManager.findFragmentByTag(tag);
+        TaskFragment previousTaskFragment = findTaskFragmentByTag(tag);
         if (previousTaskFragment != null) {
+            previousTaskFragment.detachTask();
             transaction.remove(previousTaskFragment);
         }
         transaction.add(taskFragment, tag);
         transaction.commit();
     }
 
+    private TaskFragment findTaskFragmentByRequestCode(int requestCode) {
+        String tag = tagByRequestCode(requestCode);
+        return findTaskFragmentByTag(tag);
+    }
+
+    private TaskFragment findTaskFragmentByTag(String tag) {
+        return (TaskFragment) fragmentManager.findFragmentByTag(tag);
+    }
+
     private static String tagByRequestCode(int requestCode) {
         return TAG_TASK_FRAGMENT + " " + requestCode;
+    }
+
+    public void cancelTask(int requestCode) {
+        TaskFragment taskFragment = findTaskFragmentByRequestCode(requestCode);
+        if (taskFragment != null) {
+            taskFragment.detachTask();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.remove(taskFragment);
+            transaction.commit();
+        }
     }
 
     public boolean isTaskStarted(int requestCode) {

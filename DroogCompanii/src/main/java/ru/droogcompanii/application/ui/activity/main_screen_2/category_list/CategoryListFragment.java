@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.main_screen_2;
+package ru.droogcompanii.application.ui.activity.main_screen_2.category_list;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,8 +28,6 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHi
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
-import ru.droogcompanii.application.util.LogUtils;
-import ru.droogcompanii.application.util.Snorlax;
 
 /**
  * Created by ls on 14.03.14.
@@ -309,22 +307,13 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     }
 
 
-    private static int counter = 1;
-
     private void startTaskReceivingCategories() {
         startTask(TASK_REQUEST_CODE, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                debug();
                 return (Serializable) prepareListItemHelpers();
             }
         });
-    }
-
-    private static void debug() {
-        Snorlax.sleep(3000L);
-        LogUtils.debug("Counter: " + counter);
-        counter += 1;
     }
 
     private List<ListItemHelper> prepareListItemHelpers() {

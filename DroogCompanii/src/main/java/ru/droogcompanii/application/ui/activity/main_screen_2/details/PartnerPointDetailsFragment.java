@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.main_screen_2;
+package ru.droogcompanii.application.ui.activity.main_screen_2.details;
 
 import android.app.Activity;
 import android.os.Bundle;

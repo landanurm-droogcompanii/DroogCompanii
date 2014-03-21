@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.main_screen_2;
+package ru.droogcompanii.application.ui.activity.main_screen_2.map;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
@@ -25,9 +25,5 @@ class PositionMatcher {
 
     public boolean isMet() {
         return isMet;
-    }
-
-    public void reset() {
-        isMet = !positionToMet.isPresent();
     }
 }

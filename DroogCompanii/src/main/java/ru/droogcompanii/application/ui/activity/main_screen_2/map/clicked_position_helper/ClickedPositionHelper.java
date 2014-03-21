@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.activity.main_screen_2;
+package ru.droogcompanii.application.ui.activity.main_screen_2.map.clicked_position_helper;
 
 import android.os.Bundle;
 

@@ -1,11 +1,11 @@
-package ru.droogcompanii.application.ui.activity.main_screen_2;
+package ru.droogcompanii.application.ui.activity.main_screen_2.map.clicked_position_helper;
 
 import ru.droogcompanii.application.ui.util.ZoomLevel;
 
 /**
  * Created by ls on 18.03.14.
  */
-public class ClickedCircleRadiusCalculator {
+class ClickedCircleRadiusCalculator {
 
     private static final double A = -0.5;
     private static final double B = 2.0;
