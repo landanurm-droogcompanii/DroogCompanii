@@ -52,6 +52,10 @@ public class PartnerPointsGroupedByPosition {
         return groups.isContainKey(position);
     }
 
+    public void clear() {
+        groups.clear();
+    }
+
     public static interface OnEachPositionHandler {
         void onEach(LatLng position, Set<PartnerPoint> partnerPoints);
     }

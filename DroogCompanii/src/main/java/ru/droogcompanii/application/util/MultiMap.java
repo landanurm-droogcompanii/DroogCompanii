@@ -74,6 +74,10 @@ public class MultiMap<K,V> {
         }
     }
 
+    public void clear() {
+        map.clear();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
