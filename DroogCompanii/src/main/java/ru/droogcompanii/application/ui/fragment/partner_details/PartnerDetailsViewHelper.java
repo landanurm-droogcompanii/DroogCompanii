@@ -75,7 +75,6 @@ public class PartnerDetailsViewHelper {
         setTextDetails();
         setGoToOffersButton();
         setContacts();
-        setPaymentMethods();
         setWorkingHours();
         setPhoneButton();
         setRouteButton();
@@ -89,6 +88,7 @@ public class PartnerDetailsViewHelper {
         setText(R.id.discount, prepareDiscountText());
         setText(R.id.partnerPointTitle, partnerPoint.getTitle());
         setText(R.id.partnerPointAddress, partnerPoint.getAddress());
+        setText(R.id.paymentMethods, partnerPoint.getPaymentMethods());
     }
 
     private void setText(int idOfTextView, String text) {
@@ -130,11 +130,6 @@ public class PartnerDetailsViewHelper {
 
     private String prepareDiscountText() {
         return partner.getDiscountType() + ": " + partner.getDiscountSize() + "%";
-    }
-
-    private void setPaymentMethods() {
-        TextView paymentMethodsTextView = (TextView) findViewById(R.id.paymentMethods);
-        paymentMethodsTextView.setText(partnerPoint.getPaymentMethods());
     }
 
     private void setWorkingHours() {

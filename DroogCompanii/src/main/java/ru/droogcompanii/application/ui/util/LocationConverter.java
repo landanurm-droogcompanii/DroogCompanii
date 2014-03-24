@@ -7,7 +7,11 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by ls on 05.03.14.
  */
-public class LocationBuilder {
+public class LocationConverter {
+
+    public static LatLng toLatLng(Location location) {
+        return new LatLng(location.getLatitude(), location.getLongitude());
+    }
 
     public static Location fromLatLng(String provider, LatLng latLng) {
         return fromLatitudeLongitude(provider, latLng.latitude, latLng.longitude);

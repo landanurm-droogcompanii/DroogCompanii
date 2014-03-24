@@ -45,7 +45,7 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
 
     public Offers getOffersOf(Partner partner) {
         return getOffersFromDatabase(
-                " WHERE " + OffersContract.COLUMN_NAME_PARTNER_ID + " = " + partner.getId()
+                OffersContract.COLUMN_NAME_PARTNER_ID + " = " + partner.getId()
         );
     }
 

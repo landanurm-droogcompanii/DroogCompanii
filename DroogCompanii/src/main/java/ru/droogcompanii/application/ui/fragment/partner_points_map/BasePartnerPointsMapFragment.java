@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.Marker;
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.LocationUtils;
+import ru.droogcompanii.application.ui.util.CurrentLocationUtils;
 import ru.droogcompanii.application.ui.util.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 /**
@@ -70,7 +70,7 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
             @Override
             public void activate(OnLocationChangedListener onLocationChangedListener) {
                 BasePartnerPointsMapFragment.this.onLocationChangedListener = onLocationChangedListener;
-                LocationUtils.updateCurrentLocation();
+                CurrentLocationUtils.updateCurrentLocation();
             }
 
             @Override
@@ -88,13 +88,13 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        LocationUtils.addOnLocationChangedListener(this);
+        CurrentLocationUtils.addOnLocationChangedListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        LocationUtils.removeOnLocationChangedListener(this);
+        CurrentLocationUtils.removeOnLocationChangedListener(this);
     }
 
     protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(
@@ -121,7 +121,7 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
         isFirstUpdatingMapCamera = false;
     }
 
-    private void moveCamera(LatLng center) {
+    public void moveCamera(LatLng center) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(center, defineZoom());
         getGoogleMap().animateCamera(cameraUpdate);
     }
@@ -135,16 +135,11 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     }
 
     private void updateMapCameraIfThereIsNoClickedMarker() {
-        tryMoveCameraToCurrentLocation();
+        tryMoveCameraToActualLocation();
     }
 
-    private void tryMoveCameraToCurrentLocation() {
-        Location baseLocation = ActualBaseLocationProvider.getActualBaseLocation();
-        moveCamera(positionOf(baseLocation));
-    }
-
-    private static LatLng positionOf(Location location) {
-        return new LatLng(location.getLatitude(), location.getLongitude());
+    private void tryMoveCameraToActualLocation() {
+        moveCamera(ActualBaseLocationProvider.getPositionOfActualBaseLocation());
     }
 
     private void fitVisibleMarkersOnScreen() {

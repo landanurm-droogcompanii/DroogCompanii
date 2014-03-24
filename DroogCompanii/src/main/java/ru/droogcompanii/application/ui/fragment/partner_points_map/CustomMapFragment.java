@@ -44,11 +44,11 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
     }
 
     @Override
-    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_custom_map, container, false);
     }
 
-    public final void callOnceOnResume(Runnable runnable) {
+    public void callOnceOnResume(Runnable runnable) {
         runnableOnResume = runnable;
     }
 
@@ -60,7 +60,7 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
     }
 
     @Override
-    public final GoogleMap getGoogleMap() {
+    public GoogleMap getGoogleMap() {
         if (isNeedToInitMap()) {
             initMap();
         }
@@ -72,7 +72,7 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
                 (getActivity().getSupportFragmentManager() != null);
     }
 
-    public final LatLngBounds getBounds() {
+    public LatLngBounds getBounds() {
         return getGoogleMap().getProjection().getVisibleRegion().latLngBounds;
     }
 
@@ -88,31 +88,35 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
                 getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
     }
 
-    public final View getMapView() {
+    public View getMapView() {
         return getNestedSupportMapFragment().getView();
     }
 
-    public final float getMaxZoom() {
+    public float getMaxZoom() {
         return getGoogleMap().getMaxZoomLevel();
     }
 
-    public final float getCurrentZoom() {
+    public float getCurrentZoom() {
         return getGoogleMap().getCameraPosition().zoom;
     }
 
-    public final LatLng getCurrentCenter() {
+    public LatLng getCurrentCenter() {
         return getGoogleMap().getCameraPosition().target;
     }
 
-    public final void moveCamera(LatLng center, float zoom) {
+    public void moveCamera(LatLng center, float zoom) {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }
 
-    public final void moveCamera(LatLngBounds bounds) {
+    public void moveCamera(LatLng center) {
+        getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(center, getCurrentZoom()));
+    }
+
+    public void moveCamera(LatLngBounds bounds) {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 1));
     }
 
-    public final void animateCamera(LatLng center, float zoom) {
+    public void animateCamera(LatLng center, float zoom) {
         getGoogleMap().animateCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }
 
@@ -122,19 +126,18 @@ public class CustomMapFragment extends FragmentAbleToStartTask implements Google
     }
 
 
-
-    public final Marker addMarker(MarkerOptions markerOptions) {
+    public Marker addMarker(MarkerOptions markerOptions) {
         Marker marker = getGoogleMap().addMarker(markerOptions);
         markers.add(marker);
         return marker;
     }
 
-    protected final void removeAllMarkers() {
+    protected void removeAllMarkers() {
         getGoogleMap().clear();
         markers.clear();
     }
 
-    public final Collection<Marker> getMarkers() {
+    public Collection<Marker> getMarkers() {
         return new ArrayList<Marker>(markers);
     }
 

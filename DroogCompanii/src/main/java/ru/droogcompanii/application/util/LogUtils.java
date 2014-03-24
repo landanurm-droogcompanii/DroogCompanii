@@ -18,4 +18,8 @@ public class LogUtils {
     public static void exception(String message) {
         Log.e(getTag(), message);
     }
+
+    public static void exception(Throwable e) {
+        exception(Log.getStackTraceString(e));
+    }
 }

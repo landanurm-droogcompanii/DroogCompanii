@@ -16,7 +16,7 @@ public class ActualBaseLocationProvider implements BaseLocationProvider, Seriali
 
     public static LatLng getPositionOfActualBaseLocation() {
         Location actualLocation = getActualBaseLocation();
-        return new LatLng(actualLocation.getLatitude(), actualLocation.getLongitude());
+        return LocationConverter.toLatLng(actualLocation);
     }
 
     public static Location getActualBaseLocation() {
@@ -24,12 +24,12 @@ public class ActualBaseLocationProvider implements BaseLocationProvider, Seriali
             return getCustomBaseLocation();
         }
         Location defaultLocation = DroogCompaniiSettings.getDefaultBaseLocation();
-        return LocationUtils.getCurrentLocation().or(defaultLocation);
+        return CurrentLocationUtils.getCurrentLocation().or(defaultLocation);
     }
 
     private static Location getCustomBaseLocation() {
         LatLng basePosition = CustomBaseLocationUtils.getBasePosition();
-        return LocationBuilder.fromLatLng("custom", basePosition);
+        return LocationConverter.fromLatLng("custom", basePosition);
     }
 
     @Override

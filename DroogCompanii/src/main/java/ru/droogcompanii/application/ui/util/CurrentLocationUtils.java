@@ -24,7 +24,7 @@ import ru.droogcompanii.application.util.WeakReferenceWrapper;
 /**
  * Created by ls on 17.01.14.
  */
-public class LocationUtils implements BaseLocationProvider, Serializable {
+public class CurrentLocationUtils implements BaseLocationProvider, Serializable {
 
     private static Collection<WeakReferenceWrapper<LocationSource.OnLocationChangedListener>>
             listenerWrappers = new ArrayList<WeakReferenceWrapper<LocationSource.OnLocationChangedListener>>();
@@ -43,7 +43,7 @@ public class LocationUtils implements BaseLocationProvider, Serializable {
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
             if (status == LocationProvider.AVAILABLE) {
-                LocationUtils.updateCurrentLocation();
+                CurrentLocationUtils.updateCurrentLocation();
             }
         }
 
@@ -83,10 +83,6 @@ public class LocationUtils implements BaseLocationProvider, Serializable {
                 break;
             }
         }
-    }
-
-    private static void log(String str) {
-        LogUtils.debug(str + listenerWrappers.size());
     }
 
     @Override

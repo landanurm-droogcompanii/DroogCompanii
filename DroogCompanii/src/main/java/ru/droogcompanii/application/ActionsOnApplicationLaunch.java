@@ -18,15 +18,9 @@ public class ActionsOnApplicationLaunch {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
-                handle(throwable);
+                LogUtils.exception(throwable);
             }
         });
     }
 
-    private static void handle(Throwable throwable) {
-        for (StackTraceElement each : throwable.getStackTrace()) {
-            LogUtils.exception(each.getClassName() + each.getMethodName() +
-                    " (" + each.getLineNumber() + "):  " + each.toString());
-        }
-    }
 }

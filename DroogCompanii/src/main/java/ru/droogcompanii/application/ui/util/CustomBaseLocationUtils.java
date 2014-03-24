@@ -2,6 +2,7 @@ package ru.droogcompanii.application.ui.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -62,4 +63,9 @@ public class CustomBaseLocationUtils {
         double longitude = SharedPreferencesDoubleUtils.getDouble(sharedPreferences, KEY_LONGITUDE, 0.0);
         return new LatLng(latitude, longitude);
     }
+
+    public static Location getBaseLocation() {
+        return LocationConverter.fromLatLng("Custom Base Location", getBasePosition());
+    }
+
 }

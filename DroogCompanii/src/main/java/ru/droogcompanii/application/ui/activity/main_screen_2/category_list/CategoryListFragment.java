@@ -1,7 +1,6 @@
 package ru.droogcompanii.application.ui.activity.main_screen_2.category_list;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -9,10 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.common.base.Optional;
 
@@ -22,10 +18,9 @@ import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteDBUtils;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.ui.util.StateManager;
 import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
@@ -34,204 +29,67 @@ import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterrup
  */
 public class CategoryListFragment extends FragmentAbleToStartTask implements AdapterView.OnItemClickListener {
 
-
-
     public static interface Callbacks {
         void onReceivingCategoriesTaskCompleted();
         void onListInitialized();
         void onCurrentCategoryChanged();
     }
 
-
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
-
         @Override
         public void onReceivingCategoriesTaskCompleted() {
             // do nothing
         }
-
         @Override
         public void onListInitialized() {
             // do nothing
         }
-
         @Override
         public void onCurrentCategoryChanged() {
             // do nothing
         }
     };
 
-    private static interface ListItemHelper {
-        View makeView(Context context, View convertView);
-        String getTitle(Context context);
-        String getConditionToReceivePartners();
+    private static class RequestCode {
+        public static final int TASK_RECEIVING_CATEGORIES = 142;
     }
 
-    private static abstract class ListItemHelperImpl implements ListItemHelper, Serializable {
-
-        public static final int ROW_LAYOUT_ID = R.layout.view_list_item_category;
-
-        public View makeView(Context context, View convertView) {
-            View itemView = (convertView != null) ? convertView : inflateView(context);
-            TextView textView = (TextView) itemView.findViewById(R.id.text);
-            textView.setText(getTitle(context));
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.icon);
-            init(imageView);
-            return itemView;
-        }
-
-        private View inflateView(Context context) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            return inflater.inflate(ROW_LAYOUT_ID, null);
-        }
-
-        public abstract String getTitle(Context context);
-
-        protected abstract void init(ImageView imageView);
-
-        public abstract String getConditionToReceivePartners();
+    private static class Key {
+        public static final String HELPERS = "KEY_HELPERS";
+        public static final String CURRENT_SELECTION = "KEY_CURRENT_SELECTION";
+        public static final String LIST_VIEW_STATE = "KEY_LIST_VIEW_STATE";
     }
 
-    private static class ListItemHelperBuilder {
-
-        public static ListItemHelper getFavoriteListItemHelper() {
-            return new ListItemHelperImpl() {
-                @Override
-                public String getTitle(Context context) {
-                    return context.getString(R.string.favorite);
-                }
-
-                @Override
-                protected void init(ImageView imageView) {
-                    imageView.setImageResource(R.drawable.ic_favorite);
-                }
-
-                @Override
-                public String getConditionToReceivePartners() {
-                    return FavoriteDBUtils.getIsFavoriteCondition();
-                }
-            };
-        }
-
-        public static ListItemHelper getPartnerCategoryListItemHelper(final PartnerCategory partnerCategory) {
-            return new ListItemHelperImpl() {
-                @Override
-                public String getTitle(Context context) {
-                    return partnerCategory.getTitle();
-                }
-
-                @Override
-                protected void init(ImageView imageView) {
-                    imageView.setImageDrawable(null);
-                }
-
-                @Override
-                public String getConditionToReceivePartners() {
-                    return PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID +
-                            " = " + partnerCategory.getId();
-                }
-            };
-        }
-
-        public static ListItemHelper getAllPartnersListItemHelper() {
-            return new ListItemHelperImpl() {
-                @Override
-                public String getTitle(Context context) {
-                    return context.getString(R.string.all_partners);
-                }
-
-                @Override
-                protected void init(ImageView imageView) {
-                    imageView.setImageDrawable(null);
-                }
-
-                @Override
-                public String getConditionToReceivePartners() {
-                    return "";
-                }
-            };
-        }
-    }
-
-    private static class CategoryListItemSelector {
-        private static final int SELECTED_BACKGROUND = R.color.backgroundOfCheckedCategoryListItem;
-        private static final int UNSELECTED_BACKGROUND = android.R.color.transparent;
-
-        private final CategoryListFragment fragment;
-
-        private Optional<View> lastSelectedItem;
-
-        public CategoryListItemSelector(CategoryListFragment fragment) {
-            this.fragment = fragment;
-            this.lastSelectedItem = Optional.absent();
-        }
-
-        public void select(View itemView) {
-            if (lastSelectedItem.isPresent()) {
-                lastSelectedItem.get().setBackgroundResource(UNSELECTED_BACKGROUND);
-            }
-            itemView.setBackgroundResource(SELECTED_BACKGROUND);
-            lastSelectedItem = Optional.of(itemView);
-        }
-
-        public void unselect(View itemView) {
-            itemView.setBackgroundResource(UNSELECTED_BACKGROUND);
-            if (lastSelectedItem.isPresent() && CategoryListAdapter.areAtTheSamePosition(lastSelectedItem.get(), itemView)) {
-                lastSelectedItem.get().setBackgroundResource(UNSELECTED_BACKGROUND);
-                lastSelectedItem = Optional.absent();
-            }
-        }
-    }
-
-    private static class CategoryListAdapter extends ArrayAdapter<ListItemHelper> {
-
-        private final CategoryListFragment fragment;
-
-        public CategoryListAdapter(CategoryListFragment fragment, int rowLayoutId, List<ListItemHelper> items) {
-            super(fragment.getActivity(), rowLayoutId, items);
-            this.fragment = fragment;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ListItemHelper itemHelper = getItem(position);
-            View itemView = itemHelper.makeView(getContext(), convertView);
-            itemView.setTag(Integer.valueOf(position));
-            updateSelection(itemView, position);
-            return itemView;
-        }
-
-        private void updateSelection(View itemView, int position) {
-            if (position == fragment.currentSelection) {
-                fragment.selector.select(itemView);
-            } else {
-                fragment.selector.unselect(itemView);
-            }
-        }
-
-        public static boolean areAtTheSamePosition(View itemView1, View itemView2) {
-            int position1 = (Integer) itemView1.getTag();
-            int position2 = (Integer) itemView2.getTag();
-            return position1 == position2;
-        }
-    }
-
-
-    private static final int TASK_REQUEST_CODE = 142;
-
-    private static final String KEY_HELPERS = "KEY_HELPERS";
-    private static final String KEY_CURRENT_SELECTION = "KEY_CURRENT_SELECTION";
-    private static final String KEY_LIST_VIEW_STATE = "KEY_LIST_VIEW_STATE";
-
-
-    private final CategoryListItemSelector selector = new CategoryListItemSelector(this);
-
+    private final CategoryListItemSelector selector = new CategoryListItemSelector();
     private Callbacks callbacks;
     private CategoryListAdapter adapter;
     private int currentSelection;
     private List<ListItemHelper> listItemHelpers;
     private ListView listView;
     private Optional<Parcelable> stateOfListView;
+
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            currentSelection = 0;
+            listItemHelpers = null;
+            stateOfListView = Optional.absent();
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            currentSelection = savedInstanceState.getInt(Key.CURRENT_SELECTION);
+            listItemHelpers = (List<ListItemHelper>) savedInstanceState.getSerializable(Key.HELPERS);
+            stateOfListView = Optional.of(savedInstanceState.getParcelable(Key.LIST_VIEW_STATE));
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putInt(Key.CURRENT_SELECTION, currentSelection);
+            outState.putSerializable(Key.HELPERS, (Serializable) listItemHelpers);
+            outState.putParcelable(Key.LIST_VIEW_STATE, listView.onSaveInstanceState());
+        }
+    };
 
 
     @Override
@@ -249,32 +107,13 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            initStateByDefault();
-        } else {
-            restoreState(savedInstanceState);
-        }
-    }
-
-    private void initStateByDefault() {
-        currentSelection = 0;
-        listItemHelpers = null;
-        stateOfListView = Optional.absent();
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        currentSelection = savedInstanceState.getInt(KEY_CURRENT_SELECTION);
-        listItemHelpers = (List<ListItemHelper>) savedInstanceState.getSerializable(KEY_HELPERS);
-        stateOfListView = Optional.of(savedInstanceState.getParcelable(KEY_LIST_VIEW_STATE));
+        STATE_MANAGER.initState(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_HELPERS, (Serializable) listItemHelpers);
-        outState.putInt(KEY_CURRENT_SELECTION, currentSelection);
-        outState.putParcelable(KEY_LIST_VIEW_STATE, listView.onSaveInstanceState());
+        STATE_MANAGER.saveState(outState);
     }
 
     @Override
@@ -283,6 +122,14 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(this);
         return listView;
+    }
+
+    public int getCurrentSelection() {
+        return currentSelection;
+    }
+
+    public CategoryListItemSelector getSelector() {
+        return selector;
     }
 
     @Override
@@ -308,7 +155,7 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
 
     private void startTaskReceivingCategories() {
-        startTask(TASK_REQUEST_CODE, new TaskNotBeInterruptedDuringConfigurationChange() {
+        startTask(RequestCode.TASK_RECEIVING_CATEGORIES, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 return (Serializable) prepareListItemHelpers();
@@ -335,9 +182,9 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
     @Override
     public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        if (requestCode == TASK_REQUEST_CODE) {
+        if (requestCode == RequestCode.TASK_RECEIVING_CATEGORIES) {
             if (resultCode == Activity.RESULT_OK) {
-                onListItemHelpersReceived((List<ListItemHelper>) result);
+                onHelpersReceived(result);
             } else {
                 onReceivingHelpersCancelled();
             }
@@ -348,31 +195,22 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         getActivity().finish();
     }
 
-    private void onListItemHelpersReceived(List<ListItemHelper> helpers) {
-        this.listItemHelpers = helpers;
+    private void onHelpersReceived(Serializable result) {
+        this.listItemHelpers = (List<ListItemHelper>) result;
         initList();
         callbacks.onReceivingCategoriesTaskCompleted();
     }
 
     private void initList() {
-        adapter = new CategoryListAdapter(this, ListItemHelperImpl.ROW_LAYOUT_ID, listItemHelpers);
+        adapter = new CategoryListAdapter(this, listItemHelpers);
         listView.setAdapter(adapter);
-        if (stateOfListView.isPresent()) {
-            listView.onRestoreInstanceState(stateOfListView.get());
-            //stateOfListView = Optional.absent();
-        }
-        //restoreListViewState();
+        restoreStateOfListViewIfNeed();
         callbacks.onListInitialized();
     }
 
-    private void restoreListViewState() {
-        if (currentSelection != ListView.INVALID_POSITION) {
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    listView.smoothScrollToPosition(currentSelection);
-                }
-            });
+    private void restoreStateOfListViewIfNeed() {
+        if (stateOfListView.isPresent()) {
+            listView.onRestoreInstanceState(stateOfListView.get());
         }
     }
 

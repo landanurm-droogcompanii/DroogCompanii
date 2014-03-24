@@ -4,7 +4,7 @@ import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import ru.droogcompanii.application.ui.util.LocationBuilder;
+import ru.droogcompanii.application.ui.util.LocationConverter;
 
 /**
  * Created by ls on 29.01.14.
@@ -26,11 +26,7 @@ public class DroogCompaniiSettings {
     }
 
     public static Location getDefaultBaseLocation() {
-        return getLocationOfKazan();
-    }
-
-    private static Location getLocationOfKazan() {
-        return LocationBuilder.fromLatitudeLongitude("Kazan", LATITUDE_OF_KAZAN, LONGITUDE_OF_KAZAN);
+        return LocationConverter.fromLatLng("Default", getDefaultBasePosition());
     }
 
     public static int getDefaultZoom() {

@@ -22,6 +22,7 @@ import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsAc
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.WorkingHoursIndicatorUpdater;
 import ru.droogcompanii.application.ui.util.FavoriteViewUtils;
 import ru.droogcompanii.application.ui.util.Router;
+import ru.droogcompanii.application.ui.util.StateManager;
 import ru.droogcompanii.application.ui.util.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Objects;
@@ -33,16 +34,65 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
 
     private static final int NO_INDEX = -1;
 
-    private static final String KEY_PARTNER_POINTS = "KEY_PARTNER_POINTS";
-    private static final String KEY_INDEX_OF_CURRENT_PARTNER_POINT = "KEY_INDEX_OF_CURRENT_PARTNER_POINT";
-    private static final String KEY_VISIBLE = "KEY_VISIBLE";
-    private static final String KEY_IDS = "KEY_IDS";
+    private static class Key {
+        public static final String PARTNER_POINTS = "KEY_PARTNER_POINTS";
+        public static final String INDEX_OF_CURRENT_PARTNER_POINT = "KEY_INDEX_OF_CURRENT_PARTNER_POINT";
+        public static final String VISIBLE = "KEY_VISIBLE";
+        public static final String IDS = "KEY_IDS";
+    }
 
     private boolean isVisible;
     private int indexOfCurrentPartnerPoint;
     private List<Integer> ids;
     private List<Optional<PartnerPoint>> partnerPoints;
     private FavoriteViewUtils favoriteViewUtils;
+
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            ids = new ArrayList<Integer>();
+            partnerPoints = new ArrayList<Optional<PartnerPoint>>();
+            indexOfCurrentPartnerPoint = NO_INDEX;
+            hide();
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            ids = (List<Integer>) savedInstanceState.getSerializable(Key.IDS);
+            partnerPoints = (List<Optional<PartnerPoint>>) savedInstanceState.getSerializable(Key.PARTNER_POINTS);
+            indexOfCurrentPartnerPoint = savedInstanceState.getInt(Key.INDEX_OF_CURRENT_PARTNER_POINT);
+            restoreVisibilityFrom(savedInstanceState);
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putSerializable(Key.IDS, (Serializable) ids);
+            outState.putSerializable(Key.PARTNER_POINTS, (Serializable) partnerPoints);
+            outState.putInt(Key.INDEX_OF_CURRENT_PARTNER_POINT, indexOfCurrentPartnerPoint);
+            outState.putBoolean(Key.VISIBLE, isVisible);
+        }
+    };
+
+
+    public void hide() {
+        isVisible = false;
+        getView().setVisibility(View.INVISIBLE);
+    }
+
+    private void restoreVisibilityFrom(Bundle savedInstanceState) {
+        boolean isNeedToShow = savedInstanceState.getBoolean(Key.VISIBLE);
+        if (isNeedToShow) {
+            show();
+        } else {
+            hide();
+        }
+    }
+
+    public void show() {
+        isVisible = true;
+        getView().setVisibility(View.VISIBLE);
+        updateUI();
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,47 +109,9 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (savedInstanceState == null) {
-            initStateByDefault();
-        } else {
-            restoreStateFrom(savedInstanceState);
-        }
+        STATE_MANAGER.initState(savedInstanceState);
 
         initCatchingTouchEvents();
-    }
-
-    private void initStateByDefault() {
-        ids = new ArrayList<Integer>();
-        partnerPoints = new ArrayList<Optional<PartnerPoint>>();
-        indexOfCurrentPartnerPoint = NO_INDEX;
-        hide();
-    }
-
-    public void hide() {
-        isVisible = false;
-        getView().setVisibility(View.INVISIBLE);
-    }
-
-    private void restoreStateFrom(Bundle savedInstanceState) {
-        ids = (List<Integer>) savedInstanceState.getSerializable(KEY_IDS);
-        partnerPoints = (List<Optional<PartnerPoint>>) savedInstanceState.getSerializable(KEY_PARTNER_POINTS);
-        indexOfCurrentPartnerPoint = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_PARTNER_POINT);
-        restoreVisibilityFrom(savedInstanceState);
-    }
-
-    private void restoreVisibilityFrom(Bundle savedInstanceState) {
-        boolean isNeedToShow = savedInstanceState.getBoolean(KEY_VISIBLE);
-        if (isNeedToShow) {
-            show();
-        } else {
-            hide();
-        }
-    }
-
-    public void show() {
-        isVisible = true;
-        getView().setVisibility(View.VISIBLE);
-        updateUI();
     }
 
     private void updateUI() {
@@ -174,9 +186,9 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     }
 
     private String prepareNavigationText() {
-        int indexOfCurrent = indexOfCurrentPartnerPoint + 1;
+        int currentIndexBaseOnOne = indexOfCurrentPartnerPoint + 1;
         int totalNumber = partnerPoints.size();
-        return indexOfCurrent + "/" + totalNumber;
+        return currentIndexBaseOnOne + "/" + totalNumber;
     }
 
     private void updatePartnerPointInfo() {
@@ -344,13 +356,7 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveStateInto(outState);
+        STATE_MANAGER.saveState(outState);
     }
 
-    private void saveStateInto(Bundle outState) {
-        outState.putSerializable(KEY_IDS, (Serializable) ids);
-        outState.putSerializable(KEY_PARTNER_POINTS, (Serializable) partnerPoints);
-        outState.putInt(KEY_INDEX_OF_CURRENT_PARTNER_POINT, indexOfCurrentPartnerPoint);
-        outState.putBoolean(KEY_VISIBLE, isVisible);
-    }
 }

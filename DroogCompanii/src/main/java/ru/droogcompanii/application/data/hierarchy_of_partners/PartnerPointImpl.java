@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
-import ru.droogcompanii.application.ui.util.LocationBuilder;
+import ru.droogcompanii.application.ui.util.LocationConverter;
 import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
@@ -90,7 +90,7 @@ public class PartnerPointImpl implements PartnerPoint, Serializable, Parcelable 
 
     @Override
     public Location toLocation() {
-        return LocationBuilder.fromLatitudeLongitude(title, latitude, longitude);
+        return LocationConverter.fromLatitudeLongitude(title, latitude, longitude);
     }
 
     @Override

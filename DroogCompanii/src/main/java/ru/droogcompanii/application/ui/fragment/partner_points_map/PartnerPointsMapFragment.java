@@ -19,8 +19,8 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableL
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
+import ru.droogcompanii.application.ui.util.CurrentLocationUtils;
 import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
-import ru.droogcompanii.application.ui.util.LocationUtils;
 import ru.droogcompanii.application.util.MultiMap;
 
 /**
@@ -34,6 +34,23 @@ public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
         void onNoLongerNeedToShowPartnerPoints();
         void onCustomBaseLocationIsSet();
     }
+
+    private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
+        @Override
+        public void onNeedToShowPartnerPoints(Set<PartnerPoint> partnerPointsToShow) {
+            // do nothing
+        }
+
+        @Override
+        public void onNoLongerNeedToShowPartnerPoints() {
+            // do nothing
+        }
+
+        @Override
+        public void onCustomBaseLocationIsSet() {
+            // do nothing
+        }
+    };
 
     private static final String KEY_SEARCHABLE_PARTNER_POINTS = "KEY_SEARCHABLE_PARTNER_POINTS";
 
@@ -49,6 +66,12 @@ public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         callbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        callbacks = DUMMY_CALLBACKS;
+        super.onDetach();
     }
 
     @Override
@@ -92,11 +115,12 @@ public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
     }
 
     private void initOnceOnResume() {
-        initMapListeners(getGoogleMap());
+        initMapListeners();
         initIfNeed();
     }
 
-    private void initMapListeners(GoogleMap googleMap) {
+    private void initMapListeners() {
+        GoogleMap googleMap = getGoogleMap();
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
         googleMap.setOnMapLongClickListener(this);
@@ -149,7 +173,7 @@ public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        LocationUtils.updateCurrentLocation();
+        CurrentLocationUtils.updateCurrentLocation();
     }
 
     @Override
@@ -229,7 +253,7 @@ public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
     @Override
     public void onMapLongClick(LatLng latLng) {
         CustomBaseLocationUtils.updateBasePosition(latLng);
-        LocationUtils.notifyListeners();
+        CurrentLocationUtils.notifyListeners();
         callbacks.onCustomBaseLocationIsSet();
         NotifierAboutBaseMapLocationChanges.notify(getActivity());
     }

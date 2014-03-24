@@ -18,12 +18,9 @@ import java.util.List;
 import java.util.Set;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.main_screen_2.map.clicked_position_helper.ClickedPositionHelper;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
-import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.StateManager;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.ListUtils;
@@ -32,7 +29,7 @@ import ru.droogcompanii.application.util.SerializableLatLng;
 /**
  * Created by ls on 14.03.14.
  */
-public class NewPartnerPointsMapFragment extends CustomMapFragment
+public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         implements ClusterManager.OnClusterClickListener<ClusterItem>,
                    ClusterManager.OnClusterItemClickListener<ClusterItem>,
                    GoogleMap.OnMapClickListener,
@@ -42,14 +39,6 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
     public static interface Callbacks {
         void onDisplayDetails(List<PartnerPoint> partnerPoints);
         void onHideDetails();
-    }
-
-
-    private static class Contracts {
-        public static final PartnerHierarchyContracts.PartnerPointsContract
-                PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
-        public static final PartnerHierarchyContracts.PartnersContract
-                PARTNERS = new PartnerHierarchyContracts.PartnersContract();
     }
 
     private static class Key {
@@ -119,7 +108,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
 
     private void moveCameraToActualBasePosition() {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
-                ActualBaseLocationProvider.getPositionOfActualBaseLocation(),
+                DroogCompaniiSettings.getDefaultBasePosition(),
                 DroogCompaniiSettings.getDefaultZoom()
         ));
     }
@@ -161,6 +150,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragment
         clickedPositionHelper.set(clusterItem.getPosition());
         LatLng position = clickedPositionHelper.getClickedPosition();
         Set<PartnerPoint> partnerPointsAtClickedPosition = partnerPointsGroupedByPosition.get(position);
+
         callbacks.onDisplayDetails(ListUtils.listFromSet(partnerPointsAtClickedPosition));
         return false;
     }

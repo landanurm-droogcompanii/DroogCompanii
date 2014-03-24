@@ -19,8 +19,8 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAbout
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
 import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.util.CurrentLocationUtils;
 import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
-import ru.droogcompanii.application.ui.util.LocationUtils;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
@@ -87,7 +87,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
         dismissCustomBaseLocationActionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onDismissCustomBaseLocationView();
+                onDismissCustomBaseLocation();
             }
         });
         int visibility = CustomBaseLocationUtils.isBasePositionSet() ? View.VISIBLE : View.INVISIBLE;
@@ -193,9 +193,9 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
         dismissCustomBaseLocationActionView.setVisibility(visibility);
     }
 
-    private void onDismissCustomBaseLocationView() {
+    private void onDismissCustomBaseLocation() {
         CustomBaseLocationUtils.dismissBasePosition();
-        LocationUtils.notifyListeners();
+        CurrentLocationUtils.notifyListeners();
         setVisibilityOfDismissCustomBaseLocationActionView(View.INVISIBLE);
         NotifierAboutBaseMapLocationChanges.notify(this);
     }
