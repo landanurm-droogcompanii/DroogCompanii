@@ -26,7 +26,7 @@ import ru.droogcompanii.application.ui.util.RadioGroupMaker;
 /**
  * Created by ls on 25.03.14.
  */
-class DistanceFilter implements Filter, Serializable {
+public class DistanceFilter implements Filter, Serializable {
 
     private static final int RADIO_GROUP_LAYOUT_ID = R.layout.view_filter_distance_radio_group;
     private static final int RADIO_GROUP_ID = R.id.distanceFilterRadioGroup;
@@ -56,6 +56,12 @@ class DistanceFilter implements Filter, Serializable {
     private static final int DEFAULT_INDEX = INDEX_OF_INACTIVE_DISTANCE_OPTION;
 
     private int checkedIndex;
+
+    public static DistanceFilter getCurrent(Context context) {
+        DistanceFilter distanceFilter = new DistanceFilter();
+        distanceFilter.readFrom(FiltersSharedPreferencesProvider.get(context));
+        return distanceFilter;
+    }
 
     public DistanceFilter() {
         checkedIndex = DEFAULT_INDEX;
@@ -90,7 +96,7 @@ class DistanceFilter implements Filter, Serializable {
         };
     }
 
-    private double getMaxRadius() {
+    public double getMaxRadius() {
         return DISTANCE_OPTIONS.get(checkedIndex).maxRadius;
     }
 

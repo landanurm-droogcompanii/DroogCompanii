@@ -60,6 +60,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     private ClusterManager<ClusterItem> clusterManager;
     private Optional<String> conditionToReceivePartners;
     private PartnerPointsGroupedByPosition partnerPointsGroupedByPosition;
+    private RadiusDrawer radiusDrawer;
 
 
     private final StateManager STATE_MANAGER = new StateManager() {
@@ -111,6 +112,8 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         super.onActivityCreated(savedInstanceState);
         STATE_MANAGER.initState(savedInstanceState);
         initMap();
+        radiusDrawer = new RadiusDrawer(this);
+        radiusDrawer.update();
     }
 
     @Override
@@ -187,6 +190,8 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     }
 
     private void startDisplayingTask() {
+        radiusDrawer.update();
+
         final Filters currentFilters = Filters.getCurrentFilters(getActivity());
         final LatLngBounds bounds = getBounds();
         startTask(RequestCode.TASK_DISPLAYING, new TaskNotBeInterruptedDuringConfigurationChange() {

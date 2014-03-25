@@ -21,7 +21,7 @@ import ru.droogcompanii.application.util.SerializationUtils;
 /**
  * Created by ls on 25.03.14.
  */
-class WorksNowFilter implements Filter, Serializable {
+public class WorksNowFilter implements Filter, Serializable {
 
     private static class Key {
         public static final String ACTIVATED = "ACTIVATED" + WorksNowFilter.class.getName();

@@ -18,7 +18,7 @@ import ru.droogcompanii.application.util.CashlessPaymentsChecker;
 /**
  * Created by ls on 25.03.14.
  */
-class CashlessPaymentsFilter implements Filter, Serializable {
+public class CashlessPaymentsFilter implements Filter, Serializable {
 
     private static class Key {
         public static final String ACTIVATED = "ACTIVATED" + CashlessPaymentsFilter.class.getName();

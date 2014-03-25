@@ -9,7 +9,7 @@
     <ImageButton
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/abc_ic_clear_holo_light"
         android:id="@+id/clear" />
@@ -17,7 +17,7 @@
     <ImageButton
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/abc_ic_cab_done_holo_light"
         android:id="@+id/done" />
