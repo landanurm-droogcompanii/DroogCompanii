@@ -147,8 +147,8 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
 
     @Override
     public boolean onClusterItemClick(ClusterItem clusterItem) {
-        clickedPositionHelper.set(clusterItem.getPosition());
-        LatLng position = clickedPositionHelper.getClickedPosition();
+        LatLng position = clusterItem.getPosition();
+        clickedPositionHelper.set(position);
         Set<PartnerPoint> partnerPointsAtClickedPosition = partnerPointsGroupedByPosition.get(position);
 
         callbacks.onDisplayDetails(ListUtils.listFromSet(partnerPointsAtClickedPosition));

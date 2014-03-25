@@ -2,7 +2,6 @@ package ru.droogcompanii.application.ui.activity.main_screen_2.map.clicked_posit
 
 import android.os.Bundle;
 
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
@@ -13,78 +12,53 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFrag
  */
 public class ClickedPositionHelper {
 
-    private static final String KEY_CENTER = "KEY_CENTER";
+    private static final String KEY_CENTER = "KEY_CENTER" + ClickedPositionHelper.class.getName();
 
-    private final CustomMapFragment mapFragment;
-    private LatLng center;
-    private Circle circle;
+    private final ClickedPositionDrawer clickedPositionDrawer;
+    private Optional<LatLng> center;
 
     public ClickedPositionHelper(CustomMapFragment mapFragment) {
-        this.mapFragment = mapFragment;
-        this.center = null;
-        this.circle = null;
+        clickedPositionDrawer = new CustomIconDrawer(mapFragment);
+        center = Optional.absent();
     }
 
     public void restoreFrom(Bundle savedInstanceState) {
-        LatLng restoredCenter = savedInstanceState.getParcelable(KEY_CENTER);
-        if (restoredCenter != null) {
-            set(restoredCenter);
+        Optional<LatLng> restoredCenter = Optional.fromNullable((LatLng) savedInstanceState.getParcelable(KEY_CENTER));
+        if (restoredCenter.isPresent()) {
+            set(restoredCenter.get());
         }
     }
 
     public void saveInto(Bundle outState) {
-        outState.putParcelable(KEY_CENTER, center);
+        outState.putParcelable(KEY_CENTER, center.orNull());
     }
 
     public void set(LatLng newCenter) {
-        if (center != null) {
-            remove();
-        }
-        center = newCenter;
-        draw();
-    }
-
-    private void draw() {
-        if (circle != null) {
-            circle.setVisible(true);
-        } else {
-            circle = prepareCircle();
-        }
-    }
-
-    private Circle prepareCircle() {
-        return CircleIncluder.includeIn(
-                mapFragment.getGoogleMap(), center, defineRadius()
-        );
-    }
-
-    private double defineRadius() {
-        return ClickedCircleRadiusCalculator.calculate(mapFragment.getCurrentZoom());
+        remove();
+        clickedPositionDrawer.draw(newCenter);
+        center = Optional.of(newCenter);
     }
 
     public void remove() {
-        if (circle != null) {
-            circle.remove();
-            circle = null;
+        if (center.isPresent()) {
+            clickedPositionDrawer.remove();
+            center = Optional.absent();
         }
-        center = null;
     }
 
     public Optional<LatLng> getOptionalClickedPosition() {
-        return Optional.fromNullable(center);
-    }
-
-    public LatLng getClickedPosition() {
         return center;
     }
 
+    public LatLng getClickedPosition() {
+        return center.get();
+    }
+
     public boolean isClickedPositionPresent() {
-        return center != null;
+        return center.isPresent();
     }
 
     public void updateOnCameraChange() {
-        if (circle != null) {
-            circle.setRadius(defineRadius());
-        }
+        clickedPositionDrawer.updateOnCameraChange();
     }
 }
