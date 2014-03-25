@@ -9,7 +9,7 @@ import ru.droogcompanii.application.ActionsOnApplicationLaunch;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.global_flags.SharedFlag;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
-import ru.droogcompanii.application.ui.activity.main_screen_2.MainScreen2;
+import ru.droogcompanii.application.ui.main_screen_2.MainScreen2;
 import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
 import ru.droogcompanii.application.ui.util.YesNoDialogMaker;
 

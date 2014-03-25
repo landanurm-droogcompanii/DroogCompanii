@@ -7,7 +7,7 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
-import ru.droogcompanii.application.util.SharedPreferencesDoubleUtils;
+import ru.droogcompanii.application.util.SharedPreferencesUtils;
 
 /**
  * Created by ls on 05.03.14.
@@ -44,8 +44,8 @@ public class CustomBaseLocationUtils {
     private static void setBasePosition(LatLng position) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.putBoolean(KEY_IS_CUSTOM_BASE_LOCATION_SET, true);
-        SharedPreferencesDoubleUtils.putDouble(editor, KEY_LATITUDE, position.latitude);
-        SharedPreferencesDoubleUtils.putDouble(editor, KEY_LONGITUDE, position.longitude);
+        SharedPreferencesUtils.putDouble(editor, KEY_LATITUDE, position.latitude);
+        SharedPreferencesUtils.putDouble(editor, KEY_LONGITUDE, position.longitude);
         editor.commit();
     }
 
@@ -59,8 +59,8 @@ public class CustomBaseLocationUtils {
 
     public static LatLng getBasePosition() {
         SharedPreferences sharedPreferences = getSharedPreferences();
-        double latitude = SharedPreferencesDoubleUtils.getDouble(sharedPreferences, KEY_LATITUDE, 0.0);
-        double longitude = SharedPreferencesDoubleUtils.getDouble(sharedPreferences, KEY_LONGITUDE, 0.0);
+        double latitude = SharedPreferencesUtils.getDouble(sharedPreferences, KEY_LATITUDE, 0.0);
+        double longitude = SharedPreferencesUtils.getDouble(sharedPreferences, KEY_LONGITUDE, 0.0);
         return new LatLng(latitude, longitude);
     }
 

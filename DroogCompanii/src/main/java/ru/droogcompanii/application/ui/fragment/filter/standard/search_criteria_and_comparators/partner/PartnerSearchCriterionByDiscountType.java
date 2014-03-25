@@ -6,7 +6,6 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCriterion;
-import ru.droogcompanii.application.util.MoreComparableString;
 import ru.droogcompanii.application.util.StringConstants;
 
 /**
@@ -33,9 +32,9 @@ public class PartnerSearchCriterionByDiscountType
 
     @Override
     public boolean meetCriterion(Partner partner) {
-        MoreComparableString partnerPointDiscountType = new MoreComparableString(partner.getDiscountType());
-        for (String discountType : discountTypes) {
-            if (partnerPointDiscountType.containsIgnoreCase(discountType)) {
+        String discountTypeInLowerCase = partner.getDiscountType().toLowerCase();
+        for (String each : discountTypes) {
+            if (discountTypeInLowerCase.contains(each.toLowerCase())) {
                 return true;
             }
         }

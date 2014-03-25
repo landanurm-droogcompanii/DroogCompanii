@@ -8,12 +8,12 @@ import android.view.Gravity;
 import android.view.MenuItem;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.ui.activity.menu_helper.ActivityMenuHelper;
 
 /**
  * Created by ls on 24.03.14.
  */
-public abstract class ActivityWithNavigationDrawer extends ActivityAbleToStartTask {
+public abstract class ActivityWithNavigationDrawer extends ActivityMenuHelper {
 
     private static final int DRAWER_GRAVITY = Gravity.START;
 

@@ -38,7 +38,7 @@ class SearchClosestPointsFilter implements Filter, Serializable {
         public static DistanceOption noNeedToSearch() {
             return new DistanceOption(false, 0.0f,
                     R.id.distanceOption_NoNeedToSearch,
-                    R.string.distanceOption_NoNeedToSearch);
+                    R.string.distanceOption_No);
         }
 
         public static DistanceOption from(float radius, int id, int textId) {
@@ -122,7 +122,7 @@ class SearchClosestPointsFilter implements Filter, Serializable {
         }
         radioGroup.setShowDividers(RadioGroup.SHOW_DIVIDER_MIDDLE);
         Resources res = radioGroup.getResources();
-        int dividerPadding = res.getDimensionPixelSize(R.dimen.dividerPaddingOfDistanceOptionRadioGroup);
+        int dividerPadding = res.getDimensionPixelSize(R.dimen.dividerPaddingOfRadioGroup);
         radioGroup.setDividerPadding(dividerPadding);
     }
 

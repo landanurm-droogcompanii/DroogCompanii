@@ -54,7 +54,7 @@
     <string name="done">Done</string>
 
 
-    <string name="distanceOption_NoNeedToSearch">   -   </string>
+    <string name="distanceOption_No">   -   </string>
     <string name="distanceOption_1000meters">1000 m</string>
     <string name="distanceOption_3000meters">3000 m</string>
     <string name="distanceOption_5000meters">5000 m</string>

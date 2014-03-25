@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.main_screen_2.MainScreen2"
+            android:name=".ui.main_screen_2.MainScreen2"
             android:label="@string/app_name" >
         </activity>
         <activity

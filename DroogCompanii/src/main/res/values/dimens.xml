@@ -28,7 +28,7 @@
     <dimen name="marginOfCustomRadioButton">4dp</dimen>
     <dimen name="minHeightOfDistanceOptionRadioButton">32dp</dimen>
     <dimen name="sizeOfDistanceOptionRadioButton">24sp</dimen>
-    <dimen name="dividerPaddingOfDistanceOptionRadioGroup">2dp</dimen>
+    <dimen name="dividerPaddingOfRadioGroup">2dp</dimen>
 
     <dimen name="spaceBetweenNameLabelAndName">5dp</dimen>
     <dimen name="textSizeOfEmptyOfferListView">28sp</dimen>

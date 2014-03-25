@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DistanceOptionRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:layout_margin">@dimen/marginOfCustomRadioButton</item>
+        <item name="android:textSize">@dimen/sizeOfDistanceOptionRadioButton</item>
+        <item name="android:background">@drawable/selector_radio_button_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@android:color/transparent</item>
+    </style>
+</resources>
