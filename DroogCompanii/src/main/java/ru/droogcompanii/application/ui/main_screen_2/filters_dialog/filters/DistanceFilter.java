@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl;
+package ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -58,8 +58,9 @@ public class DistanceFilter implements Filter, Serializable {
     private int checkedIndex;
 
     public static DistanceFilter getCurrent(Context context) {
+        SharedPreferences sharedPreferences = FiltersSharedPreferencesProvider.get(context);
         DistanceFilter distanceFilter = new DistanceFilter();
-        distanceFilter.readFrom(FiltersSharedPreferencesProvider.get(context));
+        distanceFilter.readFrom(sharedPreferences);
         return distanceFilter;
     }
 
@@ -67,7 +68,7 @@ public class DistanceFilter implements Filter, Serializable {
         checkedIndex = DEFAULT_INDEX;
     }
 
-    public boolean isActivated() {
+    public boolean isActive() {
         return checkedIndex != INDEX_OF_INACTIVE_DISTANCE_OPTION;
     }
 
@@ -80,7 +81,7 @@ public class DistanceFilter implements Filter, Serializable {
 
     @Override
     public Checker getChecker() {
-        if (!isActivated()) {
+        if (!isActive()) {
             return new DummyChecker(true);
         }
         final LatLng actualPosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();

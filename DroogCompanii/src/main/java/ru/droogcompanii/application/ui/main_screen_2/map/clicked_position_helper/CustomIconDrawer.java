@@ -36,7 +36,6 @@ public class CustomIconDrawer implements ClickedPositionDrawer {
 
     private BitmapDescriptor prepareBitmapDescriptor() {
         return BitmapDescriptorFactory.fromResource(R.drawable.clicked_circle);
-        //return BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
     }
 
     @Override

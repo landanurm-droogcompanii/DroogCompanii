@@ -11,7 +11,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.Filters;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.ui.main_screen_2.map.clicked_position_helper.ClickedPositionHelper;
 import ru.droogcompanii.application.util.NearestPositionCalculator;
 import ru.droogcompanii.application.util.OnEachHandler;
@@ -25,6 +25,7 @@ class Worker {
     public static class DisplayingTaskResult implements Serializable {
         public boolean isBoundsNotContainMarkers;
         public boolean isNeedToRemoveClickedPosition;
+        public int numberOfDisplayedPartnerPoints;
         public Optional<SerializableLatLng> nearestPosition;
     }
 
@@ -47,21 +48,26 @@ class Worker {
         this.conditionToReceivePartners = conditionToReceivePartners;
     }
 
-    DisplayingTaskResult displayAndGetNearestPosition(final LatLngBounds bounds,
-                                             final Filters currentFilters,
-                                      final PartnerPointsGroupedByPosition partnerPointsGroupedByPosition) {
+    DisplayingTaskResult display(final LatLngBounds bounds,
+                                 final Filters currentFilters,
+                                 final PartnerPointsGroupedByPosition partnerPointsGroupedByPosition) {
 
         final NearestPositionCalculator nearestCalculator = NearestPositionCalculator.fromActualBaseLocation();
         final PositionMatcher clickedPositionMatcher = new PositionMatcher(clickedPositionHelper.getOptionalClickedPosition());
 
         final DisplayingTaskResult taskResult = new DisplayingTaskResult();
+
         taskResult.isBoundsNotContainMarkers = true;
+
+        taskResult.numberOfDisplayedPartnerPoints = 0;
 
         IteratorOverPartnerPointsInDb iterator = new IteratorOverPartnerPointsInDb(currentFilters, prepareWhere());
 
         iterator.forEach(new OnEachHandler<PartnerPoint>() {
             @Override
             public void onEach(PartnerPoint partnerPoint) {
+
+                ++taskResult.numberOfDisplayedPartnerPoints;
 
                 LatLng position = partnerPoint.getPosition();
 

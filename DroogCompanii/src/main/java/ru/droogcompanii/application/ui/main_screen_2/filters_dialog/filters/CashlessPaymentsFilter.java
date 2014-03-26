@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl;
+package ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,7 +34,7 @@ public class CashlessPaymentsFilter implements Filter, Serializable {
         activated = DefaultValue.ACTIVATED;
     }
 
-    public boolean isActivated() {
+    public boolean isActive() {
         return activated;
     }
 
@@ -46,7 +46,7 @@ public class CashlessPaymentsFilter implements Filter, Serializable {
 
     @Override
     public Checker getChecker() {
-        if (!isActivated()) {
+        if (!isActive()) {
             return new DummyChecker(true);
         }
         return new Checker() {
@@ -69,7 +69,7 @@ public class CashlessPaymentsFilter implements Filter, Serializable {
 
     @Override
     public void writeTo(SharedPreferences.Editor editor) {
-        editor.putBoolean(Key.ACTIVATED, isActivated());
+        editor.putBoolean(Key.ACTIVATED, isActive());
     }
 
     @Override

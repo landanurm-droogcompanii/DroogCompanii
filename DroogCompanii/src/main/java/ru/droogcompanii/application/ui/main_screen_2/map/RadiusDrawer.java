@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.DistanceFilter;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilter;
 import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 
 /**
@@ -32,7 +32,7 @@ class RadiusDrawer {
 
     public void update() {
         DistanceFilter distanceFilter = DistanceFilter.getCurrent(mapFragment.getActivity());
-        if (distanceFilter.isActivated()) {
+        if (distanceFilter.isActive()) {
             drawIfNeed(distanceFilter.getMaxRadius());
         } else {
             removeIfNeed();

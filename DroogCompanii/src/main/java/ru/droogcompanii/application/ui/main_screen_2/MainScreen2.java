@@ -17,7 +17,7 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.main_screen_2.category_list.CategoryListFragment;
 import ru.droogcompanii.application.ui.main_screen_2.details.PartnerPointDetailsFragment;
-import ru.droogcompanii.application.ui.main_screen_2.filters.FiltersDialogFragment;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.FiltersDialogFragment;
 import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragmentWithBaseLocation;
 import ru.droogcompanii.application.ui.main_screen_2.map.NewPartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.util.ActivityWithNavigationDrawer;
@@ -55,10 +55,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            openNavigationDrawer();
             placeFragmentsOnLayout();
-        } else if (wasNavigationDrawerOpen(savedInstanceState)) {
-            openNavigationDrawer();
         }
         initDismissCustomBaseLocationAction();
     }
@@ -156,7 +153,8 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
                             public void run(Activity activity) {
                                 onFilterAction();
                             }
-                        })
+                        }),
+                        MenuItemHelpers.OFFERS
                 };
             }
         };
@@ -167,13 +165,23 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     }
 
     @Override
-    public void onDone() {
+    public void onFiltersDone() {
         updateMapFragment();
     }
 
     @Override
-    public void onClear() {
+    public void onFiltersClear() {
         // do nothing
+    }
+
+    @Override
+    public void onDisplayingIsStarted() {
+        findCategoryListFragment().setCategorySizeIsUnknown();
+    }
+
+    @Override
+    public void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints) {
+        findCategoryListFragment().setCategorySize(numberOfDisplayedPartnerPoints);
     }
 
 }

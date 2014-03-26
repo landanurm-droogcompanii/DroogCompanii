@@ -1,14 +1,13 @@
 package ru.droogcompanii.application.ui.util;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
 import com.google.common.base.Optional;
 
 /**
  * Created by ls on 06.03.14.
  */
-public class ActivityTrackedLifecycle extends ActionBarActivity {
+public class ActivityTrackedLifecycle extends DroogCompaniiBaseActivity {
 
     private Optional<Boolean> isCreated = Optional.absent();
     private Optional<Boolean> isStarted = Optional.absent();

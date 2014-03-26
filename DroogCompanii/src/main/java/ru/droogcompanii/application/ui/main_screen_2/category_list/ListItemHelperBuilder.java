@@ -18,8 +18,6 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
  */
 class ListItemHelperBuilder {
 
-    public static final int ROW_LAYOUT_ID = R.layout.view_list_item_category;
-
     public static ListItemHelper getFavoriteListItemHelper() {
         return new ListItemHelperImpl() {
             @Override
@@ -91,7 +89,7 @@ class ListItemHelperBuilder {
 
         private View inflateView(Context context) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            return inflater.inflate(ROW_LAYOUT_ID, null);
+            return inflater.inflate(CategoryListAdapter.ROW_LAYOUT_ID, null);
         }
 
         public abstract String getTitle(Context context);

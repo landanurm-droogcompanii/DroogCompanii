@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl;
+package ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -37,13 +37,13 @@ public class WorksNowFilter implements Filter, Serializable {
         activated = DefaultValue.ACTIVATED;
     }
 
-    public boolean isActivated() {
+    public boolean isActive() {
         return activated;
     }
 
     @Override
     public Checker getChecker() {
-        if (!isActivated()) {
+        if (!isActive()) {
             return new DummyChecker(true);
         }
         final Calendar now = CalendarUtils.now();

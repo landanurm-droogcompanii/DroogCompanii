@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.main_screen_2.category_list;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -124,19 +125,19 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         return listView;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View itemView, int position, long id) {
+        currentSelection = position;
+        selector.select(itemView);
+        callbacks.onCurrentCategoryChanged();
+    }
+
     public int getCurrentSelection() {
         return currentSelection;
     }
 
     public CategoryListItemSelector getSelector() {
         return selector;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View itemView, int position, long id) {
-        currentSelection = position;
-        selector.select(itemView);
-        callbacks.onCurrentCategoryChanged();
     }
 
     @Override
@@ -167,17 +168,24 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         final ArrayList<ListItemHelper> helpers = new ArrayList<ListItemHelper>();
         helpers.add(ListItemHelperBuilder.getAllPartnersListItemHelper());
         helpers.add(ListItemHelperBuilder.getFavoriteListItemHelper());
-        readCategoriesAndAddHelpers(helpers);
+        addPartnerCategoryHelpersIn(helpers);
         return helpers;
     }
 
-    private void readCategoriesAndAddHelpers(ArrayList<ListItemHelper> helpers) {
-        PartnerCategoriesReader reader = new PartnerCategoriesReader(DroogCompaniiApplication.getContext());
-        List<PartnerCategory> categories = reader.getAllPartnerCategories();
-        helpers.ensureCapacity(categories.size() + helpers.size());
+    private void addPartnerCategoryHelpersIn(ArrayList<ListItemHelper> helpers) {
+        List<PartnerCategory> categories = readAllPartnerCategories();
+        final int totalSize = categories.size() + helpers.size();
+        helpers.ensureCapacity(totalSize);
         for (PartnerCategory each : categories) {
-            helpers.add(ListItemHelperBuilder.getPartnerCategoryListItemHelper(each));
+            ListItemHelper eachHelper = ListItemHelperBuilder.getPartnerCategoryListItemHelper(each);
+            helpers.add(eachHelper);
         }
+    }
+
+    private List<PartnerCategory> readAllPartnerCategories() {
+        Context context = DroogCompaniiApplication.getContext();
+        PartnerCategoriesReader reader = new PartnerCategoriesReader(context);
+        return reader.getAllPartnerCategories();
     }
 
     @Override
@@ -226,5 +234,13 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     public String getSelectedCategoryName() {
         ListItemHelper item = listItemHelpers.get(currentSelection);
         return item.getTitle(getActivity());
+    }
+
+    public void setCategorySize(int size) {
+        // TODO
+    }
+
+    public void setCategorySizeIsUnknown() {
+        // TODO
     }
 }

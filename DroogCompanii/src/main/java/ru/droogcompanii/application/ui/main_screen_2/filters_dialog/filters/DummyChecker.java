@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl;
+package ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters;
 
 import android.database.Cursor;
 

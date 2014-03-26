@@ -30,6 +30,9 @@ public abstract class ActivityWithNavigationDrawer extends ActivityMenuHelper {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         initNavigationDrawer();
+        if (savedInstanceState == null || wasNavigationDrawerOpen(savedInstanceState)) {
+            openNavigationDrawer();
+        }
     }
 
     protected abstract int getLayoutId();

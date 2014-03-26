@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.main_screen_2.map;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,7 +21,8 @@ import java.util.Set;
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.Filters;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilter;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.ui.main_screen_2.map.clicked_position_helper.ClickedPositionHelper;
 import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.StateManager;
@@ -41,6 +43,8 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     public static interface Callbacks {
         void onDisplayDetails(List<PartnerPoint> partnerPoints);
         void onHideDetails();
+        void onDisplayingIsStarted();
+        void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints);
     }
 
     private static class Key {
@@ -52,7 +56,28 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         private static final int TASK_DISPLAYING = 34316;
     }
 
-    private static final Callbacks DUMMY_CALLBACKS = new DummyCallbacks();
+    private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
+        @Override
+        public void onDisplayDetails(List<PartnerPoint> partnerPoints) {
+            // do nothing
+        }
+
+        @Override
+        public void onHideDetails() {
+            // do nothing
+        }
+
+        @Override
+        public void onDisplayingIsStarted() {
+            // do nothing
+        }
+
+        @Override
+        public void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints) {
+            // do nothing
+        }
+    };
+
 
     private boolean isFirstDisplaying;
     private Callbacks callbacks;
@@ -173,6 +198,10 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
             cancelDisplayingTask();
         }
         this.conditionToReceivePartners = conditionToReceivePartners;
+        updateMap();
+    }
+
+    private void updateMap() {
         clusterManager.clearItems();
         if (conditionToReceivePartners.isPresent()) {
             startDisplayingTask();
@@ -191,6 +220,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
 
     private void startDisplayingTask() {
         radiusDrawer.update();
+        callbacks.onDisplayingIsStarted();
 
         final Filters currentFilters = Filters.getCurrentFilters(getActivity());
         final LatLngBounds bounds = getBounds();
@@ -200,7 +230,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
                 Worker worker = new Worker(clusterManager,
                         clickedPositionHelper, conditionToReceivePartners);
                 partnerPointsGroupedByPosition = new PartnerPointsGroupedByPosition();
-                return worker.displayAndGetNearestPosition(bounds, currentFilters, partnerPointsGroupedByPosition);
+                return worker.display(bounds, currentFilters, partnerPointsGroupedByPosition);
             }
         });
     }
@@ -230,6 +260,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
             onNeedToRemoveClickedPosition();
         }
         updateMapCamera(taskResult);
+        callbacks.onDisplayingIsCompleted(taskResult.numberOfDisplayedPartnerPoints);
     }
 
     private void updateMapCamera(Worker.DisplayingTaskResult taskResult) {
@@ -254,5 +285,18 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
 
     private void moveToPosition(LatLng position) {
         moveCamera(position, getCurrentZoom());
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        super.onLocationChanged(location);
+        if (isDistanceFilterSet()) {
+            updateMap();
+        }
+    }
+
+    private boolean isDistanceFilterSet() {
+        DistanceFilter distanceFilter = DistanceFilter.getCurrent(getActivity());
+        return distanceFilter.isActive();
     }
 }

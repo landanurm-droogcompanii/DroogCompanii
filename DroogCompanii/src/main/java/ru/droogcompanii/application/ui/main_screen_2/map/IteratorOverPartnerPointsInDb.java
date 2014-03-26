@@ -11,8 +11,8 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHi
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.Filter;
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.Filters;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filter;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.util.OnEachHandler;
 import ru.droogcompanii.application.util.OnEachIterable;
 import ru.droogcompanii.application.util.StringsCombiner;

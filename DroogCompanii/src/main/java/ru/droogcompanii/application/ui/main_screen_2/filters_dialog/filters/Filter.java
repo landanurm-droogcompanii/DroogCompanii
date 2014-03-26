@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl;
+package ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,7 +23,7 @@ public interface Filter {
         boolean isMeet(PartnerPoint partnerPoint, Cursor cursor);
     }
 
-    boolean isActivated();
+    boolean isActive();
     Checker getChecker();
     Set<String> getColumnsOfPartnerPoint();
     void readFrom(SharedPreferences sharedPreferences);

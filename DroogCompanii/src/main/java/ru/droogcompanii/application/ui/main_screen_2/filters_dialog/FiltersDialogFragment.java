@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.filters;
+package ru.droogcompanii.application.ui.main_screen_2.filters_dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.Filters;
-import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.FiltersSharedPreferencesProvider;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.FiltersSharedPreferencesProvider;
 
 /**
  * Created by ls on 25.03.14.
@@ -18,8 +18,8 @@ import ru.droogcompanii.application.ui.main_screen_2.filters.filters_impl.Filter
 public class FiltersDialogFragment extends DialogFragment {
 
     public static interface Callbacks {
-        void onDone();
-        void onClear();
+        void onFiltersDone();
+        void onFiltersClear();
     }
 
     private static class Key {
@@ -37,12 +37,12 @@ public class FiltersDialogFragment extends DialogFragment {
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         @Override
-        public void onDone() {
+        public void onFiltersDone() {
             // do nothing
         }
 
         @Override
-        public void onClear() {
+        public void onFiltersClear() {
             // do nothing
         }
     };
@@ -98,15 +98,15 @@ public class FiltersDialogFragment extends DialogFragment {
     private FiltersDialog prepareDialog(Filters filters) {
         return new FiltersDialog(getActivity(), filters, new Callbacks() {
             @Override
-            public void onDone() {
+            public void onFiltersDone() {
                 shareFilters();
-                callbacks.onDone();
+                callbacks.onFiltersDone();
                 dismiss();
             }
 
             @Override
-            public void onClear() {
-                callbacks.onClear();
+            public void onFiltersClear() {
+                callbacks.onFiltersClear();
                 dismiss();
             }
         });
