@@ -17,9 +17,9 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.ui.util.FavoriteViewUtils;
-import ru.droogcompanii.application.ui.util.Router;
-import ru.droogcompanii.application.ui.util.caller.CallerHelper;
+import ru.droogcompanii.application.ui.util.view.FavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.workers.Router;
+import ru.droogcompanii.application.ui.util.workers.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
 
 /**

@@ -30,7 +30,7 @@ import ru.droogcompanii.application.ui.fragment.bank_card_details.BankCardDetail
 import ru.droogcompanii.application.ui.fragment.personal_details.OnBankCardSelectedListener;
 import ru.droogcompanii.application.ui.fragment.personal_details.PersonalDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.signin.SignInFragment;
-import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.Predicate;
 import ru.droogcompanii.application.util.Snorlax;
 

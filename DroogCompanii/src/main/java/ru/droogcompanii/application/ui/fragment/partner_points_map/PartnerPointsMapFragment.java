@@ -19,8 +19,8 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableL
 import ru.droogcompanii.application.data.searchable_sortable_listing.SearchableSortableListing;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
-import ru.droogcompanii.application.ui.util.CurrentLocationUtils;
-import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
+import ru.droogcompanii.application.ui.util.location.CurrentLocationUtils;
+import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
 import ru.droogcompanii.application.util.MultiMap;
 
 /**

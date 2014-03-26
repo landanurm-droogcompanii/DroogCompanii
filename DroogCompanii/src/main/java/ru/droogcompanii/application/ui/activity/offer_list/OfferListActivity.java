@@ -18,7 +18,7 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.ui.fragment.offer_list.OfferListFragment;
 import ru.droogcompanii.application.ui.fragment.offer_list.OfferType;
-import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 31.01.14.

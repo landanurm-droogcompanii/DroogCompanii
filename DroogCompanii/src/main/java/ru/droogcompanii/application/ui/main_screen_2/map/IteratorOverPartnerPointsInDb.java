@@ -30,12 +30,12 @@ class IteratorOverPartnerPointsInDb implements OnEachIterable<PartnerPoint> {
 
     private final String where;
     private final Filters filters;
-    private final Filter.Checker filterChecker;
+    private final Filter filter;
 
     public IteratorOverPartnerPointsInDb(Filters currentFilters, String where) {
         this.where = where;
         this.filters = currentFilters;
-        this.filterChecker = filters.getChecker();
+        this.filter = currentFilters.getActiveFilter();
     }
 
     @Override
@@ -48,7 +48,7 @@ class IteratorOverPartnerPointsInDb implements OnEachIterable<PartnerPoint> {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     PartnerPoint partnerPoint = readPartnerPoint(cursor);
-                    if (filterChecker.isMeet(partnerPoint, cursor)) {
+                    if (filter.isPassedThroughFilter(partnerPoint, cursor)) {
                         onEachHandler.onEach(partnerPoint);
                     }
                     cursor.moveToNext();

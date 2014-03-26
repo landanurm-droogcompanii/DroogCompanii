@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
-import ru.droogcompanii.application.ui.util.LocationConverter;
+import ru.droogcompanii.application.ui.util.location.LocationConverter;
 import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 

@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.ActivityTrackedLifecycle;
+import ru.droogcompanii.application.ui.util.activity.ActivityTrackedLifecycle;
 
 /**
  * Created by ls on 21.02.14.

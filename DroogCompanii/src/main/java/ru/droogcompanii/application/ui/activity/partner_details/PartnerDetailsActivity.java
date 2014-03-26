@@ -19,8 +19,8 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.util.PartnerPointsProviderHolder;
+import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
+import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**

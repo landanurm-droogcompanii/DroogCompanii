@@ -10,9 +10,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAboutBaseMapLocationChanges;
-import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.CurrentLocationUtils;
-import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
+import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.ui.util.location.CurrentLocationUtils;
+import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
 
 /**
  * Created by ls on 24.03.14.
@@ -55,7 +55,6 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
 
 
     public CustomMapFragmentWithBaseLocation() {
-        callbacks = DUMMY_CALLBACKS;
         onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
     }
 
@@ -79,14 +78,13 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
         getGoogleMap().setOnMapLongClickListener(this);
     }
 
+
     protected void initCurrentLocation() {
         GoogleMap googleMap = getGoogleMap();
         if (googleMap == null) {
             return;
         }
-
         googleMap.setMyLocationEnabled(true);
-
         googleMap.setLocationSource(new LocationSource() {
             @Override
             public void activate(OnLocationChangedListener onLocationChangedListener) {
@@ -124,6 +122,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
         setCustomBaseLocation(latLng);
     }
 
+
     private void setCustomBaseLocation(LatLng latLng) {
         CustomBaseLocationUtils.updateBasePosition(latLng);
         CurrentLocationUtils.notifyListeners();
@@ -131,6 +130,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
 
         callbacks.onCustomBaseLocationIsSet();
     }
+
 
     public void dismissCustomBaseLocation() {
         CustomBaseLocationUtils.dismissBasePosition();

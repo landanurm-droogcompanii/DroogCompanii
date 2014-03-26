@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.IconAndLabelItemInflater;
+import ru.droogcompanii.application.ui.util.view.IconAndLabelItemMaker;
 import ru.droogcompanii.application.util.HotlineNumbersProvider;
-import ru.droogcompanii.application.ui.util.NavigatorToWebsite;
+import ru.droogcompanii.application.ui.util.workers.NavigatorToWebsite;
 import ru.droogcompanii.application.util.WebsiteAddressProvider;
-import ru.droogcompanii.application.ui.util.caller.CallerHelper;
+import ru.droogcompanii.application.ui.util.workers.caller.CallerHelper;
 
 /**
  * Created by ls on 14.02.14.
@@ -26,14 +26,14 @@ public class HelpFragment extends Fragment {
     }
 
     private void fill(ViewGroup viewGroup) {
-        IconAndLabelItemInflater inflater = new IconAndLabelItemInflater(getActivity());
+        IconAndLabelItemMaker inflater = new IconAndLabelItemMaker(getActivity());
         viewGroup.addView(prepareHotlineView(inflater));
         viewGroup.addView(prepareWebsiteView(inflater));
     }
 
-    private View prepareHotlineView(IconAndLabelItemInflater inflater) {
+    private View prepareHotlineView(IconAndLabelItemMaker inflater) {
         final String title = getString(R.string.hotline);
-        return inflater.inflate(R.drawable.phone, title, new Runnable() {
+        return inflater.make(R.drawable.phone, title, new Runnable() {
             @Override
             public void run() {
                 CallerHelper callerHelper = new CallerHelper(getActivity());
@@ -42,8 +42,8 @@ public class HelpFragment extends Fragment {
         });
     }
 
-    private View prepareWebsiteView(IconAndLabelItemInflater inflater) {
-        return inflater.inflate(R.drawable.ic_web_site, getString(R.string.website), new Runnable() {
+    private View prepareWebsiteView(IconAndLabelItemMaker inflater) {
+        return inflater.make(R.drawable.ic_web_site, getString(R.string.website), new Runnable() {
             @Override
             public void run() {
                 NavigatorToWebsite helper = new NavigatorToWebsite(getActivity());

@@ -13,7 +13,7 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
-import ru.droogcompanii.application.ui.util.ImageDownloader;
+import ru.droogcompanii.application.ui.util.view.ImageDownloader;
 import ru.droogcompanii.application.util.CalendarUtils;
 
 /**

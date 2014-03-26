@@ -2,29 +2,25 @@ package ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.OnEachHandler;
 
 /**
  * Created by ls on 25.03.14.
  */
 public class Filters implements Serializable {
-    private final List<Filter> filters;
 
-    public static Filters getCurrentFilters(Context context) {
+    public static Filters getCurrent(Context context) {
         Filters currentFilters = new Filters();
         SharedPreferences sharedPreferences = FiltersSharedPreferencesProvider.get(context);
         currentFilters.readFrom(sharedPreferences);
@@ -37,27 +33,30 @@ public class Filters implements Serializable {
         return filters;
     }
 
+
+    private final List<FilterHelper> filters;
+
     public Filters() {
-        filters = FiltersProvider.getFilters();
+        filters = FilterHelpersProvider.get();
     }
 
     public void readFrom(final SharedPreferences sharedPreferences) {
-        forEachFilter(new OnEachHandler<Filter>() {
+        forEachFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
+            public void onEach(FilterHelper each) {
                 each.readFrom(sharedPreferences);
             }
         });
     }
 
-    private void forEachFilter(OnEachHandler<Filter> onEachHandler) {
-        for (Filter each : filters) {
+    private void forEachFilter(OnEachHandler<FilterHelper> onEachHandler) {
+        for (FilterHelper each : filters) {
             onEachHandler.onEach(each);
         }
     }
 
-    private void forEachActiveFilter(OnEachHandler<Filter> onEachHandler) {
-        for (Filter each : filters) {
+    private void forEachActiveFilter(OnEachHandler<FilterHelper> onEachHandler) {
+        for (FilterHelper each : filters) {
             if (each.isActive()) {
                 onEachHandler.onEach(each);
             }
@@ -65,9 +64,9 @@ public class Filters implements Serializable {
     }
 
     public void writeTo(final SharedPreferences.Editor editor) {
-        forEachFilter(new OnEachHandler<Filter>() {
+        forEachFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
+            public void onEach(FilterHelper each) {
                 each.writeTo(editor);
             }
         });
@@ -75,80 +74,66 @@ public class Filters implements Serializable {
 
     public Set<String> getColumnsOfPartnerPoint() {
         final Set<String> columns = new HashSet<String>();
-        forEachActiveFilter(new OnEachHandler<Filter>() {
+        forEachActiveFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
+            public void onEach(FilterHelper each) {
                 columns.addAll(each.getColumnsOfPartnerPoint());
             }
         });
         return columns;
     }
 
-    public Filter.Checker getChecker() {
-        final List<Filter.Checker> activeCheckers = getActiveCheckers();
-        if (activeCheckers.isEmpty()) {
-            return new DummyChecker(true);
-        } else if (activeCheckers.size() == 1) {
-            return activeCheckers.get(0);
+    public Filter getActiveFilter() {
+        final List<Filter> activeFilters = prepareActiveFilters();
+        if (activeFilters.isEmpty()) {
+            return new DummyFilter(true);
+        } else if (activeFilters.size() == 1) {
+            return activeFilters.get(0);
         } else {
-            return new CombinedChecker(activeCheckers);
+            return new CombinedFilter(activeFilters);
         }
     }
 
-    private List<Filter.Checker> getActiveCheckers() {
-        final List<Filter.Checker> activeCheckers = new ArrayList<Filter.Checker>();
-        forEachActiveFilter(new OnEachHandler<Filter>() {
+    private List<Filter> prepareActiveFilters() {
+        final List<Filter> active = new ArrayList<Filter>();
+        forEachActiveFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
-                activeCheckers.add(each.getChecker());
+            public void onEach(FilterHelper each) {
+                active.add(each.getFilter());
             }
         });
-        return activeCheckers;
-    }
-
-    private static class CombinedChecker implements Filter.Checker {
-        private final Collection<Filter.Checker> checkers;
-
-        public CombinedChecker(Collection<Filter.Checker> checkers) {
-            this.checkers = checkers;
-        }
-
-        @Override
-        public boolean isMeet(PartnerPoint partnerPoint, Cursor cursor) {
-            for (Filter.Checker each : checkers) {
-                if (!each.isMeet(partnerPoint, cursor)) {
-                    return false;
-                }
-            }
-            return true;
-        }
+        return active;
     }
 
     public View inflateContentView(final Context context) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        final LinearLayout filtersLayout = (LinearLayout) layoutInflater.inflate(R.layout.vertical_linear_layout, null);
-        forEachFilter(new OnEachHandler<Filter>() {
+        final ViewGroup container = prepareContainer(context);
+        forEachFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
-                filtersLayout.addView(each.inflateContentView(context));
+            public void onEach(FilterHelper each) {
+                container.addView(each.inflateContentView(context));
             }
         });
-        return filtersLayout;
+        return container;
+    }
+
+    private static ViewGroup prepareContainer(Context context) {
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        return (ViewGroup) layoutInflater.inflate(R.layout.vertical_linear_layout, null);
     }
 
     public void displayOn(final View view) {
-        forEachFilter(new OnEachHandler<Filter>() {
+        forEachFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
+            public void onEach(FilterHelper each) {
                 each.displayOn(view);
             }
         });
     }
 
     public void readFrom(final View view) {
-        forEachFilter(new OnEachHandler<Filter>() {
+        forEachFilter(new OnEachHandler<FilterHelper>() {
             @Override
-            public void onEach(Filter each) {
+            public void onEach(FilterHelper each) {
                 each.readFrom(view);
             }
         });

@@ -20,10 +20,10 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPo
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.WorkingHoursIndicatorUpdater;
-import ru.droogcompanii.application.ui.util.FavoriteViewUtils;
-import ru.droogcompanii.application.ui.util.Router;
+import ru.droogcompanii.application.ui.util.view.FavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.workers.Router;
 import ru.droogcompanii.application.ui.util.StateManager;
-import ru.droogcompanii.application.ui.util.caller.CallerHelper;
+import ru.droogcompanii.application.ui.util.workers.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Objects;
 
@@ -73,12 +73,6 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
         }
     };
 
-
-    public void hide() {
-        isVisible = false;
-        getView().setVisibility(View.INVISIBLE);
-    }
-
     private void restoreVisibilityFrom(Bundle savedInstanceState) {
         boolean isNeedToShow = savedInstanceState.getBoolean(Key.VISIBLE);
         if (isNeedToShow) {
@@ -92,6 +86,11 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
         isVisible = true;
         getView().setVisibility(View.VISIBLE);
         updateUI();
+    }
+
+    public void hide() {
+        isVisible = false;
+        getView().setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -325,7 +324,7 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     }
 
     private List<Optional<PartnerPoint>> prepareAbsentPartnerPoints(List<PartnerPoint> partnerPointsToSet) {
-        final int size = partnerPointsToSet.size();
+        int size = partnerPointsToSet.size();
         List<Optional<PartnerPoint>> result = new ArrayList<Optional<PartnerPoint>>(size);
         for (int i = 0; i < size; ++i) {
             result.add(Optional.<PartnerPoint>absent());

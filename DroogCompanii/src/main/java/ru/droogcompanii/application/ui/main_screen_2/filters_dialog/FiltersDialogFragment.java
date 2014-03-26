@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.FiltersSharedPreferencesProvider;
@@ -19,8 +18,20 @@ public class FiltersDialogFragment extends DialogFragment {
 
     public static interface Callbacks {
         void onFiltersDone();
-        void onFiltersClear();
+        void onFiltersCancel();
     }
+
+    private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
+        @Override
+        public void onFiltersDone() {
+            // do nothing
+        }
+
+        @Override
+        public void onFiltersCancel() {
+            // do nothing
+        }
+    };
 
     private static class Key {
         public static final String FILTERS = "FILTERS" + FiltersDialogFragment.class.getName();
@@ -35,23 +46,9 @@ public class FiltersDialogFragment extends DialogFragment {
     }
 
 
-    private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
-        @Override
-        public void onFiltersDone() {
-            // do nothing
-        }
-
-        @Override
-        public void onFiltersClear() {
-            // do nothing
-        }
-    };
-
-
     private Callbacks callbacks;
     private Filters displayedFilters;
     private FiltersDialog dialog;
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -68,11 +65,13 @@ public class FiltersDialogFragment extends DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
+        // need to read displayed filters here, because
+        // in onSaveInstanceState() <dialog> or <content view> may be not available
         displayedFilters = getDisplayedFilters();
     }
 
     private Filters getDisplayedFilters() {
-        return Filters.getReadedFrom(getContentView());
+        return Filters.getReadedFrom(dialog.getContentView());
     }
 
     @Override
@@ -87,12 +86,15 @@ public class FiltersDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Filters filters = (savedInstanceState == null)
-                ? Filters.getCurrentFilters(getActivity())
-                : (Filters) savedInstanceState.getSerializable(Key.FILTERS);
-        dialog = prepareDialog(filters);
+        dialog = prepareDialog(getFilters(savedInstanceState));
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
+    }
+
+    private Filters getFilters(Bundle savedInstanceState) {
+        return (savedInstanceState == null)
+                ? Filters.getCurrent(getActivity())
+                : (Filters) savedInstanceState.getSerializable(Key.FILTERS);
     }
 
     private FiltersDialog prepareDialog(Filters filters) {
@@ -105,22 +107,17 @@ public class FiltersDialogFragment extends DialogFragment {
             }
 
             @Override
-            public void onFiltersClear() {
-                callbacks.onFiltersClear();
+            public void onFiltersCancel() {
+                callbacks.onFiltersCancel();
                 dismiss();
             }
         });
     }
 
     private void shareFilters() {
-        Filters filters = Filters.getReadedFrom(getContentView());
         SharedPreferences sharedPreferences = FiltersSharedPreferencesProvider.get(getActivity());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        filters.writeTo(editor);
+        getDisplayedFilters().writeTo(editor);
         editor.commit();
-    }
-
-    private View getContentView() {
-        return dialog.getContentView();
     }
 }

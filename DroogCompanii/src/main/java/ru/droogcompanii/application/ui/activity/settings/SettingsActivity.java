@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.ui.activity.settings;
 
-import ru.droogcompanii.application.ui.util.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 31.01.14.

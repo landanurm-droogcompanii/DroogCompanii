@@ -13,7 +13,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByDiscountSize;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByDistance;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByTitle;
-import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
+import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
 
 /**
  * Created by ls on 17.02.14.

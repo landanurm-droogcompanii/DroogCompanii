@@ -21,10 +21,11 @@ import java.util.Set;
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
-import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilter;
+import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilterHelper;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
+import ru.droogcompanii.application.ui.main_screen_2.map.circle_of_nearest.CircleOfNearestDrawer;
 import ru.droogcompanii.application.ui.main_screen_2.map.clicked_position_helper.ClickedPositionHelper;
-import ru.droogcompanii.application.ui.util.ActualBaseLocationProvider;
+import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.ui.util.StateManager;
 import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.ListUtils;
@@ -85,7 +86,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     private ClusterManager<ClusterItem> clusterManager;
     private Optional<String> conditionToReceivePartners;
     private PartnerPointsGroupedByPosition partnerPointsGroupedByPosition;
-    private RadiusDrawer radiusDrawer;
+    private CircleOfNearestDrawer nearestDrawer;
 
 
     private final StateManager STATE_MANAGER = new StateManager() {
@@ -137,8 +138,8 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         super.onActivityCreated(savedInstanceState);
         STATE_MANAGER.initState(savedInstanceState);
         initMap();
-        radiusDrawer = new RadiusDrawer(this);
-        radiusDrawer.update();
+        nearestDrawer = new CircleOfNearestDrawer(this);
+        nearestDrawer.update();
     }
 
     @Override
@@ -219,10 +220,10 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     }
 
     private void startDisplayingTask() {
-        radiusDrawer.update();
+        nearestDrawer.update();
         callbacks.onDisplayingIsStarted();
 
-        final Filters currentFilters = Filters.getCurrentFilters(getActivity());
+        final Filters currentFilters = Filters.getCurrent(getActivity());
         final LatLngBounds bounds = getBounds();
         startTask(RequestCode.TASK_DISPLAYING, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
@@ -296,7 +297,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     }
 
     private boolean isDistanceFilterSet() {
-        DistanceFilter distanceFilter = DistanceFilter.getCurrent(getActivity());
-        return distanceFilter.isActive();
+        DistanceFilterHelper distanceFilterHelper = DistanceFilterHelper.getCurrent(getActivity());
+        return distanceFilterHelper.isActive();
     }
 }

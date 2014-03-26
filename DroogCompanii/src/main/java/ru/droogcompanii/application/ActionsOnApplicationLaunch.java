@@ -1,7 +1,7 @@
 package ru.droogcompanii.application;
 
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
-import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
+import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
 import ru.droogcompanii.application.util.LogUtils;
 
 /**

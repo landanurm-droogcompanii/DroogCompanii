@@ -20,8 +20,8 @@ import ru.droogcompanii.application.ui.main_screen_2.details.PartnerPointDetails
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.FiltersDialogFragment;
 import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragmentWithBaseLocation;
 import ru.droogcompanii.application.ui.main_screen_2.map.NewPartnerPointsMapFragment;
-import ru.droogcompanii.application.ui.util.ActivityWithNavigationDrawer;
-import ru.droogcompanii.application.ui.util.CustomBaseLocationUtils;
+import ru.droogcompanii.application.ui.util.activity.ActivityWithNavigationDrawer;
+import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
 
 /**
  * Created by ls on 14.03.14.
@@ -170,7 +170,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     }
 
     @Override
-    public void onFiltersClear() {
+    public void onFiltersCancel() {
         // do nothing
     }
 

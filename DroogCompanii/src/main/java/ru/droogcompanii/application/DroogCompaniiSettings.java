@@ -4,7 +4,7 @@ import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import ru.droogcompanii.application.ui.util.LocationConverter;
+import ru.droogcompanii.application.ui.util.location.LocationConverter;
 
 /**
  * Created by ls on 29.01.14.

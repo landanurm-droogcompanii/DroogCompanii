@@ -8,7 +8,6 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.ui.util.SimpleArrayAdapter;
 
 /**
  * Created by Leonid on 17.12.13.

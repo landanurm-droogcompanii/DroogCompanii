@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.ui.util.FavoriteViewUtils;
+import ru.droogcompanii.application.ui.util.view.FavoriteViewUtils;
 
 /**
  * Created by Leonid on 27.02.14.

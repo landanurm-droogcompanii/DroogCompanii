@@ -16,8 +16,8 @@ import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filt
  */
 public class FiltersDialog extends Dialog {
 
-    private final FiltersDialogFragment.Callbacks callbacks;
     private final Filters filters;
+    private final FiltersDialogFragment.Callbacks callbacks;
     private View contentView;
 
     public FiltersDialog(Context context, Filters filters, FiltersDialogFragment.Callbacks callbacks) {
@@ -29,25 +29,25 @@ public class FiltersDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.contentView = prepareContentView();
+        contentView = prepareContentView();
         setContentView(contentView);
     }
 
     private View prepareContentView() {
         View contentView = wrapInScrollView(prepareFiltersContentView());
-        View panelClearDone = prepareClearDonePanel();
+        View panelClearDone = prepareCancelDonePanel();
         return combineIntoVerticalLinearLayout(contentView, panelClearDone);
     }
 
     private View wrapInScrollView(View view) {
-        ScrollView scrollView = prepareScrollView();
+        ScrollView scrollView = (ScrollView) inflateLayout(R.layout.view_scroll);
         scrollView.addView(view);
         return scrollView;
     }
 
-    private ScrollView prepareScrollView() {
+    private View inflateLayout(int layoutId) {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        return (ScrollView) layoutInflater.inflate(R.layout.view_scroll, null);
+        return layoutInflater.inflate(layoutId, null);
     }
 
     private View prepareFiltersContentView() {
@@ -56,27 +56,25 @@ public class FiltersDialog extends Dialog {
         return filtersContentView;
     }
 
-    private View prepareClearDonePanel() {
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        View view = layoutInflater.inflate(R.layout.view_clear_done_panel, null);
-        view.findViewById(R.id.clear).setOnClickListener(new View.OnClickListener() {
+    private View prepareCancelDonePanel() {
+        View panel = inflateLayout(R.layout.view_cancel_done_panel);
+        panel.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callbacks.onFiltersClear();
+                callbacks.onFiltersCancel();
             }
         });
-        view.findViewById(R.id.done).setOnClickListener(new View.OnClickListener() {
+        panel.findViewById(R.id.done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 callbacks.onFiltersDone();
             }
         });
-        return view;
+        return panel;
     }
 
     private View combineIntoVerticalLinearLayout(View... viewsToCombine) {
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        ViewGroup viewGroup = (ViewGroup) layoutInflater.inflate(R.layout.vertical_linear_layout, null);
+        ViewGroup viewGroup = (ViewGroup) inflateLayout(R.layout.vertical_linear_layout);
         for (View each : viewsToCombine) {
             viewGroup.addView(each);
         }
