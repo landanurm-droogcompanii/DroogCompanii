@@ -7,7 +7,7 @@ import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilterHelper;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 
 /**
  * Created by ls on 25.03.14.

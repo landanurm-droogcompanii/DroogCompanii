@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
 
 /**
  * Created by ls on 14.03.14.

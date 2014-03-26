@@ -18,7 +18,7 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderByPartnerCategory;
 import ru.droogcompanii.application.ui.activity.search.search_result_provider_impl.SearchResultProviderBySearchQuery;
 import ru.droogcompanii.application.ui.fragment.partner_category_list.PartnerCategoryListFragment;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 14.01.14.

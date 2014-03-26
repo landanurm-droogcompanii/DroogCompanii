@@ -10,9 +10,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAboutBaseMapLocationChanges;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.location.CurrentLocationUtils;
-import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.location.CurrentLocationUtils;
+import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 
 /**
  * Created by ls on 24.03.14.

@@ -1,39 +1,35 @@
 package ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner;
 
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 
 import java.io.Serializable;
 import java.util.Comparator;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.util.BaseLocationProvider;
 import ru.droogcompanii.application.util.MinMax;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 
 /**
  * Created by ls on 16.01.14.
  */
 public class PartnerComparatorByDistance implements Comparator<Partner>, Serializable {
 
-    private final BaseLocationProvider baseLocationProvider;
-
-    public PartnerComparatorByDistance(BaseLocationProvider baseLocationProvider) {
-        this.baseLocationProvider = baseLocationProvider;
-    }
-
     @Override
     public int compare(Partner partner1, Partner partner2) {
-        Location baseLocation = baseLocationProvider.getBaseLocation();
-        Float d1 = minDistanceFromPartnerToLocation(partner1, baseLocation);
-        Float d2 = minDistanceFromPartnerToLocation(partner2, baseLocation);
+        LatLng basePosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
+        Double d1 = minDistanceFromPartnerToBasePosition(partner1, basePosition);
+        Double d2 = minDistanceFromPartnerToBasePosition(partner2, basePosition);
         return d1.compareTo(d2);
     }
 
-    private static Float minDistanceFromPartnerToLocation(Partner partner, Location location) {
-        MinMax<Float> minMax = new MinMax<Float>();
-        minMax.add(Float.MAX_VALUE);
+    private static Double minDistanceFromPartnerToBasePosition(Partner partner, LatLng basePosition) {
+        MinMax<Double> minMax = new MinMax<Double>();
+        minMax.add(Double.MAX_VALUE);
         for (PartnerPoint partnerPoint : PartnerPointsProviderWithoutContext.getPointsOf(partner)) {
-            minMax.add(partnerPoint.distanceTo(location));
+            double distance = SphericalUtil.computeDistanceBetween(partnerPoint.getPosition(), basePosition);
+            minMax.add(distance);
         }
         return minMax.min();
     }

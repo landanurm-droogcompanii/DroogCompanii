@@ -25,9 +25,9 @@ import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Dist
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.ui.main_screen_2.map.circle_of_nearest.CircleOfNearestDrawer;
 import ru.droogcompanii.application.ui.main_screen_2.map.clicked_position_helper.ClickedPositionHelper;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.StateManager;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.util.SerializableLatLng;
 

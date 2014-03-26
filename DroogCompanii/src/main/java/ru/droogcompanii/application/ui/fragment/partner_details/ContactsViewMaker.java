@@ -4,9 +4,9 @@ import android.content.Context;
 import android.view.View;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.view.IconAndLabelItemMaker;
-import ru.droogcompanii.application.ui.util.workers.SenderEmail;
-import ru.droogcompanii.application.ui.util.workers.NavigatorToWebsite;
+import ru.droogcompanii.application.util.view.IconAndLabelItemMaker;
+import ru.droogcompanii.application.util.workers.SenderEmail;
+import ru.droogcompanii.application.util.workers.NavigatorToWebsite;
 
 /**
  * Created by ls on 13.02.14.

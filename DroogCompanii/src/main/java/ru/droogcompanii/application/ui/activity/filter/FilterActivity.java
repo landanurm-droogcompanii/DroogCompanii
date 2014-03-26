@@ -10,8 +10,8 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter.FilterFragment;
 import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
 import ru.droogcompanii.application.ui.fragment.filter.filters.Filters;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.util.view.YesNoDialogMaker;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.view.YesNoDialogMaker;
 import ru.droogcompanii.application.util.Objects;
 
 /**

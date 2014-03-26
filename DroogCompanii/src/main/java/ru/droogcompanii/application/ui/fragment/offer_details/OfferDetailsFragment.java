@@ -15,7 +15,7 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerAndPartnerPointsProviderByPartner;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
-import ru.droogcompanii.application.ui.util.view.ImageDownloader;
+import ru.droogcompanii.application.util.view.ImageDownloader;
 
 /**
  * Created by ls on 10.02.14.

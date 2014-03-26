@@ -20,8 +20,8 @@ import ru.droogcompanii.application.data.searchable_sortable_listing.SearchCrite
 import ru.droogcompanii.application.ui.fragment.filter.Filter;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point.PartnerPointSearchClosestPointsCriterion;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.constants.ApiVersionUtils;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.constants.ApiVersionUtils;
 import ru.droogcompanii.application.util.ConverterToString;
 
 /**

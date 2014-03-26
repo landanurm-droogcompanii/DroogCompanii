@@ -19,8 +19,8 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.view.RadioGroupMaker;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.view.RadioGroupMaker;
 
 /**
  * Created by ls on 25.03.14.

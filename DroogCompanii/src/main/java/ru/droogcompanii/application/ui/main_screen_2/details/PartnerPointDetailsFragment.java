@@ -20,10 +20,10 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPo
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.WorkingHoursIndicatorUpdater;
-import ru.droogcompanii.application.ui.util.view.FavoriteViewUtils;
-import ru.droogcompanii.application.ui.util.workers.Router;
-import ru.droogcompanii.application.ui.util.StateManager;
-import ru.droogcompanii.application.ui.util.workers.caller.CallerHelper;
+import ru.droogcompanii.application.util.view.FavoriteViewUtils;
+import ru.droogcompanii.application.util.workers.Router;
+import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Objects;
 

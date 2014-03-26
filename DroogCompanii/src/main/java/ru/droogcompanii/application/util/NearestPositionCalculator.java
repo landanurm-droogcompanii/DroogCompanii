@@ -4,7 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 import com.google.maps.android.SphericalUtil;
 
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 
 /**
  * Created by Leonid on 16.03.14.

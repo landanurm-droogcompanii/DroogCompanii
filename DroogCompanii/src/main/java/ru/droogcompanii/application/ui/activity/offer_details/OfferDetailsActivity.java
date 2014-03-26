@@ -12,7 +12,7 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.fragment.offer_details.OfferDetailsFragment;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 10.02.14.

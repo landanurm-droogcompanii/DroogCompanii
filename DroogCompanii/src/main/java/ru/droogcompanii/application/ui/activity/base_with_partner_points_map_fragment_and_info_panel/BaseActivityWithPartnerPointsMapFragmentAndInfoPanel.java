@@ -18,10 +18,10 @@ import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.Partne
 import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAboutBaseMapLocationChanges;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.ui.util.location.CurrentLocationUtils;
-import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.location.CurrentLocationUtils;
+import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 22.01.14.

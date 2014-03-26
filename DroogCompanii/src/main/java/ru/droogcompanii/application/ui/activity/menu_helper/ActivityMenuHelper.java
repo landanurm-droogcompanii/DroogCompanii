@@ -2,7 +2,7 @@ package ru.droogcompanii.application.ui.activity.menu_helper;
 
 import android.view.Menu;
 
-import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.ActivityAbleToStartTask;
 
 /**
  * Created by ls on 14.02.14.

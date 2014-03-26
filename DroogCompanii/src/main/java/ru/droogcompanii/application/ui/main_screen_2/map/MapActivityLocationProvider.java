@@ -17,8 +17,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.ui.util.activity.ActivityWithNavigationDrawer;
-import ru.droogcompanii.application.ui.util.location.LocationConverter;
+import ru.droogcompanii.application.util.activity.ActivityWithNavigationDrawer;
+import ru.droogcompanii.application.util.location.LocationConverter;
 import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.OnEachHandler;
 

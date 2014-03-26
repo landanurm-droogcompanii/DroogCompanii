@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.learn_maps_utility.marker_clustering.LearnMarkerClusteringFragment;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 14.03.14.

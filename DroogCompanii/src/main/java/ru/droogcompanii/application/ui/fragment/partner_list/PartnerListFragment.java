@@ -18,9 +18,9 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.ui.activity.partner_list.PartnerListActivity;
-import ru.droogcompanii.application.ui.util.able_to_start_task.AbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.util.able_to_start_task.AbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.util.Objects;
 
 /**

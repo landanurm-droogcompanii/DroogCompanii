@@ -12,9 +12,9 @@ import com.google.android.gms.maps.model.Marker;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
-import ru.droogcompanii.application.ui.util.location.CurrentLocationUtils;
-import ru.droogcompanii.application.ui.util.view.ObserverOfViewWillBePlacedOnGlobalLayout;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
+import ru.droogcompanii.application.util.location.CurrentLocationUtils;
+import ru.droogcompanii.application.util.view.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 /**
  * Created by ls on 10.01.14.

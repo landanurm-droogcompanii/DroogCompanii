@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 24.02.14.

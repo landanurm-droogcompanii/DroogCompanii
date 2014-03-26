@@ -1,6 +1,6 @@
 package ru.droogcompanii.application.ui.main_screen_2.map.clicked_position_helper;
 
-import ru.droogcompanii.application.ui.util.constants.ZoomLevel;
+import ru.droogcompanii.application.util.constants.ZoomLevel;
 
 /**
  * Created by ls on 18.03.14.

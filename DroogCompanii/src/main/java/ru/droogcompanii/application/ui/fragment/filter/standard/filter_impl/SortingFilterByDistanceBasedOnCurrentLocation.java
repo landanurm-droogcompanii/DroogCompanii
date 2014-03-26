@@ -2,7 +2,7 @@ package ru.droogcompanii.application.ui.fragment.filter.standard.filter_impl;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.ui.fragment.filter.FilterSet;
-import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByDistanceBasedOnCurrentLocation;
+import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByDistance;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner_point.PartnerPointComparatorByDistanceBasedOnCurrentLocation;
 
 /**
@@ -23,7 +23,7 @@ class SortingFilterByDistanceBasedOnCurrentLocation extends FilterWithOneCheckbo
     @Override
     protected void necessarilyIncludeIn(FilterSet filterSet) {
         filterSet.addPartnerPointComparator(new PartnerPointComparatorByDistanceBasedOnCurrentLocation());
-        filterSet.addPartnerComparator(new PartnerComparatorByDistanceBasedOnCurrentLocation());
+        filterSet.addPartnerComparator(new PartnerComparatorByDistance());
     }
 
 }

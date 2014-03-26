@@ -12,8 +12,8 @@ import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvi
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
-import ru.droogcompanii.application.ui.util.fragment.FragmentUtils;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
+import ru.droogcompanii.application.util.fragment.FragmentUtils;
 
 /**
  * Created by ls on 11.03.14.

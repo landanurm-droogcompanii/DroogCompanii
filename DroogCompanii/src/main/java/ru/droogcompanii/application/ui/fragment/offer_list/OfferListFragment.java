@@ -17,8 +17,8 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
-import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 10.02.14.

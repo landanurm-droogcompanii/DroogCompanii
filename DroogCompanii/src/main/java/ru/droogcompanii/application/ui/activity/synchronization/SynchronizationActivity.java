@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
-import ru.droogcompanii.application.ui.util.able_to_start_task.ActivityAbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.ActivityAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 26.12.13.

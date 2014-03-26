@@ -20,7 +20,7 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersH
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.WeakReferenceWrapper;
 

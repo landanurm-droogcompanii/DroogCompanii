@@ -21,10 +21,10 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
 import ru.droogcompanii.application.ui.fragment.partner_list.PartnerListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProviderHolder;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.TaskResultReceiver;
 
 /**
  * Created by ls on 14.01.14.

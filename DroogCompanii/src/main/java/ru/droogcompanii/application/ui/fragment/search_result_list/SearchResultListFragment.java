@@ -21,8 +21,8 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.search_result_list.adapter.SearchResultListAdapter;
 import ru.droogcompanii.application.ui.fragment.search_result_list.adapter.SearchResultListItem;
-import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 11.03.14.

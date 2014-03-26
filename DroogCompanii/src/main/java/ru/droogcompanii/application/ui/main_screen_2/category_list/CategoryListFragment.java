@@ -21,9 +21,9 @@ import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
-import ru.droogcompanii.application.ui.util.StateManager;
-import ru.droogcompanii.application.ui.util.able_to_start_task.FragmentAbleToStartTask;
-import ru.droogcompanii.application.ui.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
 /**
  * Created by ls on 14.03.14.

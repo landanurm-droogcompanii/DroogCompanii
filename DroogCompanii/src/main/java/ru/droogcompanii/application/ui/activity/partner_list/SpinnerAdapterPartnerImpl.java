@@ -13,7 +13,6 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByDiscountSize;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByDistance;
 import ru.droogcompanii.application.ui.fragment.filter.standard.search_criteria_and_comparators.partner.PartnerComparatorByTitle;
-import ru.droogcompanii.application.ui.util.location.ActualBaseLocationProvider;
 
 /**
  * Created by ls on 17.02.14.
@@ -26,7 +25,7 @@ public class SpinnerAdapterPartnerImpl extends ArrayAdapter<String> {
             new SpinnerItem<Partner>(R.string.labelOfSortByDiscountSizeCheckBox,
                                      new PartnerComparatorByDiscountSize()),
             new SpinnerItem<Partner>(R.string.labelOfSortByDistanceCheckBox,
-                                     new PartnerComparatorByDistance(new ActualBaseLocationProvider()))
+                                     new PartnerComparatorByDistance())
     );
 
     public static Comparator<Partner> getComparatorByPosition(int position) {

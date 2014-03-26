@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.main_screen_2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -15,13 +16,14 @@ import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
+import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
 import ru.droogcompanii.application.ui.main_screen_2.category_list.CategoryListFragment;
 import ru.droogcompanii.application.ui.main_screen_2.details.PartnerPointDetailsFragment;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.FiltersDialogFragment;
 import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragmentWithBaseLocation;
 import ru.droogcompanii.application.ui.main_screen_2.map.NewPartnerPointsMapFragment;
-import ru.droogcompanii.application.ui.util.activity.ActivityWithNavigationDrawer;
-import ru.droogcompanii.application.ui.util.location.CustomBaseLocationUtils;
+import ru.droogcompanii.application.util.activity.ActivityWithNavigationDrawer;
+import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 
 /**
  * Created by ls on 14.03.14.
@@ -148,13 +150,18 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
             @Override
             protected MenuItemHelper[] getMenuItemHelpers() {
                 return new MenuItemHelper[] {
+                        MenuItemHelpers.SEARCH,
                         MenuItemHelpers.FILTER.withAction(new MenuItemHelper.Action() {
                             @Override
                             public void run(Activity activity) {
                                 onFilterAction();
                             }
                         }),
-                        MenuItemHelpers.OFFERS
+                        MenuItemHelpers.OFFERS,
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
+                        MenuItemHelpers.SYNCHRONIZATION,
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
                 };
             }
         };
@@ -173,6 +180,19 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     public void onFiltersCancel() {
         // do nothing
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SynchronizationActivity.REQUEST_CODE && resultCode == RESULT_OK) {
+            onSynchronizationCompleted();
+        }
+    }
+
+    private void onSynchronizationCompleted() {
+        refresh();
+    }
+
 
     @Override
     public void onDisplayingIsStarted() {

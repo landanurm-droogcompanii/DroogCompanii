@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.util.view.IconAndLabelItemMaker;
+import ru.droogcompanii.application.util.view.IconAndLabelItemMaker;
 import ru.droogcompanii.application.util.HotlineNumbersProvider;
-import ru.droogcompanii.application.ui.util.workers.NavigatorToWebsite;
+import ru.droogcompanii.application.util.workers.NavigatorToWebsite;
 import ru.droogcompanii.application.util.WebsiteAddressProvider;
-import ru.droogcompanii.application.ui.util.workers.caller.CallerHelper;
+import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 
 /**
  * Created by ls on 14.02.14.
