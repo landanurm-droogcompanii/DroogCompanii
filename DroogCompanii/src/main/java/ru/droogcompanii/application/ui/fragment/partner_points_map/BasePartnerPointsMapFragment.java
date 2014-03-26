@@ -14,6 +14,7 @@ import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.util.location.CurrentLocationUtils;
+import ru.droogcompanii.application.util.location.OnLocationChangedListeners;
 import ru.droogcompanii.application.util.view.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 /**
@@ -88,13 +89,13 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        CurrentLocationUtils.addOnLocationChangedListener(this);
+        OnLocationChangedListeners.addOnLocationChangedListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CurrentLocationUtils.removeOnLocationChangedListener(this);
+        OnLocationChangedListeners.removeOnLocationChangedListener(this);
     }
 
     protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(

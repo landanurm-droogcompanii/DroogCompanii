@@ -8,12 +8,11 @@ import com.google.common.base.Optional;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
-import ru.droogcompanii.application.util.BaseLocationProvider;
 
 /**
  * Created by ls on 14.02.14.
  */
-public class ActualBaseLocationProvider implements BaseLocationProvider, Serializable {
+public class ActualBaseLocationProvider implements Serializable {
 
     public static LatLng getPositionOfActualBaseLocation() {
         Location actualLocation = getActualBaseLocation();
@@ -29,10 +28,5 @@ public class ActualBaseLocationProvider implements BaseLocationProvider, Seriali
             return currentLocation.get();
         }
         return DroogCompaniiSettings.getDefaultBaseLocation();
-    }
-
-    @Override
-    public Location getBaseLocation() {
-        return ActualBaseLocationProvider.getActualBaseLocation();
     }
 }

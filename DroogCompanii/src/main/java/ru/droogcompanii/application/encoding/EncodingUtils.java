@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util.encoding;
+package ru.droogcompanii.application.encoding;
 
 /**
  * Created by ls on 21.02.14.

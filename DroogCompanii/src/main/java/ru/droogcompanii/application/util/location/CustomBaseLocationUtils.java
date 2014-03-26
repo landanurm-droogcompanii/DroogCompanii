@@ -39,6 +39,7 @@ public class CustomBaseLocationUtils {
 
     public static void updateBasePosition(LatLng latLng) {
         setBasePosition(latLng);
+        OnLocationChangedListeners.notifyListeners();
     }
 
     private static void setBasePosition(LatLng position) {
@@ -51,6 +52,7 @@ public class CustomBaseLocationUtils {
 
     public static void dismissBasePosition() {
         reset();
+        OnLocationChangedListeners.notifyListeners();
     }
 
     public static boolean isBasePositionSet() {

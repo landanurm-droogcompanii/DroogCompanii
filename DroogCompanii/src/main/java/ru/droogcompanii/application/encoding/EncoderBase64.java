@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util.encoding;
+package ru.droogcompanii.application.encoding;
 
 import android.util.Base64;
 

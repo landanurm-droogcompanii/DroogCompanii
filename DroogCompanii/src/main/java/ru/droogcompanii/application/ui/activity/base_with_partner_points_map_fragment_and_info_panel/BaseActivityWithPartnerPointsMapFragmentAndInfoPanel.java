@@ -18,10 +18,9 @@ import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.Partne
 import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAboutBaseMapLocationChanges;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.util.location.CurrentLocationUtils;
-import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 
 /**
  * Created by ls on 22.01.14.
@@ -195,7 +194,6 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
 
     private void onDismissCustomBaseLocation() {
         CustomBaseLocationUtils.dismissBasePosition();
-        CurrentLocationUtils.notifyListeners();
         setVisibilityOfDismissCustomBaseLocationActionView(View.INVISIBLE);
         NotifierAboutBaseMapLocationChanges.notify(this);
     }

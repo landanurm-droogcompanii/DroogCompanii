@@ -253,9 +253,9 @@ public class PartnerPointsMapFragment extends BasePartnerPointsMapFragment
     @Override
     public void onMapLongClick(LatLng latLng) {
         CustomBaseLocationUtils.updateBasePosition(latLng);
-        CurrentLocationUtils.notifyListeners();
-        callbacks.onCustomBaseLocationIsSet();
         NotifierAboutBaseMapLocationChanges.notify(getActivity());
+
+        callbacks.onCustomBaseLocationIsSet();
     }
 
 }

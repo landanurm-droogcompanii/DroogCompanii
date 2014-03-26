@@ -13,6 +13,7 @@ import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAbout
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.util.location.CurrentLocationUtils;
 import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
+import ru.droogcompanii.application.util.location.OnLocationChangedListeners;
 
 /**
  * Created by ls on 24.03.14.
@@ -89,7 +90,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
             @Override
             public void activate(OnLocationChangedListener onLocationChangedListener) {
                 CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = onLocationChangedListener;
-                CurrentLocationUtils.notifyListeners();
+                OnLocationChangedListeners.notifyListeners();
             }
 
             @Override
@@ -107,14 +108,14 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        CurrentLocationUtils.addOnLocationChangedListener(this);
+        OnLocationChangedListeners.addOnLocationChangedListener(this);
         CurrentLocationUtils.updateCurrentLocation();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CurrentLocationUtils.removeOnLocationChangedListener(this);
+        OnLocationChangedListeners.removeOnLocationChangedListener(this);
     }
 
     @Override
@@ -125,7 +126,6 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
 
     private void setCustomBaseLocation(LatLng latLng) {
         CustomBaseLocationUtils.updateBasePosition(latLng);
-        CurrentLocationUtils.notifyListeners();
         NotifierAboutBaseMapLocationChanges.notify(getActivity());
 
         callbacks.onCustomBaseLocationIsSet();
@@ -134,7 +134,6 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
 
     public void dismissCustomBaseLocation() {
         CustomBaseLocationUtils.dismissBasePosition();
-        CurrentLocationUtils.notifyListeners();
         NotifierAboutBaseMapLocationChanges.notify(getActivity());
 
         callbacks.onCustomBaseLocationIsDismissed();
