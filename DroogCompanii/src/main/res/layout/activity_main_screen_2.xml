@@ -11,12 +11,12 @@
         android:layout_height="match_parent">
 
         <FrameLayout
-            android:id="@+id/containerOfMapFragment"
+            android:id="@+id/partnerPointsMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <FrameLayout
-            android:id="@+id/containerOfPartnerPointDetailsFragment"
+            android:id="@+id/partnerPointDetailsFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

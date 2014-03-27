@@ -96,7 +96,7 @@ public abstract class BaseActivityWithPartnerPointsMapFragmentAndInfoPanel
     private void findFragments() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         partnerPointsMapFragment = (PartnerPointsMapFragment)
-                fragmentManager.findFragmentById(R.id.mapFragment);
+                fragmentManager.findFragmentById(R.id.partnerPointsMapFragment);
         partnerPointsInfoPanelFragment = (PartnerPointsInfoPanelFragment)
                 fragmentManager.findFragmentById(R.id.partnerPointsInfoPanelFragment);
     }

@@ -14,13 +14,12 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filter;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.util.OnEachHandler;
-import ru.droogcompanii.application.util.OnEachIterable;
 import ru.droogcompanii.application.util.StringsCombiner;
 
 /**
  * Created by ls on 21.03.14.
  */
-class IteratorOverPartnerPointsInDb implements OnEachIterable<PartnerPoint> {
+class IteratorOverPartnerPointsInDb {
 
     private static final PartnerHierarchyContracts.PartnerPointsContract
             PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
@@ -38,10 +37,7 @@ class IteratorOverPartnerPointsInDb implements OnEachIterable<PartnerPoint> {
         this.filter = currentFilters.getActiveFilter();
     }
 
-    @Override
-    public void forEach(final OnEachHandler<PartnerPoint> onEachHandler) {
-
-
+    public void forEachUsingFilters(final OnEachHandler<PartnerPoint> onEachHandler) {
         READER.handleCursorByQuery(prepareSql(), new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
@@ -51,6 +47,20 @@ class IteratorOverPartnerPointsInDb implements OnEachIterable<PartnerPoint> {
                     if (filter.isPassedThroughFilter(partnerPoint, cursor)) {
                         onEachHandler.onEach(partnerPoint);
                     }
+                    cursor.moveToNext();
+                }
+            }
+        });
+    }
+
+    public void forEach(final OnEachHandler<PartnerPoint> onEachHandler) {
+        READER.handleCursorByQuery(prepareSql(), new CursorHandler() {
+            @Override
+            public void handle(Cursor cursor) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    PartnerPoint partnerPoint = readPartnerPoint(cursor);
+                    onEachHandler.onEach(partnerPoint);
                     cursor.moveToNext();
                 }
             }

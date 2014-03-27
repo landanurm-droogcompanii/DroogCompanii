@@ -28,7 +28,7 @@ public class CurrentLocationUtils implements Serializable {
         @Override
         public void onLocationChanged(final Location location) {
             currentLocation = Optional.fromNullable(location);
-            notifyListenersIfNeed();
+            notifyIfNeedListenersAboutChangingCurrentLocation();
         }
 
         @Override
@@ -63,6 +63,9 @@ public class CurrentLocationUtils implements Serializable {
         } catch (Throwable e) {
             LogUtils.debug(e.getMessage());
         }
+        if (!currentLocation.isPresent() && !CustomBaseLocationUtils.isBasePositionSet()) {
+            LocationStateListeners.notifyListenersAboutCurrentAndCustomLocationsAreNotAvailable();
+        }
     }
 
     private static void tryUpdateCurrentLocation() {
@@ -70,17 +73,17 @@ public class CurrentLocationUtils implements Serializable {
         if (lastKnownLocation.isPresent()) {
             currentLocation = lastKnownLocation;
         }
-        notifyListenersIfNeed();
+        notifyIfNeedListenersAboutChangingCurrentLocation();
     }
 
-    private static void notifyListenersIfNeed() {
+    private static void notifyIfNeedListenersAboutChangingCurrentLocation() {
         if (CustomBaseLocationUtils.isBasePositionSet()) {
             return;
         }
-        OnLocationChangedListeners.notifyListeners();
+        LocationStateListeners.notifyListenersAboutLocationChange();
     }
 
-    private static Optional<Location> getLastKnownLocation() {
+    public static Optional<Location> getLastKnownLocation() {
         final LocationManager locationManager = prepareLocationManager();
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         String enabledLocationProvider = LocationManager.GPS_PROVIDER;

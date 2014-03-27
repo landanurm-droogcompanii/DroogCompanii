@@ -24,14 +24,6 @@ public class MenuItemHelpers {
             .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM)
             .withAction(new ActionOnFilter());
 
-    public static final MenuItemHelper GO_TO_MAP = new MenuItemHelper()
-            .withId(MenuItemIds.GO_TO_MAP)
-            .withOrder(MenuItemIds.GO_TO_MAP)
-            .withTitleId(R.string.action_go_to_map)
-            .withIcon(android.R.drawable.ic_dialog_map)
-            .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM)
-            .withAction(new ActionOnGoToMap());
-
     public static final MenuItemHelper OFFERS = new MenuItemHelper()
             .withId(MenuItemIds.OFFERS)
             .withOrder(MenuItemIds.OFFERS)

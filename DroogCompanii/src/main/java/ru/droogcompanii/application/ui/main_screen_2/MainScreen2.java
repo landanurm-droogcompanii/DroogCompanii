@@ -18,8 +18,9 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
 import ru.droogcompanii.application.ui.main_screen_2.category_list.CategoryListFragment;
-import ru.droogcompanii.application.ui.main_screen_2.details.PartnerPointDetailsFragment;
+import ru.droogcompanii.application.ui.main_screen_2.partner_point_details.PartnerPointDetailsFragment;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.FiltersDialogFragment;
+import ru.droogcompanii.application.ui.main_screen_2.map.ConditionConverter;
 import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragmentWithBaseLocation;
 import ru.droogcompanii.application.ui.main_screen_2.map.NewPartnerPointsMapFragment;
 import ru.droogcompanii.application.util.activity.ActivityWithNavigationDrawer;
@@ -76,21 +77,21 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
 
     private void placeFragmentsOnLayout() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.containerOfMapFragment, new NewPartnerPointsMapFragment(), Tag.MAP);
+        transaction.add(R.id.partnerPointsMapFragment, NewPartnerPointsMapFragment.newInstance(true), Tag.MAP);
         transaction.add(R.id.leftDrawer, new CategoryListFragment(), Tag.CATEGORY_LIST);
-        transaction.add(R.id.containerOfPartnerPointDetailsFragment,
-                new PartnerPointDetailsFragment(), Tag.PARTNER_POINT_DETAILS);
+        transaction.add(R.id.partnerPointDetailsFragment,
+                PartnerPointDetailsFragment.newInstance(), Tag.PARTNER_POINT_DETAILS);
         transaction.commit();
     }
 
     @Override
     public void onReceivingCategoriesTaskCompleted() {
-        // skip
+        updateMapFragment();
     }
 
     @Override
     public void onListInitialized() {
-        updateMapFragment();
+        // skip
     }
 
     @Override
@@ -100,10 +101,12 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
 
     private void updateMapFragment() {
         CategoryListFragment categoryListFragment = findCategoryListFragment();
-        Optional<String> condition = categoryListFragment.getConditionToReceivePartners();
+        Optional<String> conditionToReceivePartners = categoryListFragment.getConditionToReceivePartners();
         NewPartnerPointsMapFragment mapFragment = findMapFragment();
-        mapFragment.updateCondition(condition);
-        if (condition.isPresent()) {
+        mapFragment.updateCondition(
+                ConditionConverter.ToReceivePartnerPoints.fromToReceivePartners(conditionToReceivePartners)
+        );
+        if (conditionToReceivePartners.isPresent()) {
             setTitle(categoryListFragment.getSelectedCategoryName());
         }
     }
@@ -117,7 +120,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     }
 
     @Override
-    public void onDisplayDetails(List<PartnerPoint> partnerPoints) {
+    public void onMarkerClicked(List<PartnerPoint> partnerPoints) {
         findPartnerPointDetailsFragment().setPartnerPoints(partnerPoints);
     }
 
@@ -126,7 +129,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     }
 
     @Override
-    public void onHideDetails() {
+    public void onNoClickedMarker() {
         findPartnerPointDetailsFragment().hide();
     }
 
@@ -202,6 +205,11 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     @Override
     public void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints) {
         findCategoryListFragment().setCategorySize(numberOfDisplayedPartnerPoints);
+    }
+
+    @Override
+    public void onMapInitialized() {
+        // skip
     }
 
 }

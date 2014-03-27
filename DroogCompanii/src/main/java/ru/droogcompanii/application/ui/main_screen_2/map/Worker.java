@@ -8,7 +8,6 @@ import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.Serializable;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
@@ -29,26 +28,20 @@ class Worker {
         public Optional<SerializableLatLng> nearestPosition;
     }
 
-    private static class Contracts {
-        public static final PartnerHierarchyContracts.PartnerPointsContract
-                PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
-        public static final PartnerHierarchyContracts.PartnersContract
-                PARTNERS = new PartnerHierarchyContracts.PartnersContract();
-    }
-
     private final ClusterManager<ClusterItem> clusterManager;
     private final ClickedPositionHelper clickedPositionHelper;
-    private final Optional<String> conditionToReceivePartners;
+    private final Optional<String> conditionToReceivePartnerPoints;
 
     Worker(ClusterManager<ClusterItem> clusterManager,
            ClickedPositionHelper clickedPositionHelper,
-           Optional<String> conditionToReceivePartners) {
+           Optional<String> conditionToReceivePartnerPoints) {
         this.clusterManager = clusterManager;
         this.clickedPositionHelper = clickedPositionHelper;
-        this.conditionToReceivePartners = conditionToReceivePartners;
+        this.conditionToReceivePartnerPoints = conditionToReceivePartnerPoints;
     }
 
-    DisplayingTaskResult display(final LatLngBounds bounds,
+    DisplayingTaskResult display(final boolean withFilters,
+                                 final LatLngBounds bounds,
                                  final Filters currentFilters,
                                  final PartnerPointsGroupedByPosition partnerPointsGroupedByPosition) {
 
@@ -63,7 +56,7 @@ class Worker {
 
         IteratorOverPartnerPointsInDb iterator = new IteratorOverPartnerPointsInDb(currentFilters, prepareWhere());
 
-        iterator.forEach(new OnEachHandler<PartnerPoint>() {
+        OnEachHandler<PartnerPoint> onEachHandler = new OnEachHandler<PartnerPoint>() {
             @Override
             public void onEach(PartnerPoint partnerPoint) {
 
@@ -84,7 +77,13 @@ class Worker {
 
                 partnerPointsGroupedByPosition.put(partnerPoint);
             }
-        });
+        };
+
+        if (withFilters) {
+            iterator.forEachUsingFilters(onEachHandler);
+        } else {
+            iterator.forEach(onEachHandler);
+        }
 
         taskResult.nearestPosition = nearestCalculator.getSerializableNearestPosition();
         taskResult.isNeedToRemoveClickedPosition =
@@ -93,17 +92,13 @@ class Worker {
     }
 
     private String prepareWhere() {
-        if (!conditionToReceivePartners.isPresent()) {
+        if (!conditionToReceivePartnerPoints.isPresent()) {
             return "";
         }
-        String condition = conditionToReceivePartners.get().trim();
+        String condition = conditionToReceivePartnerPoints.get().trim();
         if (condition.isEmpty()) {
             return "";
         }
-        return "WHERE " + Contracts.PARTNER_POINTS.COLUMN_NAME_PARTNER_ID + " IN (" +
-                " SELECT " + Contracts.PARTNERS.COLUMN_NAME_ID +
-                " FROM " + Contracts.PARTNERS.TABLE_NAME +
-                " WHERE " + condition +
-                ")";
+        return "WHERE " + condition;
     }
 }

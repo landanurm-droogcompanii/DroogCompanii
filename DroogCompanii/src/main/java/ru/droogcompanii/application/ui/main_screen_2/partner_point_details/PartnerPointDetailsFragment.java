@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.main_screen_2.details;
+package ru.droogcompanii.application.ui.main_screen_2.partner_point_details;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Optional;
@@ -18,14 +19,14 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
+import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
 import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.WorkingHoursIndicatorUpdater;
-import ru.droogcompanii.application.util.view.FavoriteViewUtils;
-import ru.droogcompanii.application.util.workers.Router;
-import ru.droogcompanii.application.util.StateManager;
-import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Objects;
+import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.view.FavoriteViewUtils;
+import ru.droogcompanii.application.util.workers.Router;
+import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 
 /**
  * Created by ls on 19.03.14.
@@ -39,8 +40,10 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
         public static final String INDEX_OF_CURRENT_PARTNER_POINT = "KEY_INDEX_OF_CURRENT_PARTNER_POINT";
         public static final String VISIBLE = "KEY_VISIBLE";
         public static final String IDS = "KEY_IDS";
+        public static final String WITHOUT_GO_TO_PARTNER = "WITHOUT_GO_TO_PARTNER";
     }
 
+    private boolean withoutGoToPartnerButton;
     private boolean isVisible;
     private int indexOfCurrentPartnerPoint;
     private List<Integer> ids;
@@ -50,6 +53,7 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
+            withoutGoToPartnerButton = getArguments().getBoolean(Key.WITHOUT_GO_TO_PARTNER);
             ids = new ArrayList<Integer>();
             partnerPoints = new ArrayList<Optional<PartnerPoint>>();
             indexOfCurrentPartnerPoint = NO_INDEX;
@@ -58,6 +62,7 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
 
         @Override
         public void restoreState(Bundle savedInstanceState) {
+            withoutGoToPartnerButton = savedInstanceState.getBoolean(Key.WITHOUT_GO_TO_PARTNER);
             ids = (List<Integer>) savedInstanceState.getSerializable(Key.IDS);
             partnerPoints = (List<Optional<PartnerPoint>>) savedInstanceState.getSerializable(Key.PARTNER_POINTS);
             indexOfCurrentPartnerPoint = savedInstanceState.getInt(Key.INDEX_OF_CURRENT_PARTNER_POINT);
@@ -66,12 +71,31 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
 
         @Override
         public void saveState(Bundle outState) {
+            outState.putBoolean(Key.WITHOUT_GO_TO_PARTNER, withoutGoToPartnerButton);
             outState.putSerializable(Key.IDS, (Serializable) ids);
             outState.putSerializable(Key.PARTNER_POINTS, (Serializable) partnerPoints);
             outState.putInt(Key.INDEX_OF_CURRENT_PARTNER_POINT, indexOfCurrentPartnerPoint);
             outState.putBoolean(Key.VISIBLE, isVisible);
         }
     };
+
+
+    public static PartnerPointDetailsFragment newInstance() {
+        return newInstanceByGoToPartnerState(false);
+    }
+
+    public static PartnerPointDetailsFragment newInstanceWithoutGoToPartnerButton() {
+        return newInstanceByGoToPartnerState(true);
+    }
+
+    private static PartnerPointDetailsFragment newInstanceByGoToPartnerState(boolean withoutGoToPartner) {
+        Bundle args = new Bundle();
+        args.putBoolean(Key.WITHOUT_GO_TO_PARTNER, withoutGoToPartner);
+        PartnerPointDetailsFragment fragment = new PartnerPointDetailsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     private void restoreVisibilityFrom(Bundle savedInstanceState) {
         boolean isNeedToShow = savedInstanceState.getBoolean(Key.VISIBLE);
@@ -258,7 +282,17 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     }
 
     private void updateGoToPartnerButton() {
-        findViewById(R.id.goToPartnerButton).setOnClickListener(new View.OnClickListener() {
+        if (withoutGoToPartnerButton) {
+            hideGoToPartnerButton();
+        } else {
+            initGoToPartnerButton();
+        }
+    }
+
+    private void initGoToPartnerButton() {
+        View goToPartner = findViewById(R.id.goToPartnerButton);
+        goToPartner.setVisibility(View.VISIBLE);
+        goToPartner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToPartnerOf(getCurrentPartnerPoint());
@@ -266,8 +300,15 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
         });
     }
 
+    private void hideGoToPartnerButton() {
+        View goToPartner = findViewById(R.id.goToPartnerButton);
+        goToPartner.setVisibility(View.GONE);
+        LinearLayout containerOfButton = (LinearLayout) goToPartner.getParent();
+        containerOfButton.setWeightSum(2);
+    }
+
     private void goToPartnerOf(PartnerPoint partnerPoint) {
-        PartnerDetailsActivity.start(getActivity(), partnerPoint);
+        PartnerDetailsActivity2.startWithFilters(getActivity(), partnerPoint);
     }
 
     private void updateIsFavorite() {

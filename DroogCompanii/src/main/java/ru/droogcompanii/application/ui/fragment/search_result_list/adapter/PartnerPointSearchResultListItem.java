@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
+import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
 
 /**
  * Created by ls on 11.03.14.
@@ -38,6 +38,6 @@ class PartnerPointSearchResultListItem implements SearchResultListItem {
 
     @Override
     public void onClick(Context context) {
-        PartnerDetailsActivity.start(context, point);
+        PartnerDetailsActivity2.startWithoutFilters(context, point);
     }
 }

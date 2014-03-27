@@ -13,14 +13,18 @@ import java.io.Serializable;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerAndPartnerPointsProviderByPartner;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
+import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
+import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.view.ImageDownloader;
 
 /**
  * Created by ls on 10.02.14.
  */
 public class OfferDetailsFragment extends Fragment {
+
+    private static class Key extends OfferDetailsActivity.Key {
+        // inherits static fields
+    }
 
     private final ImageDownloader imageDownloader = new ImageDownloader();
 
@@ -29,7 +33,28 @@ public class OfferDetailsFragment extends Fragment {
     private TextView fullDescription;
     private View goToPartner;
 
+    private boolean areOffersByOnePartner;
     private Offer offer;
+
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            offer = (Offer) getArguments().getSerializable(Key.OFFER);
+            areOffersByOnePartner = getArguments().getBoolean(Key.ARE_OFFERS_BY_ONE_PARTNER);
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            offer = (Offer) savedInstanceState.getSerializable(Key.OFFER);
+            areOffersByOnePartner = savedInstanceState.getBoolean(Key.ARE_OFFERS_BY_ONE_PARTNER);
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putSerializable(Key.OFFER, (Serializable) offer);
+            outState.putBoolean(Key.ARE_OFFERS_BY_ONE_PARTNER, areOffersByOnePartner);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,41 +71,41 @@ public class OfferDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        offer = extractOffer(savedInstanceState);
-        init();
-    }
-
-    private Offer extractOffer(Bundle savedInstanceState) {
-        Bundle bundle = (savedInstanceState == null) ? getArguments() : savedInstanceState;
-        return (Offer) bundle.getSerializable(OfferDetailsActivity.Key.OFFER);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        STATE_MANAGER.initState(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(OfferDetailsActivity.Key.OFFER, (Serializable) offer);
+        STATE_MANAGER.saveState(outState);
     }
 
-    private void init() {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initView();
+    }
+
+    private void initView() {
         shortDescription.setText(offer.getShortDescription());
         fullDescription.setText(offer.getFullDescription());
         imageDownloader.download(offer.getImageUrl(), image);
-        goToPartner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PartnerDetailsActivity.start(getActivity(), new PartnerAndPartnerPointsProviderByOffer(offer));
-            }
-        });
-    }
-
-    private static class PartnerAndPartnerPointsProviderByOffer
-            extends PartnerAndPartnerPointsProviderByPartner implements Serializable {
-
-        public PartnerAndPartnerPointsProviderByOffer(Offer offer) {
-            super(offer.getPartnerId());
+        if (areOffersByOnePartner) {
+            goToPartner.setVisibility(View.INVISIBLE);
+        } else {
+            goToPartner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToPartner();
+                }
+            });
         }
-
     }
+
+    private void goToPartner() {
+        PartnerDetailsActivity2.startWithoutFilters(getActivity(), offer);
+    }
+
 }

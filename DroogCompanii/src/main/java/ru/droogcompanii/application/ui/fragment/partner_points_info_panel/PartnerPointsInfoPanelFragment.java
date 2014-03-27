@@ -16,11 +16,11 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
+import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
+import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.view.FavoriteViewUtils;
 import ru.droogcompanii.application.util.workers.Router;
 import ru.droogcompanii.application.util.workers.caller.CallerHelper;
-import ru.droogcompanii.application.util.CalendarUtils;
 
 /**
  * Created by ls on 22.01.14.
@@ -235,7 +235,7 @@ public class PartnerPointsInfoPanelFragment extends android.support.v4.app.Fragm
     }
 
     private void goToPartnerOf(PartnerPoint partnerPoint) {
-        PartnerDetailsActivity.start(getActivity(), partnerPoint);
+        PartnerDetailsActivity2.startWithFilters(getActivity(), partnerPoint);
     }
 
     private void updateIsFavorite() {

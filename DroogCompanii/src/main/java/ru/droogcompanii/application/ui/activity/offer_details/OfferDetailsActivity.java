@@ -20,14 +20,16 @@ import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 public class OfferDetailsActivity extends ActionBarActivityWithUpButton {
 
     public static class Key {
-        public static final String ARGS = "args";
-        public static final String OFFER = "offer";
+        public static final String ARGS = "ARGS";
+        public static final String OFFER = "OFFER";
+        public static final String ARE_OFFERS_BY_ONE_PARTNER = "ARE_OFFERS_BY_ONE_PARTNER";
     }
 
-    public static void start(Context context, Offer offer) {
+    public static void start(Context context, Offer offer, boolean areOffersByOnePartner) {
         Intent intent = new Intent(context, OfferDetailsActivity.class);
         Bundle args = new Bundle();
         args.putSerializable(Key.OFFER, (Serializable) offer);
+        args.putBoolean(Key.ARE_OFFERS_BY_ONE_PARTNER, areOffersByOnePartner);
         intent.putExtra(Key.ARGS, args);
         context.startActivity(intent);
     }

@@ -5,4 +5,8 @@
     <item type="id" name="distanceOption_1000meters" />
     <item type="id" name="distanceOption_3000meters" />
     <item type="id" name="distanceOption_5000meters" />
+	
+    <item name="mbContainer" type="id" />
+    <item name="mbMessage" type="id" />
+    <item name="mbButton" type="id" />
 </resources>

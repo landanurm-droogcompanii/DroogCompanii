@@ -18,6 +18,7 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.ui.fragment.offer_list.OfferListFragment;
 import ru.droogcompanii.application.ui.fragment.offer_list.OfferType;
+import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 
 /**
@@ -26,27 +27,55 @@ import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 public class OfferListActivity extends ActionBarActivityWithUpButton
                             implements OfferListFragment.Callbacks {
 
-    private static final String KEY_WHERE = "KEY_WHERE";
-    private static final String KEY_INDEX_OF_CURRENT_OFFER_TYPE = "KEY_INDEX_OF_CURRENT_OFFER_TYPE";
+    private static class Key {
+        public static final String ARE_OFFERS_BY_ONE_PARTNER = "ARE_OFFERS_BY_ONE_PARTNER";
+        public static final String WHERE = "WHERE";
+        public static final String INDEX_OF_CURRENT_OFFER_TYPE = "INDEX_OF_CURRENT_OFFER_TYPE";
+    }
 
     private static final String TAG_OFFER_LIST_FRAGMENT = "TAG_OFFER_LIST_FRAGMENT";
 
+    private boolean areOffersByOnePartner;
     private Optional<Integer> indexOfCurrentOfferType;
     private Optional<String> where;
+
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            areOffersByOnePartner = getIntent().getBooleanExtra(Key.ARE_OFFERS_BY_ONE_PARTNER, false);
+            where = (Optional<String>) getIntent().getSerializableExtra(Key.WHERE);
+            indexOfCurrentOfferType = Optional.absent();
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            areOffersByOnePartner = savedInstanceState.getBoolean(Key.ARE_OFFERS_BY_ONE_PARTNER);
+            where = (Optional<String>) savedInstanceState.getSerializable(Key.WHERE);
+            indexOfCurrentOfferType = (Optional<Integer>) savedInstanceState.getSerializable(Key.INDEX_OF_CURRENT_OFFER_TYPE);
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putBoolean(Key.ARE_OFFERS_BY_ONE_PARTNER, areOffersByOnePartner);
+            outState.putSerializable(Key.WHERE, where);
+            outState.putSerializable(Key.INDEX_OF_CURRENT_OFFER_TYPE, indexOfCurrentOfferType);
+        }
+    };
 
 
     public static void start(Context context, Partner partner) {
         String where = OffersContract.COLUMN_NAME_PARTNER_ID + "=" + partner.getId();
-        start(context, Optional.of(where));
+        start(context, Optional.of(where), true);
     }
 
     public static void start(Context context) {
-        start(context, Optional.<String>absent());
+        start(context, Optional.<String>absent(), false);
     }
 
-    private static void start(Context context, Optional<String> where) {
+    private static void start(Context context, Optional<String> where, boolean areOffersByOnePartner) {
         Intent intent = new Intent(context, OfferListActivity.class);
-        intent.putExtra(KEY_WHERE, where);
+        intent.putExtra(Key.WHERE, where);
+        intent.putExtra(Key.ARE_OFFERS_BY_ONE_PARTNER, areOffersByOnePartner);
         context.startActivity(intent);
     }
 
@@ -55,24 +84,8 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offer_list);
-
-        if (savedInstanceState == null) {
-            initStateByDefault();
-        } else {
-            restoreState(savedInstanceState);
-        }
-
+        STATE_MANAGER.initState(savedInstanceState);
         initSpinnerOnActionBar();
-    }
-
-    private void initStateByDefault() {
-        where = (Optional<String>) getIntent().getSerializableExtra(KEY_WHERE);
-        indexOfCurrentOfferType = Optional.absent();
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        where = (Optional<String>) savedInstanceState.getSerializable(KEY_WHERE);
-        indexOfCurrentOfferType = (Optional<Integer>) savedInstanceState.getSerializable(KEY_INDEX_OF_CURRENT_OFFER_TYPE);
     }
 
     private void initSpinnerOnActionBar() {
@@ -119,16 +132,11 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveStateInto(outState);
-    }
-
-    private void saveStateInto(Bundle outState) {
-        outState.putSerializable(KEY_WHERE, where);
-        outState.putSerializable(KEY_INDEX_OF_CURRENT_OFFER_TYPE, indexOfCurrentOfferType);
+        STATE_MANAGER.saveState(outState);
     }
 
     @Override
     public void onOfferItemClick(Offer offer) {
-        OfferDetailsActivity.start(this, offer);
+        OfferDetailsActivity.start(this, offer, areOffersByOnePartner);
     }
 }

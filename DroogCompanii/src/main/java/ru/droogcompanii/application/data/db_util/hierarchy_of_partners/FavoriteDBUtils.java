@@ -67,7 +67,7 @@ public class FavoriteDBUtils {
     public List<Partner> getFavoritePartners() {
         String where = " WHERE " + getIsFavoriteCondition();
         PartnersReader partnersReader = new PartnersReader(context);
-        return partnersReader.getPartnersByCondition(where);
+        return partnersReader.getPartnersByWhere(where);
     }
 
     public static String getIsFavoriteCondition() {

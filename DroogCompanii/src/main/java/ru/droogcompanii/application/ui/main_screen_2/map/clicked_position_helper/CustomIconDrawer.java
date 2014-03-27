@@ -33,7 +33,6 @@ public class CustomIconDrawer implements ClickedPositionDrawer {
     private static final Anchor ACTUAL_ANCHOR = ANCHOR_CENTER;
 
 
-
     private final CustomMapFragment mapFragment;
     private Optional<Marker> marker;
 

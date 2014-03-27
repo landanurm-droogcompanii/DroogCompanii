@@ -19,23 +19,22 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.fragment.partner_details.PartnerDetailsFragment;
 import ru.droogcompanii.application.ui.fragment.partner_point_list.PartnerPointListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 15.01.14.
  */
-public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
-                     implements PartnerPointListFragment.Callbacks,
-                                PartnerPointsProviderHolder {
-
-    private static final int TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING = 129;
+public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
+        implements PartnerPointListFragment.Callbacks, PartnerPointsProviderHolder {
 
     public static interface PartnerAndPartnerPointsProvider {
         Partner getPartner(Context context);
         List<PartnerPoint> getPartnerPoints(Context context);
     }
+
+    private static final int TASK_REQUEST_CODE_PARTNER_DETAILS_RECEIVING = 129;
 
     public static class Key {
         public static final String PARTNER = "partner";
@@ -125,7 +124,6 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoTo
         } else {
             startPartnerDetailsFragment(onlyExistingPartnerPoint());
         }
-        updateGoToMapItemVisible();
         initTitle();
     }
 
@@ -185,19 +183,11 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButtonAndGoTo
     }
 
     @Override
-    protected boolean isGoToMapItemVisible() {
-        return (resultFromTask != null) &&
-                (resultFromTask.partnerPoints != null) &&
-                !resultFromTask.partnerPoints.isEmpty();
-    }
-
-    @Override
     protected MenuHelper getMenuHelper() {
         return new MenuHelperItemsProvider(this) {
             @Override
             protected MenuItemHelper[] getMenuItemHelpers() {
                 return new MenuItemHelper[] {
-                        MenuItemHelpers.GO_TO_MAP,
                         MenuItemHelpers.PERSONAL_ACCOUNT,
                         MenuItemHelpers.SETTINGS,
                         MenuItemHelpers.HELP

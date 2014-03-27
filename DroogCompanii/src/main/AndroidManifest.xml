@@ -80,6 +80,10 @@
             android:label="" >
         </activity>
         <activity
+            android:name="ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2"
+            android:label="" >
+        </activity>
+        <activity
             android:name="ru.droogcompanii.application.ui.activity.filter.FilterActivity"
             android:icon="@drawable/ic_filter"
             android:label="@string/titleOfFilterActivity" >

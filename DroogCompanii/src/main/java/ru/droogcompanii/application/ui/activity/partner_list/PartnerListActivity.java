@@ -18,18 +18,18 @@ import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
-import ru.droogcompanii.application.ui.activity.partner_details.PartnerDetailsActivity;
+import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
 import ru.droogcompanii.application.ui.fragment.partner_list.PartnerListFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.able_to_start_task.TaskResultReceiver;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 14.01.14.
  */
-public class PartnerListActivity extends ActionBarActivityWithUpButtonAndGoToMapItem
+public class PartnerListActivity extends ActionBarActivityWithUpButton
                 implements PartnerListFragment.Callbacks, PartnerPointsProviderHolder {
 
     public static interface InputProvider {
@@ -85,23 +85,11 @@ public class PartnerListActivity extends ActionBarActivityWithUpButtonAndGoToMap
     private void initStateByDefault() {
         indexOfCurrentComparator = 0;
         inputProvider = (InputProvider) getIntent().getSerializableExtra(KEY_INPUT_PROVIDER);
-        updateGoToMapItemVisible(false);
     }
 
     private void restoreState(Bundle savedInstanceState) {
         indexOfCurrentComparator = savedInstanceState.getInt(KEY_INDEX_OF_CURRENT_COMPARATOR);
         inputProvider = (InputProvider) savedInstanceState.getSerializable(KEY_INPUT_PROVIDER);
-        updateGoToMapItemVisible(savedInstanceState.getBoolean(KEY_IS_GO_TO_MAP_ITEM_VISIBLE));
-    }
-
-    private void updateGoToMapItemVisible(boolean visible) {
-        isGoToMapItemVisible = visible;
-        updateGoToMapItemVisible();
-    }
-
-    @Override
-    protected boolean isGoToMapItemVisible() {
-        return isGoToMapItemVisible;
     }
 
 
@@ -193,17 +181,17 @@ public class PartnerListActivity extends ActionBarActivityWithUpButtonAndGoToMap
 
     @Override
     public void onPartnerClick(Partner partner) {
-        PartnerDetailsActivity.start(this, partner);
+        PartnerDetailsActivity2.startWithoutFilters(this, partner);
     }
 
     @Override
     public void onNotFound() {
-        updateGoToMapItemVisible(false);
+        // skip
     }
 
     @Override
     public void onFound() {
-        updateGoToMapItemVisible(true);
+        // skip
     }
 
     @Override
@@ -212,7 +200,6 @@ public class PartnerListActivity extends ActionBarActivityWithUpButtonAndGoToMap
             @Override
             protected MenuItemHelper[] getMenuItemHelpers() {
                 return new MenuItemHelper[] {
-                        MenuItemHelpers.GO_TO_MAP,
                         MenuItemHelpers.PERSONAL_ACCOUNT,
                         MenuItemHelpers.SETTINGS,
                         MenuItemHelpers.HELP

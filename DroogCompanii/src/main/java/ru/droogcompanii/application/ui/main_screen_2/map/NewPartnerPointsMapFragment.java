@@ -23,13 +23,15 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilterHelper;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
+import ru.droogcompanii.application.ui.main_screen_2.map.circle_of_nearest.ActualCircleOfNearestDrawer;
 import ru.droogcompanii.application.ui.main_screen_2.map.circle_of_nearest.CircleOfNearestDrawer;
+import ru.droogcompanii.application.ui.main_screen_2.map.circle_of_nearest.DummyCircleOfNearestDrawer;
 import ru.droogcompanii.application.ui.main_screen_2.map.clicked_position_helper.ClickedPositionHelper;
-import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
-import ru.droogcompanii.application.util.StateManager;
-import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.util.SerializableLatLng;
+import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 
 /**
  * Created by ls on 14.03.14.
@@ -41,16 +43,26 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
                    GoogleMap.OnCameraChangeListener {
 
 
+    public static NewPartnerPointsMapFragment newInstance(boolean withFilters) {
+        NewPartnerPointsMapFragment fragment = new NewPartnerPointsMapFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Key.WITH_FILTERS, withFilters);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public static interface Callbacks {
-        void onDisplayDetails(List<PartnerPoint> partnerPoints);
-        void onHideDetails();
+        void onMarkerClicked(List<PartnerPoint> partnerPoints);
+        void onNoClickedMarker();
         void onDisplayingIsStarted();
         void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints);
+        void onMapInitialized();
     }
 
     private static class Key {
         public static final String CONDITION = "KEY_CONDITION";
         public static final String IS_FIRST_DISPLAYING = "KEY_IS_FIRST_DISPLAYING";
+        public static final String WITH_FILTERS = "WITH_FILTERS";
     }
 
     private static class RequestCode {
@@ -59,12 +71,12 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         @Override
-        public void onDisplayDetails(List<PartnerPoint> partnerPoints) {
+        public void onMarkerClicked(List<PartnerPoint> partnerPoints) {
             // do nothing
         }
 
         @Override
-        public void onHideDetails() {
+        public void onNoClickedMarker() {
             // do nothing
         }
 
@@ -77,39 +89,47 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         public void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints) {
             // do nothing
         }
+
+        @Override
+        public void onMapInitialized() {
+            // do nothing
+        }
     };
 
 
+    private boolean withFilters;
     private boolean isFirstDisplaying;
     private Callbacks callbacks;
     private ClickedPositionHelper clickedPositionHelper;
     private ClusterManager<ClusterItem> clusterManager;
-    private Optional<String> conditionToReceivePartners;
+    private Optional<String> conditionToReceivePartnerPoints;
     private PartnerPointsGroupedByPosition partnerPointsGroupedByPosition;
-    private CircleOfNearestDrawer nearestDrawer;
+    private CircleOfNearestDrawer circleOfNearestDrawer;
 
 
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
+            withFilters = getArguments().getBoolean(Key.WITH_FILTERS, true);
             isFirstDisplaying = true;
-            conditionToReceivePartners = Optional.absent();
+            conditionToReceivePartnerPoints = Optional.absent();
             clickedPositionHelper = new ClickedPositionHelper(NewPartnerPointsMapFragment.this);
-            moveCameraToActualBasePosition();
         }
 
         @Override
         public void restoreState(Bundle savedInstanceState) {
+            withFilters = savedInstanceState.getBoolean(Key.WITH_FILTERS, true);
             isFirstDisplaying = savedInstanceState.getBoolean(Key.IS_FIRST_DISPLAYING);
-            conditionToReceivePartners = (Optional<String>) savedInstanceState.getSerializable(Key.CONDITION);
             clickedPositionHelper = new ClickedPositionHelper(NewPartnerPointsMapFragment.this);
             clickedPositionHelper.restoreFrom(savedInstanceState);
+            conditionToReceivePartnerPoints = (Optional<String>) savedInstanceState.getSerializable(Key.CONDITION);
         }
 
         @Override
         public void saveState(Bundle outState) {
+            outState.putBoolean(Key.WITH_FILTERS, withFilters);
             outState.putBoolean(Key.IS_FIRST_DISPLAYING, isFirstDisplaying);
-            outState.putSerializable(Key.CONDITION, conditionToReceivePartners);
+            outState.putSerializable(Key.CONDITION, conditionToReceivePartnerPoints);
             clickedPositionHelper.saveInto(outState);
         }
     };
@@ -137,9 +157,20 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         STATE_MANAGER.initState(savedInstanceState);
+        initMap(savedInstanceState);
+    }
+
+    private void initMap(Bundle savedInstanceState) {
         initMap();
-        nearestDrawer = new CircleOfNearestDrawer(this);
-        nearestDrawer.update();
+        onPostMapInitialized(savedInstanceState);
+    }
+
+    private void onPostMapInitialized(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            moveCameraToActualBasePosition();
+        } else {
+            updateMap();
+        }
     }
 
     @Override
@@ -149,6 +180,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     }
 
     private void initMap() {
+
         clusterManager = new ClusterManager<ClusterItem>(getActivity(), getGoogleMap());
         getGoogleMap().setOnMarkerClickListener(clusterManager);
         getGoogleMap().setOnInfoWindowClickListener(clusterManager);
@@ -156,6 +188,18 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         getGoogleMap().setOnMapClickListener(this);
         clusterManager.setOnClusterItemClickListener(this);
         clusterManager.setOnClusterClickListener(this);
+
+        initCircleOfNearestDrawer();
+
+        callbacks.onMapInitialized();
+    }
+
+    private void initCircleOfNearestDrawer() {
+        circleOfNearestDrawer =
+                withFilters
+                ? new ActualCircleOfNearestDrawer(this)
+                : new DummyCircleOfNearestDrawer();
+        circleOfNearestDrawer.update();
     }
 
     @Override
@@ -171,17 +215,43 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
 
     private void onNeedToRemoveClickedPosition() {
         clickedPositionHelper.remove();
-        callbacks.onHideDetails();
+        callbacks.onNoClickedMarker();
     }
 
     @Override
     public boolean onClusterItemClick(ClusterItem clusterItem) {
         LatLng position = clusterItem.getPosition();
         clickedPositionHelper.set(position);
-        Set<PartnerPoint> partnerPointsAtClickedPosition = partnerPointsGroupedByPosition.get(position);
-
-        callbacks.onDisplayDetails(ListUtils.listFromSet(partnerPointsAtClickedPosition));
+        List<PartnerPoint> partnerPoints = getPartnerPointsAtPosition(position);
+        callbacks.onMarkerClicked(partnerPoints);
         return false;
+    }
+
+    private List<PartnerPoint> getPartnerPointsAtPosition(LatLng position) {
+        Set<PartnerPoint> partnerPointsAtClickedPosition = partnerPointsGroupedByPosition.get(position);
+        return ListUtils.listFromSet(partnerPointsAtClickedPosition);
+    }
+
+    public void clickAtPartnerPoint(PartnerPoint partnerPoint) {
+        LatLng position = partnerPoint.getPosition();
+        clickedPositionHelper.set(position);
+        List<PartnerPoint> partnerPoints = getPartnerPointsAtPosition(position);
+        movePartnerPointWithThisIdAtFirstPositionAtList(partnerPoint.getId(), partnerPoints);
+        callbacks.onMarkerClicked(partnerPoints);
+    }
+
+    private static void movePartnerPointWithThisIdAtFirstPositionAtList(int partnerPointId, List<PartnerPoint> partnerPoints) {
+        int index = indexOfPartnerPointWithIdAtList(partnerPointId, partnerPoints);
+        ListUtils.swap(partnerPoints, 0, index);
+    }
+
+    private static int indexOfPartnerPointWithIdAtList(int partnerPointId, List<PartnerPoint> partnerPoints) {
+        for (int i = 0; i < partnerPoints.size(); ++i) {
+            if (partnerPointId == partnerPoints.get(i).getId()) {
+                return i;
+            }
+        }
+        throw new IllegalStateException("There is should be partner point with this <id> at list");
     }
 
     @Override
@@ -194,17 +264,17 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         return Math.min(getMaxZoom(), getCurrentZoom() + 1.0f);
     }
 
-    public void updateCondition(Optional<String> conditionToReceivePartners) {
-        if (isDisplayingTaskAlreadyStarted()) {
-            cancelDisplayingTask();
-        }
-        this.conditionToReceivePartners = conditionToReceivePartners;
+    public void updateCondition(Optional<String> conditionToReceivePartnerPoints) {
+        this.conditionToReceivePartnerPoints = conditionToReceivePartnerPoints;
         updateMap();
     }
 
     private void updateMap() {
+        if (isDisplayingTaskAlreadyStarted()) {
+            cancelDisplayingTask();
+        }
         clusterManager.clearItems();
-        if (conditionToReceivePartners.isPresent()) {
+        if (conditionToReceivePartnerPoints.isPresent()) {
             startDisplayingTask();
         } else {
             clusterManager.cluster();
@@ -220,7 +290,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     }
 
     private void startDisplayingTask() {
-        nearestDrawer.update();
+        circleOfNearestDrawer.update();
         callbacks.onDisplayingIsStarted();
 
         final Filters currentFilters = Filters.getCurrent(getActivity());
@@ -229,9 +299,9 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
             @Override
             protected Serializable doInBackground(Void... voids) {
                 Worker worker = new Worker(clusterManager,
-                        clickedPositionHelper, conditionToReceivePartners);
+                        clickedPositionHelper, conditionToReceivePartnerPoints);
                 partnerPointsGroupedByPosition = new PartnerPointsGroupedByPosition();
-                return worker.display(bounds, currentFilters, partnerPointsGroupedByPosition);
+                return worker.display(withFilters, bounds, currentFilters, partnerPointsGroupedByPosition);
             }
         });
     }
@@ -299,5 +369,10 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     private boolean isDistanceFilterSet() {
         DistanceFilterHelper distanceFilterHelper = DistanceFilterHelper.getCurrent(getActivity());
         return distanceFilterHelper.isActive();
+    }
+
+    @Override
+    protected boolean isAbleToChangeBaseLocationByLongClickOnMap() {
+        return withFilters;
     }
 }

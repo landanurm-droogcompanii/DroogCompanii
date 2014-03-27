@@ -1,6 +1,5 @@
 package ru.droogcompanii.application.ui.activity.search_result_list;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,14 +11,13 @@ import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvi
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.fragment.search_result_list.SearchResultListFragment;
-import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButtonAndGoToMapItem;
+import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.fragment.FragmentUtils;
 
 /**
  * Created by ls on 11.03.14.
  */
-public class SearchResultListActivity
-        extends ActionBarActivityWithUpButtonAndGoToMapItem {
+public class SearchResultListActivity extends ActionBarActivityWithUpButton {
 
     private static final String TAG_SEARCH_RESULT_LIST_FRAGMENT = "TAG_SEARCH_RESULT_LIST_FRAGMENT";
 
@@ -76,33 +74,21 @@ public class SearchResultListActivity
         saveStateInto(outState);
     }
 
+    private void saveStateInto(Bundle outState) {
+        outState.putString(KEY_QUERY, query);
+    }
+
     @Override
     protected MenuHelper getMenuHelper() {
         return new MenuHelperItemsProvider(this) {
             @Override
             protected MenuItemHelper[] getMenuItemHelpers() {
                 return new MenuItemHelper[] {
-                        MenuItemHelpers.GO_TO_MAP.withAction(new MenuItemHelper.Action() {
-                            @Override
-                            public void run(Activity activity) {
-                                onGoToMap();
-                            }
-                        })
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
                 };
             }
         };
-    }
-
-    private void saveStateInto(Bundle outState) {
-        outState.putString(KEY_QUERY, query);
-    }
-
-    @Override
-    protected boolean isGoToMapItemVisible() {
-        return true;
-    }
-
-    private void onGoToMap() {
-
     }
 }

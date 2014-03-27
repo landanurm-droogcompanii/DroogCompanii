@@ -1,8 +1,11 @@
 package ru.droogcompanii.application.ui.main_screen_2.map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.Settings;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -10,16 +13,19 @@ import com.google.android.gms.maps.model.LatLng;
 
 import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
 import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAboutBaseMapLocationChanges;
+import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.util.location.CurrentLocationUtils;
 import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
-import ru.droogcompanii.application.util.location.OnLocationChangedListeners;
+import ru.droogcompanii.application.util.location.LocationStateListeners;
+import ru.droogcompanii.application.util.view.MessageBar;
+import ru.droogcompanii.application.util.view.ToastUtils;
 
 /**
  * Created by ls on 24.03.14.
  */
 public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
-                         implements LocationSource.OnLocationChangedListener,
+                         implements LocationStateListeners.LocationStateListener,
                                     GoogleMap.OnMapLongClickListener {
 
 
@@ -50,9 +56,45 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
     };
 
 
+    private static class Key {
+        public static final String STATE_OF_MESSAGE_BAR = "STATE_OF_MESSAGE_BAR";
+    }
+
+
     private Callbacks callbacks;
     private LocationSource.OnLocationChangedListener onLocationChangedListener;
 
+    private MessageBar mMessageBar;
+
+    private final StateManager STATE_MANAGER = new StateManager() {
+
+        @Override
+        public void initStateByDefault() {
+            initMessageBar();
+        }
+
+        private void initMessageBar() {
+            mMessageBar = new MessageBar(getActivity());
+            mMessageBar.setOnClickListener(new MessageBar.OnMessageClickListener() {
+                @Override
+                public void onMessageClick(Parcelable token) {
+                    onNotifierAboutLocationClicked();
+                }
+            });
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            initMessageBar();
+            Bundle stateOfMessageBar = savedInstanceState.getBundle(Key.STATE_OF_MESSAGE_BAR);
+            mMessageBar.onRestoreInstanceState(stateOfMessageBar);
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putBundle(Key.STATE_OF_MESSAGE_BAR, mMessageBar.onSaveInstanceState());
+        }
+    };
 
 
     public CustomMapFragmentWithBaseLocation() {
@@ -73,8 +115,16 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        STATE_MANAGER.saveState(outState);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        STATE_MANAGER.initState(savedInstanceState);
+
         initCurrentLocation();
         getGoogleMap().setOnMapLongClickListener(this);
     }
@@ -90,7 +140,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
             @Override
             public void activate(OnLocationChangedListener onLocationChangedListener) {
                 CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = onLocationChangedListener;
-                OnLocationChangedListeners.notifyListeners();
+                LocationStateListeners.notifyListenersAboutLocationChange();
             }
 
             @Override
@@ -108,19 +158,26 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        OnLocationChangedListeners.addOnLocationChangedListener(this);
+        LocationStateListeners.addListener(this);
         CurrentLocationUtils.updateCurrentLocation();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        OnLocationChangedListeners.removeOnLocationChangedListener(this);
+        LocationStateListeners.removeListener(this);
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        setCustomBaseLocation(latLng);
+        if (isAbleToChangeBaseLocationByLongClickOnMap()) {
+            setCustomBaseLocation(latLng);
+        }
+    }
+
+
+    protected boolean isAbleToChangeBaseLocationByLongClickOnMap() {
+        return true;
     }
 
 
@@ -139,4 +196,20 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
         callbacks.onCustomBaseLocationIsDismissed();
     }
 
+    @Override
+    public void onCurrentAndCustomLocationsAreNotAvailable() {
+        ToastUtils.LONG.show(getActivity(), "Location is not available. Please, turn on Location Service");
+        mMessageBar.show("Location is not available. Please, turn on Location Service");
+    }
+
+    private void onNotifierAboutLocationClicked() {
+        openLocationSettingsScreen();
+    }
+
+    private void openLocationSettingsScreen() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+        }
+    }
 }

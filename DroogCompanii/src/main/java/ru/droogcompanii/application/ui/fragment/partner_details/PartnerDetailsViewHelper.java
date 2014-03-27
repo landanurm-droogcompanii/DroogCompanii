@@ -18,8 +18,8 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity;
 import ru.droogcompanii.application.ui.activity.partner_list.PartnerListActivity;
 import ru.droogcompanii.application.ui.activity.search_2.InputProviderByPartnerCategory;
-import ru.droogcompanii.application.util.view.ImageDownloader;
 import ru.droogcompanii.application.util.view.FavoriteViewUtils;
+import ru.droogcompanii.application.util.view.ImageDownloader;
 import ru.droogcompanii.application.util.workers.Router;
 import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 

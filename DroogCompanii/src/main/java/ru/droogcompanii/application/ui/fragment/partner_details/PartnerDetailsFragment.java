@@ -41,8 +41,8 @@ public class PartnerDetailsFragment extends android.support.v4.app.Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        PartnerDetailsViewHelper viewMaker = new PartnerDetailsViewHelper(getActivity(), inflater, container);
-        return viewMaker.getViewFilledBy(partner, partnerPoint);
+        PartnerDetailsViewHelper viewHelper = new PartnerDetailsViewHelper(getActivity(), inflater, container);
+        return viewHelper.getViewFilledBy(partner, partnerPoint);
     }
 
     @Override

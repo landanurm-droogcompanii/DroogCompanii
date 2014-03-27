@@ -39,6 +39,7 @@
     <dimen name="categoryListHorizontalPadding">6dp</dimen>
     <dimen name="categoryListTopPadding">10dp</dimen>
     <dimen name="categoryListBottomPadding">8dp</dimen>
+    <dimen name="heightOfMapFragmentOnPartnerDetailsScreen">350dp</dimen>
 
 
 </resources>

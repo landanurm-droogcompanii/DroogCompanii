@@ -61,11 +61,12 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
     public List<Partner> getPartnersOf(PartnerCategory category) {
         String where = " WHERE " +
                 PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + " = " + category.getId();
-        return getPartnersByCondition(where);
+        return getPartnersByWhere(where);
     }
 
-    List<Partner> getPartnersByCondition(String where) {
-        String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + where + " ;";
+    List<Partner> getPartnersByWhere(String where) {
+        String sql = "SELECT * FROM " +
+                PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " " + where + " ;";
 
         initDatabase();
 
@@ -127,6 +128,24 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         return getPartnerById(partnerPoint.getPartnerId());
     }
 
+    public Partner getPartnerByPointId(int partnerPointId) {
+        final PartnerHierarchyContracts.PartnersContract
+                PARTNERS = new PartnerHierarchyContracts.PartnersContract();
+        final PartnerHierarchyContracts.PartnerPointsContract
+                PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
+        List<Partner> partners = getPartnersByWhere(
+            "WHERE " + PARTNERS.TABLE_NAME + "." + PARTNERS.COLUMN_NAME_ID + " IN (" +
+                "SELECT " + PARTNER_POINTS.TABLE_NAME + "." + PARTNER_POINTS.COLUMN_NAME_PARTNER_ID +
+                " FROM " + PARTNER_POINTS.TABLE_NAME +
+                " WHERE " + PARTNER_POINTS.TABLE_NAME + "." + PARTNER_POINTS.COLUMN_NAME_ID + "=" + partnerPointId +
+            ")"
+        );
+        if (partners.size() != 1) {
+            throw new IllegalStateException("Every PartnerPoint should be associated with only ONE Partner");
+        }
+        return partners.get(0);
+    }
+
     public Partner getPartnerOf(Offer offer) {
         return getPartnerById(offer.getPartnerId());
     }
@@ -134,7 +153,7 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
     public Partner getPartnerById(int partnerId) {
         String where = " WHERE " +
                 PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerId;
-        List<Partner> partners = getPartnersByCondition(where);
+        List<Partner> partners = getPartnersByWhere(where);
         if (partners.isEmpty()) {
             throw new IllegalArgumentException("There is no partners with id: " + partnerId);
         }
@@ -142,6 +161,6 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
     }
 
     public List<Partner> getAllPartners() {
-        return getPartnersByCondition("");
+        return getPartnersByWhere("");
     }
 }

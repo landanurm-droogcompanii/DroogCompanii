@@ -6,8 +6,7 @@ package ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper;
 public class MenuItemIds {
     public static final int SEARCH = 1;
     public static final int FILTER = SEARCH + 1;
-    public static final int GO_TO_MAP = FILTER + 1;
-    public static final int OFFERS = GO_TO_MAP + 1;
+    public static final int OFFERS = FILTER + 1;
     public static final int SIGNOUT = OFFERS + 1;
     public static final int PERSONAL_ACCOUNT = SIGNOUT + 1;
     public static final int SYNCHRONIZATION = PERSONAL_ACCOUNT + 1;

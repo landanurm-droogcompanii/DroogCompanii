@@ -14,14 +14,14 @@ import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.util.location.CurrentLocationUtils;
-import ru.droogcompanii.application.util.location.OnLocationChangedListeners;
+import ru.droogcompanii.application.util.location.LocationStateListeners;
 import ru.droogcompanii.application.util.view.ObserverOfViewWillBePlacedOnGlobalLayout;
 
 /**
  * Created by ls on 10.01.14.
  */
 public class BasePartnerPointsMapFragment extends CustomMapFragment
-        implements MarkersFinder, LocationSource.OnLocationChangedListener {
+        implements MarkersFinder, LocationStateListeners.LocationStateListener {
 
     private static final LocationSource.OnLocationChangedListener
             DUMMY_ON_LOCATION_CHANGED_LISTENER = new LocationSource.OnLocationChangedListener() {
@@ -89,13 +89,13 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     @Override
     public void onResume() {
         super.onResume();
-        OnLocationChangedListeners.addOnLocationChangedListener(this);
+        LocationStateListeners.addListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        OnLocationChangedListeners.removeOnLocationChangedListener(this);
+        LocationStateListeners.removeListener(this);
     }
 
     protected final void updateMapCameraAfterMapViewWillBePlacedOnLayout(
@@ -164,5 +164,10 @@ public class BasePartnerPointsMapFragment extends CustomMapFragment
     @Override
     public boolean isMarkerPlacedOnMap(Marker marker) {
         return getMarkers().contains(marker);
+    }
+
+    @Override
+    public void onCurrentAndCustomLocationsAreNotAvailable() {
+
     }
 }
