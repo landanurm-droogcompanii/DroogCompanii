@@ -17,8 +17,8 @@ import ru.droogcompanii.application.util.WeakReferenceWrapper;
  */
 public class LocationStateListeners {
 
-    public static interface LocationStateListener extends LocationSource.OnLocationChangedListener {
-        void onCurrentAndCustomLocationsAreNotAvailable();
+    public static interface LocationStateListener extends LocationSource.OnLocationChangedListener,
+                    OnCurrentAndCustomLocationsAreNotAvailableListener {
     }
 
     private static final Collection<WeakReferenceWrapper<LocationStateListener>>

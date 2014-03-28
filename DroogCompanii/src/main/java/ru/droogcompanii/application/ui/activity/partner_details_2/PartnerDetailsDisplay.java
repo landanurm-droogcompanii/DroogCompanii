@@ -35,6 +35,7 @@ public class PartnerDetailsDisplay {
     private final View view;
 
     private Partner partner;
+    private boolean hasOffers;
 
 
     public PartnerDetailsDisplay(Activity activity, LayoutInflater inflater) {
@@ -53,8 +54,9 @@ public class PartnerDetailsDisplay {
         return view.findViewById(id);
     }
 
-    public void display(Partner partner) {
+    public void display(Partner partner, boolean hasOffers) {
         this.partner = partner;
+        this.hasOffers = hasOffers;
         display();
     }
 
@@ -84,15 +86,21 @@ public class PartnerDetailsDisplay {
     }
 
     private void setGoToOffersButton() {
-        findViewById(R.id.goToOffersButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onGoToOffersOfPartner(partner);
-            }
-        });
+        View goToOffers = findViewById(R.id.goToOffersButton);
+        if (hasOffers) {
+            goToOffers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onGoToOffersByPartner(partner);
+                }
+            });
+            goToOffers.setVisibility(View.VISIBLE);
+        } else {
+            goToOffers.setVisibility(View.GONE);
+        }
     }
 
-    private void onGoToOffersOfPartner(Partner partner) {
+    private void onGoToOffersByPartner(Partner partner) {
         OfferListActivity.start(activity, partner);
     }
 

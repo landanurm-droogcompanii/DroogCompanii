@@ -9,4 +9,8 @@
     <color name="backgroundColorOfCategoryList">#c4eeeeee</color>
 
     <color name="backgroundOfCheckedCategoryListItem">#67113ae5</color>
+
+    <color name="backgroundOfToastLocationService">#bb090909</color>
+    <color name="textColorOfToastLocationService">#eeeeeeee</color>
+    <color name="colorOfDividerToastLocationService">#88999999</color>
 </resources>

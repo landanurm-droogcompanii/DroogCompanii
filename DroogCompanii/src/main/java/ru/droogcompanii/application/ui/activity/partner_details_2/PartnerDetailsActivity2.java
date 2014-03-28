@@ -287,4 +287,9 @@ public class PartnerDetailsActivity2 extends ActionBarActivityWithUpButton
     public void onCustomBaseLocationIsDismissed() {
         // skip
     }
+
+    @Override
+    public void onNeedToEnableLocationService() {
+        // do nothing
+    }
 }

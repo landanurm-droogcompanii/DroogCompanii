@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteDBUtils;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
@@ -24,6 +27,8 @@ import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.Workin
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Objects;
 import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
+import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.view.FavoriteViewUtils;
 import ru.droogcompanii.application.util.workers.Router;
 import ru.droogcompanii.application.util.workers.caller.CallerHelper;
@@ -31,7 +36,7 @@ import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 /**
  * Created by ls on 19.03.14.
  */
-public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment {
+public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
 
     private static final int NO_INDEX = -1;
 
@@ -312,8 +317,73 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     }
 
     private void updateIsFavorite() {
-        CheckBox checkBox = (CheckBox) findViewById(R.id.isFavorite);
-        favoriteViewUtils.init(checkBox, getCurrentPartnerPoint().getPartnerId());
+        if (!findIsFavoriteCheckBox().isEnabled()) {
+            return;
+        }
+        findIsFavoriteCheckBox().setEnabled(false);
+        startTaskIsPartnerFavorite(getCurrentPartnerPoint().getPartnerId());
+    }
+
+    private CheckBox findIsFavoriteCheckBox() {
+        return (CheckBox) findViewById(R.id.isFavorite);
+    }
+
+    private static class TaskRequestCode {
+        public static final int IS_PARTNER_FAVORITE = 145;
+        public static final int WRITE_IS_FAVORITE_IN_DB = IS_PARTNER_FAVORITE + 1;
+    }
+
+    private void startTaskIsPartnerFavorite(final int partnerId) {
+        startTask(TaskRequestCode.IS_PARTNER_FAVORITE, new TaskNotBeInterruptedDuringConfigurationChange() {
+            @Override
+            protected Serializable doInBackground(Void... voids) {
+                FavoriteDBUtils favoriteDBUtils = new FavoriteDBUtils(DroogCompaniiApplication.getContext());
+                return favoriteDBUtils.isFavorite(partnerId);
+            }
+        });
+    }
+
+    @Override
+    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
+        if (resultCode != Activity.RESULT_OK) {
+            getActivity().finish();
+            return;
+        }
+        if (requestCode == TaskRequestCode.IS_PARTNER_FAVORITE) {
+            onTaskIsPartnerFavoriteFinished(result);
+        } else if (requestCode == TaskRequestCode.WRITE_IS_FAVORITE_IN_DB) {
+            onTaskWriteIsFavoriteInDbFinished(result);
+        }
+    }
+
+    private void onTaskIsPartnerFavoriteFinished(Serializable result) {
+        boolean isPartnerFavorite = (Boolean) result;
+        CheckBox checkBox = findIsFavoriteCheckBox();
+        checkBox.setChecked(isPartnerFavorite);
+        checkBox.setEnabled(true);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checkedIsFavorite) {
+                startTaskWriteIsFavoriteInDB(checkedIsFavorite);
+            }
+        });
+    }
+
+    private void startTaskWriteIsFavoriteInDB(final boolean isFavorite) {
+        findIsFavoriteCheckBox().setEnabled(false);
+        final int partnerId = getCurrentPartnerPoint().getPartnerId();
+        startTask(TaskRequestCode.WRITE_IS_FAVORITE_IN_DB, new TaskNotBeInterruptedDuringConfigurationChange() {
+            @Override
+            protected Serializable doInBackground(Void... voids) {
+                FavoriteDBUtils favoriteDBUtils = new FavoriteDBUtils(DroogCompaniiApplication.getContext());
+                favoriteDBUtils.setFavorite(partnerId, isFavorite);
+                return null;
+            }
+        });
+    }
+
+    private void onTaskWriteIsFavoriteInDbFinished(Serializable result) {
+        findIsFavoriteCheckBox().setEnabled(true);
     }
 
     private void initCatchingTouchEvents() {
@@ -330,9 +400,10 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
             throw new IllegalArgumentException("partnerPointsToSet should be not null");
         }
         if (isAlreadySetting(partnerPointsToSet)) {
+            show();
             return;
         }
-        update(prepareIds(partnerPointsToSet), prepareAbsentPartnerPoints(partnerPointsToSet));
+        set(prepareIds(partnerPointsToSet), prepareAbsentPartnerPoints(partnerPointsToSet));
         show();
     }
 
@@ -350,7 +421,7 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
         return true;
     }
 
-    private void update(List<Integer> newIds, List<Optional<PartnerPoint>> newPartnerPoints) {
+    private void set(List<Integer> newIds, List<Optional<PartnerPoint>> newPartnerPoints) {
         indexOfCurrentPartnerPoint = defineIndex(ids, newIds);
         ids = newIds;
         partnerPoints = newPartnerPoints;
@@ -400,3 +471,4 @@ public class PartnerPointDetailsFragment extends android.support.v4.app.Fragment
     }
 
 }
+

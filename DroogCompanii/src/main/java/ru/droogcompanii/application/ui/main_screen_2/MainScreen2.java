@@ -18,11 +18,13 @@ import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.Men
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity;
 import ru.droogcompanii.application.ui.main_screen_2.category_list.CategoryListFragment;
+import ru.droogcompanii.application.ui.main_screen_2.map.ToastLocationService;
 import ru.droogcompanii.application.ui.main_screen_2.partner_point_details.PartnerPointDetailsFragment;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.FiltersDialogFragment;
 import ru.droogcompanii.application.ui.main_screen_2.map.ConditionConverter;
 import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragmentWithBaseLocation;
 import ru.droogcompanii.application.ui.main_screen_2.map.NewPartnerPointsMapFragment;
+import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.activity.ActivityWithNavigationDrawer;
 import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 
@@ -42,6 +44,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     }
 
     private View dismissCustomBaseLocation;
+    private ToastLocationService toastLocationService;
 
 
     @Override
@@ -61,6 +64,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
             placeFragmentsOnLayout();
         }
         initDismissCustomBaseLocationAction();
+        toastLocationService = new ToastLocationService(this);
     }
 
     private void initDismissCustomBaseLocationAction() {
@@ -121,6 +125,7 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
 
     @Override
     public void onMarkerClicked(List<PartnerPoint> partnerPoints) {
+        LogUtils.debug("onMarkerClicked()");
         findPartnerPointDetailsFragment().setPartnerPoints(partnerPoints);
     }
 
@@ -210,6 +215,11 @@ public class MainScreen2 extends ActivityWithNavigationDrawer
     @Override
     public void onMapInitialized() {
         // skip
+    }
+
+    @Override
+    public void onNeedToEnableLocationService() {
+        toastLocationService.show();
     }
 
 }

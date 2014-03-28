@@ -87,6 +87,8 @@
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>
     <string name="all_partners">All Partners</string>
+    <string name="textToastLocationService">Location is not available. Please, turn on Location Service</string>
+    <string name="textDoNotShowAgain">Don\'t show again</string>
 
 
 </resources>

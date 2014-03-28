@@ -16,6 +16,7 @@ import ru.droogcompanii.application.data.offers.OfferImpl;
 import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Holder;
+import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 11.02.14.
@@ -60,13 +61,32 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         return result.value;
     }
 
+    public boolean hasOffers(Partner partner) {
+        return hasOffers(partner.getId());
+    }
+
+    private boolean hasOffers(int partnerId) {
+        LogUtils.debug("Partner id:  " + partnerId);
+        
+        final Holder<Boolean> hasOffers = Holder.from(false);
+        String condition = OffersContract.COLUMN_NAME_PARTNER_ID + "=" + partnerId;
+        handleCursorByCondition(condition, new CursorHandler() {
+            @Override
+            public void handle(Cursor cursor) {
+                hasOffers.value = cursor.getCount() > 0;
+            }
+        });
+        LogUtils.debug("Has offers ? " + hasOffers.value);
+        return hasOffers.value;
+    }
+
     private static interface CursorHandler {
         void handle(Cursor cursor);
     }
 
-    private void handleCursorByCondition(String where, CursorHandler cursorHandler) {
+    private void handleCursorByCondition(String condition, CursorHandler cursorHandler) {
         initDatabase();
-        where = where.trim().isEmpty() ? where : ("WHERE " + where);
+        String where = condition.trim().isEmpty() ? " " : ("WHERE " + condition);
         Cursor cursor = db.rawQuery(prepareSqlUsedSorting(where), null);
         cursorHandler.handle(cursor);
         cursor.close();

@@ -10,7 +10,7 @@ public class TimeOfDay implements Time, Serializable {
     private static final int HOURS_PER_DAY = 24;
     private static final int MINUTES_PER_HOUR = 60;
 
-    private final int hours;
+    //private final int hours;
     private final int minutes;
 
     public static TimeOfDay from(Calendar calendar) {
@@ -21,8 +21,10 @@ public class TimeOfDay implements Time, Serializable {
 
     public TimeOfDay(int hours, int minutes) {
         checkArguments(hours, minutes);
-        this.hours = hours;
-        this.minutes = minutes;
+        //this.hours = hours;
+        //this.minutes = minutes;
+        /* + */
+        this.minutes = hours * MINUTES_PER_HOUR + minutes;
     }
 
     private void checkArguments(int hours, int minutes) {
@@ -33,12 +35,16 @@ public class TimeOfDay implements Time, Serializable {
 
     @Override
     public int getHours() {
-        return hours;
+        //return hours;
+        /* + */
+        return minutes / MINUTES_PER_HOUR;
     }
 
     @Override
     public int getMinutes() {
-        return minutes;
+        //return minutes;
+        /* + */
+        return minutes % MINUTES_PER_HOUR;
     }
 
     @Override
@@ -49,12 +55,13 @@ public class TimeOfDay implements Time, Serializable {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof TimeOfDay)) {
+        if (!(obj instanceof Time)) {
             return false;
         }
-        TimeOfDay other = (TimeOfDay) obj;
-        return (hours == other.hours) &&
-               (minutes == other.minutes);
+        Time other = (Time) obj;
+        return (getHours() == other.getHours()) &&
+               (getMinutes() == other.getMinutes());
+
     }
 
     @Override
@@ -63,12 +70,14 @@ public class TimeOfDay implements Time, Serializable {
     }
 
     private int toMinutesOfDay() {
-        return hours * 60 + minutes;
+        //return hours * 60 + minutes;
+        /* + */
+        return minutes;
     }
 
     @Override
     public String toString() {
-        return twoDigitString(hours) + ":" + twoDigitString(minutes);
+        return twoDigitString(getHours()) + ":" + twoDigitString(getMinutes());
     }
 
     private static String twoDigitString(int timeComponent) {

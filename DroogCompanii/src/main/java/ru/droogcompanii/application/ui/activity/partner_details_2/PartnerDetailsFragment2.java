@@ -11,6 +11,7 @@ import com.google.common.base.Optional;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
+import ru.droogcompanii.application.data.db_util.offers.OffersReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
@@ -35,6 +36,7 @@ public class PartnerDetailsFragment2 extends FragmentAbleToStartTask {
     private static class Key {
         public static final String INPUT_PROVIDER = "INPUT_PROVIDER";
         public static final String PARTNER = "PARTNER";
+        public static final String HAS_OFFERS = "HAS_OFFERS";
     }
 
     private static class RequestCode {
@@ -51,19 +53,24 @@ public class PartnerDetailsFragment2 extends FragmentAbleToStartTask {
 
 
     private Callbacks callbacks;
+
+    private boolean hasOffers;
     private Optional<Partner> partner;
     private PartnerDetailsDisplay partnerDetailsDisplay;
+
 
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
             partner = Optional.absent();
+            hasOffers = false;
             startTaskReceivingDetails();
         }
 
         @Override
         public void restoreState(Bundle savedInstanceState) {
             partner = (Optional<Partner>) savedInstanceState.getSerializable(Key.PARTNER);
+            hasOffers = savedInstanceState.getBoolean(Key.HAS_OFFERS);
             if (partner.isPresent()) {
                 displayDetails();
             }
@@ -72,6 +79,7 @@ public class PartnerDetailsFragment2 extends FragmentAbleToStartTask {
         @Override
         public void saveState(Bundle outState) {
             outState.putSerializable(Key.PARTNER, partner);
+            outState.putBoolean(Key.HAS_OFFERS, hasOffers);
         }
     };
 
@@ -105,6 +113,17 @@ public class PartnerDetailsFragment2 extends FragmentAbleToStartTask {
         STATE_MANAGER.saveState(outState);
     }
 
+
+    private static class TaskResult implements Serializable {
+        public final boolean hasOffers;
+        public final Partner partner;
+
+        public TaskResult(Partner partner, boolean hasOffers) {
+            this.partner = partner;
+            this.hasOffers = hasOffers;
+        }
+    }
+
     private void startTaskReceivingDetails() {
         Bundle args = getArguments();
         final PartnerDetailsActivity2.InputProvider inputProvider =
@@ -113,9 +132,15 @@ public class PartnerDetailsFragment2 extends FragmentAbleToStartTask {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 Partner partner = inputProvider.getPartner(DroogCompaniiApplication.getContext());
-                return (Serializable) partner;
+                boolean hasOffers = defineHasOffers(partner);
+                return new TaskResult(partner, hasOffers);
             }
         });
+    }
+
+    private boolean defineHasOffers(Partner partner) {
+        OffersReaderFromDatabase offersReader = new OffersReaderFromDatabase(DroogCompaniiApplication.getContext());
+        return offersReader.hasOffers(partner);
     }
 
     @Override
@@ -135,11 +160,13 @@ public class PartnerDetailsFragment2 extends FragmentAbleToStartTask {
     }
 
     private void onDetailsReceived(Serializable result) {
-        partner = Optional.of((Partner) result);
+        TaskResult taskResult = (TaskResult) result;
+        partner = Optional.of(taskResult.partner);
+        hasOffers = taskResult.hasOffers;
         displayDetails();
     }
 
     private void displayDetails() {
-        partnerDetailsDisplay.display(partner.get());
+        partnerDetailsDisplay.display(partner.get(), hasOffers);
     }
 }
