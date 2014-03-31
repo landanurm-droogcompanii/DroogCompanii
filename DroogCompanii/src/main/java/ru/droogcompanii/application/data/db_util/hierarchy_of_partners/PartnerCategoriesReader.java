@@ -17,9 +17,6 @@ import ru.droogcompanii.application.util.StringsCombiner;
  */
 public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase {
 
-    private int idColumnIndex;
-    private int titleColumnIndex;
-
     private static class ColumnIndices {
         int idColumnIndex;
         int titleColumnIndex;

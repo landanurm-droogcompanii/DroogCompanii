@@ -37,15 +37,6 @@ public class CallerHelper {
         showMultiPhonesDialogFragment(title, phones);
     }
 
-    private void callImmediatelyIfOnlyOnePhoneNumberAndShowDialogOtherwise(String title, List<String> phones) {
-        if (phones.size() == 1) {
-            String phone = phones.get(0);
-            Caller.call(activity, phone);
-        } else if (phones.size() > 1) {
-            showMultiPhonesDialogFragment(title, phones);
-        }
-    }
-
     private void showMultiPhonesDialogFragment(String title, List<String> phones) {
         DialogFragment dialogFragment = MultiPhonesCallerDialogFragment.newInstance(title, phones);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();

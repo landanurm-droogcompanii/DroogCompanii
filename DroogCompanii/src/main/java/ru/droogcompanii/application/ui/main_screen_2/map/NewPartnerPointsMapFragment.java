@@ -20,7 +20,6 @@ import java.util.Set;
 
 import ru.droogcompanii.application.DroogCompaniiSettings;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsGroupedByPosition;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilterHelper;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.Filters;
 import ru.droogcompanii.application.ui.main_screen_2.map.circle_of_nearest.ActualCircleOfNearestDrawer;
@@ -100,17 +99,19 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     private boolean withFilters;
     private boolean isFirstDisplaying;
     private Callbacks callbacks;
+    private CircleOfNearestDrawer circleOfNearestDrawer;
     private ClickedPositionHelper clickedPositionHelper;
     private ClusterManager<ClusterItem> clusterManager;
     private Optional<String> conditionToReceivePartnerPoints;
     private PartnerPointsGroupedByPosition partnerPointsGroupedByPosition;
-    private CircleOfNearestDrawer circleOfNearestDrawer;
+    private Worker.Factory workerFactory;
 
 
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
             withFilters = getArguments().getBoolean(Key.WITH_FILTERS, true);
+            initWithFilters();
             isFirstDisplaying = true;
             conditionToReceivePartnerPoints = Optional.absent();
             clickedPositionHelper = new ClickedPositionHelper(NewPartnerPointsMapFragment.this);
@@ -119,10 +120,11 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         @Override
         public void restoreState(Bundle savedInstanceState) {
             withFilters = savedInstanceState.getBoolean(Key.WITH_FILTERS, true);
+            initWithFilters();
             isFirstDisplaying = savedInstanceState.getBoolean(Key.IS_FIRST_DISPLAYING);
+            conditionToReceivePartnerPoints = (Optional<String>) savedInstanceState.getSerializable(Key.CONDITION);
             clickedPositionHelper = new ClickedPositionHelper(NewPartnerPointsMapFragment.this);
             clickedPositionHelper.restoreFrom(savedInstanceState);
-            conditionToReceivePartnerPoints = (Optional<String>) savedInstanceState.getSerializable(Key.CONDITION);
         }
 
         @Override
@@ -133,6 +135,15 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
             clickedPositionHelper.saveInto(outState);
         }
     };
+
+    private void initWithFilters() {
+        if (withFilters) {
+            circleOfNearestDrawer = new ActualCircleOfNearestDrawer(NewPartnerPointsMapFragment.this);
+        } else {
+            circleOfNearestDrawer = new DummyCircleOfNearestDrawer();
+        }
+        workerFactory = new Worker.Factory(withFilters);
+    }
 
     private void moveCameraToActualBasePosition() {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
@@ -157,12 +168,20 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         STATE_MANAGER.initState(savedInstanceState);
-        initMap(savedInstanceState);
-    }
-
-    private void initMap(Bundle savedInstanceState) {
         initMap();
         onPostMapInitialized(savedInstanceState);
+    }
+
+    private void initMap() {
+        clusterManager = new ClusterManager<ClusterItem>(getActivity(), getGoogleMap());
+        getGoogleMap().setOnMarkerClickListener(clusterManager);
+        getGoogleMap().setOnInfoWindowClickListener(clusterManager);
+        getGoogleMap().setOnCameraChangeListener(this);
+        getGoogleMap().setOnMapClickListener(this);
+        clusterManager.setOnClusterItemClickListener(this);
+        clusterManager.setOnClusterClickListener(this);
+        circleOfNearestDrawer.update();
+        callbacks.onMapInitialized();
     }
 
     private void onPostMapInitialized(Bundle savedInstanceState) {
@@ -177,29 +196,6 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         STATE_MANAGER.saveState(outState);
-    }
-
-    private void initMap() {
-
-        clusterManager = new ClusterManager<ClusterItem>(getActivity(), getGoogleMap());
-        getGoogleMap().setOnMarkerClickListener(clusterManager);
-        getGoogleMap().setOnInfoWindowClickListener(clusterManager);
-        getGoogleMap().setOnCameraChangeListener(this);
-        getGoogleMap().setOnMapClickListener(this);
-        clusterManager.setOnClusterItemClickListener(this);
-        clusterManager.setOnClusterClickListener(this);
-
-        initCircleOfNearestDrawer();
-
-        callbacks.onMapInitialized();
-    }
-
-    private void initCircleOfNearestDrawer() {
-        circleOfNearestDrawer =
-                withFilters
-                ? new ActualCircleOfNearestDrawer(this)
-                : new DummyCircleOfNearestDrawer();
-        circleOfNearestDrawer.update();
     }
 
     @Override
@@ -298,10 +294,10 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
         startTask(RequestCode.TASK_DISPLAYING, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                Worker worker = new Worker(clusterManager,
+                Worker worker = workerFactory.create(clusterManager,
                         clickedPositionHelper, conditionToReceivePartnerPoints);
                 partnerPointsGroupedByPosition = new PartnerPointsGroupedByPosition();
-                return worker.display(withFilters, bounds, currentFilters, partnerPointsGroupedByPosition);
+                return worker.display(bounds, currentFilters, partnerPointsGroupedByPosition);
             }
         });
     }

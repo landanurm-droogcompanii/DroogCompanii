@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.util.activity.ActivityTrackedLifecycle;
+import ru.droogcompanii.application.util.activity.DroogCompaniiBaseActivity;
 
 /**
  * Created by ls on 21.02.14.
  */
-public class ActivityAbleToStartTask extends ActivityTrackedLifecycle
+public class ActivityAbleToStartTask extends DroogCompaniiBaseActivity
         implements AbleToStartTask, TaskResultReceiver, FragmentStartedTaskOnCreate.Callbacks {
 
     private static final String TAG_TASK_FRAGMENT_HOLDER = "TAG_TASK_FRAGMENT_HOLDER";

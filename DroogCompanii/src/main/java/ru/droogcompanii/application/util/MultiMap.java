@@ -1,6 +1,5 @@
 package ru.droogcompanii.application.util;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,12 +36,6 @@ public class MultiMap<K,V> {
 
     public MultiMap() {
         map = new HashMap<K, Set<V>>();
-    }
-
-    public void putAll(K key, Collection<V> values) {
-        Set<V> existingValues = get(key);
-        existingValues.addAll(values);
-        map.put(key, existingValues);
     }
 
     public void put(K key, V value) {

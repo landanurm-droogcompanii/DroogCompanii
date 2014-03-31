@@ -23,13 +23,11 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteD
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
-import ru.droogcompanii.application.ui.fragment.partner_points_info_panel.WorkingHoursIndicatorUpdater;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Objects;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
-import ru.droogcompanii.application.util.view.FavoriteViewUtils;
 import ru.droogcompanii.application.util.workers.Router;
 import ru.droogcompanii.application.util.workers.caller.CallerHelper;
 
@@ -53,7 +51,6 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     private int indexOfCurrentPartnerPoint;
     private List<Integer> ids;
     private List<Optional<PartnerPoint>> partnerPoints;
-    private FavoriteViewUtils favoriteViewUtils;
 
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
@@ -120,12 +117,6 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     public void hide() {
         isVisible = false;
         getView().setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        favoriteViewUtils = new FavoriteViewUtils(activity);
     }
 
     @Override

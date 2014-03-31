@@ -42,7 +42,6 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
     }
 
     public static interface InputProvider {
-        String getTitle(Context context);
         Input getInput(Context context);
     }
 

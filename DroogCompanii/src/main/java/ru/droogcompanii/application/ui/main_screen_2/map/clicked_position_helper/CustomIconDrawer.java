@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
+import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragment;
 
 /**
  * Created by ls on 25.03.14.

@@ -23,14 +23,12 @@ public class InputProviderBySearchQuery implements SearchResultListFragment.Inpu
     private static final PartnerHierarchyContracts.PartnerPointsContract
             POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
 
-    private final String searchQuery;
+
     private final String sqlCategoriesReceiver;
     private final String sqlPartnersReceiver;
     private final String sqlPointsReceiver;
 
     public InputProviderBySearchQuery(String searchQuery) {
-        this.searchQuery = searchQuery;
-
         sqlCategoriesReceiver = prepareSqlQuery(searchQuery, CATEGORIES.TABLE_NAME, CATEGORIES.COLUMN_NAME_TITLE);
         sqlPartnersReceiver = prepareSqlQuery(searchQuery, PARTNERS.TABLE_NAME, PARTNERS.COLUMN_NAME_TITLE);
         sqlPointsReceiver = prepareSqlQuery(searchQuery, POINTS.TABLE_NAME, POINTS.COLUMN_NAME_TITLE);
@@ -43,11 +41,6 @@ public class InputProviderBySearchQuery implements SearchResultListFragment.Inpu
 
     private static String quote(String stringToQuote) {
         return "\'" + stringToQuote + "\'";
-    }
-
-    @Override
-    public String getTitle(Context context) {
-        return searchQuery;
     }
 
     @Override

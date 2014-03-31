@@ -13,7 +13,6 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
-import ru.droogcompanii.application.data.offers.Offers;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Holder;
 import ru.droogcompanii.application.util.LogUtils;
@@ -40,34 +39,13 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         return new OffersDbHelper(context);
     }
 
-    public Offers getOffers() {
-        return getOffersFromDatabase("");
-    }
-
-    public Offers getOffersOf(Partner partner) {
-        return getOffersFromDatabase(
-                OffersContract.COLUMN_NAME_PARTNER_ID + " = " + partner.getId()
-        );
-    }
-
-    private Offers getOffersFromDatabase(String where) {
-        final Holder<Offers> result = Holder.from(null);
-        handleCursorByCondition(where, new CursorHandler() {
-            @Override
-            public void handle(Cursor cursor) {
-                result.value = getOffersFromCursor(cursor);
-            }
-        });
-        return result.value;
-    }
-
     public boolean hasOffers(Partner partner) {
         return hasOffers(partner.getId());
     }
 
     private boolean hasOffers(int partnerId) {
         LogUtils.debug("Partner id:  " + partnerId);
-        
+
         final Holder<Boolean> hasOffers = Holder.from(false);
         String condition = OffersContract.COLUMN_NAME_PARTNER_ID + "=" + partnerId;
         handleCursorByCondition(condition, new CursorHandler() {
@@ -102,17 +80,6 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
                 " ORDER BY " + OffersContract.COLUMN_NAME_TO + " DESC ;";
     }
 
-    private Offers getOffersFromCursor(Cursor cursor) {
-        Offers offers = new Offers();
-        calculateColumnIndices(cursor);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            offers.add(getOfferFromCursor(cursor));
-            cursor.moveToNext();
-        }
-        return offers;
-    }
-
     private void calculateColumnIndices(Cursor cursor) {
         idColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_ID);
         partnerIdColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_PARTNER_ID);
@@ -144,7 +111,7 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
     }
 
     public List<Offer> getOfferList(String where) {
-        final Holder<List<Offer>> result = Holder.from(null);
+        final Holder<List<Offer>> result = Holder.absent();
         handleCursorByCondition(where, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {

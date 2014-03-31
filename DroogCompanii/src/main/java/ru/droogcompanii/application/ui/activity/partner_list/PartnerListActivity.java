@@ -13,15 +13,12 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2;
 import ru.droogcompanii.application.ui.fragment.partner_list.PartnerListFragment;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProvider;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.PartnerPointsProviderHolder;
 import ru.droogcompanii.application.util.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 import ru.droogcompanii.application.util.able_to_start_task.TaskResultReceiver;
 import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
@@ -30,11 +27,10 @@ import ru.droogcompanii.application.util.activity.ActionBarActivityWithUpButton;
  * Created by ls on 14.01.14.
  */
 public class PartnerListActivity extends ActionBarActivityWithUpButton
-                implements PartnerListFragment.Callbacks, PartnerPointsProviderHolder {
+                implements PartnerListFragment.Callbacks {
 
     public static interface InputProvider {
         List<Partner> getPartners(Context context);
-        List<PartnerPoint> getAllPartnerPoints(Context context);
         String getTitle(Context context);
     }
 
@@ -44,11 +40,9 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton
                         TASK_REQUEST_CODE_EXTRACT_SEARCH_RESULTS + 1;
 
     private static final String KEY_INDEX_OF_CURRENT_COMPARATOR = "KEY_INDEX_OF_CURRENT_COMPARATOR";
-    private static final String KEY_IS_GO_TO_MAP_ITEM_VISIBLE = "KEY_IS_GO_TO_MAP_ITEM_VISIBLE";
 
     private static final String KEY_INPUT_PROVIDER = "KEY_INPUT_PROVIDER";
 
-    private boolean isGoToMapItemVisible;
     private int indexOfCurrentComparator;
     private InputProvider inputProvider;
     private PartnerListFragment searchResultFragment;
@@ -94,7 +88,7 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton
 
 
     private void initSpinnerOnActionBar() {
-        SpinnerAdapter spinnerAdapter = new SpinnerAdapterPartnerImpl(this);
+        SpinnerAdapter spinnerAdapter = new SpinnerAdapterImpl(this);
         ActionBar.OnNavigationListener onNavigationListener = new ActionBar.OnNavigationListener() {
             @Override
             public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -107,7 +101,7 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton
 
     private void onComparatorChanged(int comparatorPosition) {
         indexOfCurrentComparator = comparatorPosition;
-        Comparator<Partner> newComparator = SpinnerAdapterPartnerImpl.getComparatorByPosition(comparatorPosition);
+        Comparator<Partner> newComparator = SpinnerAdapterImpl.getComparatorByPosition(comparatorPosition);
         searchResultFragment.setComparator(newComparator);
     }
 
@@ -174,7 +168,6 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton
     }
 
     private void saveStateInto(Bundle outState) {
-        outState.putBoolean(KEY_IS_GO_TO_MAP_ITEM_VISIBLE, isGoToMapItemVisible);
         outState.putInt(KEY_INDEX_OF_CURRENT_COMPARATOR, indexOfCurrentComparator);
         outState.putSerializable(KEY_INPUT_PROVIDER, (Serializable) inputProvider);
     }
@@ -208,28 +201,5 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton
         };
     }
 
-    @Override
-    public PartnerPointsProvider getPartnerPointsProvider() {
-        return new AllPartnerPointsProvider(inputProvider);
-    }
-
-    private static class AllPartnerPointsProvider implements PartnerPointsProvider, Serializable {
-        private final InputProvider inputProvider;
-
-        AllPartnerPointsProvider(InputProvider inputProvider) {
-            this.inputProvider = inputProvider;
-        }
-
-        @Override
-        public String getTitle(Context context) {
-            return inputProvider.getTitle(context);
-        }
-
-        @Override
-        public List<PartnerPoint> getPartnerPoints(Context context) {
-
-            return inputProvider.getAllPartnerPoints(context);
-        }
-    }
 
 }

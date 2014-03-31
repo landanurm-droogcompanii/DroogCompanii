@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.common.base.Optional;
 
-import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
+import ru.droogcompanii.application.ui.main_screen_2.map.CustomMapFragment;
 import ru.droogcompanii.application.ui.main_screen_2.filters_dialog.filters.DistanceFilterHelper;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 

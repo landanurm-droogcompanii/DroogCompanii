@@ -14,10 +14,6 @@ public class CopierToClipboard {
     private final Context context;
     private final Toast toastOnCopy;
 
-    public CopierToClipboard(Context context) {
-        this(context, R.string.labelOnCopiedText);
-    }
-
     public CopierToClipboard(Context context, int idOfMessageTextCopied) {
         this.context = context;
         toastOnCopy = Toast.makeText(context, idOfMessageTextCopied, Toast.LENGTH_SHORT);

@@ -1,7 +1,5 @@
 package ru.droogcompanii.application.data.hierarchy_of_partners;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -21,9 +19,5 @@ public interface PartnerPoint {
     String getPaymentMethods();
     WeekWorkingHours getWorkingHours();
     int getPartnerId();
-
     LatLng getPosition();
-    float distanceTo(PartnerPoint other);
-    float distanceTo(Location location);
-    Location toLocation();
 }

@@ -30,9 +30,7 @@ public abstract class ActivityWithNavigationDrawer extends ActivityMenuHelper {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         initNavigationDrawer();
-        if (savedInstanceState == null || wasNavigationDrawerOpen(savedInstanceState)) {
-            openNavigationDrawer();
-        }
+        restoreNavigationDrawerState(savedInstanceState);
     }
 
     protected abstract int getLayoutId();
@@ -56,10 +54,9 @@ public abstract class ActivityWithNavigationDrawer extends ActivityMenuHelper {
 
     protected abstract int getDrawerLayoutId();
 
-    protected void restoreNavigationDrawerState(Bundle savedInstanceState) {
-        if (wasNavigationDrawerOpen(savedInstanceState)) {
-            openNavigationDrawer();
-        } else {
+    private void restoreNavigationDrawerState(Bundle savedInstanceState) {
+        openNavigationDrawer();
+        if (savedInstanceState != null && !wasNavigationDrawerOpen(savedInstanceState)) {
             closeNavigationDrawer();
         }
     }

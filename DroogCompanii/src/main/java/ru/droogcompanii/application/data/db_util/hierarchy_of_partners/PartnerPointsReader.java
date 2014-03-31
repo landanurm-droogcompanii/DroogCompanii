@@ -8,7 +8,6 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
@@ -39,16 +38,6 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
         this.context = context;
     }
 
-    public List<PartnerPoint> getPartnerPointsOf(PartnerCategory partnerCategory) {
-        PartnersReader partnersReader = new PartnersReader(context);
-        List<Partner> partners = partnersReader.getPartnersOf(partnerCategory);
-        List<PartnerPoint> result = new ArrayList<PartnerPoint>();
-        for (Partner partner : partners) {
-            result.addAll(getPartnerPointsOf(partner));
-        }
-        return result;
-    }
-
     public List<PartnerPoint> getPartnerPointsOf(Partner partner) {
         return getPartnerPointsByPartnerId(partner.getId());
     }
@@ -57,10 +46,6 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
         return getPartnerPointsByWhere(
                 " WHERE " + PartnerPointsContract.COLUMN_NAME_PARTNER_ID + " = " + partnerId
         );
-    }
-
-    public List<PartnerPoint> getAllPartnerPoints() {
-        return getPartnerPointsByWhere("");
     }
 
     private List<PartnerPoint> getPartnerPointsByWhere(String where) {

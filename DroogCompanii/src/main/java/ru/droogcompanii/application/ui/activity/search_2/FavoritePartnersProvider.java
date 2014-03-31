@@ -8,7 +8,6 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteDBUtils;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.activity.partner_list.PartnerListActivity;
 
 /**
@@ -25,11 +24,5 @@ public class FavoritePartnersProvider implements PartnerListActivity.InputProvid
     public List<Partner> getPartners(Context context) {
         FavoriteDBUtils favoriteDBUtils = new FavoriteDBUtils(context);
         return favoriteDBUtils.getFavoritePartners();
-    }
-
-    @Override
-    public List<PartnerPoint> getAllPartnerPoints(Context context) {
-        FavoriteDBUtils favoriteDBUtils = new FavoriteDBUtils(context);
-        return favoriteDBUtils.getAllFavoritePartnerPoints();
     }
 }

@@ -10,8 +10,6 @@ import ru.droogcompanii.application.data.db_util.CursorHandler;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerImpl;
-import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
-import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
@@ -19,7 +17,8 @@ import ru.droogcompanii.application.util.SerializationUtils;
  */
 public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
-    private static final PartnerHierarchyContracts.PartnersContract COLUMNS = new PartnerHierarchyContracts.PartnersContract();
+    private static final PartnerHierarchyContracts.PartnersContract
+            COLUMNS = new PartnerHierarchyContracts.PartnersContract();
 
     private static class ColumnIndices {
         int idColumnIndex;
@@ -34,18 +33,6 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         int emailsColumnIndex;
         int isFavoriteColumnIndex;
     }
-
-    private int idColumnIndex;
-    private int titleColumnIndex;
-    private int fullTitleColumnIndex;
-    private int discountTypeColumnIndex;
-    private int discountSizeColumnIndex;
-    private int categoryIdColumnIndex;
-    private int imageUrlColumnIndex;
-    private int descriptionColumnIndex;
-    private int webSitesColumnIndex;
-    private int emailsColumnIndex;
-    private int isFavoriteColumnIndex;
 
 
     public PartnersReader(Context context) {
@@ -124,10 +111,6 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         return partner;
     }
 
-    public Partner getPartnerOf(PartnerPoint partnerPoint) {
-        return getPartnerById(partnerPoint.getPartnerId());
-    }
-
     public Partner getPartnerByPointId(int partnerPointId) {
         final PartnerHierarchyContracts.PartnersContract
                 PARTNERS = new PartnerHierarchyContracts.PartnersContract();
@@ -146,10 +129,6 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         return partners.get(0);
     }
 
-    public Partner getPartnerOf(Offer offer) {
-        return getPartnerById(offer.getPartnerId());
-    }
-
     public Partner getPartnerById(int partnerId) {
         String where = " WHERE " +
                 PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_ID + " = " + partnerId;
@@ -158,9 +137,5 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
             throw new IllegalArgumentException("There is no partners with id: " + partnerId);
         }
         return partners.get(0);
-    }
-
-    public List<Partner> getAllPartners() {
-        return getPartnersByWhere("");
     }
 }

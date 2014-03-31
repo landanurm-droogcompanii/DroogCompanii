@@ -29,11 +29,7 @@ public class NearestPositionCalculator {
         }
     }
 
-    public Optional<LatLng> getNearestPosition() {
-        return Optional.fromNullable(nearestPosition);
-    }
-
-    public Optional<SerializableLatLng> getSerializableNearestPosition() {
+    public Optional<SerializableLatLng> getNearestPosition() {
         if (nearestPosition != null) {
             return Optional.of(SerializableLatLng.fromParcelable(nearestPosition));
         } else {

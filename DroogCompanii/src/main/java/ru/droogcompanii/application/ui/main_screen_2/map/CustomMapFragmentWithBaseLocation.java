@@ -8,8 +8,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 
-import ru.droogcompanii.application.ui.fragment.partner_points_map.CustomMapFragment;
-import ru.droogcompanii.application.ui.fragment.partner_points_map.NotifierAboutBaseMapLocationChanges;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.util.location.CurrentLocationUtils;
 import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
@@ -139,7 +137,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
 
     private void setCustomBaseLocation(LatLng latLng) {
         CustomBaseLocationUtils.updateBasePosition(latLng);
-        NotifierAboutBaseMapLocationChanges.notify(getActivity());
+        NotifierAboutBaseLocationChanges.notify(getActivity());
 
         callbacks.onCustomBaseLocationIsSet();
     }
@@ -147,7 +145,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
 
     public void dismissCustomBaseLocation() {
         CustomBaseLocationUtils.dismissBasePosition();
-        NotifierAboutBaseMapLocationChanges.notify(getActivity());
+        NotifierAboutBaseLocationChanges.notify(getActivity());
 
         callbacks.onCustomBaseLocationIsDismissed();
     }

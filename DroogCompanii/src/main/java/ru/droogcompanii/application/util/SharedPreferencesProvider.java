@@ -24,4 +24,10 @@ public class SharedPreferencesProvider {
     public static SharedPreferences getFromApplicationContext() {
         return get(DroogCompaniiApplication.getContext());
     }
+
+    public static void clear(Context context) {
+        SharedPreferences.Editor editor = get(context).edit();
+        editor.clear();
+        editor.commit();
+    }
 }

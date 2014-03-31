@@ -1,6 +1,6 @@
 package ru.droogcompanii.application;
 
-import ru.droogcompanii.application.ui.fragment.filter.FilterUtils;
+import ru.droogcompanii.application.util.SharedPreferencesProvider;
 import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 
 /**
@@ -9,7 +9,7 @@ import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
 public class ActionsOnApplicationLaunch {
 
     public static void actionsOnApplicationLaunch() {
-        FilterUtils.resetFilters(DroogCompaniiApplication.getContext());
+        SharedPreferencesProvider.clear(DroogCompaniiApplication.getContext());
         CustomBaseLocationUtils.init();
     }
 

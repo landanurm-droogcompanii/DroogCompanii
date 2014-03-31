@@ -19,35 +19,6 @@ public class ListUtils {
         list.set(index2, obj1);
     }
 
-    public static <T> void moveElementAtFirstPosition(T element, List<T> list) {
-        int index = list.indexOf(element);
-        if (index == -1) {
-            throw new IllegalArgumentException("Cannot find element <" + element + "> in list");
-        }
-        swap(list, 0, index);
-    }
-
-
-    public static <T> List<T> combineLists(List<T>... listsToCombine) {
-        List<T> combined = new ArrayList<T>(totalSizeOf(listsToCombine));
-        for (List<T> each : listsToCombine) {
-            combined.addAll(each);
-        }
-        return combined;
-    }
-
-    public static int totalSizeOf(List<?>... lists) {
-        int totalSize = 0;
-        for (List<?> each : lists) {
-            totalSize += each.size();
-        }
-        return totalSize;
-    }
-
-    public static <T> List<T> copyOf(List<T> listToCopy) {
-        return new ArrayList<T>(listToCopy);
-    }
-
     public static <T> List<T> listFromSet(Set<T> set) {
         return new ArrayList<T>(set);
     }
