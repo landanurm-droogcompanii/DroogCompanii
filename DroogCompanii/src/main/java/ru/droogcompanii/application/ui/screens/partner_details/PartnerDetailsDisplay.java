@@ -24,7 +24,7 @@ import ru.droogcompanii.application.util.ui.view.ImageDownloader;
  */
 public class PartnerDetailsDisplay {
 
-    private static final int LAYOUT_ID = R.layout.fragment_partner_details_2;
+    private static final int LAYOUT_ID = R.layout.fragment_partner_details;
 
 
     private final ContactsViewMaker contactsViewMaker;

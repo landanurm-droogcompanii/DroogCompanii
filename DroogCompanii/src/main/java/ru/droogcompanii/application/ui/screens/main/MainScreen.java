@@ -48,7 +48,7 @@ public class MainScreen extends ActivityWithNavigationDrawer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_screen_2);
+        setContentView(R.layout.activity_main_screen);
 
         initNavigationDrawer(R.id.drawerLayout);
         if (savedInstanceState == null) {
@@ -57,6 +57,20 @@ public class MainScreen extends ActivityWithNavigationDrawer
             restoreNavigationDrawerState(savedInstanceState);
         }
         initDismissCustomBaseLocationAction();
+    }
+
+    private void placeFragmentsOnLayout() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.partnerPointsMapFragment,
+                NewPartnerPointsMapFragment.newInstance(true),
+                Tag.MAP);
+        transaction.add(R.id.leftDrawer,
+                new CategoryListFragment(),
+                Tag.CATEGORY_LIST);
+        transaction.add(R.id.partnerPointDetailsFragment,
+                        PartnerPointDetailsFragment.newInstance(),
+                        Tag.PARTNER_POINT_DETAILS);
+        transaction.commit();
     }
 
     private void initDismissCustomBaseLocationAction() {
@@ -69,15 +83,6 @@ public class MainScreen extends ActivityWithNavigationDrawer
         });
         int visibility = CustomBaseLocationUtils.isBasePositionSet() ? View.VISIBLE : View.INVISIBLE;
         dismissCustomBaseLocation.setVisibility(visibility);
-    }
-
-    private void placeFragmentsOnLayout() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.partnerPointsMapFragment, NewPartnerPointsMapFragment.newInstance(true), Tag.MAP);
-        transaction.add(R.id.leftDrawer, new CategoryListFragment(), Tag.CATEGORY_LIST);
-        transaction.add(R.id.partnerPointDetailsFragment,
-                PartnerPointDetailsFragment.newInstance(), Tag.PARTNER_POINT_DETAILS);
-        transaction.commit();
     }
 
     @Override

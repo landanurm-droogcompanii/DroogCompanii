@@ -49,7 +49,7 @@ public abstract class ActivityWithNavigationDrawer extends ActivityMenuHelper {
     }
 
     protected void restoreNavigationDrawerState(Bundle savedInstanceState) {
-        if (savedInstanceState != null && !wasNavigationDrawerOpen(savedInstanceState)) {
+        if (!wasNavigationDrawerOpen(savedInstanceState)) {
             closeNavigationDrawer();
         }
     }

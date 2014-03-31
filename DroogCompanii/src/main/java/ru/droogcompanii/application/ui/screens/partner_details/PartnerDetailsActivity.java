@@ -185,7 +185,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_partner_details_2);
+        setContentView(R.layout.activity_partner_details);
         STATE_MANAGER.initState(savedInstanceState);
     }
 
