@@ -94,7 +94,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
             @Override
             public void activate(OnLocationChangedListener onLocationChangedListener) {
                 CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = onLocationChangedListener;
-                LocationStateListeners.notifyListenersAboutLocationChange();
+                onLocationChangedListener.onLocationChanged(ActualBaseLocationProvider.getActualBaseLocation());
             }
 
             @Override

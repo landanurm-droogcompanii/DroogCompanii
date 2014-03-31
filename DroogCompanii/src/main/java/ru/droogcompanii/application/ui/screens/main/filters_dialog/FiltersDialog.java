@@ -34,9 +34,9 @@ public class FiltersDialog extends Dialog {
     }
 
     private View prepareContentView() {
-        View contentView = wrapInScrollView(prepareFiltersContentView());
+        View mainContent = wrapInScrollView(prepareFiltersContentView());
         View panelClearDone = prepareCancelDonePanel();
-        return combineIntoVerticalLinearLayout(contentView, panelClearDone);
+        return combineIntoVerticalLinearLayout(mainContent, panelClearDone);
     }
 
     private View wrapInScrollView(View view) {

@@ -64,10 +64,10 @@ public class FiltersDialogFragment extends DialogFragment {
         super.onPause();
         // need to read displayed filters here, because
         // in onSaveInstanceState() <dialog> or <content view> may be not available
-        displayedFilters = getDisplayedFilters();
+        displayedFilters = readDisplayedFilters();
     }
 
-    private Filters getDisplayedFilters() {
+    private Filters readDisplayedFilters() {
         return Filters.getReadedFrom(dialog.getContentView());
     }
 
@@ -114,7 +114,7 @@ public class FiltersDialogFragment extends DialogFragment {
     private void shareFilters() {
         SharedPreferences sharedPreferences = FiltersSharedPreferencesProvider.get(getActivity());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        getDisplayedFilters().writeTo(editor);
+        readDisplayedFilters().writeTo(editor);
         editor.commit();
     }
 }

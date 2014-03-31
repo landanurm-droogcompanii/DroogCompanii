@@ -10,9 +10,9 @@ import ru.droogcompanii.application.R;
 class WorkingHoursIndicatorUpdater {
     public static void update(View indicator, boolean opened) {
         if (opened) {
-            indicator.setBackgroundResource(R.drawable.gradient_open_indicator);
+            indicator.setBackgroundResource(R.drawable.ic_working_hours_is_open);
         } else {
-            indicator.setBackgroundResource(R.drawable.gradient_close_indicator);
+            indicator.setBackgroundResource(R.drawable.ic_working_hours_is_close);
         }
     }
 }

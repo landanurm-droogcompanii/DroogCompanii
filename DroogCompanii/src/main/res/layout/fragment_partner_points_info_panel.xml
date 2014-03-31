@@ -49,9 +49,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/workingHoursIndicator" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/workingHoursIndicator"
                 android:id="@+id/partnerPointInfoPanelLayout" >
 
                 <CheckBox
@@ -106,13 +113,6 @@
 
 
             </RelativeLayout>
-
-            <ImageView
-                android:layout_width="@dimen/partner_point_indicator_width"
-                android:layout_height="0dp"
-                android:layout_alignTop="@id/partnerPointInfoPanelLayout"
-                android:layout_alignBottom="@id/partnerPointInfoPanelLayout"
-                android:id="@+id/workingHoursIndicator" />
 
         </RelativeLayout>
 

@@ -18,7 +18,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.screens.main.map.CustomMapFragmentWithBaseLocation;
-import ru.droogcompanii.application.ui.screens.main.map.NewPartnerPointsMapFragment;
+import ru.droogcompanii.application.ui.screens.main.map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.screens.main.partner_point_details.PartnerPointDetailsFragment;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
@@ -28,7 +28,7 @@ import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButt
  */
 public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
                             implements PartnerDetailsFragment.Callbacks,
-                                       NewPartnerPointsMapFragment.Callbacks,
+                                       PartnerPointsMapFragment.Callbacks,
                                        CustomMapFragmentWithBaseLocation.Callbacks {
 
 
@@ -197,7 +197,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
                         PartnerDetailsFragment.newInstance(inputProvider),
                         FragmentTag.PARTNER_DETAILS);
         transaction.add(R.id.partnerPointsMapFragment,
-                        NewPartnerPointsMapFragment.newInstance(withFilters),
+                        PartnerPointsMapFragment.newInstance(withFilters),
                         FragmentTag.PARTNER_POINTS_MAP);
         transaction.add(R.id.partnerPointDetailsFragment,
                         PartnerPointDetailsFragment.newInstanceWithoutGoToPartnerButton(),
@@ -229,9 +229,9 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
         findMapFragment().updateCondition(Optional.of(condition));
     }
 
-    private NewPartnerPointsMapFragment findMapFragment() {
+    private PartnerPointsMapFragment findMapFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        return (NewPartnerPointsMapFragment) fragmentManager.findFragmentByTag(FragmentTag.PARTNER_POINTS_MAP);
+        return (PartnerPointsMapFragment) fragmentManager.findFragmentByTag(FragmentTag.PARTNER_POINTS_MAP);
     }
 
     @Override

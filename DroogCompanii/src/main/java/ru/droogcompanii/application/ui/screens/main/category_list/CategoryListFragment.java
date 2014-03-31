@@ -231,9 +231,17 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         return Optional.of(condition);
     }
 
-    public String getSelectedCategoryName() {
+    public Optional<String> getSelectedCategoryName() {
+        if (isNoSelection()) {
+            return Optional.absent();
+        }
         ListItemHelper item = listItemHelpers.get(currentSelection);
-        return item.getTitle(getActivity());
+        String title = item.getTitle(getActivity());
+        return Optional.of(title);
+    }
+
+    private boolean isNoSelection() {
+        return (currentSelection < 0) || (currentSelection >= listItemHelpers.size());
     }
 
     public void setCategorySize(int size) {

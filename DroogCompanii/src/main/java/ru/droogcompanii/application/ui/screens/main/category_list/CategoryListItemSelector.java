@@ -16,7 +16,7 @@ class CategoryListItemSelector {
     private Optional<View> lastSelectedItem;
 
     public CategoryListItemSelector() {
-        this.lastSelectedItem = Optional.absent();
+        lastSelectedItem = Optional.absent();
     }
 
     public void select(View itemView) {

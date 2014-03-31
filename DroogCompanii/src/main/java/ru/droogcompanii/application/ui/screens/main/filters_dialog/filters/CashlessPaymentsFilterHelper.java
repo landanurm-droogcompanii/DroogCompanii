@@ -56,8 +56,10 @@ class CashlessPaymentsFilterHelper implements FilterHelper, Serializable {
         }
 
         private String readPaymentMethods(Cursor cursor) {
-            int indexPaymentMethodsColumn = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_NAME_PAYMENT_METHODS);
-            return cursor.getString(indexPaymentMethodsColumn);
+            int columnIndexPaymentMethods = cursor.getColumnIndexOrThrow(
+                    PARTNER_POINTS.COLUMN_NAME_PAYMENT_METHODS
+            );
+            return cursor.getString(columnIndexPaymentMethods);
         }
     }
 

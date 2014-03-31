@@ -35,15 +35,15 @@ import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 /**
  * Created by ls on 14.03.14.
  */
-public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
+public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         implements ClusterManager.OnClusterClickListener<ClusterItem>,
                    ClusterManager.OnClusterItemClickListener<ClusterItem>,
                    GoogleMap.OnMapClickListener,
                    GoogleMap.OnCameraChangeListener {
 
 
-    public static NewPartnerPointsMapFragment newInstance(boolean withFilters) {
-        NewPartnerPointsMapFragment fragment = new NewPartnerPointsMapFragment();
+    public static PartnerPointsMapFragment newInstance(boolean withFilters) {
+        PartnerPointsMapFragment fragment = new PartnerPointsMapFragment();
         Bundle args = new Bundle();
         args.putBoolean(Key.WITH_FILTERS, withFilters);
         fragment.setArguments(args);
@@ -114,7 +114,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
             initWithFilters();
             isFirstDisplaying = true;
             conditionToReceivePartnerPoints = Optional.absent();
-            clickedPositionHelper = new ClickedPositionHelper(NewPartnerPointsMapFragment.this);
+            clickedPositionHelper = new ClickedPositionHelper(PartnerPointsMapFragment.this);
         }
 
         @Override
@@ -123,7 +123,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
             initWithFilters();
             isFirstDisplaying = savedInstanceState.getBoolean(Key.IS_FIRST_DISPLAYING);
             conditionToReceivePartnerPoints = (Optional<String>) savedInstanceState.getSerializable(Key.CONDITION);
-            clickedPositionHelper = new ClickedPositionHelper(NewPartnerPointsMapFragment.this);
+            clickedPositionHelper = new ClickedPositionHelper(PartnerPointsMapFragment.this);
             clickedPositionHelper.restoreFrom(savedInstanceState);
         }
 
@@ -138,7 +138,7 @@ public class NewPartnerPointsMapFragment extends CustomMapFragmentWithBaseLocati
 
     private void initWithFilters() {
         if (withFilters) {
-            circleOfNearestDrawer = new ActualCircleOfNearestDrawer(NewPartnerPointsMapFragment.this);
+            circleOfNearestDrawer = new ActualCircleOfNearestDrawer(PartnerPointsMapFragment.this);
         } else {
             circleOfNearestDrawer = new DummyCircleOfNearestDrawer();
         }

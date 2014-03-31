@@ -57,7 +57,7 @@ public class LocationStateListeners {
         }
     }
 
-    public static void notifyListenersAboutLocationChange() {
+    static void notifyListenersAboutLocationChange() {
         final Location actualLocation = ActualBaseLocationProvider.getActualBaseLocation();
         for (WeakReferenceWrapper<LocationStateListener> listenerWrapper : listenerWrappers) {
             listenerWrapper.handleIfExist(new WeakReferenceWrapper.Handler<LocationStateListener>() {

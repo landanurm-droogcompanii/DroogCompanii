@@ -12,6 +12,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
+import ru.droogcompanii.application.ui.screens.main.map.PartnerPointsMapFragment;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
@@ -21,7 +22,6 @@ import ru.droogcompanii.application.ui.screens.main.category_list.CategoryListFr
 import ru.droogcompanii.application.ui.screens.main.filters_dialog.FiltersDialogFragment;
 import ru.droogcompanii.application.ui.screens.main.map.ConditionConverter;
 import ru.droogcompanii.application.ui.screens.main.map.CustomMapFragmentWithBaseLocation;
-import ru.droogcompanii.application.ui.screens.main.map.NewPartnerPointsMapFragment;
 import ru.droogcompanii.application.ui.screens.main.map.notifier_location_service.NotifierLocationServiceDialogFragment;
 import ru.droogcompanii.application.ui.screens.main.partner_point_details.PartnerPointDetailsFragment;
 import ru.droogcompanii.application.util.ui.activity.ActivityWithNavigationDrawer;
@@ -32,7 +32,7 @@ import ru.droogcompanii.application.util.location.CustomBaseLocationUtils;
  */
 public class MainScreen extends ActivityWithNavigationDrawer
         implements CategoryListFragment.Callbacks,
-                   NewPartnerPointsMapFragment.Callbacks,
+                   PartnerPointsMapFragment.Callbacks,
                    CustomMapFragmentWithBaseLocation.Callbacks,
                    FiltersDialogFragment.Callbacks {
 
@@ -62,11 +62,11 @@ public class MainScreen extends ActivityWithNavigationDrawer
     private void placeFragmentsOnLayout() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.partnerPointsMapFragment,
-                NewPartnerPointsMapFragment.newInstance(true),
-                Tag.MAP);
+                        PartnerPointsMapFragment.newInstance(true),
+                        Tag.MAP);
         transaction.add(R.id.leftDrawer,
-                new CategoryListFragment(),
-                Tag.CATEGORY_LIST);
+                        new CategoryListFragment(),
+                        Tag.CATEGORY_LIST);
         transaction.add(R.id.partnerPointDetailsFragment,
                         PartnerPointDetailsFragment.newInstance(),
                         Tag.PARTNER_POINT_DETAILS);
@@ -92,32 +92,37 @@ public class MainScreen extends ActivityWithNavigationDrawer
 
     @Override
     public void onListInitialized() {
-        // skip
+        updateTitle();
+    }
+
+    private void updateTitle() {
+        Optional<String> title = findCategoryListFragment().getSelectedCategoryName();
+        if (title.isPresent()) {
+            setTitle(title.get());
+        }
     }
 
     @Override
     public void onCurrentCategoryChanged() {
         updateMapFragment();
+        updateTitle();
     }
 
     private void updateMapFragment() {
         CategoryListFragment categoryListFragment = findCategoryListFragment();
         Optional<String> conditionToReceivePartners = categoryListFragment.getConditionToReceivePartners();
-        NewPartnerPointsMapFragment mapFragment = findMapFragment();
+        PartnerPointsMapFragment mapFragment = findMapFragment();
         mapFragment.updateCondition(
                 ConditionConverter.ToReceivePartnerPoints.fromToReceivePartners(conditionToReceivePartners)
         );
-        if (conditionToReceivePartners.isPresent()) {
-            setTitle(categoryListFragment.getSelectedCategoryName());
-        }
     }
 
     private CategoryListFragment findCategoryListFragment() {
         return (CategoryListFragment) getSupportFragmentManager().findFragmentByTag(Tag.CATEGORY_LIST);
     }
 
-    private NewPartnerPointsMapFragment findMapFragment() {
-        return (NewPartnerPointsMapFragment) getSupportFragmentManager().findFragmentByTag(Tag.MAP);
+    private PartnerPointsMapFragment findMapFragment() {
+        return (PartnerPointsMapFragment) getSupportFragmentManager().findFragmentByTag(Tag.MAP);
     }
 
     @Override
