@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="titleOfSortingGroup">Sorting</string>
     <string name="labelOfSortByTitleCheckBox">by Title</string>
     <string name="labelOfSortByDistanceCheckBox">by Distance</string>
     <string name="labelOfSortByDiscountSizeCheckBox">by Discount</string>
-    <string name="titleOfPaymentMethodGroup">Payment method</string>
     <string name="labelOfCashlessPaymentsCheckBox">Cashless Payments</string>
-    <string name="titleOfWorkingHoursGroup">Working Hours</string>
     <string name="labelOfWorksNowCheckBox">Works Now</string>
-    <string name="titleOfDiscountTypeGroup">Discount Type</string>
-    <string name="labelOfBonusCheckBox">Bonus</string>
-    <string name="labelOfDiscountCheckBox">Discount</string>
-    <string name="labelOfCashBackCheckBox">Cash back</string>
-    <string name="titleOfFilterSearchClosestPointsGroup">Closest</string>
-    <string name="labelOfSearchClosestPointsCheckBox">Within</string>
-    <string name="hintOfRadiusWithinSearchEditText">in meters</string>
-
-    <string name="cautionExitWithoutCommittingChangesInCurrentFilters">Your changes of current filters are not saved. Are you sure you want to discard the changes?</string>
 
 </resources>

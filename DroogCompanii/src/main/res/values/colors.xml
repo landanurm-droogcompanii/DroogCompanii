@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="textColorOfItemWhichMeetsCriteria">#ff050505</color>
-    <color name="textColorOfItemWhichDoesNotMeetCriteria">#80050505</color>
 
-    <color name="backgroundOfOffersLayout">#cf272f20</color>
-    <color name="backgroundOfOfferRow">#ddcccccc</color>
-    <color name="textColorOfOfferRow">@color/backgroundOfOffersLayout</color>
     <color name="backgroundColorOfCategoryList">#c4eeeeee</color>
 
     <color name="backgroundOfCheckedCategoryListItem">#67113ae5</color>

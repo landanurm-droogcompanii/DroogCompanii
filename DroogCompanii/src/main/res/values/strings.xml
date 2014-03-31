@@ -2,13 +2,10 @@
 <resources>
 
     <string name="app_name">DroogCompanii</string>
-    <string name="search_title">Search</string>
-    <string name="search_hint">type partner point name</string>
-    <string name="search_global_description">Search Global Description</string>
+
     <string name="no_search_results">No search results</string>
 
     <string name="menu_item_personal_account">Personal Account</string>
-    <string name="menu_item_partner_categories">Partner Categories</string>
     <string name="menu_item_offers">Offers</string>
     <string name="menu_item_synchronization">Synchronization</string>
     <string name="menu_item_settings">Settings</string>
@@ -24,15 +21,9 @@
         Do you want to download the data?
     </string>
 
-    <string name="titleOfMultiPhonesCallerDialog">Call</string>
-
     <string name="action_search">Search</string>
     <string name="action_filter">Filters</string>
-    <string name="action_menu">Menu</string>
-    <string name="action_go_to_map">Go to Map</string>
 
-    <string name="titleOfFilterActivity">@string/action_filter</string>
-    <string name="titleOfMenuActivity">@string/action_menu</string>
     <string name="titleOfSearchActivity">@string/action_search</string>
     <string name="titleOfSettingsActivity">@string/menu_item_settings</string>
     <string name="titleOfOfferListActivity">@string/menu_item_offers</string>
@@ -40,19 +31,13 @@
     <string name="titleOfSynchronizationActivity">@string/menu_item_synchronization</string>
     <string name="titleOfHelpActivity">@string/menu_item_help</string>
 
-    <string name="titleOfAllPartnerPoints">All partners</string>
-
     <string name="labelOfGoToPartnerButton">Go to partner</string>
 
-    <string name="titleOfSynchronizationDialog">Data is updated...</string>
-
-    <string name="textMapIsLoaded">Map is loaded...</string>
+    <string name="titleOfSynchronizationDialog">Data is updated&#8230;</string>
 
     <string name="labelOfGoToOffersButton">Offers</string>
     <string name="labelOnCopiedText">Copied Text</string>
     <string name="copyToClipboard">Copy to clipboard</string>
-    <string name="done">Done</string>
-
 
     <string name="distanceOption_No">   -   </string>
     <string name="distanceOption_1000meters">1000 m</string>

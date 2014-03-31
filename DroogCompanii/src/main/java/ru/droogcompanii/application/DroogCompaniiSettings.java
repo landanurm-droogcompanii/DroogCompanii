@@ -13,20 +13,19 @@ public class DroogCompaniiSettings {
 
     private static final double LATITUDE_OF_KAZAN = 55.79966;
     private static final double LONGITUDE_OF_KAZAN = 49.11053;
+    private static final LatLng POSITION_OF_KAZAN = new LatLng(LATITUDE_OF_KAZAN, LONGITUDE_OF_KAZAN);
+
+    private static final LatLng DEFAULT_POSITION = POSITION_OF_KAZAN;
 
     private static final int DEFAULT_ZOOM_LEVEL = 14;
 
 
     public static LatLng getDefaultBasePosition() {
-        return getPositionOfKazan();
-    }
-
-    private static LatLng getPositionOfKazan() {
-        return new LatLng(LATITUDE_OF_KAZAN, LONGITUDE_OF_KAZAN);
+        return DEFAULT_POSITION;
     }
 
     public static Location getDefaultBaseLocation() {
-        return LocationConverter.fromLatLng("Default", getDefaultBasePosition());
+        return LocationConverter.fromLatLng("Default", DEFAULT_POSITION);
     }
 
     public static int getDefaultZoom() {

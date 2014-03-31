@@ -2,24 +2,14 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="space_between_category_list_and_map">8dp</dimen>
     <dimen name="search_activity_vertical_space_between_elements">2dp</dimen>
-    <dimen name="partner_point_item_indicator_side_length">48dp</dimen>
-    <dimen name="textSizeOfFilterGroupTitle">28sp</dimen>
-    <dimen name="textSizeOfSortingGroupItems">18sp</dimen>
-    <dimen name="sizeBetweenFilterGroups">32dp</dimen>
     <dimen name="textSizeOfNoSearchResultsLabel">28sp</dimen>
 
     <dimen name="textSizeOfSearchQueryInput">24sp</dimen>
 
     <dimen name="partner_point_indicator_width">18dp</dimen>
-    <dimen name="textSizeOfPartnerPointTitle">24sp</dimen>
-    <dimen name="textSizeOfPartnerPointAddress">18sp</dimen>
-    <dimen name="leftMarginOfAddressTextView">18dp</dimen>
-    <dimen name="textSizeOfPaymentMethods">16sp</dimen>
     <dimen name="textSizeOfFullPartnerTitle">28sp</dimen>
     <dimen name="textSizeOfDiscount">18sp</dimen>
-    <dimen name="offer_row_padding">4dp</dimen>
     <dimen name="offer_row_margin">4dp</dimen>
     <dimen name="textSizeOfPartnerDescription">14sp</dimen>
     <dimen name="widthOfPartnerLogo">400dp</dimen>

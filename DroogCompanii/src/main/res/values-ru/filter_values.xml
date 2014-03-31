@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="titleOfSortingGroup">Сортировка</string>
     <string name="labelOfSortByTitleCheckBox">по названию</string>
     <string name="labelOfSortByDistanceCheckBox">по расстоянию</string>
     <string name="labelOfSortByDiscountSizeCheckBox">по размеру скидки</string>
-    <string name="titleOfPaymentMethodGroup">Способ оплаты</string>
     <string name="labelOfCashlessPaymentsCheckBox">Безналичный расчет</string>
-    <string name="titleOfWorkingHoursGroup">Рабочее время</string>
     <string name="labelOfWorksNowCheckBox">Работает сейчас</string>
-    <string name="titleOfDiscountTypeGroup">Тип скидки</string>
-    <string name="labelOfBonusCheckBox">Бонус</string>
-    <string name="labelOfDiscountCheckBox">Скидка</string>
-    <string name="labelOfCashBackCheckBox">Cash back</string>
-    <string name="titleOfFilterSearchClosestPointsGroup">Ближайшие</string>
-    <string name="labelOfSearchClosestPointsCheckBox">В радиусе</string>
-
-    <string name="cautionExitWithoutCommittingChangesInCurrentFilters">Изменения текущих фильтров не сохранены. Хотите выйти без их сохранения?</string>
     
 </resources>

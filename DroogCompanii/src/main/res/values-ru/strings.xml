@@ -6,7 +6,6 @@
     <string name="no_search_results">Не найдено</string>
 
     <string name="menu_item_personal_account">Личный кабинет</string>
-    <string name="menu_item_partner_categories">Категории партнеров</string>
     <string name="menu_item_offers">Акции</string>
     <string name="website">Веб-сайт</string>
     <string name="hotline">Горячая линия</string>
@@ -21,29 +20,17 @@
         Вы хотите загрузить данные?
     </string>
 
-    <string name="titleOfMultiPhonesCallerDialog">Позвонить</string>
-
     <string name="action_search">Поиск</string>
     <string name="action_filter">Фильтры</string>
-    <string name="action_menu">Меню</string>
-    <string name="action_go_to_map">На карту</string>
-
-    <string name="titleOfAllPartnerPoints">Все партнеры</string>
 
     <string name="labelOfGoToPartnerButton">Перейти к партнеру</string>
 
-    <string name="titleOfSynchronizationDialog">Данные обновляются...</string>
-
-    <string name="textMapIsLoaded">Карта загружается...</string>
+    <string name="titleOfSynchronizationDialog">Данные обновляются&#8230;</string>
 
     <string name="labelOfGoToOffersButton">Акции</string>
 
     <string name="labelOnCopiedText">Копируемый текст</string>
     <string name="copyToClipboard">Скопировать в буфер</string>
-
-
-    <string name="done">Применить</string>
-
 
     <string name="messagePhoneCopied">Номер телефона скопирован</string>
 
