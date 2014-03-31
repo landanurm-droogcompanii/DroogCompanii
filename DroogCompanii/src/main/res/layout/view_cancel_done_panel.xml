@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/abc_ic_clear_holo_light"
-        android:id="@+id/cancel" />
+        android:id="@+id/buttonCancel" />
 
     <ImageButton
         android:layout_weight="1"

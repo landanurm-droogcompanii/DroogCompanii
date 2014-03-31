@@ -6,7 +6,7 @@
     android:id="@+id/rootLayout" >
 
     <fragment
-        android:name="ru.droogcompanii.application.ui.fragment.partner_list.PartnerListFragment"
+        android:name="ru.droogcompanii.application.ui.screens.partner_list.PartnerListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/searchResultFragment" />

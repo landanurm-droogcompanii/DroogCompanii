@@ -5,7 +5,7 @@
 
     <color name="backgroundOfCheckedCategoryListItem">#67113ae5</color>
 
-    <color name="backgroundOfToastLocationService">#bb090909</color>
-    <color name="textColorOfToastLocationService">#eeeeeeee</color>
-    <color name="colorOfDividerToastLocationService">#88999999</color>
+    <color name="backgroundOfLocationService">#b2333333</color>
+    <color name="textColorOfLocationService">#cceeeeee</color>
+    <color name="colorOfDividerLocationService">#88888888</color>
 </resources>

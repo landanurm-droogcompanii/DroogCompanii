@@ -28,7 +28,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.start.StartActivity"
+            android:name=".ui.start_activity.StartActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,59 +37,59 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main_screen_2.MainScreen2"
+            android:name=".ui.screens.main.MainScreen"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.synchronization.SynchronizationActivity"
+            android:name=".ui.screens.synchronization.SynchronizationActivity"
             android:label="@string/titleOfSynchronizationActivity" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.search_2.SearchActivity2"
+            android:name=".ui.screens.search.SearchActivity"
             android:label="@string/titleOfSearchActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.partner_list.PartnerListActivity"
+            android:name=".ui.screens.partner_list.PartnerListActivity"
             android:icon="@android:drawable/ic_menu_search"
             android:label="" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.search_result_list.SearchResultListActivity"
+            android:name=".ui.screens.search_result_list.SearchResultListActivity"
             android:icon="@android:drawable/ic_menu_search"
             android:label="" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.partner_details_2.PartnerDetailsActivity2"
+            android:name=".ui.screens.partner_details.PartnerDetailsActivity"
             android:label="" >
         </activity>
         <activity
-            android:name=".ui.activity.personal_account.PersonalAccountActivity"
+            android:name=".ui.screens.personal_account.PersonalAccountActivity"
             android:icon="@drawable/ic_personal_account"
             android:label="@string/titleOfPersonalAccountActivity" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.offer_list.OfferListActivity"
+            android:name=".ui.screens.offer_list.OfferListActivity"
             android:icon="@drawable/ic_offers"
             android:label="" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.offer_details.OfferDetailsActivity"
+            android:name=".ui.screens.offer_details.OfferDetailsActivity"
             android:icon="@drawable/ic_offers"
             android:label="@string/titleOfOfferListActivity" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.settings.SettingsActivity"
+            android:name=".ui.screens.settings.SettingsActivity"
             android:icon="@drawable/ic_action_settings"
             android:label="@string/titleOfSettingsActivity" >
         </activity>
         <activity
-            android:name="ru.droogcompanii.application.ui.activity.help.HelpActivity"
+            android:name=".ui.screens.help.HelpActivity"
             android:icon="@drawable/ic_action_help"
             android:label="@string/titleOfHelpActivity" >
         </activity>
 
         <activity
-            android:name=".ui.activity.signin.SignInActivity"
+            android:name=".ui.screens.signin.SignInActivity"
             android:icon="@drawable/ic_personal_account"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >

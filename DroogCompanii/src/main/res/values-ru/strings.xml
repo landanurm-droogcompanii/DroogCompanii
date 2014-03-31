@@ -58,5 +58,7 @@
     <string name="partner_points">Точки партнеров</string>
 
     <string name="all_partners">Все партнеры</string>
+    <string name="textToastLocationService">Ваше местоположение недоступно. Включите службу</string>
+    <string name="textDoNotShowAgain">Не показывать больше</string>
 
 </resources>

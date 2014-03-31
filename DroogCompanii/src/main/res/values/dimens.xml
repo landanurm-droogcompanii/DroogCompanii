@@ -30,7 +30,7 @@
     <dimen name="categoryListTopPadding">10dp</dimen>
     <dimen name="categoryListBottomPadding">8dp</dimen>
     <dimen name="heightOfMapFragmentOnPartnerDetailsScreen">350dp</dimen>
-    <dimen name="textSizeOfToastLocationService">16sp</dimen>
-
+    <dimen name="textLargeSizeOfToastLocationService">16sp</dimen>
+    <dimen name="textSmallSizeOfToastLocationService">10sp</dimen>
 
 </resources>
