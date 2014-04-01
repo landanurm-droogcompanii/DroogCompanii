@@ -20,13 +20,13 @@ public class OffersDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + CONTRACT.TABLE_NAME + " (" +
                     CONTRACT._ID + INTEGER_TYPE + PRIMARY_KEY_TYPE_AUTOINCREMENT + COMMA +
-                    CONTRACT.COLUMN_NAME_ID + INTEGER_TYPE + NOT_NULL + COMMA +
-                    CONTRACT.COLUMN_NAME_PARTNER_ID + INTEGER_TYPE + NOT_NULL + COMMA +
-                    CONTRACT.COLUMN_NAME_FROM + INTEGER_TYPE + COMMA +
-                    CONTRACT.COLUMN_NAME_TO + INTEGER_TYPE + COMMA +
-                    CONTRACT.COLUMN_NAME_SHORT_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
-                    CONTRACT.COLUMN_NAME_FULL_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
-                    CONTRACT.COLUMN_NAME_IMAGE_URL + NOT_NULL + TEXT_TYPE +
+                    CONTRACT.COLUMN_ID + INTEGER_TYPE + NOT_NULL + COMMA +
+                    CONTRACT.COLUMN_PARTNER_ID + INTEGER_TYPE + NOT_NULL + COMMA +
+                    CONTRACT.COLUMN_FROM + INTEGER_TYPE + COMMA +
+                    CONTRACT.COLUMN_TO + INTEGER_TYPE + COMMA +
+                    CONTRACT.COLUMN_SHORT_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
+                    CONTRACT.COLUMN_FULL_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
+                    CONTRACT.COLUMN_IMAGE_URL + NOT_NULL + TEXT_TYPE +
                     " )";
 
     private static final String SQL_DELETE_TABLE =

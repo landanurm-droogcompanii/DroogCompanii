@@ -14,7 +14,7 @@ import ru.droogcompanii.application.util.DownloadingFailedException;
  * Created by ls on 14.02.14.
  */
 public class OffersProviderViaInetAndDatabase implements OffersProvider, Serializable {
-    private static final OffersDownloader OFFERS_PROVIDER_FROM_INET = new DummyOffersDownloder();
+    private static final OffersDownloader OFFERS_PROVIDER_FROM_INET = new DummyOffersDownloader();
 
     @Override
     public List<Offer> getAllOffers(Context context) {
@@ -40,24 +40,24 @@ public class OffersProviderViaInetAndDatabase implements OffersProvider, Seriali
         return offers;
     }
 
-    private static List<Offer> readOffersFromDatabaseByCondition(Context context, String where) {
+    private static List<Offer> readOffersFromDatabaseByCondition(Context context, String condition) {
         OffersReaderFromDatabase readerFromDatabase = new OffersReaderFromDatabase(context);
-        return readerFromDatabase.getOfferList(where);
+        return readerFromDatabase.getOfferList(condition);
     }
 
     @Override
-    public List<Offer> getOffersByCondition(Context context, String where) {
+    public List<Offer> getOffersByCondition(Context context, String condition) {
         try {
             downloadAndWriteOffersToDatabaseIfInetAvailable(context);
-            return readOffersFromDatabaseByCondition(context, where);
+            return readOffersFromDatabaseByCondition(context, condition);
         } catch (DownloadingFailedException exception) {
-            return tryReadOffersFromDatabaseByCondition(context, where, exception);
+            return tryReadOffersFromDatabaseByCondition(context, condition, exception);
         }
     }
 
     private List<Offer> tryReadOffersFromDatabaseByCondition(Context context,
-                                  String where, DownloadingFailedException exception) {
-        List<Offer> offers = readOffersFromDatabaseByCondition(context, where);
+                                  String condition, DownloadingFailedException exception) {
+        List<Offer> offers = readOffersFromDatabaseByCondition(context, condition);
         if (offers.isEmpty()) {
             throw exception;
         }

@@ -46,7 +46,7 @@ class WorksNowFilterHelper implements FilterHelper, Serializable {
         return new FilterImpl();
     }
 
-    private class FilterImpl implements Filter {
+    private static class FilterImpl implements Filter {
         private final Calendar now = CalendarUtils.now();
 
         @Override
@@ -55,14 +55,16 @@ class WorksNowFilterHelper implements FilterHelper, Serializable {
         }
 
         private WeekWorkingHours readWorkingHours(Cursor cursor) {
-            int indexWorkingHoursColumn = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_NAME_WORKING_HOURS);
-            byte[] workingHoursBlob = cursor.getBlob(indexWorkingHoursColumn);
+            int indexWorkingHours = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_WORKING_HOURS);
+            byte[] workingHoursBlob = cursor.getBlob(indexWorkingHours);
             return (WeekWorkingHours) SerializationUtils.deserialize(workingHoursBlob);
         }
     }
 
     public Collection<String> getColumnsOfPartnerPoint() {
-        return Arrays.asList(PARTNER_POINTS.COLUMN_NAME_WORKING_HOURS);
+        return Arrays.asList(
+                PARTNER_POINTS.COLUMN_WORKING_HOURS
+        );
     }
 
     @Override

@@ -24,38 +24,38 @@ public class PartnerHierarchyDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_PARTNER_CATEGORIES_TABLE =
             "CREATE TABLE " + PartnerCategoriesContract.TABLE_NAME + " (" +
                     PartnerCategoriesContract._ID + INTEGER_TYPE + PRIMARY_KEY_TYPE_AUTOINCREMENT + COMMA +
-                    PartnerCategoriesContract.COLUMN_NAME_ID + INTEGER_TYPE + COMMA +
-                    PartnerCategoriesContract.COLUMN_NAME_TITLE + TEXT_TYPE + NOT_NULL +
+                    PartnerCategoriesContract.COLUMN_ID + INTEGER_TYPE + COMMA +
+                    PartnerCategoriesContract.COLUMN_TITLE + TEXT_TYPE + NOT_NULL +
             " )";
 
     private static final String SQL_CREATE_PARTNERS_TABLE =
             "CREATE TABLE " + PartnersContract.TABLE_NAME + " (" +
                     PartnersContract._ID + INTEGER_TYPE + PRIMARY_KEY_TYPE_AUTOINCREMENT + COMMA +
-                    PartnersContract.COLUMN_NAME_ID + INTEGER_TYPE + COMMA +
-                    PartnersContract.COLUMN_NAME_TITLE  + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_FULL_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_DISCOUNT_TYPE + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_DISCOUNT_SIZE + INTEGER_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_IMAGE_URL + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_WEB_SITES + BLOB_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_EMAILS + BLOB_TYPE + NOT_NULL + COMMA +
-                    PartnersContract.COLUMN_NAME_IS_FAVORITE + INTEGER_TYPE + NOT_NULL +
+                    PartnersContract.COLUMN_ID + INTEGER_TYPE + COMMA +
+                    PartnersContract.COLUMN_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_FULL_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_DISCOUNT_TYPE + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_DISCOUNT_SIZE + INTEGER_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_CATEGORY_ID + INTEGER_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_IMAGE_URL + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_DESCRIPTION + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_WEB_SITES + BLOB_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_EMAILS + BLOB_TYPE + NOT_NULL + COMMA +
+                    PartnersContract.COLUMN_IS_FAVORITE + INTEGER_TYPE + NOT_NULL +
             " )";
 
     private static final String SQL_CREATE_PARTNER_POINTS_TABLE =
             "CREATE TABLE " + PartnerPointsContract.TABLE_NAME + " (" +
                     PartnerPointsContract._ID + INTEGER_TYPE + PRIMARY_KEY_TYPE_AUTOINCREMENT + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_ID + INTEGER_TYPE + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_ADDRESS + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_LONGITUDE + REAL_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_LATITUDE + REAL_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_PAYMENT_METHODS + TEXT_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_PHONES + BLOB_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_WORKING_HOURS + BLOB_TYPE + NOT_NULL + COMMA +
-                    PartnerPointsContract.COLUMN_NAME_PARTNER_ID + INTEGER_TYPE + NOT_NULL +
+                    PartnerPointsContract.COLUMN_ID + INTEGER_TYPE + COMMA +
+                    PartnerPointsContract.COLUMN_TITLE + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_ADDRESS + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_LONGITUDE + REAL_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_LATITUDE + REAL_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_PAYMENT_METHODS + TEXT_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_PHONES + BLOB_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_WORKING_HOURS + BLOB_TYPE + NOT_NULL + COMMA +
+                    PartnerPointsContract.COLUMN_PARTNER_ID + INTEGER_TYPE + NOT_NULL +
             " )";
 
     private static final String SQL_DELETE_PARTNER_CATEGORIES_TABLE =

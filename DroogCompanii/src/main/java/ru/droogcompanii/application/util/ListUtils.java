@@ -22,4 +22,11 @@ public class ListUtils {
     public static <T> List<T> listFromSet(Set<T> set) {
         return new ArrayList<T>(set);
     }
+
+    public static <T> void ensureCapacityByCountIfCan(List<T> items, int byCount) {
+        if (items instanceof ArrayList<?>) {
+            ArrayList<?> arrayList = (ArrayList<?>) items;
+            arrayList.ensureCapacity(arrayList.size() + byCount);
+        }
+    }
 }

@@ -47,7 +47,7 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         LogUtils.debug("Partner id:  " + partnerId);
 
         final Holder<Boolean> hasOffers = Holder.from(false);
-        String condition = OffersContract.COLUMN_NAME_PARTNER_ID + "=" + partnerId;
+        String condition = OffersContract.COLUMN_PARTNER_ID + "=" + partnerId;
         handleCursorByCondition(condition, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
@@ -77,17 +77,17 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
 
     private static String prepareSqlUsedSorting(String where) {
         return "SELECT * FROM " + OffersContract.TABLE_NAME + " " + where +
-                " ORDER BY " + OffersContract.COLUMN_NAME_TO + " DESC ;";
+                " ORDER BY " + OffersContract.COLUMN_TO + " DESC ;";
     }
 
     private void calculateColumnIndices(Cursor cursor) {
-        idColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_ID);
-        partnerIdColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_PARTNER_ID);
-        fromColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_FROM);
-        toColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_TO);
-        shortDescriptionColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_SHORT_DESCRIPTION);
-        fullDescriptionColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_FULL_DESCRIPTION);
-        imageUrlColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_NAME_IMAGE_URL);
+        idColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_ID);
+        partnerIdColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_PARTNER_ID);
+        fromColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_FROM);
+        toColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_TO);
+        shortDescriptionColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_SHORT_DESCRIPTION);
+        fullDescriptionColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_FULL_DESCRIPTION);
+        imageUrlColumnIndex = cursor.getColumnIndexOrThrow(OffersContract.COLUMN_IMAGE_URL);
     }
 
     private Offer getOfferFromCursor(Cursor cursor) {
@@ -110,9 +110,9 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
         offer.duration = new CalendarRange(from, to);
     }
 
-    public List<Offer> getOfferList(String where) {
+    public List<Offer> getOfferList(String condition) {
         final Holder<List<Offer>> result = Holder.absent();
-        handleCursorByCondition(where, new CursorHandler() {
+        handleCursorByCondition(condition, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
                 result.value = getOfferListFromCursor(cursor);

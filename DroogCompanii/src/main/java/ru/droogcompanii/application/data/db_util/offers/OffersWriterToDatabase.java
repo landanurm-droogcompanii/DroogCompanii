@@ -53,13 +53,13 @@ public class OffersWriterToDatabase {
     private void writeOffer(Offer offer) {
         final String COMMA = ", ";
         String sql = "INSERT INTO " + OffersContract.TABLE_NAME + " (" +
-                OffersContract.COLUMN_NAME_ID + COMMA +
-                OffersContract.COLUMN_NAME_PARTNER_ID + COMMA +
-                OffersContract.COLUMN_NAME_FROM + COMMA +
-                OffersContract.COLUMN_NAME_TO + COMMA +
-                OffersContract.COLUMN_NAME_SHORT_DESCRIPTION + COMMA +
-                OffersContract.COLUMN_NAME_FULL_DESCRIPTION + COMMA +
-                OffersContract.COLUMN_NAME_IMAGE_URL +
+                OffersContract.COLUMN_ID + COMMA +
+                OffersContract.COLUMN_PARTNER_ID + COMMA +
+                OffersContract.COLUMN_FROM + COMMA +
+                OffersContract.COLUMN_TO + COMMA +
+                OffersContract.COLUMN_SHORT_DESCRIPTION + COMMA +
+                OffersContract.COLUMN_FULL_DESCRIPTION + COMMA +
+                OffersContract.COLUMN_IMAGE_URL +
                 ") VALUES(?,?,?,?,?,?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();

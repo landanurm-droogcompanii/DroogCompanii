@@ -40,9 +40,6 @@
     <string name="copyToClipboard">Copy to clipboard</string>
 
     <string name="distanceOption_No">   -   </string>
-    <string name="distanceOption_1000meters">1000 m</string>
-    <string name="distanceOption_3000meters">3000 m</string>
-    <string name="distanceOption_5000meters">5000 m</string>
 
 
     <string name="messagePhoneCopied">Copied Phone Number</string>
@@ -74,6 +71,11 @@
     <string name="all_partners">All Partners</string>
     <string name="textToastLocationService">Location is not available. Please, turn on Location Service</string>
     <string name="textDoNotShowAgain">Don\'t show again</string>
+    <string name="meters_in_filters">m</string>
+
+    <string name="offer_duration_before_from">\u0020 from \u0020</string>
+    <string name="offer_duration_before_to">\u0020 to \u0020</string>
+    <string name="offer_duration_after_to"></string>
 
 
 </resources>

@@ -11,5 +11,5 @@ import ru.droogcompanii.application.data.offers.Offer;
  */
 public interface OffersProvider {
     List<Offer> getAllOffers(Context context);
-    List<Offer> getOffersByCondition(Context context, String where);
+    List<Offer> getOffersByCondition(Context context, String condition);
 }

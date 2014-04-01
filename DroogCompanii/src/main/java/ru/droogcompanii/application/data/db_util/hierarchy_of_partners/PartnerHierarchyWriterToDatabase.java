@@ -63,8 +63,8 @@ public class PartnerHierarchyWriterToDatabase {
 
     private void writePartnerCategory(PartnerCategory partnerCategory) {
         String sql = "INSERT INTO " + PartnerCategoriesContract.TABLE_NAME + " (" +
-                         PartnerCategoriesContract.COLUMN_NAME_ID + ", " +
-                         PartnerCategoriesContract.COLUMN_NAME_TITLE +
+                         PartnerCategoriesContract.COLUMN_ID + ", " +
+                         PartnerCategoriesContract.COLUMN_TITLE +
                      ") VALUES(?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();
@@ -81,16 +81,16 @@ public class PartnerHierarchyWriterToDatabase {
 
     private void writePartner(Partner partner) {
         String sql = "INSERT INTO " + PartnersContract.TABLE_NAME + " (" +
-                         PartnersContract.COLUMN_NAME_ID + ", " +
-                         PartnersContract.COLUMN_NAME_TITLE + ", " +
-                         PartnersContract.COLUMN_NAME_FULL_TITLE + ", " +
-                         PartnersContract.COLUMN_NAME_DISCOUNT_TYPE + ", " +
-                         PartnersContract.COLUMN_NAME_DISCOUNT_SIZE + ", " +
-                         PartnersContract.COLUMN_NAME_CATEGORY_ID + ", " +
-                         PartnersContract.COLUMN_NAME_IMAGE_URL + ", " +
-                         PartnersContract.COLUMN_NAME_DESCRIPTION + ", " +
-                         PartnersContract.COLUMN_NAME_WEB_SITES + ", " +
-                         PartnersContract.COLUMN_NAME_EMAILS +
+                         PartnersContract.COLUMN_ID + ", " +
+                         PartnersContract.COLUMN_TITLE + ", " +
+                         PartnersContract.COLUMN_FULL_TITLE + ", " +
+                         PartnersContract.COLUMN_DISCOUNT_TYPE + ", " +
+                         PartnersContract.COLUMN_DISCOUNT_SIZE + ", " +
+                         PartnersContract.COLUMN_CATEGORY_ID + ", " +
+                         PartnersContract.COLUMN_IMAGE_URL + ", " +
+                         PartnersContract.COLUMN_DESCRIPTION + ", " +
+                         PartnersContract.COLUMN_WEB_SITES + ", " +
+                         PartnersContract.COLUMN_EMAILS +
                      ") VALUES(?,?,?,?,?,?,?,?,?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();
@@ -115,15 +115,15 @@ public class PartnerHierarchyWriterToDatabase {
 
     private void writePartnerPoint(PartnerPoint partnerPoint) {
         String sql = "INSERT INTO " + PartnerPointsContract.TABLE_NAME + " (" +
-                         PartnerPointsContract.COLUMN_NAME_ID + ", " +
-                         PartnerPointsContract.COLUMN_NAME_TITLE + ", " +
-                         PartnerPointsContract.COLUMN_NAME_ADDRESS + ", " +
-                         PartnerPointsContract.COLUMN_NAME_LONGITUDE + ", " +
-                         PartnerPointsContract.COLUMN_NAME_LATITUDE + ", " +
-                         PartnerPointsContract.COLUMN_NAME_PAYMENT_METHODS + ", " +
-                         PartnerPointsContract.COLUMN_NAME_PHONES + ", " +
-                         PartnerPointsContract.COLUMN_NAME_WORKING_HOURS + ", " +
-                         PartnerPointsContract.COLUMN_NAME_PARTNER_ID +
+                         PartnerPointsContract.COLUMN_ID + ", " +
+                         PartnerPointsContract.COLUMN_TITLE + ", " +
+                         PartnerPointsContract.COLUMN_ADDRESS + ", " +
+                         PartnerPointsContract.COLUMN_LONGITUDE + ", " +
+                         PartnerPointsContract.COLUMN_LATITUDE + ", " +
+                         PartnerPointsContract.COLUMN_PAYMENT_METHODS + ", " +
+                         PartnerPointsContract.COLUMN_PHONES + ", " +
+                         PartnerPointsContract.COLUMN_WORKING_HOURS + ", " +
+                         PartnerPointsContract.COLUMN_PARTNER_ID +
                      ") VALUES(?,?,?,?,?,?,?,?,?)";
         SQLiteStatement insertStatement = db.compileStatement(sql);
         insertStatement.clearBindings();

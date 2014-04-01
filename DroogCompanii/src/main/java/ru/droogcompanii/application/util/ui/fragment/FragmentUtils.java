@@ -31,11 +31,11 @@ public class FragmentUtils {
 
         FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        if (fragmentManager.findFragmentByTag(tag) == null) {
-            transaction.add(containerId, fragment, tag);
-        } else {
-            transaction.replace(containerId, fragment, tag);
+        Fragment previousFragment = fragmentManager.findFragmentByTag(tag);
+        if (previousFragment != null) {
+            transaction.remove(previousFragment);
         }
+        transaction.add(containerId, fragment, tag);
         transaction.commitAllowingStateLoss();
     }
 

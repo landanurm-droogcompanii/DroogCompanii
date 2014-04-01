@@ -29,9 +29,9 @@ public class InputProviderBySearchQuery implements SearchResultListFragment.Inpu
     private final String sqlPointsReceiver;
 
     public InputProviderBySearchQuery(String searchQuery) {
-        sqlCategoriesReceiver = prepareSqlQuery(searchQuery, CATEGORIES.TABLE_NAME, CATEGORIES.COLUMN_NAME_TITLE);
-        sqlPartnersReceiver = prepareSqlQuery(searchQuery, PARTNERS.TABLE_NAME, PARTNERS.COLUMN_NAME_TITLE);
-        sqlPointsReceiver = prepareSqlQuery(searchQuery, POINTS.TABLE_NAME, POINTS.COLUMN_NAME_TITLE);
+        sqlCategoriesReceiver = prepareSqlQuery(searchQuery, CATEGORIES.TABLE_NAME, CATEGORIES.COLUMN_TITLE);
+        sqlPartnersReceiver = prepareSqlQuery(searchQuery, PARTNERS.TABLE_NAME, PARTNERS.COLUMN_TITLE);
+        sqlPointsReceiver = prepareSqlQuery(searchQuery, POINTS.TABLE_NAME, POINTS.COLUMN_TITLE);
     }
 
     private static String prepareSqlQuery(String searchQuery, String tableName, String columnName) {

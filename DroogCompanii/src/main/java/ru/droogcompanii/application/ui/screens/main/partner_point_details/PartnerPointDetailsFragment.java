@@ -39,24 +39,24 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     private static final int NO_INDEX = -1;
 
     private static class Key {
-        public static final String PARTNER_POINTS = "KEY_PARTNER_POINTS";
-        public static final String INDEX_OF_CURRENT_PARTNER_POINT = "KEY_INDEX_OF_CURRENT_PARTNER_POINT";
-        public static final String VISIBLE = "KEY_VISIBLE";
-        public static final String IDS = "KEY_IDS";
+        public static final String PARTNER_POINTS = "PARTNER_POINTS";
+        public static final String INDEX_OF_CURRENT_PARTNER_POINT = "INDEX_OF_CURRENT_PARTNER_POINT";
+        public static final String VISIBLE = "VISIBLE";
+        public static final String IDS = "IDS";
         public static final String WITHOUT_GO_TO_PARTNER = "WITHOUT_GO_TO_PARTNER";
     }
 
-    private boolean withoutGoToPartnerButton;
     private boolean isVisible;
+    private boolean withoutGoToPartnerButton;
     private int indexOfCurrentPartnerPoint;
-    private List<Integer> ids;
+    private List<Integer> idsOfPartnerPoints;
     private List<Optional<PartnerPoint>> partnerPoints;
 
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
             withoutGoToPartnerButton = getArguments().getBoolean(Key.WITHOUT_GO_TO_PARTNER);
-            ids = new ArrayList<Integer>();
+            idsOfPartnerPoints = new ArrayList<Integer>();
             partnerPoints = new ArrayList<Optional<PartnerPoint>>();
             indexOfCurrentPartnerPoint = NO_INDEX;
             hide();
@@ -65,7 +65,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         @Override
         public void restoreState(Bundle savedInstanceState) {
             withoutGoToPartnerButton = savedInstanceState.getBoolean(Key.WITHOUT_GO_TO_PARTNER);
-            ids = (List<Integer>) savedInstanceState.getSerializable(Key.IDS);
+            idsOfPartnerPoints = (List<Integer>) savedInstanceState.getSerializable(Key.IDS);
             partnerPoints = (List<Optional<PartnerPoint>>) savedInstanceState.getSerializable(Key.PARTNER_POINTS);
             indexOfCurrentPartnerPoint = savedInstanceState.getInt(Key.INDEX_OF_CURRENT_PARTNER_POINT);
             restoreVisibilityFrom(savedInstanceState);
@@ -74,7 +74,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         @Override
         public void saveState(Bundle outState) {
             outState.putBoolean(Key.WITHOUT_GO_TO_PARTNER, withoutGoToPartnerButton);
-            outState.putSerializable(Key.IDS, (Serializable) ids);
+            outState.putSerializable(Key.IDS, (Serializable) idsOfPartnerPoints);
             outState.putSerializable(Key.PARTNER_POINTS, (Serializable) partnerPoints);
             outState.putInt(Key.INDEX_OF_CURRENT_PARTNER_POINT, indexOfCurrentPartnerPoint);
             outState.putBoolean(Key.VISIBLE, isVisible);
@@ -83,14 +83,14 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
 
 
     public static PartnerPointDetailsFragment newInstance() {
-        return newInstanceByGoToPartnerState(false);
+        return newInstanceByWithoutGoToPartner(false);
     }
 
     public static PartnerPointDetailsFragment newInstanceWithoutGoToPartnerButton() {
-        return newInstanceByGoToPartnerState(true);
+        return newInstanceByWithoutGoToPartner(true);
     }
 
-    private static PartnerPointDetailsFragment newInstanceByGoToPartnerState(boolean withoutGoToPartner) {
+    private static PartnerPointDetailsFragment newInstanceByWithoutGoToPartner(boolean withoutGoToPartner) {
         Bundle args = new Bundle();
         args.putBoolean(Key.WITHOUT_GO_TO_PARTNER, withoutGoToPartner);
         PartnerPointDetailsFragment fragment = new PartnerPointDetailsFragment();
@@ -136,7 +136,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     private void updateUI() {
         checkIndexOfCurrentPartnerPoint();
         updateNavigationPanel();
-        updatePartnerPointInfo();
+        updatePartnerPointDetails();
     }
 
     private void checkIndexOfCurrentPartnerPoint() {
@@ -200,8 +200,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     }
 
     private void updateNavigationText() {
-        TextView navigationTextView = (TextView) findViewById(R.id.navigationTextView);
-        navigationTextView.setText(prepareNavigationText());
+        setText(R.id.navigationTextView, prepareNavigationText());
     }
 
     private String prepareNavigationText() {
@@ -210,8 +209,8 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         return currentIndexBaseOnOne + "/" + totalNumber;
     }
 
-    private void updatePartnerPointInfo() {
-        updateTextInfo();
+    private void updatePartnerPointDetails() {
+        updateTextDetails();
         updatePhones();
         updateRouteButton();
         updateWorkingHoursIndicator();
@@ -219,7 +218,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         updateIsFavorite();
     }
 
-    private void updateTextInfo() {
+    private void updateTextDetails() {
         PartnerPoint currentPartnerPoint = getCurrentPartnerPoint();
         setText(R.id.titleTextView, currentPartnerPoint.getTitle());
         setText(R.id.addressTextView, currentPartnerPoint.getAddress());
@@ -238,7 +237,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     }
 
     private PartnerPoint loadPartnerPointByIndex(int index) {
-        int idOfPartnerPoint = ids.get(index);
+        int idOfPartnerPoint = idsOfPartnerPoints.get(index);
         PartnerPointsReader reader = new PartnerPointsReader(getActivity());
         return reader.getPartnerPointById(idOfPartnerPoint);
     }
@@ -390,12 +389,18 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         if (partnerPointsToSet == null) {
             throw new IllegalArgumentException("partnerPointsToSet should be not null");
         }
-        if (isAlreadySetting(partnerPointsToSet)) {
-            show();
+        setIfNeed(partnerPointsToSet);
+        show();
+    }
+
+    private void setIfNeed(List<PartnerPoint> partnerPoints) {
+        if (isAlreadySetting(partnerPoints)) {
             return;
         }
-        set(prepareIds(partnerPointsToSet), prepareAbsentPartnerPoints(partnerPointsToSet));
-        show();
+        List<Integer> ids = prepareIds(partnerPoints);
+        int numberOfPartnerPoints = partnerPoints.size();
+        List<Optional<PartnerPoint>> absentPartnerPoints = prepareAbsentPartnerPoints(numberOfPartnerPoints);
+        set(ids, absentPartnerPoints);
     }
 
     private boolean isAlreadySetting(List<PartnerPoint> partnerPointsToSet) {
@@ -413,8 +418,8 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     }
 
     private void set(List<Integer> newIds, List<Optional<PartnerPoint>> newPartnerPoints) {
-        indexOfCurrentPartnerPoint = defineIndex(ids, newIds);
-        ids = newIds;
+        indexOfCurrentPartnerPoint = defineIndex(idsOfPartnerPoints, newIds);
+        idsOfPartnerPoints = newIds;
         partnerPoints = newPartnerPoints;
     }
 
@@ -426,13 +431,12 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         return result;
     }
 
-    private List<Optional<PartnerPoint>> prepareAbsentPartnerPoints(List<PartnerPoint> partnerPointsToSet) {
-        int size = partnerPointsToSet.size();
-        List<Optional<PartnerPoint>> result = new ArrayList<Optional<PartnerPoint>>(size);
+    private static List<Optional<PartnerPoint>> prepareAbsentPartnerPoints(int size) {
+        List<Optional<PartnerPoint>> absentPartnerPoints = new ArrayList<Optional<PartnerPoint>>(size);
         for (int i = 0; i < size; ++i) {
-            result.add(Optional.<PartnerPoint>absent());
+            absentPartnerPoints.add(Optional.<PartnerPoint>absent());
         }
-        return result;
+        return absentPartnerPoints;
     }
 
     private int defineIndex(List<Integer> oldIds, List<Integer> newIds) {

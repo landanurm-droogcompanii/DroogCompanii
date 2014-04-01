@@ -30,7 +30,7 @@ public class OfferDetailsFragment extends Fragment {
     private ImageView image;
     private TextView shortDescription;
     private TextView fullDescription;
-    private View goToPartner;
+    private View buttonGoToPartner;
 
     private boolean areOffersByOnePartner;
     private Offer offer;
@@ -66,7 +66,7 @@ public class OfferDetailsFragment extends Fragment {
         shortDescription = (TextView) root.findViewById(R.id.shortDescription);
         image = (ImageView) root.findViewById(R.id.image);
         fullDescription = (TextView) root.findViewById(R.id.fullDescription);
-        goToPartner = root.findViewById(R.id.goToPartnerButton);
+        buttonGoToPartner = root.findViewById(R.id.goToPartnerButton);
     }
 
     @Override
@@ -92,9 +92,9 @@ public class OfferDetailsFragment extends Fragment {
         fullDescription.setText(offer.getFullDescription());
         imageDownloader.download(offer.getImageUrl(), image);
         if (areOffersByOnePartner) {
-            goToPartner.setVisibility(View.INVISIBLE);
+            buttonGoToPartner.setVisibility(View.INVISIBLE);
         } else {
-            goToPartner.setOnClickListener(new View.OnClickListener() {
+            buttonGoToPartner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     goToPartner();

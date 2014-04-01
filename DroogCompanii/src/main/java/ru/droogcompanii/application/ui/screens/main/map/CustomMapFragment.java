@@ -53,9 +53,10 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
 
     private SupportMapFragment getNestedSupportMapFragment() {
         return (SupportMapFragment)
-                getActivity().getSupportFragmentManager().findFragmentById(R.id.mapView);
+                getActivity().getSupportFragmentManager().findFragmentById(R.id.nestedSupportMapFragment);
     }
 
+    @SuppressWarnings("unused")
     public View getMapView() {
         return getNestedSupportMapFragment().getView();
     }
@@ -78,7 +79,7 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
 
     @Override
     public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        // do nothing
+        // inheritors must override this method
     }
 
 }

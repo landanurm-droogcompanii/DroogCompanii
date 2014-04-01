@@ -139,4 +139,10 @@ public class Filters implements Serializable {
         });
     }
 
+    public void share(Context context) {
+        SharedPreferences sharedPreferences = FiltersSharedPreferencesProvider.get(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        writeTo(editor);
+        editor.commit();
+    }
 }

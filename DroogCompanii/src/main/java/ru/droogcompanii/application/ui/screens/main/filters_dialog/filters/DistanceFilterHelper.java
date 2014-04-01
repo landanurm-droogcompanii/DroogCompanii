@@ -27,21 +27,47 @@ import ru.droogcompanii.application.util.ui.view.RadioGroupMaker;
  */
 public class DistanceFilterHelper implements FilterHelper, Serializable {
 
-    private static class DistanceOption {
-        public final int labelId;
-        public final double maxRadius;
+    private abstract static class DistanceOption {
 
-        public DistanceOption(int labelId, double maxRadius) {
-            this.labelId = labelId;
-            this.maxRadius = maxRadius;
+        public static DistanceOption none() {
+            return new DistanceOption() {
+
+                @Override
+                public double getMaxRadius() {
+                    return -1.0;
+                }
+
+                @Override
+                public String getLabel(Context context) {
+                    return context.getString(R.string.distanceOption_No);
+                }
+            };
         }
+
+        public static DistanceOption byMeters(final int meters) {
+            return new DistanceOption() {
+                @Override
+                public double getMaxRadius() {
+                    return meters;
+                }
+
+                @Override
+                public String getLabel(Context context) {
+                    String metersText = context.getString(R.string.meters_in_filters);
+                    return meters + " " + metersText;
+                }
+            };
+        }
+
+        public abstract double getMaxRadius();
+        public abstract String getLabel(Context context);
     }
 
     private static final List<DistanceOption> DISTANCE_OPTIONS = Arrays.asList(
-            new DistanceOption(R.string.distanceOption_No, -1.0),
-            new DistanceOption(R.string.distanceOption_1000meters, 1000.0),
-            new DistanceOption(R.string.distanceOption_3000meters, 3000.0),
-            new DistanceOption(R.string.distanceOption_5000meters, 5000.0)
+            DistanceOption.none(),
+            DistanceOption.byMeters(1000),
+            DistanceOption.byMeters(3000),
+            DistanceOption.byMeters(5000)
     );
 
     private static class Key {
@@ -73,8 +99,8 @@ public class DistanceFilterHelper implements FilterHelper, Serializable {
 
     public Collection<String> getColumnsOfPartnerPoint() {
         return Arrays.asList(
-                PARTNER_POINTS.COLUMN_NAME_LATITUDE,
-                PARTNER_POINTS.COLUMN_NAME_LONGITUDE
+                PARTNER_POINTS.COLUMN_LATITUDE,
+                PARTNER_POINTS.COLUMN_LONGITUDE
         );
     }
 
@@ -102,7 +128,7 @@ public class DistanceFilterHelper implements FilterHelper, Serializable {
     }
 
     public double getMaxRadius() {
-        return DISTANCE_OPTIONS.get(checkedIndex).maxRadius;
+        return DISTANCE_OPTIONS.get(checkedIndex).getMaxRadius();
     }
 
     @Override
@@ -136,7 +162,7 @@ public class DistanceFilterHelper implements FilterHelper, Serializable {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         RadioButton radioButton = (RadioButton)
                 layoutInflater.inflate(R.layout.view_filter_distance_radio_button, null);
-        radioButton.setText(distanceOption.labelId);
+        radioButton.setText(distanceOption.getLabel(context));
         radioButton.setId(index);
         return radioButton;
     }

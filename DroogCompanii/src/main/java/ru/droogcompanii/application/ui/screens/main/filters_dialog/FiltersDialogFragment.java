@@ -2,13 +2,14 @@ package ru.droogcompanii.application.ui.screens.main.filters_dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.SharedPreferences;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 import ru.droogcompanii.application.ui.screens.main.filters_dialog.filters.Filters;
-import ru.droogcompanii.application.ui.screens.main.filters_dialog.filters.FiltersSharedPreferencesProvider;
+import ru.droogcompanii.application.util.LogUtils;
 import ru.droogcompanii.application.util.ui.fragment.FragmentUtils;
 
 /**
@@ -24,17 +25,17 @@ public class FiltersDialogFragment extends DialogFragment {
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         @Override
         public void onFiltersDone() {
-            // do nothing
+            LogUtils.debug("DUMMY_CALLBACKS.onFiltersDone()");
         }
 
         @Override
         public void onFiltersCancel() {
-            // do nothing
+            LogUtils.debug("DUMMY_CALLBACKS.onFiltersCancel()");
         }
     };
 
     private static class Key {
-        public static final String FILTERS = "FILTERS" + FiltersDialogFragment.class.getName();
+        public static final String FILTERS = "FILTERS";
     }
 
 
@@ -68,53 +69,54 @@ public class FiltersDialogFragment extends DialogFragment {
     }
 
     private Filters readDisplayedFilters() {
-        return Filters.getReadedFrom(dialog.getContentView());
+        View filtersView = dialog.getContentView();
+        return Filters.getReadedFrom(filtersView);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveFiltersState(outState);
+        saveDisplayedFiltersState(outState);
     }
 
-    private void saveFiltersState(Bundle outState) {
+    private void saveDisplayedFiltersState(Bundle outState) {
         outState.putSerializable(Key.FILTERS, displayedFilters);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        dialog = prepareDialog(getFilters(savedInstanceState));
-        dialog.setCanceledOnTouchOutside(false);
+        dialog = prepareDialog(savedInstanceState);
         return dialog;
     }
 
-    private Filters getFilters(Bundle savedInstanceState) {
-        return (savedInstanceState == null)
-                ? Filters.getCurrent(getActivity())
-                : (Filters) savedInstanceState.getSerializable(Key.FILTERS);
+    private FiltersDialog prepareDialog(Bundle savedInstanceState) {
+        Context context = getActivity();
+        Filters filters = (savedInstanceState == null) ? Filters.getCurrent(context) : restoreFilters(savedInstanceState);
+        FiltersDialog filtersDialog = new FiltersDialog(context, filters, ACTUAL_CALLBACKS);
+        filtersDialog.setCanceledOnTouchOutside(false);
+        return filtersDialog;
     }
 
-    private FiltersDialog prepareDialog(Filters filters) {
-        return new FiltersDialog(getActivity(), filters, new Callbacks() {
-            @Override
-            public void onFiltersDone() {
-                shareFilters();
-                callbacks.onFiltersDone();
-                dismiss();
-            }
-
-            @Override
-            public void onFiltersCancel() {
-                callbacks.onFiltersCancel();
-                dismiss();
-            }
-        });
+    private static Filters restoreFilters(Bundle savedInstanceState) {
+        return (Filters) savedInstanceState.getSerializable(Key.FILTERS);
     }
 
-    private void shareFilters() {
-        SharedPreferences sharedPreferences = FiltersSharedPreferencesProvider.get(getActivity());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        readDisplayedFilters().writeTo(editor);
-        editor.commit();
+    private final Callbacks ACTUAL_CALLBACKS = new Callbacks() {
+        @Override
+        public void onFiltersDone() {
+            shareDisplayedFilters();
+            callbacks.onFiltersDone();
+            dismiss();
+        }
+
+        @Override
+        public void onFiltersCancel() {
+            callbacks.onFiltersCancel();
+            dismiss();
+        }
+    };
+
+    private void shareDisplayedFilters() {
+        readDisplayedFilters().share(getActivity());
     }
 }

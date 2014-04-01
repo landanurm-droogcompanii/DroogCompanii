@@ -20,8 +20,8 @@ public class OffersReceiverByOfferType implements Serializable {
 
     private final Optional<String> condition;
 
-    public OffersReceiverByOfferType(OfferType offerType, Optional<String> where) {
-        condition = OffersConditionsPreparer.prepare(offerType, where);
+    public OffersReceiverByOfferType(OfferType offerType, Optional<String> condition) {
+        this.condition = OffersConditionsPreparer.prepare(offerType, condition);
     }
 
     public List<Offer> getOffers(Context context) {

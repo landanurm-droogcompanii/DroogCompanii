@@ -26,9 +26,13 @@ public class CalendarUtils {
     public static String convertToString(Calendar calendar) {
         return (toTwoDigitString(calendar.get(Calendar.DAY_OF_MONTH)) +
                 SEPARATOR_OF_DATE_COMPONENTS +
-                toTwoDigitString(calendar.get(Calendar.MONTH)) +
+                toTwoDigitString(monthBasedOn1From(calendar)) +
                 SEPARATOR_OF_DATE_COMPONENTS +
                 calendar.get(Calendar.YEAR));
+    }
+
+    private static int monthBasedOn1From(Calendar calendar) {
+        return calendar.get(Calendar.MONTH) - Calendar.JANUARY + 1;
     }
 
     private static String toTwoDigitString(int value) {

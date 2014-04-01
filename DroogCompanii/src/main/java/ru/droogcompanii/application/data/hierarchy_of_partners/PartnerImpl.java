@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 /**
@@ -73,16 +72,16 @@ public class PartnerImpl implements Partner, Serializable {
 
     @Override
     public String toString() {
-        return ConverterToString.buildFor(this)
-            .withFieldNames("id", "title",
-                    "fullTitle", "discountSize",
-                    "discountType", "imageUrl",
-                    "description", "webSites", "emails")
-            .withFieldValues(id, title,
-                    fullTitle, discountSize,
-                    discountType, imageUrl,
-                    description, webSites, emails)
-            .toString();
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("id", id)
+                .add("title", title)
+                .add("fullTitle", fullTitle)
+                .add("discountSize", discountSize)
+                .add("discountType", discountType)
+                .add("description", description)
+                .add("webSites", webSites)
+                .add("emails", emails)
+                .toString();
     }
 
     @Override

@@ -3,13 +3,12 @@ package ru.droogcompanii.application.ui.screens.main.map;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 /**
  * Created by ls on 21.03.14.
  */
-public class ClusterItemImpl implements ClusterItem {
+class ClusterItemImpl implements ClusterItem {
     private final LatLng position;
 
     public ClusterItemImpl(LatLng position) {
@@ -29,7 +28,7 @@ public class ClusterItemImpl implements ClusterItem {
             return false;
         }
         ClusterItemImpl other = (ClusterItemImpl) obj;
-        return Objects.equals(position, other.position);
+        return Objects.equals(this.position, other.position);
     }
 
     @Override
@@ -39,9 +38,8 @@ public class ClusterItemImpl implements ClusterItem {
 
     @Override
     public String toString() {
-        return ConverterToString.buildFor(this)
-                .withFieldNames("position")
-                .withFieldValues(position)
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("position", position)
                 .toString();
     }
 }

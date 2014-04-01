@@ -29,9 +29,14 @@ class CategoryListItemSelector {
 
     public void unselect(View itemView) {
         itemView.setBackgroundResource(UNSELECTED_BACKGROUND);
-        if (lastSelectedItem.isPresent() && CategoryListAdapter.areAtTheSamePosition(lastSelectedItem.get(), itemView)) {
+        if (lastSelectedItem.isPresent() && areAtTheSamePosition(lastSelectedItem.get(), itemView)) {
             lastSelectedItem.get().setBackgroundResource(UNSELECTED_BACKGROUND);
             lastSelectedItem = Optional.absent();
         }
+    }
+
+    private boolean areAtTheSamePosition(View itemView1, View itemView2) {
+        return (CategoryListAdapter.PositionUtil.getPosition(itemView1) ==
+                CategoryListAdapter.PositionUtil.getPosition(itemView2));
     }
 }

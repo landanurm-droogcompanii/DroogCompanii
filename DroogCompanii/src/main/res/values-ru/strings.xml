@@ -61,4 +61,7 @@
     <string name="textToastLocationService">Ваше местоположение недоступно. Включите службу</string>
     <string name="textDoNotShowAgain">Не показывать больше</string>
 
+    <string name="offer_duration_before_from">\u0020 с \u0020</string>
+    <string name="offer_duration_before_to">\u0020 до \u0020</string>
+
 </resources>

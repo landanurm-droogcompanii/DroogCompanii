@@ -1,21 +1,20 @@
 package ru.droogcompanii.application.ui.screens.help;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
-import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
 
 /**
  * Created by ls on 14.02.14.
  */
 public class HelpActivity extends ActionBarActivityWithUpButton {
-
-    private static final String TAG_OF_FRAGMENT = "TagOfHelpFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +22,16 @@ public class HelpActivity extends ActionBarActivityWithUpButton {
         setContentView(R.layout.activity_help);
 
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.containerOfFragment, new HelpFragment(), TAG_OF_FRAGMENT);
-            transaction.commit();
+            placeFragmentOnLayout();
         }
+    }
+
+    private void placeFragmentOnLayout() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = new HelpFragment();
+        String tag = fragment.getClass().getName();
+        transaction.add(R.id.containerOfFragment, fragment, tag);
+        transaction.commit();
     }
 
     @Override

@@ -68,7 +68,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
 
         @Override
         public String getConditionToReceivePartnerPoints() {
-            String columnPartnerId = PartnerHierarchyContracts.PartnerPointsContract.COLUMN_NAME_PARTNER_ID;
+            String columnPartnerId = PartnerHierarchyContracts.PartnerPointsContract.COLUMN_PARTNER_ID;
             return columnPartnerId + " = " + partnerId;
         }
 
@@ -95,10 +95,10 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
         public String getConditionToReceivePartnerPoints() {
             final PartnerHierarchyContracts.PartnerPointsContract
                     PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
-            return PARTNER_POINTS.COLUMN_NAME_PARTNER_ID + " IN ( " +
-                    "SELECT " + PARTNER_POINTS.COLUMN_NAME_PARTNER_ID +
+            return PARTNER_POINTS.COLUMN_PARTNER_ID + " IN ( " +
+                    "SELECT " + PARTNER_POINTS.COLUMN_PARTNER_ID +
                     " FROM " + PARTNER_POINTS.TABLE_NAME +
-                    " WHERE " + PARTNER_POINTS.COLUMN_NAME_ID + "=" + partnerPoint.getId() +
+                    " WHERE " + PARTNER_POINTS.COLUMN_ID + "=" + partnerPoint.getId() +
             ")";
         }
 
@@ -257,7 +257,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     }
 
     @Override
-    public void onDisplayingIsStarted() {
+    public void onDisplayingIsStarting() {
         // skip
     }
 

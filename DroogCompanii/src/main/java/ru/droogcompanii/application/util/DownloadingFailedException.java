@@ -5,6 +5,10 @@ package ru.droogcompanii.application.util;
  */
 public class DownloadingFailedException extends RuntimeException {
 
+    public DownloadingFailedException() {
+        super();
+    }
+
     public DownloadingFailedException(String message) {
         super(message);
     }

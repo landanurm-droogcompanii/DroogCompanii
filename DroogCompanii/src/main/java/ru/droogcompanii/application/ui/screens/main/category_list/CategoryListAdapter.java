@@ -13,38 +13,48 @@ import ru.droogcompanii.application.R;
  */
 class CategoryListAdapter extends ArrayAdapter<ListItemHelper> {
 
+    public static class PositionUtil {
+
+        public static void setPosition(View itemView, int position) {
+            Integer tag = position;
+            itemView.setTag(tag);
+        }
+
+        public static int getPosition(View itemView) {
+            return (Integer) itemView.getTag();
+        }
+    }
+
+
     public static final int ROW_LAYOUT_ID = R.layout.view_list_item_category;
 
     private final CategoryListFragment fragment;
+    private final CategoryListItemSelector selector;
 
     public CategoryListAdapter(CategoryListFragment fragment, List<ListItemHelper> items) {
         super(fragment.getActivity(), ROW_LAYOUT_ID, items);
         this.fragment = fragment;
+        this.selector = fragment.getSelector();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ListItemHelper itemHelper = getItem(position);
         View itemView = itemHelper.makeView(getContext(), convertView);
-        Integer tag = position;
-        itemView.setTag(tag);
+        PositionUtil.setPosition(itemView, position);
         initSelectionState(itemView, position);
         return itemView;
     }
 
     private void initSelectionState(View itemView, int position) {
-        if (position == fragment.getCurrentSelection()) {
-            fragment.getSelector().select(itemView);
+        if (isPositionOfCurrentSelection(position)) {
+            selector.select(itemView);
         } else {
-            fragment.getSelector().unselect(itemView);
+            selector.unselect(itemView);
         }
     }
 
-    public static int getPositionOfItem(View itemView) {
-        return (Integer) itemView.getTag();
-    }
-
-    public static boolean areAtTheSamePosition(View itemView1, View itemView2) {
-        return getPositionOfItem(itemView1) == getPositionOfItem(itemView2);
+    private boolean isPositionOfCurrentSelection(int position) {
+        return position == fragment.getCurrentSelection();
     }
 }

@@ -3,7 +3,6 @@ package ru.droogcompanii.application.data.offers;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.util.CalendarUtils;
-import ru.droogcompanii.application.util.ConverterToString;
 import ru.droogcompanii.application.util.Objects;
 
 public class OfferImpl implements Offer, Serializable {
@@ -84,14 +83,15 @@ public class OfferImpl implements Offer, Serializable {
 
     @Override
     public String toString() {
-        return ConverterToString.buildFor(this)
-            .withFieldNames(
-                    "id", "partnerId", "duration", "shortDescription", "fullDescription", "imageUrl", "isSpecial()"
-            )
-            .withFieldValues(
-                    id, partnerId, duration, shortDescription, fullDescription, imageUrl, isSpecial()
-            )
-            .toString();
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("id", id)
+                .add("partnerId", partnerId)
+                .add("duration", duration)
+                .add("shortDescription", shortDescription)
+                .add("fullDescription", fullDescription)
+                .add("imageUrl", imageUrl)
+                .add("isSpecial()", isSpecial())
+                .toString();
     }
 
 }

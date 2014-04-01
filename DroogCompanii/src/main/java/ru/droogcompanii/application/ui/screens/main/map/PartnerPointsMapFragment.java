@@ -53,7 +53,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
     public static interface Callbacks {
         void onMarkerClicked(List<PartnerPoint> partnerPoints);
         void onNoClickedMarker();
-        void onDisplayingIsStarted();
+        void onDisplayingIsStarting();
         void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints);
         void onMapInitialized();
     }
@@ -62,6 +62,10 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         public static final String CONDITION = "KEY_CONDITION";
         public static final String IS_FIRST_DISPLAYING = "KEY_IS_FIRST_DISPLAYING";
         public static final String WITH_FILTERS = "WITH_FILTERS";
+    }
+
+    private static class DefaultValue {
+        public static final boolean WITH_FILTERS = true;
     }
 
     private static class RequestCode {
@@ -80,7 +84,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         }
 
         @Override
-        public void onDisplayingIsStarted() {
+        public void onDisplayingIsStarting() {
             // do nothing
         }
 
@@ -110,7 +114,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
-            withFilters = getArguments().getBoolean(Key.WITH_FILTERS, true);
+            withFilters = getArguments().getBoolean(Key.WITH_FILTERS, DefaultValue.WITH_FILTERS);
             initWithFilters();
             isFirstDisplaying = true;
             conditionToReceivePartnerPoints = Optional.absent();
@@ -119,7 +123,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
 
         @Override
         public void restoreState(Bundle savedInstanceState) {
-            withFilters = savedInstanceState.getBoolean(Key.WITH_FILTERS, true);
+            withFilters = savedInstanceState.getBoolean(Key.WITH_FILTERS, DefaultValue.WITH_FILTERS);
             initWithFilters();
             isFirstDisplaying = savedInstanceState.getBoolean(Key.IS_FIRST_DISPLAYING);
             conditionToReceivePartnerPoints = (Optional<String>) savedInstanceState.getSerializable(Key.CONDITION);
@@ -138,7 +142,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
 
     private void initWithFilters() {
         if (withFilters) {
-            circleOfNearestDrawer = new ActualCircleOfNearestDrawer(PartnerPointsMapFragment.this);
+            circleOfNearestDrawer = new ActualCircleOfNearestDrawer(this);
         } else {
             circleOfNearestDrawer = new DummyCircleOfNearestDrawer();
         }
@@ -206,10 +210,10 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
 
     @Override
     public void onMapClick(LatLng latLng) {
-        onNeedToRemoveClickedPosition();
+        removeClickedPosition();
     }
 
-    private void onNeedToRemoveClickedPosition() {
+    private void removeClickedPosition() {
         clickedPositionHelper.remove();
         callbacks.onNoClickedMarker();
     }
@@ -237,11 +241,11 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
     }
 
     private static void movePartnerPointWithThisIdAtFirstPositionAtList(int partnerPointId, List<PartnerPoint> partnerPoints) {
-        int index = indexOfPartnerPointWithIdAtList(partnerPointId, partnerPoints);
+        int index = indexOfPartnerPointWithThisId(partnerPointId, partnerPoints);
         ListUtils.swap(partnerPoints, 0, index);
     }
 
-    private static int indexOfPartnerPointWithIdAtList(int partnerPointId, List<PartnerPoint> partnerPoints) {
+    private static int indexOfPartnerPointWithThisId(int partnerPointId, List<PartnerPoint> partnerPoints) {
         for (int i = 0; i < partnerPoints.size(); ++i) {
             if (partnerPointId == partnerPoints.get(i).getId()) {
                 return i;
@@ -287,7 +291,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
 
     private void startDisplayingTask() {
         circleOfNearestDrawer.update();
-        callbacks.onDisplayingIsStarted();
+        callbacks.onDisplayingIsStarting();
 
         final Filters currentFilters = Filters.getCurrent(getActivity());
         final LatLngBounds bounds = getBounds();
@@ -324,7 +328,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         clusterManager.cluster();
         Worker.DisplayingTaskResult taskResult = (Worker.DisplayingTaskResult) result;
         if (taskResult.isNeedToRemoveClickedPosition) {
-            onNeedToRemoveClickedPosition();
+            removeClickedPosition();
         }
         updateMapCamera(taskResult);
         callbacks.onDisplayingIsCompleted(taskResult.numberOfDisplayedPartnerPoints);

@@ -34,13 +34,13 @@ public class FavoriteDBUtils {
         final Holder<Boolean> isFavorite = Holder.from(false);
 
         PartnersReader partnersReader = new PartnersReader(context);
-        final String where = " WHERE " + PARTNERS_CONTRACT.COLUMN_NAME_ID + " = " + partnerId;
+        final String where = " WHERE " + PARTNERS_CONTRACT.COLUMN_ID + " = " + partnerId;
         partnersReader.handleCursorByCondition(where, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
                 cursor.moveToFirst();
                 if (!cursor.isAfterLast()) {
-                    int index = cursor.getColumnIndexOrThrow(PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE);
+                    int index = cursor.getColumnIndexOrThrow(PARTNERS_CONTRACT.COLUMN_IS_FAVORITE);
                     isFavorite.value = (cursor.getInt(index) == 1);
                 }
             }
@@ -59,8 +59,8 @@ public class FavoriteDBUtils {
 
     private void setFavorite(SQLiteDatabase db, int partnerId, boolean isFavorite) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE, isFavorite ? 1 : 0);
-        String where = PARTNERS_CONTRACT.COLUMN_NAME_ID + "=" + partnerId;
+        contentValues.put(PARTNERS_CONTRACT.COLUMN_IS_FAVORITE, isFavorite ? 1 : 0);
+        String where = PARTNERS_CONTRACT.COLUMN_ID + "=" + partnerId;
         db.update(PARTNERS_CONTRACT.TABLE_NAME, contentValues, where, null);
     }
 
@@ -71,17 +71,17 @@ public class FavoriteDBUtils {
     }
 
     public static String getIsFavoriteCondition() {
-        return PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE + " = 1 ";
+        return PARTNERS_CONTRACT.COLUMN_IS_FAVORITE + " = 1 ";
     }
 
     public List<PartnerPoint> getAllFavoritePartnerPoints() {
         final String sql = "SELECT " + PARTNER_POINTS_CONTRACT.TABLE_NAME + ".* " +
                 " FROM " + PARTNER_POINTS_CONTRACT.TABLE_NAME + " WHERE EXISTS " +
                 "( SELECT * FROM " + PARTNERS_CONTRACT.TABLE_NAME + " WHERE " +
-                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_NAME_ID + " = " +
-                    PARTNER_POINTS_CONTRACT.TABLE_NAME + "." + PARTNER_POINTS_CONTRACT.COLUMN_NAME_PARTNER_ID +
+                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_ID + " = " +
+                    PARTNER_POINTS_CONTRACT.TABLE_NAME + "." + PARTNER_POINTS_CONTRACT.COLUMN_PARTNER_ID +
                     " AND " +
-                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_NAME_IS_FAVORITE + " = 1" +
+                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_IS_FAVORITE + " = 1" +
                 " )";
 
         List<PartnerPoint> noPartnerPoints = new ArrayList<PartnerPoint>();

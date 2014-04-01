@@ -8,14 +8,14 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
  * Created by ls on 25.03.14.
  */
 class DummyFilter implements Filter {
-    private final boolean meet;
+    private final boolean passed;
 
-    public DummyFilter(boolean meet) {
-        this.meet = meet;
+    public DummyFilter(boolean passed) {
+        this.passed = passed;
     }
 
     @Override
     public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor) {
-        return meet;
+        return passed;
     }
 }

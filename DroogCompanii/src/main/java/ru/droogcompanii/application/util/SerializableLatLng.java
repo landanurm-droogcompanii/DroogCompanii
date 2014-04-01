@@ -39,9 +39,9 @@ public class SerializableLatLng implements Serializable {
 
     @Override
     public String toString() {
-        return ConverterToString.buildFor(this)
-                .withFieldNames("latitude", "longitude")
-                .withFieldValues(latitude, longitude)
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("latitude", latitude)
+                .add("longitude", longitude)
                 .toString();
     }
 

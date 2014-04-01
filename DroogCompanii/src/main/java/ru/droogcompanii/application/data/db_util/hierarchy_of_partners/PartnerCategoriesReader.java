@@ -41,7 +41,7 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
     }
 
     public static String getDefaultOrder() {
-        return "ORDER BY " + PartnerCategoriesContract.COLUMN_NAME_TITLE;
+        return "ORDER BY " + PartnerCategoriesContract.COLUMN_TITLE;
     }
 
     public static List<PartnerCategory> getPartnerCategoriesFromCursor(Cursor cursor) {
@@ -58,8 +58,8 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
 
     private static ColumnIndices calculateColumnIndices(Cursor cursor) {
         ColumnIndices columnIndices = new ColumnIndices();
-        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_ID);
-        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_NAME_TITLE);
+        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_ID);
+        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(PartnerCategoriesContract.COLUMN_TITLE);
         return columnIndices;
     }
 
@@ -72,7 +72,7 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
 
     public PartnerCategory getPartnerCategoryOf(Partner partner) {
         List<PartnerCategory> partnerCategories = getPartnerCategoriesFromDatabase(
-                " WHERE " + PartnerCategoriesContract.COLUMN_NAME_ID + " = " + partner.getCategoryId()
+                " WHERE " + PartnerCategoriesContract.COLUMN_ID + " = " + partner.getCategoryId()
         );
         if (partnerCategories.isEmpty()) {
             throw new IllegalArgumentException("partner with illegal category id");

@@ -32,5 +32,6 @@
     <dimen name="heightOfMapFragmentOnPartnerDetailsScreen">350dp</dimen>
     <dimen name="textLargeSizeOfToastLocationService">16sp</dimen>
     <dimen name="textSmallSizeOfToastLocationService">10sp</dimen>
+    <dimen name="paddingOfOfferRow">6dp</dimen>
 
 </resources>

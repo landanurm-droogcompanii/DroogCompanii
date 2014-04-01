@@ -3,9 +3,6 @@ package ru.droogcompanii.application.data.offers;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import ru.droogcompanii.application.util.CalendarUtils;
-import ru.droogcompanii.application.util.ConverterToString;
-
 public class CalendarRange implements Serializable {
 
 	private final Calendar from;
@@ -53,9 +50,9 @@ public class CalendarRange implements Serializable {
 
     @Override
     public String toString() {
-        return ConverterToString.buildFor(this)
-                .withFieldNames("from", "to")
-                .withFieldValues(CalendarUtils.convertToString(from), CalendarUtils.convertToString(to))
+        return com.google.common.base.Objects.toStringHelper(this)
+                .add("from", from)
+                .add("to", to)
                 .toString();
     }
 	

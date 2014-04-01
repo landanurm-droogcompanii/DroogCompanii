@@ -40,7 +40,7 @@ class CashlessPaymentsFilterHelper implements FilterHelper, Serializable {
 
     public Collection<String> getColumnsOfPartnerPoint() {
         return Arrays.asList(
-                PARTNER_POINTS.COLUMN_NAME_PAYMENT_METHODS
+                PARTNER_POINTS.COLUMN_PAYMENT_METHODS
         );
     }
 
@@ -49,17 +49,15 @@ class CashlessPaymentsFilterHelper implements FilterHelper, Serializable {
         return new FilterImpl();
     }
 
-    private class FilterImpl implements Filter {
+    private static class FilterImpl implements Filter {
         @Override
         public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor) {
             return CashlessPaymentsUtils.isSupportCashlessPayments(readPaymentMethods(cursor));
         }
 
         private String readPaymentMethods(Cursor cursor) {
-            int columnIndexPaymentMethods = cursor.getColumnIndexOrThrow(
-                    PARTNER_POINTS.COLUMN_NAME_PAYMENT_METHODS
-            );
-            return cursor.getString(columnIndexPaymentMethods);
+            int indexPaymentMethods = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_PAYMENT_METHODS);
+            return cursor.getString(indexPaymentMethods);
         }
     }
 
@@ -75,7 +73,8 @@ class CashlessPaymentsFilterHelper implements FilterHelper, Serializable {
 
     @Override
     public View inflateContentView(Context context) {
-        return LayoutInflater.from(context).inflate(R.layout.view_filter_cashless_payments, null);
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        return layoutInflater.inflate(R.layout.view_filter_cashless_payments, null);
     }
 
     @Override

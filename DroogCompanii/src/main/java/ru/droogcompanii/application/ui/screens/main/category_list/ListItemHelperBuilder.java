@@ -51,7 +51,7 @@ class ListItemHelperBuilder {
 
             @Override
             public String getConditionToReceivePartners() {
-                return PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID +
+                return PartnerHierarchyContracts.PartnersContract.COLUMN_CATEGORY_ID +
                         " = " + partnerCategory.getId();
             }
         };

@@ -27,15 +27,6 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
         void onNeedToEnableLocationService();
     }
 
-
-    private static final LocationSource.OnLocationChangedListener
-            DUMMY_ON_LOCATION_CHANGED_LISTENER = new LocationSource.OnLocationChangedListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            // do nothing
-        }
-    };
-
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
         @Override
         public void onCustomBaseLocationIsSet() {
@@ -53,10 +44,30 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
         }
     };
 
+    private static final LocationSource.OnLocationChangedListener
+            DUMMY_ON_LOCATION_CHANGED_LISTENER = new LocationSource.OnLocationChangedListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            // do nothing
+        }
+    };
+
 
     private Callbacks callbacks;
     private LocationSource.OnLocationChangedListener onLocationChangedListener;
 
+    private final LocationSource LOCATION_SOURCE = new LocationSource() {
+        @Override
+        public void activate(OnLocationChangedListener onLocationChangedListener) {
+            CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = onLocationChangedListener;
+            onLocationChangedListener.onLocationChanged(ActualBaseLocationProvider.getActualBaseLocation());
+        }
+
+        @Override
+        public void deactivate() {
+            CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
+        }
+    };
 
 
     public CustomMapFragmentWithBaseLocation() {
@@ -72,7 +83,6 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
     @Override
     public void onDetach() {
         callbacks = DUMMY_CALLBACKS;
-        onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
         super.onDetach();
     }
 
@@ -90,18 +100,7 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
             return;
         }
         googleMap.setMyLocationEnabled(true);
-        googleMap.setLocationSource(new LocationSource() {
-            @Override
-            public void activate(OnLocationChangedListener onLocationChangedListener) {
-                CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = onLocationChangedListener;
-                onLocationChangedListener.onLocationChanged(ActualBaseLocationProvider.getActualBaseLocation());
-            }
-
-            @Override
-            public void deactivate() {
-                CustomMapFragmentWithBaseLocation.this.onLocationChangedListener = DUMMY_ON_LOCATION_CHANGED_LISTENER;
-            }
-        });
+        googleMap.setLocationSource(LOCATION_SOURCE);
     }
 
     @Override
@@ -129,24 +128,19 @@ public class CustomMapFragmentWithBaseLocation extends CustomMapFragment
         }
     }
 
-
     protected boolean isAbleToChangeBaseLocationByLongClickOnMap() {
         return true;
     }
 
-
-    private void setCustomBaseLocation(LatLng latLng) {
-        CustomBaseLocationUtils.updateBasePosition(latLng);
+    private void setCustomBaseLocation(LatLng basePosition) {
+        CustomBaseLocationUtils.updateBasePosition(basePosition);
         NotifierAboutBaseLocationChanges.notify(getActivity());
-
         callbacks.onCustomBaseLocationIsSet();
     }
-
 
     public void dismissCustomBaseLocation() {
         CustomBaseLocationUtils.dismissBasePosition();
         NotifierAboutBaseLocationChanges.notify(getActivity());
-
         callbacks.onCustomBaseLocationIsDismissed();
     }
 

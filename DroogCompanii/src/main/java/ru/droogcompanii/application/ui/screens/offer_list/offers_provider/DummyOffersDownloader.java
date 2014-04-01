@@ -16,15 +16,24 @@ import ru.droogcompanii.application.util.LogUtils;
 /**
  * Created by ls on 10.02.14.
  */
-public class DummyOffersDownloder implements OffersDownloader, Serializable {
+public class DummyOffersDownloader implements OffersDownloader, Serializable {
 
     @Override
     public List<Offer> downloadOffers(Context context) {
         try {
             return tryDownloadOffers(context);
         } catch (Exception e) {
+            processException(e);
+            return null;
+        }
+    }
+
+    private void processException(Exception e) {
+        if (e != null && e.getMessage() != null) {
             LogUtils.debug(e.getMessage());
             throw new DownloadingFailedException(e.getMessage(), e);
+        } else {
+            throw new DownloadingFailedException();
         }
     }
 

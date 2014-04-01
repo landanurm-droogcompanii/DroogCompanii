@@ -21,6 +21,7 @@ import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
+import ru.droogcompanii.application.util.ListUtils;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
@@ -51,8 +52,8 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         }
     };
 
-    private static class RequestCode {
-        public static final int TASK_RECEIVING_CATEGORIES = 142;
+    private static class TaskRequestCode {
+        public static final int RECEIVING_CATEGORIES = 142;
     }
 
     private static class Key {
@@ -65,29 +66,31 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     private Callbacks callbacks;
     private CategoryListAdapter adapter;
     private int currentSelection;
-    private List<ListItemHelper> listItemHelpers;
+    private Optional<List<ListItemHelper>> listItemHelpers;
     private ListView listView;
     private Optional<Parcelable> stateOfListView;
 
+
     private final StateManager STATE_MANAGER = new StateManager() {
+
         @Override
         public void initStateByDefault() {
             currentSelection = 0;
-            listItemHelpers = null;
+            listItemHelpers = Optional.absent();
             stateOfListView = Optional.absent();
         }
 
         @Override
         public void restoreState(Bundle savedInstanceState) {
             currentSelection = savedInstanceState.getInt(Key.CURRENT_SELECTION);
-            listItemHelpers = (List<ListItemHelper>) savedInstanceState.getSerializable(Key.HELPERS);
+            listItemHelpers = (Optional<List<ListItemHelper>>) savedInstanceState.getSerializable(Key.HELPERS);
             stateOfListView = Optional.of(savedInstanceState.getParcelable(Key.LIST_VIEW_STATE));
         }
 
         @Override
         public void saveState(Bundle outState) {
             outState.putInt(Key.CURRENT_SELECTION, currentSelection);
-            outState.putSerializable(Key.HELPERS, (Serializable) listItemHelpers);
+            outState.putSerializable(Key.HELPERS, listItemHelpers);
             outState.putParcelable(Key.LIST_VIEW_STATE, listView.onSaveInstanceState());
         }
     };
@@ -145,18 +148,14 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
             startTaskReceivingCategories();
-        } else if (isListItemsReceived()) {
+        } else if (listItemHelpers.isPresent()) {
             initList();
         }
     }
 
-    private boolean isListItemsReceived() {
-        return (listItemHelpers != null);
-    }
-
 
     private void startTaskReceivingCategories() {
-        startTask(RequestCode.TASK_RECEIVING_CATEGORIES, new TaskNotBeInterruptedDuringConfigurationChange() {
+        startTask(TaskRequestCode.RECEIVING_CATEGORIES, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
                 return (Serializable) prepareListItemHelpers();
@@ -165,17 +164,16 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     }
 
     private List<ListItemHelper> prepareListItemHelpers() {
-        final ArrayList<ListItemHelper> helpers = new ArrayList<ListItemHelper>();
+        final List<ListItemHelper> helpers = new ArrayList<ListItemHelper>();
         helpers.add(ListItemHelperBuilder.getAllPartnersListItemHelper());
         helpers.add(ListItemHelperBuilder.getFavoriteListItemHelper());
         addPartnerCategoryHelpersIn(helpers);
         return helpers;
     }
 
-    private void addPartnerCategoryHelpersIn(ArrayList<ListItemHelper> helpers) {
+    private void addPartnerCategoryHelpersIn(List<ListItemHelper> helpers) {
         List<PartnerCategory> categories = readAllPartnerCategories();
-        final int totalSize = categories.size() + helpers.size();
-        helpers.ensureCapacity(totalSize);
+        ListUtils.ensureCapacityByCountIfCan(helpers, categories.size());
         for (PartnerCategory each : categories) {
             ListItemHelper eachHelper = ListItemHelperBuilder.getPartnerCategoryListItemHelper(each);
             helpers.add(eachHelper);
@@ -190,27 +188,23 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
     @Override
     public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        if (requestCode == RequestCode.TASK_RECEIVING_CATEGORIES) {
-            if (resultCode == Activity.RESULT_OK) {
-                onHelpersReceived(result);
-            } else {
-                onReceivingHelpersCancelled();
-            }
+        if (resultCode != Activity.RESULT_OK) {
+            getActivity().finish();
+            return;
+        }
+        if (requestCode == TaskRequestCode.RECEIVING_CATEGORIES) {
+            onHelpersReceived(result);
         }
     }
 
-    private void onReceivingHelpersCancelled() {
-        getActivity().finish();
-    }
-
     private void onHelpersReceived(Serializable result) {
-        this.listItemHelpers = (List<ListItemHelper>) result;
+        this.listItemHelpers = Optional.fromNullable((List<ListItemHelper>) result);
         initList();
         callbacks.onReceivingCategoriesTaskCompleted();
     }
 
     private void initList() {
-        adapter = new CategoryListAdapter(this, listItemHelpers);
+        adapter = new CategoryListAdapter(this, listItemHelpers.get());
         listView.setAdapter(adapter);
         restoreStateOfListViewIfNeed();
         callbacks.onListInitialized();
@@ -223,25 +217,25 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     }
 
     public Optional<String> getConditionToReceivePartners() {
-        if (currentSelection == ListView.INVALID_POSITION) {
+        if (isNoSelection()) {
             return Optional.absent();
         }
-        ListItemHelper item = listItemHelpers.get(currentSelection);
+        ListItemHelper item = listItemHelpers.get().get(currentSelection);
         String condition = item.getConditionToReceivePartners();
         return Optional.of(condition);
+    }
+
+    private boolean isNoSelection() {
+        return (currentSelection < 0) || (currentSelection >= listItemHelpers.get().size());
     }
 
     public Optional<String> getSelectedCategoryName() {
         if (isNoSelection()) {
             return Optional.absent();
         }
-        ListItemHelper item = listItemHelpers.get(currentSelection);
+        ListItemHelper item = listItemHelpers.get().get(currentSelection);
         String title = item.getTitle(getActivity());
         return Optional.of(title);
-    }
-
-    private boolean isNoSelection() {
-        return (currentSelection < 0) || (currentSelection >= listItemHelpers.size());
     }
 
     public void setCategorySize(int size) {

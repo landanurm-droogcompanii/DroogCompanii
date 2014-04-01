@@ -12,7 +12,7 @@ import ru.droogcompanii.application.util.MultiMap;
 /**
  * Created by ls on 22.01.14.
  */
-public class PartnerPointsGroupedByPosition {
+class PartnerPointsGroupedByPosition {
 
     private final MultiMap<LatLng, PartnerPoint> groups;
 

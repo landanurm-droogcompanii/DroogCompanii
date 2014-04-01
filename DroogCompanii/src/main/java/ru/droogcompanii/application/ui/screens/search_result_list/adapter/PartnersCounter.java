@@ -17,7 +17,7 @@ class PartnersCounter {
     public static int countPartnersInCategory(Context context, PartnerCategory category) {
         PartnersHierarchyReaderFromDatabase reader = new PartnersHierarchyReaderFromDatabase(context);
         String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " WHERE " +
-                PartnerHierarchyContracts.PartnersContract.COLUMN_NAME_CATEGORY_ID + "=" + category.getId() + ";";
+                PartnerHierarchyContracts.PartnersContract.COLUMN_CATEGORY_ID + "=" + category.getId() + ";";
         final Holder<Integer> counterHolder = Holder.from(0);
         reader.handleCursorByQuery(sql, new CursorHandler() {
             @Override

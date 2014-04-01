@@ -15,8 +15,10 @@ import com.google.common.base.Optional;
 import java.io.Serializable;
 import java.util.List;
 
+import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.offers.Offer;
+import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
@@ -25,15 +27,18 @@ import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterrup
  */
 public class OfferListFragment extends FragmentAbleToStartTask implements AdapterView.OnItemClickListener {
 
-
     public static interface Callbacks {
         void onOfferItemClick(Offer offer);
     }
 
-    private static final int TASK_REQUEST_CODE_RECEIVING_OFFERS = 461;
+    private static class TaskRequestCode {
+        public static final int RECEIVING_OFFERS = 461;
+    }
 
-    private static final String KEY_OFFERS = "KEY_OFFERS";
-    private static final String KEY_OFFERS_PROVIDER = "KEY_OFFERS_PROVIDER";
+    private static class Key {
+        private static final String OFFERS = "OFFERS";
+        private static final String OFFERS_RECEIVER = "OFFERS_RECEIVER";
+    }
 
     private ArrayAdapter<Offer> adapter;
     private Callbacks callbacks;
@@ -41,10 +46,40 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
     private Optional<List<Offer>> optionalOffers;
 
 
-    public static Fragment newInstance(OfferType offerType, Optional<String> where) {
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            optionalOffers = Optional.absent();
+            startTaskReceivingOffers();
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            optionalOffers = (Optional<List<Offer>>) savedInstanceState.getSerializable(Key.OFFERS);
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putSerializable(Key.OFFERS, optionalOffers);
+        }
+    };
+
+    private void startTaskReceivingOffers() {
+        final OffersReceiverByOfferType offersReceiver =
+                (OffersReceiverByOfferType) getArguments().getSerializable(Key.OFFERS_RECEIVER);
+        startTask(TaskRequestCode.RECEIVING_OFFERS, new TaskNotBeInterruptedDuringConfigurationChange() {
+            @Override
+            protected Serializable doInBackground(Void... voids) {
+                return (Serializable) offersReceiver.getOffers(DroogCompaniiApplication.getContext());
+            }
+        });
+    }
+
+
+    public static Fragment newInstance(OfferType offerType, Optional<String> condition) {
         OfferListFragment fragment = new OfferListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(KEY_OFFERS_PROVIDER, new OffersReceiverByOfferType(offerType, where));
+        args.putSerializable(Key.OFFERS_RECEIVER, new OffersReceiverByOfferType(offerType, condition));
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,52 +100,28 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState == null) {
-            initStateByDefault();
-        } else {
-            restoreState(savedInstanceState);
+        STATE_MANAGER.initState(savedInstanceState);
+        initListIfNeed();
+    }
+
+    private void initListIfNeed() {
+        if (optionalOffers.isPresent()) {
+            initList();
         }
-        initList();
-    }
-
-    private void initStateByDefault() {
-        optionalOffers = Optional.absent();
-        startTaskReceivingOffers();
-    }
-
-    private void startTaskReceivingOffers() {
-        OffersReceiverByOfferType offersReceiver = (OffersReceiverByOfferType)
-                getArguments().getSerializable(KEY_OFFERS_PROVIDER);
-        TaskNotBeInterruptedDuringConfigurationChange task = new OffersReceiverTask(offersReceiver, getActivity());
-        startTask(TASK_REQUEST_CODE_RECEIVING_OFFERS, task);
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        optionalOffers = (Optional<List<Offer>>) savedInstanceState.getSerializable(KEY_OFFERS);
     }
 
     private void initList() {
-        if (optionalOffers.isPresent()) {
-            initList(optionalOffers.get());
-        }
-        gridView.setOnItemClickListener(this);
-    }
-
-    private void initList(List<Offer> offers) {
         View emptyListView = getView().findViewById(R.id.noOffersView);
         gridView.setEmptyView(emptyListView);
-        adapter = new OffersAdapter(getActivity(), offers);
+        adapter = new OffersAdapter(getActivity(), optionalOffers.get());
         gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(this);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveStateInto(outState);
-    }
-
-    private void saveStateInto(Bundle outState) {
-        outState.putSerializable(KEY_OFFERS, optionalOffers);
+        STATE_MANAGER.saveState(outState);
     }
 
     private void setOffers(List<Offer> offers) {
@@ -126,7 +137,7 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
 
     @Override
     public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        if (requestCode == TASK_REQUEST_CODE_RECEIVING_OFFERS) {
+        if (requestCode == TaskRequestCode.RECEIVING_OFFERS) {
             onReceivingOffersTaskResult(resultCode, result);
         }
     }
@@ -134,9 +145,10 @@ public class OfferListFragment extends FragmentAbleToStartTask implements Adapte
     private void onReceivingOffersTaskResult(int resultCode, Serializable result) {
         if (resultCode != Activity.RESULT_OK) {
             getActivity().finish();
-        } else {
-            List<Offer> offers = (List<Offer>) result;
-            setOffers(offers);
+            return;
         }
+        List<Offer> offers = (List<Offer>) result;
+        setOffers(offers);
     }
+
 }
