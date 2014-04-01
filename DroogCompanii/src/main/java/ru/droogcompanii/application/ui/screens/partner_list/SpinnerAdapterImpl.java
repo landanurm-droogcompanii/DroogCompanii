@@ -20,6 +20,7 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPo
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.MinMax;
+import ru.droogcompanii.application.util.SerializableLatLng;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 
 /**
@@ -71,8 +72,23 @@ class SpinnerAdapterImpl extends ArrayAdapter<String> {
         return itemTitles;
     }
 
+    static abstract class BaseComparator<T> implements Comparator<T> {
 
-    static class ComparatorByDiscountSize implements Comparator<Partner>, Serializable {
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            return getClass().equals(obj.getClass());
+        }
+
+        @Override
+        public int hashCode() {
+            return getClass().hashCode();
+        }
+    }
+
+    static class ComparatorByDiscountSize extends BaseComparator<Partner> implements Serializable {
         @Override
         public int compare(Partner partner1, Partner partner2) {
             Integer discountSize1 = partner1.getDiscountSize();
@@ -82,9 +98,11 @@ class SpinnerAdapterImpl extends ArrayAdapter<String> {
     }
 
 
-    static class ComparatorByDistance implements Comparator<Partner>, Serializable {
-        private LatLng basePosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
+    static class ComparatorByDistance extends BaseComparator<Partner> implements Serializable {
+        private transient LatLng basePosition;
+        private SerializableLatLng serializableBasePosition;
         private Map<Integer, Double> pairsPartnerIdAndMinDistance = new HashMap<Integer, Double>();
+
 
         @Override
         public int compare(Partner partner1, Partner partner2) {
@@ -108,11 +126,27 @@ class SpinnerAdapterImpl extends ArrayAdapter<String> {
             MinMax<Double> minMax = new MinMax<Double>();
             minMax.add(Double.MAX_VALUE);
             for (PartnerPoint partnerPoint : getPointsOf(partner)) {
-                double distance = SphericalUtil.computeDistanceBetween(partnerPoint.getPosition(), basePosition);
+                double distance = SphericalUtil.computeDistanceBetween(partnerPoint.getPosition(), getBasePosition());
                 minMax.add(distance);
             }
             Double minDistance = minMax.min();
             return minDistance;
+        }
+
+        private LatLng getBasePosition() {
+            if (basePosition == null) {
+                prepareBasePosition();
+            }
+            return basePosition;
+        }
+
+        private void prepareBasePosition() {
+            if (serializableBasePosition != null) {
+                basePosition = serializableBasePosition.toParcelable();
+            } else {
+                basePosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
+                serializableBasePosition = SerializableLatLng.fromParcelable(basePosition);
+            }
         }
 
         private static List<PartnerPoint> getPointsOf(Partner partner) {
@@ -123,7 +157,7 @@ class SpinnerAdapterImpl extends ArrayAdapter<String> {
     }
 
 
-    static class ComparatorByTitle implements Comparator<Partner>, Serializable {
+    static class ComparatorByTitle extends BaseComparator<Partner> implements Serializable {
         @Override
         public int compare(Partner partner1, Partner partner2) {
             String title1 = partner1.getTitle();
