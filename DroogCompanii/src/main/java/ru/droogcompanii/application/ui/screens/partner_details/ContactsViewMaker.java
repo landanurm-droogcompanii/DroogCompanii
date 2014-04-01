@@ -15,16 +15,16 @@ public class ContactsViewMaker {
 
     private final SenderEmail senderEmail;
     private final NavigatorToWebsite navigatorToWebsite;
-    private final IconAndLabelItemMaker inflater;
+    private final IconAndLabelItemMaker itemMaker;
 
     public ContactsViewMaker(Context context) {
         navigatorToWebsite = new NavigatorToWebsite(context);
         senderEmail = new SenderEmail(context);
-        inflater = new IconAndLabelItemMaker(context);
+        itemMaker = new IconAndLabelItemMaker(context);
     }
 
     public View makeViewByWebSite(final String webSite) {
-        return inflater.make(R.drawable.ic_web_site, webSite, new Runnable() {
+        return itemMaker.make(R.drawable.ic_web_site, webSite, new Runnable() {
             @Override
             public void run() {
                 navigatorToWebsite.navigateToSite(webSite);
@@ -33,7 +33,7 @@ public class ContactsViewMaker {
     }
 
     public View makeViewByEmail(final String email) {
-        return inflater.make(android.R.drawable.ic_dialog_email, email, new Runnable() {
+        return itemMaker.make(android.R.drawable.ic_dialog_email, email, new Runnable() {
             @Override
             public void run() {
                 senderEmail.sendTo(email);

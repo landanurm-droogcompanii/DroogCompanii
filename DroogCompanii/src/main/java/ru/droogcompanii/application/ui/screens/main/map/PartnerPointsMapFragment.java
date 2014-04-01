@@ -232,7 +232,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         return ListUtils.listFromSet(partnerPointsAtClickedPosition);
     }
 
-    public void clickAtPartnerPoint(PartnerPoint partnerPoint) {
+    public void selectPartnerPoint(PartnerPoint partnerPoint) {
         LatLng position = partnerPoint.getPosition();
         clickedPositionHelper.set(position);
         List<PartnerPoint> partnerPoints = getPartnerPointsAtPosition(position);

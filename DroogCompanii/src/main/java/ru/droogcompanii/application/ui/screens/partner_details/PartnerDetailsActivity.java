@@ -147,9 +147,8 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     }
 
 
-    private boolean isFirstDisplaying = true;
-    private boolean isMapInitialized = false;
-
+    private boolean isFirstDisplaying;
+    private boolean isMapInitialized;
     private boolean isDetailsLoaded;
     private InputProvider inputProvider;
 
@@ -157,6 +156,8 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     private final StateManager STATE_MANAGER = new StateManager() {
         @Override
         public void initStateByDefault() {
+            isFirstDisplaying = true;
+            isMapInitialized = false;
             inputProvider = (InputProvider) getIntent().getSerializableExtra(Key.INPUT_PROVIDER);
             isDetailsLoaded = false;
             placeFragmentsOnActivity();
@@ -165,29 +166,22 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
         @Override
         public void restoreState(Bundle savedInstanceState) {
             isFirstDisplaying = savedInstanceState.getBoolean(Key.IS_FIRST_DISPLAYING);
-            inputProvider = (InputProvider) savedInstanceState.getSerializable(Key.INPUT_PROVIDER);
-            isDetailsLoaded = savedInstanceState.getBoolean(Key.IS_DETAILS_LOADED);
             if (!isMapInitialized) {
                 isMapInitialized = savedInstanceState.getBoolean(Key.IS_MAP_INITIALIZED);
             }
+            inputProvider = (InputProvider) savedInstanceState.getSerializable(Key.INPUT_PROVIDER);
+            isDetailsLoaded = savedInstanceState.getBoolean(Key.IS_DETAILS_LOADED);
         }
 
         @Override
         public void saveState(Bundle outState) {
             outState.putBoolean(Key.IS_FIRST_DISPLAYING, isFirstDisplaying);
+            outState.putBoolean(Key.IS_MAP_INITIALIZED, isMapInitialized);
             outState.putSerializable(Key.INPUT_PROVIDER, (Serializable) inputProvider);
             outState.putBoolean(Key.IS_DETAILS_LOADED, isDetailsLoaded);
-            outState.putBoolean(Key.IS_MAP_INITIALIZED, isMapInitialized);
         }
     };
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_partner_details);
-        STATE_MANAGER.initState(savedInstanceState);
-    }
 
     private void placeFragmentsOnActivity() {
         boolean withFilters = getIntent().getBooleanExtra(Key.WITH_FILTERS, true);
@@ -203,6 +197,13 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
                         PartnerPointDetailsFragment.newInstanceWithoutGoToPartnerButton(),
                         FragmentTag.PARTNER_POINT_DETAILS);
         transaction.commit();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_partner_details);
+        STATE_MANAGER.initState(savedInstanceState);
     }
 
     @Override
@@ -264,9 +265,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     @Override
     public void onDisplayingIsCompleted(int numberOfDisplayedPartnerPoints) {
         if (isFirstDisplaying) {
-
             selectPartnerPointIdNeed();
-
             isFirstDisplaying = false;
         }
     }
@@ -274,7 +273,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     private void selectPartnerPointIdNeed() {
         Optional<PartnerPoint> partnerPointToBeSelected = inputProvider.getPartnerPointToBeSelected();
         if (partnerPointToBeSelected.isPresent()) {
-            findMapFragment().clickAtPartnerPoint(partnerPointToBeSelected.get());
+            findMapFragment().selectPartnerPoint(partnerPointToBeSelected.get());
         }
     }
 
