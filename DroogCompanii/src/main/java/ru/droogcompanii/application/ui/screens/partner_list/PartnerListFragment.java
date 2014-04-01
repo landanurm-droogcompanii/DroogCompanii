@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.ui.screens.partner_details.PartnerDetailsActivity;
@@ -98,7 +99,7 @@ public class PartnerListFragment extends FragmentAbleToStartTask implements Adap
         TaskNotBeInterruptedDuringConfigurationChange task = new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
             protected Serializable doInBackground(Void... voids) {
-                return (Serializable) inputProvider.getPartners(getActivity());
+                return (Serializable) inputProvider.getPartners(DroogCompaniiApplication.getContext());
             }
         };
         startTask(TaskRequestCode.EXTRACT_SEARCH_RESULTS, task);

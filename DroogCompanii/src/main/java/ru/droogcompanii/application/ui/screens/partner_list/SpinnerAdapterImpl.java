@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.R;
@@ -27,12 +29,31 @@ class SpinnerAdapterImpl extends ArrayAdapter<String> {
 
     private static final List<SpinnerItem<Partner>> ITEMS = Arrays.asList(
             new SpinnerItem<Partner>(R.string.labelOfSortByTitleCheckBox,
-                                     new ComparatorByTitle()),
+                                     new ComparatorProvider<Partner>() {
+                                         @Override
+                                         public Comparator<Partner> get() {
+                                             return new ComparatorByTitle();
+                                         }
+                                     }),
             new SpinnerItem<Partner>(R.string.labelOfSortByDiscountSizeCheckBox,
-                                     new ComparatorByDiscountSize()),
+                                     new ComparatorProvider<Partner>() {
+                                         @Override
+                                         public Comparator<Partner> get() {
+                                             return new ComparatorByDiscountSize();
+                                         }
+                                     }),
             new SpinnerItem<Partner>(R.string.labelOfSortByDistanceCheckBox,
-                                     new ComparatorByDistance())
+                                     new ComparatorProvider<Partner>() {
+                                         @Override
+                                         public Comparator<Partner> get() {
+                                             return new ComparatorByDistance();
+                                         }
+                                     })
     );
+
+    public static interface ComparatorProvider<T> {
+        Comparator<T> get();
+    }
 
     public static Comparator<Partner> getComparatorByPosition(int position) {
         return ITEMS.get(position).getComparator();
@@ -62,23 +83,36 @@ class SpinnerAdapterImpl extends ArrayAdapter<String> {
 
 
     static class ComparatorByDistance implements Comparator<Partner>, Serializable {
+        private LatLng basePosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
+        private Map<Integer, Double> pairsPartnerIdAndMinDistance = new HashMap<Integer, Double>();
 
         @Override
         public int compare(Partner partner1, Partner partner2) {
-            LatLng basePosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
-            Double d1 = minDistanceFromPartnerToBasePosition(partner1, basePosition);
-            Double d2 = minDistanceFromPartnerToBasePosition(partner2, basePosition);
+            Double d1 = getMinDistanceToBasePosition(partner1);
+            Double d2 = getMinDistanceToBasePosition(partner2);
             return d1.compareTo(d2);
         }
 
-        private static Double minDistanceFromPartnerToBasePosition(Partner partner, LatLng basePosition) {
+        private Double getMinDistanceToBasePosition(Partner partner) {
+            Integer key = partner.getId();
+            if (pairsPartnerIdAndMinDistance.containsKey(key)) {
+                return pairsPartnerIdAndMinDistance.get(key);
+            } else {
+                Double minDistance = calculateMinDistanceToBasePosition(partner);
+                pairsPartnerIdAndMinDistance.put(key, minDistance);
+                return minDistance;
+            }
+        }
+
+        private Double calculateMinDistanceToBasePosition(Partner partner) {
             MinMax<Double> minMax = new MinMax<Double>();
             minMax.add(Double.MAX_VALUE);
             for (PartnerPoint partnerPoint : getPointsOf(partner)) {
                 double distance = SphericalUtil.computeDistanceBetween(partnerPoint.getPosition(), basePosition);
                 minMax.add(distance);
             }
-            return minMax.min();
+            Double minDistance = minMax.min();
+            return minDistance;
         }
 
         private static List<PartnerPoint> getPointsOf(Partner partner) {

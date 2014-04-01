@@ -6,12 +6,12 @@ import java.util.Comparator;
  * Created by ls on 17.02.14.
  */
 public class SpinnerItem<T> {
-    private final Comparator<T> comparator;
+    private final SpinnerAdapterImpl.ComparatorProvider<T> comparatorProvider;
     private final int titleId;
 
-    public SpinnerItem(int titleId, Comparator<T> comparator) {
+    public SpinnerItem(int titleId, SpinnerAdapterImpl.ComparatorProvider<T> comparatorProvider) {
         this.titleId = titleId;
-        this.comparator = comparator;
+        this.comparatorProvider = comparatorProvider;
     }
 
     public int getTitleId() {
@@ -19,6 +19,6 @@ public class SpinnerItem<T> {
     }
 
     public Comparator<T> getComparator() {
-        return comparator;
+        return comparatorProvider.get();
     }
 }
