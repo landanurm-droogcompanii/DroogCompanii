@@ -21,6 +21,7 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.ui.screens.search_result_list.adapter.SearchResultListAdapter;
 import ru.droogcompanii.application.ui.screens.search_result_list.adapter.SearchResultListItem;
+import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.able_to_start_task.FragmentAbleToStartTask;
 import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
 
@@ -28,8 +29,6 @@ import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterrup
  * Created by ls on 11.03.14.
  */
 public class SearchResultListFragment extends FragmentAbleToStartTask {
-
-    private static final int TASK_REQUEST_CODE_INPUT_RECEIVER = 140;
 
     public static class Input implements Serializable {
         public final List<PartnerCategory> categories = new ArrayList<PartnerCategory>();
@@ -46,18 +45,45 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
     }
 
 
-    private static final String KEY_INPUT_PROVIDER = "KEY_INPUT_PROVIDER";
-    private static final String KEY_INPUT = "KEY_INPUT";
+    private static final int TASK_REQUEST_CODE_INPUT_RECEIVER = 140;
+
+    private static class Key {
+        private static final String INPUT_PROVIDER = "INPUT_PROVIDER";
+        private static final String INPUT = "INPUT";
+    }
 
 
     private InputProvider inputProvider;
     private Optional<Input> input;
 
 
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            inputProvider = (InputProvider) getArguments().getSerializable(Key.INPUT_PROVIDER);
+            input = Optional.absent();
+            startInputReceiverTask();
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            inputProvider = (InputProvider) savedInstanceState.getSerializable(Key.INPUT_PROVIDER);
+            input = (Optional<Input>) savedInstanceState.getSerializable(Key.INPUT);
+            updateSearchResultListIfInputIsPresent();
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putSerializable(Key.INPUT_PROVIDER, (Serializable) inputProvider);
+            outState.putSerializable(Key.INPUT, input);
+        }
+    };
+
+
     public static SearchResultListFragment newInstance(String query) {
         SearchResultListFragment fragment = new SearchResultListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(KEY_INPUT_PROVIDER, new InputProviderBySearchQuery(query));
+        args.putSerializable(Key.INPUT_PROVIDER, new InputProviderBySearchQuery(query));
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,17 +96,13 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState == null) {
-            initStateByDefault();
-        } else {
-            restoreState(savedInstanceState);
-        }
+        STATE_MANAGER.initState(savedInstanceState);
     }
 
-    private void initStateByDefault() {
-        inputProvider = (InputProvider) getArguments().getSerializable(KEY_INPUT_PROVIDER);
-        input = Optional.absent();
-        startInputReceiverTask();
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        STATE_MANAGER.saveState(outState);
     }
 
     private void startInputReceiverTask() {
@@ -152,26 +174,10 @@ public class SearchResultListFragment extends FragmentAbleToStartTask {
         item.onClick(getActivity());
     }
 
-    private void restoreState(Bundle savedInstanceState) {
-        inputProvider = (InputProvider) savedInstanceState.getSerializable(KEY_INPUT_PROVIDER);
-        input = (Optional<Input>) savedInstanceState.getSerializable(KEY_INPUT);
-        updateSearchResultListIfInputIsPresent();
-    }
-
     private void updateSearchResultListIfInputIsPresent() {
         if (input.isPresent()) {
             updateSearchResultList();
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveStateInto(outState);
-    }
-
-    private void saveStateInto(Bundle outState) {
-        outState.putSerializable(KEY_INPUT_PROVIDER, (Serializable) inputProvider);
-        outState.putSerializable(KEY_INPUT, input);
-    }
 }

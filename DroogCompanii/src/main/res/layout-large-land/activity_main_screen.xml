@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout
+
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawerLayout" >
+    android:id="@+id/twoPaneLayout" >
 
+    <FrameLayout
+        android:id="@+id/leftPanel"
+        android:layout_width="@dimen/widthOfMainScreenNavigationDrawer"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:layout_width="@dimen/spaceBetweenCategoryListAndMapOnMainScreenInTwoPaneLayout"
+        android:layout_height="1dp" />
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,14 +48,4 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/leftPanel"
-        android:layout_width="@dimen/widthOfMainScreenNavigationDrawer"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="@android:color/transparent" />
-
-</android.support.v4.widget.DrawerLayout>
+</LinearLayout>

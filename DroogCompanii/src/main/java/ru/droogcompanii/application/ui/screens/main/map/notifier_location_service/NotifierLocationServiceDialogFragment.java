@@ -18,7 +18,7 @@ public class NotifierLocationServiceDialogFragment extends DialogFragment implem
             return;
         }
         DialogFragment dialogFragment = new NotifierLocationServiceDialogFragment();
-        FragmentUtils.show(dialogFragment, fragmentActivity);
+        FragmentUtils.showDialogFragment(dialogFragment, fragmentActivity);
     }
 
     private NotifierLocationServiceDialog dialog;

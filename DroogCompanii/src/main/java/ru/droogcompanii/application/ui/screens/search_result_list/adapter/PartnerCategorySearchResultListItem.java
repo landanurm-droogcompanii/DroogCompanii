@@ -7,7 +7,7 @@ import android.widget.TextView;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.screens.partner_list.PartnerListActivity;
-import ru.droogcompanii.application.ui.screens.search.InputProviderByPartnerCategory;
+import ru.droogcompanii.application.ui.screens.partner_details.InputProviderByPartnerCategory;
 
 /**
  * Created by ls on 11.03.14.

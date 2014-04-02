@@ -114,7 +114,7 @@ public class DistanceFilterHelper implements FilterHelper, Serializable {
         private final double maxRadius;
 
         FilterImpl() {
-            actualPosition = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
+            actualPosition = ActualBaseLocationProvider.getActualBasePosition();
             maxRadius = getMaxRadius();
         }
 

@@ -40,7 +40,7 @@ public class FiltersDialogFragment extends DialogFragment {
 
 
     public static void show(FragmentActivity fragmentActivity) {
-        FragmentUtils.show(new FiltersDialogFragment(), fragmentActivity);
+        FragmentUtils.showDialogFragment(new FiltersDialogFragment(), fragmentActivity);
     }
 
 

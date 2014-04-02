@@ -6,10 +6,10 @@ import android.content.Intent;
 /**
  * Created by ls on 13.02.14.
  */
-public class SenderEmail {
+public class EmailSender {
     private final Context context;
 
-    public SenderEmail(Context context) {
+    public EmailSender(Context context) {
         this.context = context;
     }
 

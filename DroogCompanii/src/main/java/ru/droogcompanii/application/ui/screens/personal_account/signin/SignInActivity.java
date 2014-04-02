@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.screens.signin;
+package ru.droogcompanii.application.ui.screens.personal_account.signin;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

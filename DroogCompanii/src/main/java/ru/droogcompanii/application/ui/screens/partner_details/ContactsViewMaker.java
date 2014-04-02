@@ -5,7 +5,7 @@ import android.view.View;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.util.ui.view.IconAndLabelItemMaker;
-import ru.droogcompanii.application.util.workers.SenderEmail;
+import ru.droogcompanii.application.util.workers.EmailSender;
 import ru.droogcompanii.application.util.workers.NavigatorToWebsite;
 
 /**
@@ -13,13 +13,13 @@ import ru.droogcompanii.application.util.workers.NavigatorToWebsite;
  */
 public class ContactsViewMaker {
 
-    private final SenderEmail senderEmail;
+    private final EmailSender emailSender;
     private final NavigatorToWebsite navigatorToWebsite;
     private final IconAndLabelItemMaker itemMaker;
 
     public ContactsViewMaker(Context context) {
         navigatorToWebsite = new NavigatorToWebsite(context);
-        senderEmail = new SenderEmail(context);
+        emailSender = new EmailSender(context);
         itemMaker = new IconAndLabelItemMaker(context);
     }
 
@@ -36,7 +36,7 @@ public class ContactsViewMaker {
         return itemMaker.make(android.R.drawable.ic_dialog_email, email, new Runnable() {
             @Override
             public void run() {
-                senderEmail.sendTo(email);
+                emailSender.sendTo(email);
             }
         });
     }

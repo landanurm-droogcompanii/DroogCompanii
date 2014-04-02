@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.StateManager;
+import ru.droogcompanii.application.util.ui.activity.ReuseAlreadyLaunchedActivityFlag;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
@@ -22,26 +24,44 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButton {
 
     private static final String KEY_QUERY = "KEY_QUERY";
 
-
     private String query;
 
+    private final StateManager STATE_MANAGER = new StateManager() {
+        @Override
+        public void initStateByDefault() {
+            query = getIntent().getStringExtra(KEY_QUERY);
+            placeFragmentOnLayout();
+        }
+
+        @Override
+        public void restoreState(Bundle savedInstanceState) {
+            query = savedInstanceState.getString(KEY_QUERY);
+        }
+
+        @Override
+        public void saveState(Bundle outState) {
+            outState.putString(KEY_QUERY, query);
+        }
+    };
 
     public static void start(Context context, String query) {
         Intent intent = new Intent(context, SearchResultListActivity.class);
         intent.putExtra(KEY_QUERY, query);
+        ReuseAlreadyLaunchedActivityFlag.set(intent);
         context.startActivity(intent);
     }
 
+    private void placeFragmentOnLayout() {
+        Fragment fragment = SearchResultListFragment.newInstance(query);
+        FragmentUtils.placeFragmentOnLayout(this,
+                R.id.containerOfSearchResultList, fragment, TAG_SEARCH_RESULT_LIST_FRAGMENT);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result_list);
-        if (savedInstanceState == null) {
-            initStateByDefault();
-        } else {
-            restoreState(savedInstanceState);
-        }
+        STATE_MANAGER.initState(savedInstanceState);
         setTitle();
     }
 
@@ -52,29 +72,10 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButton {
         setTitle(title);
     }
 
-    private void initStateByDefault() {
-        query = getIntent().getStringExtra(KEY_QUERY);
-        placeFragmentOnLayout();
-    }
-
-    private void placeFragmentOnLayout() {
-        Fragment fragment = SearchResultListFragment.newInstance(query);
-        FragmentUtils.placeFragmentOnLayout(this,
-                R.id.containerOfSearchResultList, fragment, TAG_SEARCH_RESULT_LIST_FRAGMENT);
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        query = savedInstanceState.getString(KEY_QUERY);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveStateInto(outState);
-    }
-
-    private void saveStateInto(Bundle outState) {
-        outState.putString(KEY_QUERY, query);
+        STATE_MANAGER.saveState(outState);
     }
 
     @Override

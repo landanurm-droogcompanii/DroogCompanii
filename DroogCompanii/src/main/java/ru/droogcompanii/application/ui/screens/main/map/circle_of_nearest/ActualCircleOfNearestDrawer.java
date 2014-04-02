@@ -32,7 +32,7 @@ public class ActualCircleOfNearestDrawer implements CircleOfNearestDrawer {
     }
 
     private void drawIfNeed(double radius) {
-        LatLng actualCenter = ActualBaseLocationProvider.getPositionOfActualBaseLocation();
+        LatLng actualCenter = ActualBaseLocationProvider.getActualBasePosition();
         if (optionalCircle.isPresent()) {
             updateCircle(actualCenter, radius);
         } else {

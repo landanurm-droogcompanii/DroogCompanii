@@ -15,6 +15,7 @@ import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.ui.activity.ReuseAlreadyLaunchedActivityFlag;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
@@ -40,12 +41,14 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton {
                 "PARTNER_LIST_FRAGMENT" + PartnerListActivity.class.getName();
     }
 
+
     private int indexOfCurrentComparator;
 
 
     public static void start(Context context, InputProvider inputProvider) {
         Intent intent = new Intent(context, PartnerListActivity.class);
         intent.putExtra(Key.INPUT_PROVIDER, (Serializable) inputProvider);
+        ReuseAlreadyLaunchedActivityFlag.set(intent);
         context.startActivity(intent);
     }
 
@@ -93,7 +96,10 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton {
                 return true;
             }
         };
-        initSpinnerOnActionBar(spinnerAdapter, onNavigationListener);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        actionBar.setListNavigationCallbacks(spinnerAdapter, onNavigationListener);
+        actionBar.setSelectedNavigationItem(indexOfCurrentComparator);
     }
 
     private void onComparatorChanged(int comparatorPosition) {
@@ -104,14 +110,6 @@ public class PartnerListActivity extends ActionBarActivityWithUpButton {
 
     private PartnerListFragment findFragment() {
         return (PartnerListFragment) getSupportFragmentManager().findFragmentByTag(Tag.PARTNER_LIST_FRAGMENT);
-    }
-
-    private void initSpinnerOnActionBar(SpinnerAdapter spinnerAdapter,
-                                        ActionBar.OnNavigationListener listener) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setListNavigationCallbacks(spinnerAdapter, listener);
-        actionBar.setSelectedNavigationItem(indexOfCurrentComparator);
     }
 
     @Override

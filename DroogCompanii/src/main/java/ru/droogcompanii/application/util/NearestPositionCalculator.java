@@ -15,6 +15,12 @@ public class NearestPositionCalculator {
     private double minDistance;
     private LatLng nearestPosition;
 
+    public static NearestPositionCalculator fromActualBaseLocation() {
+        return new NearestPositionCalculator(
+                ActualBaseLocationProvider.getActualBasePosition()
+        );
+    }
+
     public NearestPositionCalculator(LatLng positionOfBaseLocation) {
         this.positionOfBaseLocation = positionOfBaseLocation;
         this.minDistance = Double.MAX_VALUE;
@@ -35,9 +41,5 @@ public class NearestPositionCalculator {
         } else {
             return Optional.absent();
         }
-    }
-
-    public static NearestPositionCalculator fromActualBaseLocation() {
-        return new NearestPositionCalculator(ActualBaseLocationProvider.getPositionOfActualBaseLocation());
     }
 }

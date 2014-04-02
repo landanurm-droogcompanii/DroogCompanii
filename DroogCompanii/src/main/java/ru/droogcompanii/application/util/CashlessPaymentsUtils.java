@@ -1,5 +1,7 @@
 package ru.droogcompanii.application.util;
 
+import ru.droogcompanii.application.util.constants.StringConstants;
+
 /**
  * Created by ls on 25.03.14.
  */

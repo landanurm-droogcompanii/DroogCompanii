@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.util.constants;
 
 /**
  * Created by ls on 15.01.14.

@@ -1,5 +1,7 @@
 package ru.droogcompanii.application.ui.screens.synchronization;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.io.Serializable;
@@ -17,6 +19,12 @@ public class SynchronizationActivity extends ActivityAbleToStartTask {
     public static final int REQUEST_CODE = 157;
 
     private static final int TASK_REQUEST_CODE_SYNCHRONIZATION = 244;
+
+
+    public static void startForResult(Activity activity) {
+        Intent intent = new Intent(activity, SynchronizationActivity.class);
+        activity.startActivityForResult(intent, SynchronizationActivity.REQUEST_CODE);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

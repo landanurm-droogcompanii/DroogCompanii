@@ -34,7 +34,7 @@ public class FavoriteDBUtils {
         final Holder<Boolean> isFavorite = Holder.from(false);
 
         PartnersReader partnersReader = new PartnersReader(context);
-        final String where = " WHERE " + PARTNERS_CONTRACT.COLUMN_ID + " = " + partnerId;
+        final String where = PARTNERS_CONTRACT.COLUMN_ID + " = " + partnerId;
         partnersReader.handleCursorByCondition(where, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {

@@ -151,7 +151,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
 
     private void moveCameraToActualBasePosition() {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(
-                ActualBaseLocationProvider.getPositionOfActualBaseLocation(),
+                ActualBaseLocationProvider.getActualBasePosition(),
                 DroogCompaniiSettings.getDefaultZoom()
         ));
     }
@@ -220,16 +220,21 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
 
     @Override
     public boolean onClusterItemClick(ClusterItem clusterItem) {
-        LatLng position = clusterItem.getPosition();
+        notifyNeedToShowPartnerPoints(clusterItem.getPosition());
+        return false;
+    }
+
+    private void notifyNeedToShowPartnerPoints(LatLng position) {
         clickedPositionHelper.set(position);
         List<PartnerPoint> partnerPoints = getPartnerPointsAtPosition(position);
-        callbacks.onMarkerClicked(partnerPoints);
-        return false;
+        if (partnerPoints.size() > 0) {
+            callbacks.onMarkerClicked(partnerPoints);
+        }
     }
 
     private List<PartnerPoint> getPartnerPointsAtPosition(LatLng position) {
         Set<PartnerPoint> partnerPointsAtClickedPosition = partnerPointsGroupedByPosition.get(position);
-        return ListUtils.listFromSet(partnerPointsAtClickedPosition);
+        return ListUtils.convertToList(partnerPointsAtClickedPosition);
     }
 
     public void selectPartnerPoint(PartnerPoint partnerPoint) {
@@ -327,11 +332,17 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
     private void onDisplayingTaskFinished(Serializable result) {
         clusterManager.cluster();
         Worker.DisplayingTaskResult taskResult = (Worker.DisplayingTaskResult) result;
-        if (taskResult.isNeedToRemoveClickedPosition) {
-            removeClickedPosition();
-        }
+        updateClickedPosition(taskResult);
         updateMapCamera(taskResult);
         callbacks.onDisplayingIsCompleted(taskResult.numberOfDisplayedPartnerPoints);
+    }
+
+    private void updateClickedPosition(Worker.DisplayingTaskResult taskResult) {
+        if (taskResult.isNeedToRemoveClickedPosition) {
+            removeClickedPosition();
+        } else if (clickedPositionHelper.isClickedPositionPresent()) {
+            notifyNeedToShowPartnerPoints(clickedPositionHelper.getClickedPosition());
+        }
     }
 
     private void updateMapCamera(Worker.DisplayingTaskResult taskResult) {

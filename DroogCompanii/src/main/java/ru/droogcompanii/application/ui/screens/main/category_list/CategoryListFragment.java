@@ -15,6 +15,7 @@ import com.google.common.base.Optional;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
@@ -35,6 +36,42 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         void onReceivingCategoriesTaskCompleted();
         void onListInitialized();
         void onCurrentCategoryChanged();
+    }
+
+    public static enum Mode {
+        DEFAULT(
+            Arrays.asList(
+                ListItemHelperBuilder.getAllPartnersListItemHelper(),
+                ListItemHelperBuilder.getFavoriteListItemHelper()
+            )
+        ),
+
+        WITHOUT_ALL_PARTNERS(
+            Arrays.asList(
+                ListItemHelperBuilder.getFavoriteListItemHelper()
+            )
+        );
+
+        private final List<ListItemHelper> helpers;
+        private boolean showSelection;
+
+        Mode(List<ListItemHelper> helpers) {
+            this.helpers = helpers;
+            this.showSelection = true;
+        }
+
+        List<ListItemHelper> getHelpers() {
+            return helpers;
+        }
+
+        public Mode doNotShowSelection() {
+            showSelection = false;
+            return this;
+        }
+
+        boolean isShowSelection() {
+            return showSelection;
+        }
     }
 
     private static final Callbacks DUMMY_CALLBACKS = new Callbacks() {
@@ -60,14 +97,16 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         public static final String HELPERS = "KEY_HELPERS";
         public static final String CURRENT_SELECTION = "KEY_CURRENT_SELECTION";
         public static final String LIST_VIEW_STATE = "KEY_LIST_VIEW_STATE";
+        public static final String MODE = "MODE";
     }
 
-    private final CategoryListItemSelector selector = new CategoryListItemSelector();
     private Callbacks callbacks;
     private CategoryListAdapter adapter;
+    private CategoryListItemSelector selector;
     private int currentSelection;
-    private Optional<List<ListItemHelper>> listItemHelpers;
     private ListView listView;
+    private Mode mode;
+    private Optional<List<ListItemHelper>> listItemHelpers;
     private Optional<Parcelable> stateOfListView;
 
 
@@ -78,6 +117,14 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
             currentSelection = 0;
             listItemHelpers = Optional.absent();
             stateOfListView = Optional.absent();
+            mode = (Mode) getArguments().getSerializable(Key.MODE);
+            selector = createListItemSelectorByMode(mode);
+        }
+
+        private CategoryListItemSelector createListItemSelectorByMode(Mode mode) {
+            return mode.isShowSelection()
+                    ? new ActualCategoryListItemSelector()
+                    : new DummyCategoryListItemSelector();
         }
 
         @Override
@@ -85,6 +132,8 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
             currentSelection = savedInstanceState.getInt(Key.CURRENT_SELECTION);
             listItemHelpers = (Optional<List<ListItemHelper>>) savedInstanceState.getSerializable(Key.HELPERS);
             stateOfListView = Optional.of(savedInstanceState.getParcelable(Key.LIST_VIEW_STATE));
+            mode = (Mode) savedInstanceState.getSerializable(Key.MODE);
+            selector = createListItemSelectorByMode(mode);
         }
 
         @Override
@@ -92,8 +141,25 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
             outState.putInt(Key.CURRENT_SELECTION, currentSelection);
             outState.putSerializable(Key.HELPERS, listItemHelpers);
             outState.putParcelable(Key.LIST_VIEW_STATE, listView.onSaveInstanceState());
+            outState.putSerializable(Key.MODE, mode);
         }
     };
+
+    public static CategoryListFragment newDefaultInstance() {
+        return newInstance(Mode.DEFAULT);
+    }
+
+    public static CategoryListFragment newInstanceWithoutAllPartners() {
+        return newInstance(Mode.WITHOUT_ALL_PARTNERS);
+    }
+
+    public static CategoryListFragment newInstance(Mode mode) {
+        CategoryListFragment fragment = new CategoryListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(Key.MODE, mode);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
 
     @Override
@@ -153,7 +219,6 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         }
     }
 
-
     private void startTaskReceivingCategories() {
         startTask(TaskRequestCode.RECEIVING_CATEGORIES, new TaskNotBeInterruptedDuringConfigurationChange() {
             @Override
@@ -165,15 +230,14 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
     private List<ListItemHelper> prepareListItemHelpers() {
         final List<ListItemHelper> helpers = new ArrayList<ListItemHelper>();
-        helpers.add(ListItemHelperBuilder.getAllPartnersListItemHelper());
-        helpers.add(ListItemHelperBuilder.getFavoriteListItemHelper());
+        helpers.addAll(mode.getHelpers());
         addPartnerCategoryHelpersIn(helpers);
         return helpers;
     }
 
     private void addPartnerCategoryHelpersIn(List<ListItemHelper> helpers) {
         List<PartnerCategory> categories = readAllPartnerCategories();
-        ListUtils.ensureCapacityByCountIfCan(helpers, categories.size());
+        ListUtils.ensureCapacityOfArrayListByCount(helpers, categories.size());
         for (PartnerCategory each : categories) {
             ListItemHelper eachHelper = ListItemHelperBuilder.getPartnerCategoryListItemHelper(each);
             helpers.add(eachHelper);

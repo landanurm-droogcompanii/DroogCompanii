@@ -1,13 +1,10 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+
     <dimen name="search_activity_vertical_space_between_elements">2dp</dimen>
     <dimen name="textSizeOfNoSearchResultsLabel">28sp</dimen>
 
     <dimen name="textSizeOfSearchQueryInput">24sp</dimen>
 
-    <dimen name="partner_point_indicator_width">18dp</dimen>
     <dimen name="textSizeOfFullPartnerTitle">28sp</dimen>
     <dimen name="textSizeOfDiscount">18sp</dimen>
     <dimen name="offer_row_margin">4dp</dimen>
@@ -29,9 +26,11 @@
     <dimen name="categoryListHorizontalPadding">6dp</dimen>
     <dimen name="categoryListTopPadding">10dp</dimen>
     <dimen name="categoryListBottomPadding">8dp</dimen>
-    <dimen name="heightOfMapFragmentOnPartnerDetailsScreen">350dp</dimen>
     <dimen name="textLargeSizeOfToastLocationService">16sp</dimen>
     <dimen name="textSmallSizeOfToastLocationService">10sp</dimen>
     <dimen name="paddingOfOfferRow">6dp</dimen>
+    <dimen name="spaceBetweenCategoryListAndMapOnMainScreenInTwoPaneLayout">5dp</dimen>
+    <dimen name="widthOfFavoriteCheckBoxInPartnerListItem">48dp</dimen>
+    <dimen name="heightOfFavoriteCheckBoxInPartnerListItem">@dimen/widthOfFavoriteCheckBoxInPartnerListItem</dimen>
 
 </resources>

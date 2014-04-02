@@ -36,8 +36,8 @@ public class PersonalDetailsFragment extends Fragment implements DetailsReceiver
 
     @Override
     public void onDetach() {
-        super.onDetach();
         listener = DUMMY_ON_BANK_CARD_SELECTED_LISTENER;
+        super.onDetach();
     }
 
     @Override
@@ -54,9 +54,7 @@ public class PersonalDetailsFragment extends Fragment implements DetailsReceiver
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         setDefaultActivityTitle();
-
         requestDetails();
     }
 

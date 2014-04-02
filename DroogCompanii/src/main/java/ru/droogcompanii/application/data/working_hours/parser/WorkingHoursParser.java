@@ -3,7 +3,7 @@ package ru.droogcompanii.application.data.working_hours.parser;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.DayAndNightWorkingHours;
 import ru.droogcompanii.application.data.working_hours.working_hours_impl.WorkingHoursOnHoliday;
-import ru.droogcompanii.application.util.StringConstants.PartnersXmlConstants.TypesOfDay;
+import ru.droogcompanii.application.util.constants.StringConstants.PartnersXmlConstants.TypesOfDay;
 
 /**
  * Created by Leonid on 19.12.13.

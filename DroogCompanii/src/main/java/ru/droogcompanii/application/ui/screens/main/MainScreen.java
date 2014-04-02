@@ -42,6 +42,7 @@ public class MainScreen extends ActivityWithNavigationDrawer
         public static final String PARTNER_POINT_DETAILS = "PARTNER_POINT_DETAILS";
     }
 
+    private boolean twoPaneLayout;
     private View buttonDismissCustomBaseLocation;
 
     @Override
@@ -49,13 +50,25 @@ public class MainScreen extends ActivityWithNavigationDrawer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
-        initNavigationDrawer(R.id.drawerLayout);
+        twoPaneLayout = findViewById(R.id.twoPaneLayout) != null;
+
         if (savedInstanceState == null) {
             placeFragmentsOnLayout();
-        } else {
+        }
+
+        initNavigationDrawerIfNeed(savedInstanceState);
+
+        initDismissCustomBaseLocationAction();
+    }
+
+    private void initNavigationDrawerIfNeed(Bundle savedInstanceState) {
+        if (twoPaneLayout) {
+            return;
+        }
+        initNavigationDrawer(R.id.drawerLayout);
+        if (savedInstanceState != null) {
             restoreNavigationDrawerState(savedInstanceState);
         }
-        initDismissCustomBaseLocationAction();
     }
 
     private void placeFragmentsOnLayout() {
@@ -63,8 +76,8 @@ public class MainScreen extends ActivityWithNavigationDrawer
         transaction.add(R.id.partnerPointsMapFragment,
                 PartnerPointsMapFragment.newInstance(true),
                 Tag.MAP);
-        transaction.add(R.id.leftDrawer,
-                        new CategoryListFragment(),
+        transaction.add(R.id.leftPanel,
+                        CategoryListFragment.newDefaultInstance(),
                         Tag.CATEGORY_LIST);
         transaction.add(R.id.partnerPointDetailsFragment,
                         PartnerPointDetailsFragment.newInstance(),

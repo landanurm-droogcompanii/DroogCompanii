@@ -20,7 +20,7 @@ import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.data.working_hours.WorkingHoursForEachDayOfWeek;
 import ru.droogcompanii.application.data.working_hours.parser.WorkingHoursParser;
 import ru.droogcompanii.application.data.xml_parser.XmlParserUtils;
-import ru.droogcompanii.application.util.StringConstants;
+import ru.droogcompanii.application.util.constants.StringConstants;
 
 /**
  * Created by Leonid on 02.12.13.

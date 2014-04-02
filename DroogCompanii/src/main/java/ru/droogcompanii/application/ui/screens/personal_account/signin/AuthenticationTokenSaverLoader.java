@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.screens.signin;
+package ru.droogcompanii.application.ui.screens.personal_account.signin;
 
 import android.content.Context;
 
@@ -19,7 +19,6 @@ public class AuthenticationTokenSaverLoader {
 
     public Optional<AuthenticationToken> load() {
         // TODO
-        log(".load()");
         if (tokenSaved) {
             return Optional.of(new AuthenticationToken());
         } else {
@@ -30,16 +29,10 @@ public class AuthenticationTokenSaverLoader {
     public void save(AuthenticationToken token) {
         // TODO
         tokenSaved = true;
-        log(".save(token)");
     }
 
     public void invalidateToken(AuthenticationToken token) {
         // TODO
         tokenSaved = false;
-        log(".invalidate(token)");
-    }
-
-    private void log(final String message) {
-        //LogUtils.debug(getClass().getSimpleName() + message);
     }
 }

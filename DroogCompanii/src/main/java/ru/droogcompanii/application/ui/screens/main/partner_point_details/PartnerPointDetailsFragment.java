@@ -133,6 +133,19 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
         initCatchingTouchEvents();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isVisible) {
+            updateUIOnResume();
+        }
+    }
+
+    private void updateUIOnResume() {
+        updateWorkingHoursIndicator();
+        updateIsFavorite();
+    }
+
     private void updateUI() {
         checkIndexOfCurrentPartnerPoint();
         updateNavigationPanel();
@@ -315,7 +328,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     }
 
     private CheckBox findIsFavoriteCheckBox() {
-        return (CheckBox) findViewById(R.id.isFavorite);
+        return (CheckBox) findViewById(R.id.isFavoriteCheckBox);
     }
 
     private static class TaskRequestCode {
@@ -449,14 +462,6 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
             return 0;
         }
         return indexOfDisplayedPartnerPointInNewList;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (isVisible) {
-            updateIsFavorite();
-        }
     }
 
     @Override

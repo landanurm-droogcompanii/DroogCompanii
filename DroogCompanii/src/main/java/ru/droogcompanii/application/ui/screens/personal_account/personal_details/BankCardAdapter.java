@@ -24,13 +24,14 @@ public class BankCardAdapter extends ArrayAdapter<BankCard> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View itemView = convertView;
-        if (itemView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            itemView = layoutInflater.inflate(ROW_LAYOUT_RESOURCE_ID, null);
-        }
+        View itemView = (convertView != null) ? convertView : inflateItemView();
         fill(itemView, getItem(position));
         return itemView;
+    }
+
+    private View inflateItemView() {
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        return layoutInflater.inflate(ROW_LAYOUT_RESOURCE_ID, null);
     }
 
     private void fill(View itemView, BankCard item) {

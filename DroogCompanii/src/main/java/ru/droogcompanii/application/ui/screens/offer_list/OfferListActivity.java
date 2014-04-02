@@ -16,6 +16,11 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.screens.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.ui.activity.ReuseAlreadyLaunchedActivityFlag;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 import ru.droogcompanii.application.util.ui.fragment.FragmentUtils;
 
 /**
@@ -76,6 +81,7 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
         Intent intent = new Intent(context, OfferListActivity.class);
         intent.putExtra(Key.CONDITION, condition);
         intent.putExtra(Key.ARE_OFFERS_BY_ONE_PARTNER, areOffersByOnePartner);
+        ReuseAlreadyLaunchedActivityFlag.set(intent);
         context.startActivity(intent);
     }
 
@@ -140,5 +146,19 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
     @Override
     public void onOfferItemClick(Offer offer) {
         OfferDetailsActivity.start(this, offer, areOffersByOnePartner);
+    }
+
+    @Override
+    protected MenuHelper getMenuHelper() {
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
+                };
+            }
+        };
     }
 }

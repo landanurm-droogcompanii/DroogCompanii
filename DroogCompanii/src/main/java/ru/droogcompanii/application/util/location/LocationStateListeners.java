@@ -17,7 +17,8 @@ import ru.droogcompanii.application.util.WeakReferenceWrapper;
  */
 public class LocationStateListeners {
 
-    public static interface LocationStateListener extends LocationSource.OnLocationChangedListener,
+    public static interface LocationStateListener
+            extends LocationSource.OnLocationChangedListener,
                     OnCurrentAndCustomLocationsAreNotAvailableListener {
     }
 
@@ -25,15 +26,9 @@ public class LocationStateListeners {
             listenerWrappers = new ArrayList<WeakReferenceWrapper<LocationStateListener>>();
 
 
-
-
     public static void addListener(LocationStateListener listener) {
         removeListener(listener);
         listenerWrappers.add(WeakReferenceWrapper.from(listener));
-    }
-
-    public static void removeAllListeners() {
-        listenerWrappers.clear();
     }
 
     public static void removeListener(final LocationStateListener listenerToRemove) {

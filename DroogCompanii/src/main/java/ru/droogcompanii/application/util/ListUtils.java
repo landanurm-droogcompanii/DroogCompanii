@@ -19,11 +19,11 @@ public class ListUtils {
         list.set(index2, obj1);
     }
 
-    public static <T> List<T> listFromSet(Set<T> set) {
+    public static <T> List<T> convertToList(Set<T> set) {
         return new ArrayList<T>(set);
     }
 
-    public static <T> void ensureCapacityByCountIfCan(List<T> items, int byCount) {
+    public static <T> void ensureCapacityOfArrayListByCount(List<T> items, int byCount) {
         if (items instanceof ArrayList<?>) {
             ArrayList<?> arrayList = (ArrayList<?>) items;
             arrayList.ensureCapacity(arrayList.size() + byCount);

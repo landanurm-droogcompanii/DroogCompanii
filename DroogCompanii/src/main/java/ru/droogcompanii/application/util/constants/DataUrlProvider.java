@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.util;
+package ru.droogcompanii.application.util.constants;
 
 /**
  * Created by Leonid on 03.12.13.

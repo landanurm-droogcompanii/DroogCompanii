@@ -17,7 +17,6 @@ class InputToItemsConvertor {
     private final SearchResultListFragment.Input input;
     private List<SearchResultListItem> items;
 
-
     public static List<SearchResultListItem> convert(SearchResultListFragment.Input input) {
         return new InputToItemsConvertor(input).convert();
     }

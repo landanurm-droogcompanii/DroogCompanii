@@ -1,7 +1,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ru.droogcompanii.application.ui.screens.signin.SignInActivity"
+    tools:context="ru.droogcompanii.application.ui.screens.personal_account.signin.SignInActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 

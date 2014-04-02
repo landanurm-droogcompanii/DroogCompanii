@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,8 +14,6 @@ import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.ui.screens.offer_list.OfferListActivity;
 import ru.droogcompanii.application.ui.screens.partner_list.PartnerListActivity;
-import ru.droogcompanii.application.ui.screens.search.InputProviderByPartnerCategory;
-import ru.droogcompanii.application.util.ui.view.FavoriteViewUtils;
 import ru.droogcompanii.application.util.ui.view.ImageDownloader;
 
 /**
@@ -29,7 +26,6 @@ public class PartnerDetailsDisplay {
 
     private final ContactsViewMaker contactsViewMaker;
     private final Activity activity;
-    private final FavoriteViewUtils favoriteViewUtils;
     private final ImageDownloader imageDownloader;
     private final View view;
 
@@ -40,7 +36,6 @@ public class PartnerDetailsDisplay {
     public PartnerDetailsDisplay(Activity activity, LayoutInflater inflater) {
         this.contactsViewMaker = new ContactsViewMaker(activity);
         this.activity = activity;
-        this.favoriteViewUtils = new FavoriteViewUtils(activity);
         this.imageDownloader = new ImageDownloader();
         this.view = inflater.inflate(LAYOUT_ID, null);
     }
@@ -62,7 +57,6 @@ public class PartnerDetailsDisplay {
     private void display() {
         setActivityTitle();
         setLogo();
-        setIsFavorite();
         setTextDetails();
         setGoToOffersButton();
         setContacts();
@@ -144,8 +138,4 @@ public class PartnerDetailsDisplay {
         PartnerListActivity.start(activity, new InputProviderByPartnerCategory(category));
     }
 
-    private void setIsFavorite() {
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.isFavorite);
-        favoriteViewUtils.init(checkBox, partner.getId());
-    }
 }

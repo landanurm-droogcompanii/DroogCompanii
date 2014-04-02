@@ -14,7 +14,7 @@ import ru.droogcompanii.application.DroogCompaniiSettings;
  */
 public class ActualBaseLocationProvider implements Serializable {
 
-    public static LatLng getPositionOfActualBaseLocation() {
+    public static LatLng getActualBasePosition() {
         Location actualLocation = getActualBaseLocation();
         return LocationConverter.toLatLng(actualLocation);
     }

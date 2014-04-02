@@ -22,7 +22,7 @@ public class MenuItemHelpers {
             .withTitleId(R.string.action_filter)
             .withIcon(R.drawable.ic_filter)
             .withShowAsAction(MenuItemCompat.SHOW_AS_ACTION_IF_ROOM)
-            .withAction(new ActionOnFilter());
+            .withAction(new DummyAction());
 
     public static final MenuItemHelper OFFERS = new MenuItemHelper()
             .withId(MenuItemIds.OFFERS)

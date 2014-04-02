@@ -20,7 +20,6 @@ public class SynchronizationTask extends TaskNotBeInterruptedDuringConfiguration
     @Override
     protected Serializable doInBackground(Void... params) {
         worker.execute();
-        Snorlax.sleep();
         return null;
     }
 }

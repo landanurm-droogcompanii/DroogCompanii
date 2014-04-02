@@ -14,7 +14,7 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
 import ru.droogcompanii.application.data.xml_parser.XmlParserUtils;
 import ru.droogcompanii.application.util.CalendarUtils;
-import ru.droogcompanii.application.util.StringConstants;
+import ru.droogcompanii.application.util.constants.StringConstants;
 import ru.droogcompanii.application.util.StringsCombiner;
 
 /**

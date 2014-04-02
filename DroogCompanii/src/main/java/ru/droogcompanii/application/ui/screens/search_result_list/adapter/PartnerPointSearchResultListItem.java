@@ -12,10 +12,10 @@ import ru.droogcompanii.application.ui.screens.partner_details.PartnerDetailsAct
  * Created by ls on 11.03.14.
  */
 class PartnerPointSearchResultListItem implements SearchResultListItem {
-    private final PartnerPoint point;
+    private final PartnerPoint partnerPoint;
 
-    public PartnerPointSearchResultListItem(PartnerPoint point) {
-        this.point = point;
+    public PartnerPointSearchResultListItem(PartnerPoint partnerPoint) {
+        this.partnerPoint = partnerPoint;
     }
 
     @Override
@@ -31,13 +31,13 @@ class PartnerPointSearchResultListItem implements SearchResultListItem {
     @Override
     public void init(View itemView) {
         TextView title = (TextView) itemView.findViewById(R.id.title);
-        title.setText(point.getTitle());
+        title.setText(partnerPoint.getTitle());
         TextView address = (TextView) itemView.findViewById(R.id.address);
-        address.setText(point.getAddress());
+        address.setText(partnerPoint.getAddress());
     }
 
     @Override
     public void onClick(Context context) {
-        PartnerDetailsActivity.startWithoutFilters(context, point);
+        PartnerDetailsActivity.startWithoutFilters(context, partnerPoint);
     }
 }

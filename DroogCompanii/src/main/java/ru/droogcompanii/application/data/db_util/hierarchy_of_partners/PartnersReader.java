@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.CursorHandler;
+import ru.droogcompanii.application.data.db_util.Where;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerImpl;
+import ru.droogcompanii.application.util.Holder;
 import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
@@ -39,9 +41,21 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         super(context);
     }
 
-    public void handleCursorByCondition(String where, CursorHandler cursorHandler) {
-        String correctedWhere = ((where == null || where.isEmpty()) ? "" : where);
-        String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " " + correctedWhere + " ;";
+    public List<Partner> getPartnersByCondition(String conditionToReceivePartners) {
+        List<Partner> noPartners = new ArrayList<Partner>();
+        final Holder<List<Partner>> resultHolder = Holder.from(noPartners);
+        handleCursorByCondition(conditionToReceivePartners, new CursorHandler() {
+            @Override
+            public void handle(Cursor cursor) {
+                resultHolder.value = getPartnersFromCursor(cursor);
+            }
+        });
+        return resultHolder.value;
+    }
+
+    public void handleCursorByCondition(String condition, CursorHandler cursorHandler) {
+        String where = Where.byCondition(condition);
+        String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " " + where + " ;";
         handleCursorByQuery(sql, cursorHandler);
     }
 

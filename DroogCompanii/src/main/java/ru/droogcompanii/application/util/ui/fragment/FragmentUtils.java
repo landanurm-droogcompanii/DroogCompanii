@@ -14,7 +14,7 @@ import ru.droogcompanii.application.util.LogUtils;
  */
 public class FragmentUtils {
 
-    public static void show(DialogFragment dialogFragment, FragmentActivity fragmentActivity) {
+    public static void showDialogFragment(DialogFragment dialogFragment, FragmentActivity fragmentActivity) {
         String tag = dialogFragment.getClass().getName();
         FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
         Fragment previousFragment = fragmentManager.findFragmentByTag(tag);

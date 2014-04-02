@@ -4,19 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <CheckBox
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:focusable="false"
-        android:button="@drawable/selector_is_favorite_background"
-        android:id="@+id/isFavorite" />
+        android:id="@+id/isFavoriteContainer" >
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/isFavoriteProgressBar" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/isFavoriteProgressBar"
+            android:layout_alignBottom="@id/isFavoriteProgressBar"
+            android:layout_alignLeft="@id/isFavoriteProgressBar"
+            android:layout_alignRight="@id/isFavoriteProgressBar"
+            android:focusable="false"
+            android:button="@drawable/selector_is_favorite_background"
+            android:id="@+id/isFavoriteCheckBox" />
+
+    </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/isFavorite"
+        android:layout_toLeftOf="@id/isFavoriteContainer"
         android:layout_centerVertical="true"
         android:id="@+id/textView" />
 

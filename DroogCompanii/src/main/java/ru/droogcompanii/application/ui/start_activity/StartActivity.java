@@ -20,11 +20,11 @@ public class StartActivity extends FragmentActivity {
 
     private static class RequestCode {
         public static final int SYNCHRONIZATION = 11111;
-        public static final int MAIN_SCREEN = 22222;
+        public static final int FIRST_SCREEN = 22222;
     }
 
 
-    private static final Class<?> FIRST_SCREEN = MainScreen.class;
+    private static final Class<?> FIRST_SCREEN_CLASS = MainScreen.class;
 
 
     private static final SharedFlag IS_MAIN_SCREEN_STARTED = SharedFlag.from("IS_MAIN_SCREEN_STARTED");
@@ -60,7 +60,7 @@ public class StartActivity extends FragmentActivity {
 
     private void startMainScreen() {
         IS_MAIN_SCREEN_STARTED.set(true);
-        startActivityForResult(RequestCode.MAIN_SCREEN, FIRST_SCREEN);
+        startActivityForResult(RequestCode.FIRST_SCREEN, FIRST_SCREEN_CLASS);
     }
 
     private void startActivityForResult(int requestCode, Class<?> activityClass) {
@@ -93,8 +93,8 @@ public class StartActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case RequestCode.MAIN_SCREEN:
-                onReturnFrom_MainScreen();
+            case RequestCode.FIRST_SCREEN:
+                onReturnFrom_FirstScreen();
                 return;
 
             case RequestCode.SYNCHRONIZATION:
@@ -103,7 +103,7 @@ public class StartActivity extends FragmentActivity {
         }
     }
 
-    private void onReturnFrom_MainScreen() {
+    private void onReturnFrom_FirstScreen() {
         finish();
     }
 

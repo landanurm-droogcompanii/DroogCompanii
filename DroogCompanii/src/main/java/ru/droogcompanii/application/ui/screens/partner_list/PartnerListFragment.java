@@ -41,7 +41,7 @@ public class PartnerListFragment extends FragmentAbleToStartTask implements Adap
 
     private static class TaskRequestCode {
         public static final int EXTRACT_SEARCH_RESULTS = 145;
-        public static final int SORTING = 153;
+        public static final int SORTING = EXTRACT_SEARCH_RESULTS + 1;
     }
 
     private boolean isSearchResultsReady;
@@ -116,7 +116,7 @@ public class PartnerListFragment extends FragmentAbleToStartTask implements Adap
 
         STATE_MANAGER.initState(savedInstanceState);
 
-        if (isSearchResultsReady && isSearchResultsSorted) {
+        if (isSearchResultsReady) {
             initSearchResultList();
         }
 

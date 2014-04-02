@@ -9,13 +9,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.BaseReaderFromDatabase;
+import ru.droogcompanii.application.data.db_util.Where;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.data.offers.OfferImpl;
 import ru.droogcompanii.application.util.CalendarUtils;
 import ru.droogcompanii.application.util.Holder;
-import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 11.02.14.
@@ -44,8 +44,6 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
     }
 
     private boolean hasOffers(int partnerId) {
-        LogUtils.debug("Partner id:  " + partnerId);
-
         final Holder<Boolean> hasOffers = Holder.from(false);
         String condition = OffersContract.COLUMN_PARTNER_ID + "=" + partnerId;
         handleCursorByCondition(condition, new CursorHandler() {
@@ -54,7 +52,6 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
                 hasOffers.value = cursor.getCount() > 0;
             }
         });
-        LogUtils.debug("Has offers ? " + hasOffers.value);
         return hasOffers.value;
     }
 
@@ -64,7 +61,7 @@ public class OffersReaderFromDatabase extends BaseReaderFromDatabase {
 
     private void handleCursorByCondition(String condition, CursorHandler cursorHandler) {
         initDatabase();
-        String where = condition.trim().isEmpty() ? " " : ("WHERE " + condition);
+        String where = Where.byCondition(condition);
         Cursor cursor = db.rawQuery(prepareSqlUsedSorting(where), null);
         cursorHandler.handle(cursor);
         cursor.close();

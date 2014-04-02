@@ -5,14 +5,13 @@ import android.content.Context;
 import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.data.personal_details.AccountOwner;
-import ru.droogcompanii.application.ui.screens.signin.AuthenticationToken;
+import ru.droogcompanii.application.ui.screens.personal_account.signin.AuthenticationToken;
 import ru.droogcompanii.application.util.LogUtils;
 
 /**
  * Created by ls on 21.02.14.
  */
 public class PersonalDetailsRequesterFromInetAndDatabase implements PersonalDetailsRequester {
-
     private final PersonalDetailsRequester requesterFromInet;
     private final PersonalDetailsSaverLoader saverLoader;
 
@@ -26,7 +25,7 @@ public class PersonalDetailsRequesterFromInetAndDatabase implements PersonalDeta
         try {
             return tryReceiveDetailsFromInet(token);
         } catch (Throwable e) {
-            LogUtils.debug(e.getMessage());
+            LogUtils.exception(e);
             return saverLoader.load(token);
         }
     }

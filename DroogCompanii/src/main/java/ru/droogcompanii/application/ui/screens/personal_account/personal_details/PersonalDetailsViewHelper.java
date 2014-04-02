@@ -13,30 +13,21 @@ import java.util.List;
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.personal_details.AccountOwner;
 import ru.droogcompanii.application.data.personal_details.BankCard;
+import ru.droogcompanii.application.util.ui.view.SimpleLayoutInflater;
 
 /**
  * Created by ls on 21.02.14.
  */
 public class PersonalDetailsViewHelper {
 
-
-    private static interface ViewMaker {
-        View make(int layoutId);
-    }
-
     private final OnBankCardSelectedListener onBankCardSelectedListener;
-    private final ViewMaker viewMaker;
+    private final SimpleLayoutInflater inflater;
     private View detailsView;
     private View rootView;
 
 
     public PersonalDetailsViewHelper(final LayoutInflater inflater, OnBankCardSelectedListener listener) {
-        viewMaker = new ViewMaker() {
-            @Override
-            public View make(int layoutId) {
-                return inflater.inflate(layoutId, null);
-            }
-        };
+        this.inflater = new SimpleLayoutInflater(inflater);
         onBankCardSelectedListener = listener;
     }
 
@@ -48,14 +39,14 @@ public class PersonalDetailsViewHelper {
     }
 
     private void prepareView() {
-        rootView = viewMaker.make(R.layout.fragment_personal_details);
+        rootView = inflater.inflate(R.layout.fragment_personal_details);
         connectDetailsViewToRoot();
     }
 
     public void connectDetailsViewToRoot() {
         ViewGroup containerOfDetails = (ViewGroup) rootView.findViewById(R.id.containerOfPersonalDetails);
         containerOfDetails.removeAllViews();
-        detailsView = viewMaker.make(R.layout.view_personal_details);
+        detailsView = inflater.inflate(R.layout.view_personal_details);
         containerOfDetails.addView(detailsView);
     }
 

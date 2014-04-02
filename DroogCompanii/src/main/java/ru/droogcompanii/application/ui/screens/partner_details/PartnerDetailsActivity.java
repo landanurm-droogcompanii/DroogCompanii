@@ -22,6 +22,11 @@ import ru.droogcompanii.application.ui.screens.main.map.PartnerPointsMapFragment
 import ru.droogcompanii.application.ui.screens.main.partner_point_details.PartnerPointDetailsFragment;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
+import ru.droogcompanii.application.util.ui.activity.ReuseAlreadyLaunchedActivityFlag;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
+import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelpers;
 
 /**
  * Created by ls on 15.01.14.
@@ -133,8 +138,8 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     }
 
     public static void startWithFilters(Context context, Offer offer) {
-        PartnerDetailsActivity.InputProviderByPartnerId inputProvider =
-                new PartnerDetailsActivity.InputProviderByPartnerId(offer.getPartnerId());
+        InputProviderByPartnerId inputProvider =
+                new InputProviderByPartnerId(offer.getPartnerId());
         start(context, inputProvider, true);
     }
 
@@ -143,6 +148,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
         Intent intent = new Intent(context, PartnerDetailsActivity.class);
         intent.putExtra(Key.INPUT_PROVIDER, (Serializable) inputProvider);
         intent.putExtra(Key.WITH_FILTERS, withFilters);
+        ReuseAlreadyLaunchedActivityFlag.set(intent);
         context.startActivity(intent);
     }
 
@@ -290,5 +296,19 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
     @Override
     public void onNeedToEnableLocationService() {
         // do nothing
+    }
+
+    @Override
+    protected MenuHelper getMenuHelper() {
+        return new MenuHelperItemsProvider(this) {
+            @Override
+            protected MenuItemHelper[] getMenuItemHelpers() {
+                return new MenuItemHelper[] {
+                        MenuItemHelpers.PERSONAL_ACCOUNT,
+                        MenuItemHelpers.SETTINGS,
+                        MenuItemHelpers.HELP
+                };
+            }
+        };
     }
 }

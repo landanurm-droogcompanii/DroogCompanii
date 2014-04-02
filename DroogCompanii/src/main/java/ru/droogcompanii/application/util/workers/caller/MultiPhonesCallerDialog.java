@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.util.workers.CopierToClipboard;
 
 /**
  * Created by ls on 03.02.14.

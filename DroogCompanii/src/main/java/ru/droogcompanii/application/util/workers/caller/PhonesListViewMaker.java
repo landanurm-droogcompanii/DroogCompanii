@@ -17,8 +17,9 @@ class PhonesListViewMaker {
         void onNeedToCall(String phone);
     }
 
-    public static ListView make(
-            Context context, List<String> phones, final OnNeedToCallListener onNeedToCallListener) {
+    public static ListView make(Context context,
+                                List<String> phones,
+                                final OnNeedToCallListener onNeedToCallListener) {
 
         ListView listView = new ListView(context);
         final ArrayAdapter<String> adapter =

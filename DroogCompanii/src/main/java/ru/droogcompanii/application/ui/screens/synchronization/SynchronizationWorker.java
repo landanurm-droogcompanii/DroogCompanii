@@ -10,7 +10,7 @@ import java.net.URLConnection;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.DataUpdater;
-import ru.droogcompanii.application.util.DataUrlProvider;
+import ru.droogcompanii.application.util.constants.DataUrlProvider;
 import ru.droogcompanii.application.util.LogUtils;
 
 /**

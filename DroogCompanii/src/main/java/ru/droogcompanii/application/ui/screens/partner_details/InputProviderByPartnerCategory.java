@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.ui.screens.search;
+package ru.droogcompanii.application.ui.screens.partner_details;
 
 import android.content.Context;
 

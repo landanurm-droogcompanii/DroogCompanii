@@ -33,41 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_activity_vertical_space_between_elements" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:background="@android:drawable/list_selector_background"
-        android:id="@+id/showFavorite">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_favorite" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/favoriteContainer" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/search_activity_vertical_space_between_elements" />
-
-    <fragment
-        android:name="ru.droogcompanii.application.ui.screens.search.PartnerCategoryListFragment"
-        android:id="@+id/partnerCategoryListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/containerOfFragment" />
 
 </LinearLayout>

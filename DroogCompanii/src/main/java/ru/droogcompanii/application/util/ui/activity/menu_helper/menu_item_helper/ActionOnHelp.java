@@ -1,7 +1,6 @@
 package ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import ru.droogcompanii.application.ui.screens.help.HelpActivity;
 
@@ -11,7 +10,6 @@ import ru.droogcompanii.application.ui.screens.help.HelpActivity;
 class ActionOnHelp implements MenuItemHelper.Action {
     @Override
     public void run(Activity activity) {
-        Intent intent = new Intent(activity, HelpActivity.class);
-        activity.startActivity(intent);
+        HelpActivity.start(activity);
     }
 }

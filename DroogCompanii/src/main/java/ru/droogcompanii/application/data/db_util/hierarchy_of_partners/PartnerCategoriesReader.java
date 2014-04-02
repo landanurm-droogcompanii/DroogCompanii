@@ -27,10 +27,10 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
     }
 
     public List<PartnerCategory> getAllPartnerCategories() {
-        return getPartnerCategoriesFromDatabase("");
+        return getPartnerCategoriesByWhere("");
     }
 
-    private List<PartnerCategory> getPartnerCategoriesFromDatabase(String where) {
+    private List<PartnerCategory> getPartnerCategoriesByWhere(String where) {
         String sql = "SELECT * FROM " + PartnerCategoriesContract.TABLE_NAME + " " + where + " " + getDefaultOrder() + ";";
         initDatabase();
         Cursor cursor = db.rawQuery(sql, new String[]{});
@@ -71,7 +71,7 @@ public class PartnerCategoriesReader extends PartnersHierarchyReaderFromDatabase
     }
 
     public PartnerCategory getPartnerCategoryOf(Partner partner) {
-        List<PartnerCategory> partnerCategories = getPartnerCategoriesFromDatabase(
+        List<PartnerCategory> partnerCategories = getPartnerCategoriesByWhere(
                 " WHERE " + PartnerCategoriesContract.COLUMN_ID + " = " + partner.getCategoryId()
         );
         if (partnerCategories.isEmpty()) {
