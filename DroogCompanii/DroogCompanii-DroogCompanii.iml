@@ -93,6 +93,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="guava-15.0" level="project" />
     <orderEntry type="library" exported="" name="ComGoogleAndroidGmsPlayServices4030.aar" level="project" />
+    <orderEntry type="library" exported="" name="libGoogleAnalyticsServices" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
     <orderEntry type="library" exported="" name="ComGoogleMapsAndroidAndroidMapsUtils03.aar" level="project" />
     <orderEntry type="library" exported="" name="ComAndroidSupportAppcompatV71901.aar" level="project" />

@@ -16,7 +16,6 @@ import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.screens.offer_details.OfferDetailsActivity;
 import ru.droogcompanii.application.util.StateManager;
 import ru.droogcompanii.application.util.ui.activity.ActionBarActivityWithUpButton;
-import ru.droogcompanii.application.util.ui.activity.ReuseAlreadyLaunchedActivityFlag;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelper;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.MenuHelperItemsProvider;
 import ru.droogcompanii.application.util.ui.activity.menu_helper.menu_item_helper.MenuItemHelper;
@@ -81,7 +80,6 @@ public class OfferListActivity extends ActionBarActivityWithUpButton
         Intent intent = new Intent(context, OfferListActivity.class);
         intent.putExtra(Key.CONDITION, condition);
         intent.putExtra(Key.ARE_OFFERS_BY_ONE_PARTNER, areOffersByOnePartner);
-        ReuseAlreadyLaunchedActivityFlag.set(intent);
         context.startActivity(intent);
     }
 
