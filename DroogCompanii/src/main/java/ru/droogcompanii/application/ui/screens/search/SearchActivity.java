@@ -58,7 +58,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
     }
 
     private void placeFragmentOnLayout() {
-        CategoryListFragment.Mode mode = CategoryListFragment.Mode.WITHOUT_ALL_PARTNERS.doNotShowSelection();
+        CategoryListFragment.Mode mode = CategoryListFragment.Mode.WITHOUT_ALL_PARTNERS_AND_WITHOUT_SELECTION;
         CategoryListFragment fragment = CategoryListFragment.newInstance(mode);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.containerOfFragment, fragment, Tag.CATEGORY_LIST_FRAGMENT);
@@ -139,7 +139,7 @@ public class SearchActivity extends ActionBarActivityWithUpButton
     }
 
     private void onSearch(String searchQuery) {
-        SearchResultListActivity.start(this, searchQuery);
+        SearchResultListActivity.startBySearchQuery(this, searchQuery);
     }
 
     @Override

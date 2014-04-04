@@ -6,19 +6,17 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.contracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.contracts.PhonesContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
-import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
-import ru.droogcompanii.application.util.SerializationUtils;
+import ru.droogcompanii.application.util.OnEachHandler;
 
 /**
  * Created by Leonid on 17.12.13.
  */
 public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
-
-    private final Context context;
 
     private static class ColumnIndices {
         int idColumnIndex;
@@ -35,7 +33,6 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
 
     public PartnerPointsReader(Context context) {
         super(context);
-        this.context = context;
     }
 
     public List<PartnerPoint> getPartnerPointsOf(Partner partner) {
@@ -53,7 +50,14 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
 
         String sql = "SELECT * FROM " + PartnerPointsContract.TABLE_NAME + " " + where + " ;";
         Cursor cursor = db.rawQuery(sql, null);
-        List<PartnerPoint> partnerPoints = getPartnerPointsFromCursor(cursor);
+        List<PartnerPoint> partnerPoints = getPartnerPointsFromCursor(
+                cursor, new OnEachHandler<PartnerPointImpl>() {
+                    @Override
+                    public void onEach(PartnerPointImpl partnerPoint) {
+                        partnerPoint.workingHours = WorkingHoursDbUtils.read(db, partnerPoint.getId());
+                    }
+                }
+        );
         cursor.close();
 
         closeDatabase();
@@ -61,11 +65,24 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
     }
 
     public static List<PartnerPoint> getPartnerPointsFromCursor(Cursor cursor) {
+        return getPartnerPointsFromCursor(cursor, new OnEachHandler<PartnerPointImpl>() {
+
+            @Override
+            public void onEach(PartnerPointImpl each) {
+                // do nothing
+            }
+        });
+    }
+
+    public static List<PartnerPoint> getPartnerPointsFromCursor(Cursor cursor,
+                                               OnEachHandler<PartnerPointImpl> onEachHandler) {
         List<PartnerPoint> partnerPoints = new ArrayList<PartnerPoint>();
         ColumnIndices columnIndices = calculateColumnIndices(cursor);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            partnerPoints.add(getPartnerPointFromCursor(cursor, columnIndices));
+            PartnerPointImpl partnerPoint = getPartnerPointFromCursor(cursor, columnIndices);
+            onEachHandler.onEach(partnerPoint);
+            partnerPoints.add(partnerPoint);
             cursor.moveToNext();
         }
         return partnerPoints;
@@ -93,12 +110,28 @@ public class PartnerPointsReader extends PartnersHierarchyReaderFromDatabase {
         partnerPoint.longitude = cursor.getDouble(columnIndices.longitudeColumnIndex);
         partnerPoint.latitude = cursor.getDouble(columnIndices.latitudeColumnIndex);
         partnerPoint.paymentMethods = cursor.getString(columnIndices.paymentMethodsColumnIndex);
-        byte[] phonesBlob = cursor.getBlob(columnIndices.phonesColumnIndex);
-        partnerPoint.phones = (List<String>) SerializationUtils.deserialize(phonesBlob);
-        byte[] weekWorkingHoursBlob = cursor.getBlob(columnIndices.workingHoursColumnIndex);
-        partnerPoint.workingHours = (WeekWorkingHours) SerializationUtils.deserialize(weekWorkingHoursBlob);
+        partnerPoint.phones = getPhonesOfPartnerPoint(partnerPoint.getId());
         partnerPoint.partnerId = cursor.getInt(columnIndices.partnerIdColumnIndex);
         return partnerPoint;
+    }
+
+    private static List<String> getPhonesOfPartnerPoint(int partnerPointId) {
+        return ListOfStringsReader.readByOwnerId(partnerPointId, new ListOfStringsReader.Arguments() {
+            @Override
+            public String getTableName() {
+                return PhonesContract.TABLE_NAME;
+            }
+
+            @Override
+            public String getOwnerIdColumnName() {
+                return PhonesContract.COLUMN_OWNER_ID;
+            }
+
+            @Override
+            public String getRequiredColumnName() {
+                return PhonesContract.COLUMN_NUMBER;
+            }
+        });
     }
 
     public PartnerPoint getPartnerPointById(int idOfPartnerPoint) {

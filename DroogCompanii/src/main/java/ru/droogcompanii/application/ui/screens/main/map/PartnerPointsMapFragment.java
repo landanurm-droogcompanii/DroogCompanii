@@ -243,6 +243,7 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
         List<PartnerPoint> partnerPoints = getPartnerPointsAtPosition(position);
         movePartnerPointWithThisIdAtFirstPositionAtList(partnerPoint.getId(), partnerPoints);
         callbacks.onMarkerClicked(partnerPoints);
+        moveCamera(position);
     }
 
     private static void movePartnerPointWithThisIdAtFirstPositionAtList(int partnerPointId, List<PartnerPoint> partnerPoints) {
@@ -348,17 +349,17 @@ public class PartnerPointsMapFragment extends CustomMapFragmentWithBaseLocation
     private void updateMapCamera(Worker.DisplayingTaskResult taskResult) {
         if (isFirstDisplaying) {
             isFirstDisplaying = false;
-            tryMoveToPosition(taskResult.nearestPosition);
+            moveToPositionIfPresent(taskResult.nearestPosition);
         } else if (taskResult.isBoundsNotContainMarkers) {
             if (clickedPositionHelper.isClickedPositionPresent()) {
                 moveToPosition(clickedPositionHelper.getClickedPosition());
             } else {
-                tryMoveToPosition(taskResult.nearestPosition);
+                moveToPositionIfPresent(taskResult.nearestPosition);
             }
         }
     }
 
-    private void tryMoveToPosition(Optional<SerializableLatLng> optionalSerializablePosition) {
+    private void moveToPositionIfPresent(Optional<SerializableLatLng> optionalSerializablePosition) {
         if (optionalSerializablePosition.isPresent()) {
             LatLng position = optionalSerializablePosition.get().toParcelable();
             moveToPosition(position);

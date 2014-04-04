@@ -10,6 +10,7 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.BaseReaderFromDatabase;
 import ru.droogcompanii.application.data.db_util.Where;
+import ru.droogcompanii.application.data.db_util.contracts.OffersContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;

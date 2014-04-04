@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.CursorHandler;
+import ru.droogcompanii.application.data.db_util.contracts.*;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.Holder;
@@ -17,12 +18,6 @@ import ru.droogcompanii.application.util.Holder;
  * Created by ls on 18.02.14.
  */
 public class FavoriteDBUtils {
-
-    private static final PartnerHierarchyContracts.PartnersContract
-            PARTNERS_CONTRACT = new PartnerHierarchyContracts.PartnersContract();
-
-    private static final PartnerHierarchyContracts.PartnerPointsContract
-            PARTNER_POINTS_CONTRACT = new PartnerHierarchyContracts.PartnerPointsContract();
 
     private final Context context;
 
@@ -34,13 +29,13 @@ public class FavoriteDBUtils {
         final Holder<Boolean> isFavorite = Holder.from(false);
 
         PartnersReader partnersReader = new PartnersReader(context);
-        final String where = PARTNERS_CONTRACT.COLUMN_ID + " = " + partnerId;
+        final String where = PartnersContract.COLUMN_ID + " = " + partnerId;
         partnersReader.handleCursorByCondition(where, new CursorHandler() {
             @Override
             public void handle(Cursor cursor) {
                 cursor.moveToFirst();
                 if (!cursor.isAfterLast()) {
-                    int index = cursor.getColumnIndexOrThrow(PARTNERS_CONTRACT.COLUMN_IS_FAVORITE);
+                    int index = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_IS_FAVORITE);
                     isFavorite.value = (cursor.getInt(index) == 1);
                 }
             }
@@ -59,9 +54,9 @@ public class FavoriteDBUtils {
 
     private void setFavorite(SQLiteDatabase db, int partnerId, boolean isFavorite) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PARTNERS_CONTRACT.COLUMN_IS_FAVORITE, isFavorite ? 1 : 0);
-        String where = PARTNERS_CONTRACT.COLUMN_ID + "=" + partnerId;
-        db.update(PARTNERS_CONTRACT.TABLE_NAME, contentValues, where, null);
+        contentValues.put(PartnersContract.COLUMN_IS_FAVORITE, isFavorite ? 1 : 0);
+        String where = PartnersContract.COLUMN_ID + "=" + partnerId;
+        db.update(PartnersContract.TABLE_NAME, contentValues, where, null);
     }
 
     public List<Partner> getFavoritePartners() {
@@ -71,17 +66,17 @@ public class FavoriteDBUtils {
     }
 
     public static String getIsFavoriteCondition() {
-        return PARTNERS_CONTRACT.COLUMN_IS_FAVORITE + " = 1 ";
+        return PartnersContract.COLUMN_IS_FAVORITE + " = 1 ";
     }
 
     public List<PartnerPoint> getAllFavoritePartnerPoints() {
-        final String sql = "SELECT " + PARTNER_POINTS_CONTRACT.TABLE_NAME + ".* " +
-                " FROM " + PARTNER_POINTS_CONTRACT.TABLE_NAME + " WHERE EXISTS " +
-                "( SELECT * FROM " + PARTNERS_CONTRACT.TABLE_NAME + " WHERE " +
-                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_ID + " = " +
-                    PARTNER_POINTS_CONTRACT.TABLE_NAME + "." + PARTNER_POINTS_CONTRACT.COLUMN_PARTNER_ID +
+        final String sql = "SELECT " + PartnerPointsContract.TABLE_NAME + ".* " +
+                " FROM " + PartnerPointsContract.TABLE_NAME + " WHERE EXISTS (" +
+                    "SELECT * FROM " + PartnersContract.TABLE_NAME + " WHERE " +
+                    PartnersContract.TABLE_NAME + "." + PartnersContract.COLUMN_ID + " = " +
+                PartnerPointsContract.TABLE_NAME + "." + PartnerPointsContract.COLUMN_PARTNER_ID +
                     " AND " +
-                    PARTNERS_CONTRACT.TABLE_NAME + "." + PARTNERS_CONTRACT.COLUMN_IS_FAVORITE + " = 1" +
+                    PartnersContract.TABLE_NAME + "." + PartnersContract.COLUMN_IS_FAVORITE + " = 1" +
                 " )";
 
         List<PartnerPoint> noPartnerPoints = new ArrayList<PartnerPoint>();

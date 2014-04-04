@@ -3,20 +3,21 @@ package ru.droogcompanii.application.ui.screens.main.filters_dialog.filters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.WorkingHoursDbUtils;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.working_hours.WeekWorkingHours;
 import ru.droogcompanii.application.util.CalendarUtils;
-import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
  * Created by ls on 25.03.14.
@@ -50,21 +51,14 @@ class WorksNowFilterHelper implements FilterHelper, Serializable {
         private final Calendar now = CalendarUtils.now();
 
         @Override
-        public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor) {
-            return readWorkingHours(cursor).includes(now);
-        }
-
-        private WeekWorkingHours readWorkingHours(Cursor cursor) {
-            int indexWorkingHours = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_WORKING_HOURS);
-            byte[] workingHoursBlob = cursor.getBlob(indexWorkingHours);
-            return (WeekWorkingHours) SerializationUtils.deserialize(workingHoursBlob);
+        public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db) {
+            WeekWorkingHours workingHours = WorkingHoursDbUtils.read(db, partnerPoint.getId());
+            return workingHours.includes(now);
         }
     }
 
     public Collection<String> getColumnsOfPartnerPoint() {
-        return Arrays.asList(
-                PARTNER_POINTS.COLUMN_WORKING_HOURS
-        );
+        return Collections.EMPTY_LIST;
     }
 
     @Override

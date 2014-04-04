@@ -1,4 +1,4 @@
-package ru.droogcompanii.application.data.db_util.offers;
+package ru.droogcompanii.application.data.db_util.contracts;
 
 import android.provider.BaseColumns;
 

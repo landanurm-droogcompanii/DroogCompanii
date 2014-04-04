@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.screens.main.filters_dialog.filters;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 
@@ -15,7 +16,7 @@ class DummyFilter implements Filter {
     }
 
     @Override
-    public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor) {
+    public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db) {
         return passed;
     }
 }

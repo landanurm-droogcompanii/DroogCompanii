@@ -3,22 +3,22 @@ package ru.droogcompanii.application.ui.screens.synchronization;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import java.io.Serializable;
+import android.support.v4.app.FragmentTransaction;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.global_flags.VerifierDataForRelevance;
-import ru.droogcompanii.application.util.ui.able_to_start_task.ActivityAbleToStartTask;
-import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
+import ru.droogcompanii.application.util.ui.activity.DroogCompaniiBaseActivity;
 
 /**
  * Created by ls on 26.12.13.
  */
-public class SynchronizationActivity extends ActivityAbleToStartTask {
+public class SynchronizationActivity extends DroogCompaniiBaseActivity
+        implements SynchronizationFragment.Callbacks {
 
     public static final int REQUEST_CODE = 157;
 
-    private static final int TASK_REQUEST_CODE_SYNCHRONIZATION = 244;
+    private static class Tag {
+        public static final String SYNCHRONIZATION_FRAGMENT = "SYNCHRONIZATION_FRAGMENT";
+    }
 
 
     public static void startForResult(Activity activity) {
@@ -32,32 +32,21 @@ public class SynchronizationActivity extends ActivityAbleToStartTask {
         setContentView(R.layout.activity_synchronization);
 
         if (savedInstanceState == null) {
-            startSynchronizationTask();
+            placeFragmentOnLayout();
         }
     }
 
-    private void startSynchronizationTask() {
-        TaskNotBeInterruptedDuringConfigurationChange task = new SynchronizationTask(this);
-        Integer title = R.string.titleOfSynchronizationDialog;
-        startTask(TASK_REQUEST_CODE_SYNCHRONIZATION, task, title);
+    private void placeFragmentOnLayout() {
+        SynchronizationFragment fragment = new SynchronizationFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.fragmentContainer, fragment, Tag.SYNCHRONIZATION_FRAGMENT);
+        transaction.commit();
     }
 
     @Override
-    public void onTaskResult(int requestCode, int resultCode, Serializable result) {
-        if (requestCode == TASK_REQUEST_CODE_SYNCHRONIZATION) {
-            onSynchronizationTaskFinished(resultCode, result);
-        }
-    }
-
-    private void onSynchronizationTaskFinished(int resultCode, Serializable result) {
-        if (resultCode == RESULT_OK) {
-            onSynchronizationTaskFinishedSuccessfully();
-        }
+    public void setResultAndFinish(int resultCode) {
         setResult(resultCode);
         finish();
     }
 
-    private void onSynchronizationTaskFinishedSuccessfully() {
-        VerifierDataForRelevance.setDataIsUpdated();
-    }
 }

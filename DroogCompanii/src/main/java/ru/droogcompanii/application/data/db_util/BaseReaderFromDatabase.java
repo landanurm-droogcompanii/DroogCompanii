@@ -29,4 +29,8 @@ public abstract class BaseReaderFromDatabase {
         dbHelper.close();
         dbHelper = null;
     }
+
+    public SQLiteDatabase getDatabase() {
+        return db;
+    }
 }

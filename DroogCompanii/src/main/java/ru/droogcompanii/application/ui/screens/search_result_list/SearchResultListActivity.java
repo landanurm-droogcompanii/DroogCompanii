@@ -44,7 +44,7 @@ public class SearchResultListActivity extends ActionBarActivityWithUpButton {
         }
     };
 
-    public static void start(Context context, String query) {
+    public static void startBySearchQuery(Context context, String query) {
         Intent intent = new Intent(context, SearchResultListActivity.class);
         intent.putExtra(KEY_QUERY, query);
         ReuseAlreadyLaunchedActivityFlag.set(intent);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.droogcompanii.application.data.time.TimeOfDay;
+import ru.droogcompanii.application.data.time.TimeRange;
 import ru.droogcompanii.application.data.time.TimeRangeIncludedExcluded;
 import ru.droogcompanii.application.data.working_hours.WorkingHours;
 import ru.droogcompanii.application.util.StringsCombiner;
@@ -14,22 +15,26 @@ import ru.droogcompanii.application.util.StringsCombiner;
  */
 public class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
 
-    private final List<TimeRangeIncludedExcluded> includedRanges;
-    private final List<TimeRangeIncludedExcluded> excludedRanges;
+    private final List<TimeRange> includedRanges;
+    private final List<TimeRange> excludedRanges;
+
+    public static TimeRange createTimeRange(TimeOfDay from, TimeOfDay to) {
+        return new TimeRangeIncludedExcluded(from, to);
+    }
 
     public WorkingHoursOnBusinessDay() {
-        includedRanges = new ArrayList<TimeRangeIncludedExcluded>();
-        excludedRanges = new ArrayList<TimeRangeIncludedExcluded>();
+        includedRanges = new ArrayList<TimeRange>();
+        excludedRanges = new ArrayList<TimeRange>();
     }
 
     @Override
-    public boolean includes(TimeOfDay time) {
-        for (TimeRangeIncludedExcluded excludedRange : excludedRanges) {
+    public boolean isInclude(TimeOfDay time) {
+        for (TimeRange excludedRange : excludedRanges) {
             if (excludedRange.includes(time)) {
                 return false;
             }
         }
-        for (TimeRangeIncludedExcluded includedRange : includedRanges) {
+        for (TimeRange includedRange : includedRanges) {
             if (includedRange.includes(time)) {
                 return true;
             }
@@ -37,12 +42,12 @@ public class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
         return false;
     }
 
-    public WorkingHoursOnBusinessDay include(TimeRangeIncludedExcluded timeRange) {
+    public WorkingHoursOnBusinessDay include(TimeRange timeRange) {
         includedRanges.add(timeRange);
         return this;
     }
 
-    public WorkingHoursOnBusinessDay exclude(TimeRangeIncludedExcluded timeRange) {
+    public WorkingHoursOnBusinessDay exclude(TimeRange timeRange) {
         excludedRanges.add(timeRange);
         return this;
     }
@@ -78,11 +83,11 @@ public class WorkingHoursOnBusinessDay implements WorkingHours, Serializable {
         return includedRanges.hashCode() + excludedRanges.hashCode();
     }
 
-    public List<TimeRangeIncludedExcluded> getIncludedRanges() {
-        return new ArrayList<TimeRangeIncludedExcluded>(includedRanges);
+    public List<TimeRange> getIncludedRanges() {
+        return new ArrayList<TimeRange>(includedRanges);
     }
 
-    public List<TimeRangeIncludedExcluded> getExcludedRanges() {
-        return new ArrayList<TimeRangeIncludedExcluded>(excludedRanges);
+    public List<TimeRange> getExcludedRanges() {
+        return new ArrayList<TimeRange>(excludedRanges);
     }
 }

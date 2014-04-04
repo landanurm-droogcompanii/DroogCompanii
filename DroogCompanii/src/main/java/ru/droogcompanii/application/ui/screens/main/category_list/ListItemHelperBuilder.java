@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.FavoriteDBUtils;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
+import ru.droogcompanii.application.data.db_util.contracts.*;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 
 /**
@@ -51,8 +51,7 @@ class ListItemHelperBuilder {
 
             @Override
             public String getConditionToReceivePartners() {
-                return PartnerHierarchyContracts.PartnersContract.COLUMN_CATEGORY_ID +
-                        " = " + partnerCategory.getId();
+                return PartnersContract.COLUMN_CATEGORY_ID + " = " + partnerCategory.getId();
             }
         };
     }

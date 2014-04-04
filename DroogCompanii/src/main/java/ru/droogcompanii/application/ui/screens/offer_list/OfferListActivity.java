@@ -10,7 +10,7 @@ import android.widget.SpinnerAdapter;
 import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.offers.OffersContract;
+import ru.droogcompanii.application.data.db_util.contracts.OffersContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.offers.Offer;
 import ru.droogcompanii.application.ui.screens.offer_details.OfferDetailsActivity;

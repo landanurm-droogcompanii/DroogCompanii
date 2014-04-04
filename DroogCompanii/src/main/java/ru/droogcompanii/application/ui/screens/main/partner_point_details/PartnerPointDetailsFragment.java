@@ -251,7 +251,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
 
     private PartnerPoint loadPartnerPointByIndex(int index) {
         int idOfPartnerPoint = idsOfPartnerPoints.get(index);
-        PartnerPointsReader reader = new PartnerPointsReader(getActivity());
+        PartnerPointsReader reader = new PartnerPointsReader(DroogCompaniiApplication.getContext());
         return reader.getPartnerPointById(idOfPartnerPoint);
     }
 
@@ -316,7 +316,7 @@ public class PartnerPointDetailsFragment extends FragmentAbleToStartTask {
     }
 
     private void goToPartnerOf(PartnerPoint partnerPoint) {
-        PartnerDetailsActivity.startWithFilters(getActivity(), partnerPoint);
+        PartnerDetailsActivity.startWithoutFilters(getActivity(), partnerPoint);
     }
 
     private void updateIsFavorite() {

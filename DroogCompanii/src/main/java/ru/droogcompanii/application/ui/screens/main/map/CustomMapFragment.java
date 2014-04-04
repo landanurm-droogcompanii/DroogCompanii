@@ -73,6 +73,10 @@ public class CustomMapFragment extends FragmentAbleToStartTask {
         getGoogleMap().moveCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }
 
+    public void moveCamera(LatLng center) {
+        moveCamera(center, getCurrentZoom());
+    }
+
     public void animateCamera(LatLng center, float zoom) {
         getGoogleMap().animateCamera(CameraUpdateFactory.newLatLngZoom(center, zoom));
     }

@@ -6,8 +6,9 @@ import android.database.Cursor;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.data.db_util.CursorHandler;
+import ru.droogcompanii.application.data.db_util.SearchingInDBUtils;
+import ru.droogcompanii.application.data.db_util.contracts.*;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerCategoriesReader;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerPointsReader;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
@@ -16,27 +17,27 @@ import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersR
  * Created by ls on 11.03.14.
  */
 public class InputProviderBySearchQuery implements SearchResultListFragment.InputProvider, Serializable {
-    private static final PartnerHierarchyContracts.PartnerCategoriesContract
-            CATEGORIES = new PartnerHierarchyContracts.PartnerCategoriesContract();
-    private static final PartnerHierarchyContracts.PartnersContract
-            PARTNERS = new PartnerHierarchyContracts.PartnersContract();
-    private static final PartnerHierarchyContracts.PartnerPointsContract
-            POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
-
 
     private final String sqlCategoriesReceiver;
     private final String sqlPartnersReceiver;
     private final String sqlPointsReceiver;
 
     public InputProviderBySearchQuery(String searchQuery) {
-        sqlCategoriesReceiver = prepareSqlQuery(searchQuery, CATEGORIES.TABLE_NAME, CATEGORIES.COLUMN_TITLE);
-        sqlPartnersReceiver = prepareSqlQuery(searchQuery, PARTNERS.TABLE_NAME, PARTNERS.COLUMN_TITLE);
-        sqlPointsReceiver = prepareSqlQuery(searchQuery, POINTS.TABLE_NAME, POINTS.COLUMN_TITLE);
+        String correctedSearchQuery = SearchingInDBUtils.convertInTheSameCharacterCase(searchQuery.trim());
+        sqlCategoriesReceiver = prepareSqlQuery(correctedSearchQuery,
+                                                PartnerCategoriesContract.TABLE_NAME,
+                                                PartnerCategoriesContract.COLUMN_TEXT_SEARCH_IN);
+        sqlPartnersReceiver = prepareSqlQuery(correctedSearchQuery,
+                                              PartnersContract.TABLE_NAME,
+                                              PartnersContract.COLUMN_TEXT_SEARCH_IN);
+        sqlPointsReceiver = prepareSqlQuery(correctedSearchQuery,
+                                            PartnerPointsContract.TABLE_NAME,
+                                            PartnerPointsContract.COLUMN_TEXT_SEARCH_IN);
     }
 
     private static String prepareSqlQuery(String searchQuery, String tableName, String columnName) {
-        return "SELECT * FROM " + tableName + " WHERE " +
-                columnName + " LIKE " + quote("%" + searchQuery + "%") + " ;";
+        String pattern = quote("%" + searchQuery + "%");
+        return "SELECT * FROM " + tableName + " WHERE " + columnName + " LIKE " + pattern + " ;";
     }
 
     private static String quote(String stringToQuote) {

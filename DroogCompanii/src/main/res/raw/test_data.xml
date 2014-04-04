@@ -36,12 +36,12 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
                             <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
@@ -57,12 +57,12 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
                             <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
@@ -98,12 +98,12 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-19:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-19:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-19:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-19:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-19:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-19:00(12:00-13:00)</sat>
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
                             <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
@@ -138,12 +138,12 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
+                            <mon type="holiday">Выходной день</mon>
+                            <tue type="holiday">Выходной день</tue>
+                            <wed type="holiday">Выходной день</wed>
+                            <thu type="holiday">Выходной день</thu>
+                            <fri type="holiday">Выходной день</fri>
+                            <sat type="holiday">Выходной день</sat>
                             <sun type="holiday">Выходной день</sun>
                         </workinghours>
                     </partner-point>
@@ -179,13 +179,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="day_and_night">Круглосуточно</mon>
+                            <tue type="day_and_night">Круглосуточно</tue>
+                            <wed type="day_and_night">Круглосуточно</wed>
+                            <thu type="day_and_night">Круглосуточно</thu>
+                            <fri type="day_and_night">Круглосуточно</fri>
+                            <sat type="day_and_night">Круглосуточно</sat>
+                            <sun type="day_and_night">Круглосуточно</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -224,13 +224,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="day_and_night">Круглосуточно</mon>
+                            <tue type="day_and_night">Круглосуточно</tue>
+                            <wed type="day_and_night">Круглосуточно</wed>
+                            <thu type="day_and_night">Круглосуточно</thu>
+                            <fri type="day_and_night">Круглосуточно</fri>
+                            <sat type="day_and_night">Круглосуточно</sat>
+                            <sun type="day_and_night">Круглосуточно</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -245,13 +245,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="day_and_night">Круглосуточно</mon>
+                            <tue type="day_and_night">Круглосуточно</tue>
+                            <wed type="day_and_night">Круглосуточно</wed>
+                            <thu type="day_and_night">Круглосуточно</thu>
+                            <fri type="day_and_night">Круглосуточно</fri>
+                            <sat type="day_and_night">Круглосуточно</sat>
+                            <sun type="day_and_night">Круглосуточно</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -286,13 +286,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-19:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-19:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-19:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-19:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-19:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-19:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="day_and_night">Круглосуточно</mon>
+                            <tue type="day_and_night">Круглосуточно</tue>
+                            <wed type="day_and_night">Круглосуточно</wed>
+                            <thu type="day_and_night">Круглосуточно</thu>
+                            <fri type="day_and_night">Круглосуточно</fri>
+                            <sat type="day_and_night">Круглосуточно</sat>
+                            <sun type="day_and_night">Круглосуточно</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -326,13 +326,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="day_and_night">Круглосуточно</mon>
+                            <tue type="day_and_night">Круглосуточно</tue>
+                            <wed type="day_and_night">Круглосуточно</wed>
+                            <thu type="day_and_night">Круглосуточно</thu>
+                            <fri type="day_and_night">Круглосуточно</fri>
+                            <sat type="day_and_night">Круглосуточно</sat>
+                            <sun type="day_and_night">Круглосуточно</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -367,13 +367,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -387,13 +387,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -407,13 +407,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -427,13 +427,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -447,13 +447,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -467,13 +467,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -487,13 +487,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -507,13 +507,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -527,13 +527,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -547,13 +547,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -567,13 +567,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -587,13 +587,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -607,13 +607,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -627,13 +627,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -647,13 +647,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -667,13 +667,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -687,13 +687,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -707,13 +707,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -727,13 +727,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -747,13 +747,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -767,13 +767,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">06:00-21:00</mon>
+                            <tue type="usual_day">06:00-21:00</tue>
+                            <wed type="usual_day">06:00-21:00</wed>
+                            <thu type="usual_day">06:00-21:00</thu>
+                            <fri type="usual_day">06:00-21:00</fri>
+                            <sat type="usual_day">06:00-21:00</sat>
+                            <sun type="usual_day">06:00-21:00</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -818,13 +818,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(10:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(10:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(10:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(10:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(10:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(10:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(10:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -839,13 +839,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(10:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(10:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(10:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(10:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(10:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(10:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(10:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -880,13 +880,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-19:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-19:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-19:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-19:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-19:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-19:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(10:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(10:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(10:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(10:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(10:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(10:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(10:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -920,13 +920,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(11:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(11:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(11:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(11:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(11:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(11:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(11:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -961,13 +961,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-18:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-18:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-18:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-18:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-18:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-18:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(11:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(11:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(11:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(11:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(11:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(11:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(11:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>
@@ -1006,13 +1006,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(11:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(11:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(11:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(11:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(11:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(11:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(11:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                     <partner-point>
@@ -1027,13 +1027,13 @@
                             <phone>(960) 048-58-59</phone>
                         </phones>
                         <workinghours type="array">
-                            <mon type="usual_day">09:00-17:00(12:00-13:00)</mon>
-                            <tue type="usual_day">09:00-17:00(12:00-13:00)</tue>
-                            <wed type="usual_day">09:00-17:00(12:00-13:00)</wed>
-                            <thu type="usual_day">09:00-17:00(12:00-13:00)</thu>
-                            <fri type="usual_day">09:00-17:00(12:00-13:00)</fri>
-                            <sat type="usual_day">09:00-17:00(12:00-13:00)</sat>
-                            <sun type="holiday">Выходной день</sun>
+                            <mon type="usual_day">09:00-19:00(11:00-17:00)</mon>
+                            <tue type="usual_day">09:00-19:00(11:00-17:00)</tue>
+                            <wed type="usual_day">09:00-19:00(11:00-17:00)</wed>
+                            <thu type="usual_day">09:00-19:00(11:00-17:00)</thu>
+                            <fri type="usual_day">09:00-19:00(11:00-17:00)</fri>
+                            <sat type="usual_day">09:00-19:00(11:00-17:00)</sat>
+                            <sun type="usual_day">09:00-19:00(11:00-17:00)</sun>
                         </workinghours>
                     </partner-point>
                 </partner-points>

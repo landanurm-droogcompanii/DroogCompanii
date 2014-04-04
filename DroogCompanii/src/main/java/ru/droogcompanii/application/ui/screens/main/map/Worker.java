@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.screens.main.map;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 import ru.droogcompanii.application.DroogCompaniiApplication;
 import ru.droogcompanii.application.data.db_util.CursorHandler;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
+import ru.droogcompanii.application.data.db_util.contracts.*;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersHierarchyReaderFromDatabase;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPointImpl;
@@ -151,9 +152,6 @@ class Worker {
 
     static class IteratorOverAllPartnerPoints implements IteratorOverPartnerPoints {
 
-        private static final PartnerHierarchyContracts.PartnerPointsContract
-                PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
-
         private final PartnersHierarchyReaderFromDatabase READER =
                 new PartnersHierarchyReaderFromDatabase(DroogCompaniiApplication.getContext());
 
@@ -166,13 +164,13 @@ class Worker {
         }
 
         protected static interface OnEachPartnerPointAndCursorHandler {
-            void onEach(PartnerPoint partnerPoint, Cursor cursor);
+            void onEach(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db);
         }
 
         public void forEach(final OnEachHandler<PartnerPoint> onEachHandler) {
             forEach(new OnEachPartnerPointAndCursorHandler() {
                 @Override
-                public void onEach(PartnerPoint partnerPoint, Cursor cursor) {
+                public void onEach(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db) {
                     onEachHandler.onEach(partnerPoint);
                 }
             });
@@ -185,7 +183,7 @@ class Worker {
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         PartnerPoint partnerPoint = readPartnerPoint(cursor);
-                        onEachHandler.onEach(partnerPoint, cursor);
+                        onEachHandler.onEach(partnerPoint, cursor, READER.getDatabase());
                         cursor.moveToNext();
                     }
                 }
@@ -195,23 +193,23 @@ class Worker {
         private String prepareSql() {
             return "SELECT " +
                     prepareColumnList() +
-                    " FROM " + PARTNER_POINTS.TABLE_NAME + " " +
+                    " FROM " + PartnerPointsContract.TABLE_NAME + " " +
                     where + ";";
         }
 
         private String prepareColumnList() {
             Set<String> columns = new HashSet<String>();
-            columns.add(PARTNER_POINTS.COLUMN_ID);
-            columns.add(PARTNER_POINTS.COLUMN_LATITUDE);
-            columns.add(PARTNER_POINTS.COLUMN_LONGITUDE);
+            columns.add(PartnerPointsContract.COLUMN_ID);
+            columns.add(PartnerPointsContract.COLUMN_LATITUDE);
+            columns.add(PartnerPointsContract.COLUMN_LONGITUDE);
             columns.addAll(filters.getColumnsOfPartnerPoint());
             return StringsCombiner.combine(columns, ", ");
         }
 
         private PartnerPoint readPartnerPoint(Cursor cursor) {
-            int idColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_ID);
-            int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_LATITUDE);
-            int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PARTNER_POINTS.COLUMN_LONGITUDE);
+            int idColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_ID);
+            int latitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_LATITUDE);
+            int longitudeColumnIndex = cursor.getColumnIndexOrThrow(PartnerPointsContract.COLUMN_LONGITUDE);
             PartnerPointImpl partnerPoint = new PartnerPointImpl();
             partnerPoint.id = cursor.getInt(idColumnIndex);
             partnerPoint.latitude = cursor.getDouble(latitudeColumnIndex);
@@ -233,8 +231,8 @@ class Worker {
         public void forEach(final OnEachHandler<PartnerPoint> onEachHandler) {
             super.forEach(new OnEachPartnerPointAndCursorHandler() {
                 @Override
-                public void onEach(PartnerPoint partnerPoint, Cursor cursor) {
-                    if (filter.isPassedThroughFilter(partnerPoint, cursor)) {
+                public void onEach(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db) {
+                    if (filter.isPassedThroughFilter(partnerPoint, cursor, db)) {
                         onEachHandler.onEach(partnerPoint);
                     }
                 }

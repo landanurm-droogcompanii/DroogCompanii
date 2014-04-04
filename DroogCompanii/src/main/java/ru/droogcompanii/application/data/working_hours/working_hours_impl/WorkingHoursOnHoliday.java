@@ -16,7 +16,7 @@ public class WorkingHoursOnHoliday implements WorkingHours, Serializable {
     }
 
     @Override
-    public boolean includes(TimeOfDay time) {
+    public boolean isInclude(TimeOfDay time) {
         return false;
     }
 

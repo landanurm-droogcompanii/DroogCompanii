@@ -3,7 +3,7 @@ package ru.droogcompanii.application.ui.screens.offer_list;
 import com.google.common.base.Optional;
 
 import ru.droogcompanii.application.data.db_util.ConditionsCombiner;
-import ru.droogcompanii.application.data.db_util.offers.OffersContract;
+import ru.droogcompanii.application.data.db_util.contracts.OffersContract;
 import ru.droogcompanii.application.data.db_util.offers.SpecialOffersDBUtils;
 import ru.droogcompanii.application.util.CalendarUtils;
 

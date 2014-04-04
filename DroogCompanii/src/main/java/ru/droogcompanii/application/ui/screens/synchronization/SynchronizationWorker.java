@@ -10,6 +10,7 @@ import java.net.URLConnection;
 
 import ru.droogcompanii.application.R;
 import ru.droogcompanii.application.data.DataUpdater;
+import ru.droogcompanii.application.util.InputStreamConverter;
 import ru.droogcompanii.application.util.constants.DataUrlProvider;
 import ru.droogcompanii.application.util.LogUtils;
 
@@ -42,28 +43,27 @@ public class SynchronizationWorker {
             public InputStream getXml() throws Exception {
                 URL url = new URL(DataUrlProvider.getDataUrl());
                 URLConnection connection = url.openConnection();
-                return connection.getInputStream();
+                InputStream connectionInputStream = connection.getInputStream();
+                String input = InputStreamConverter.inputStreamToString(connectionInputStream);
+                return InputStreamConverter.stringToInputStream(input);
             }
         };
     }
 
-    public void execute() {
+    public boolean doWork() {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         wakeLock.acquire();
+        boolean successful;
         try {
             dataUpdater.update();
+            successful = true;
         } catch (Exception e) {
-            processExceptionDuringUpdate(e);
+            LogUtils.exception(e);
+            successful = false;
         } finally {
             wakeLock.release();
         }
-    }
-
-    private static void processExceptionDuringUpdate(Exception e) {
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        for (StackTraceElement each : stackTrace) {
-            LogUtils.debug(each.toString());
-        }
+        return successful;
     }
 }

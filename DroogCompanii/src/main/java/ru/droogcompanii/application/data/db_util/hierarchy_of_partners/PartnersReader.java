@@ -8,19 +8,19 @@ import java.util.List;
 
 import ru.droogcompanii.application.data.db_util.CursorHandler;
 import ru.droogcompanii.application.data.db_util.Where;
+import ru.droogcompanii.application.data.db_util.contracts.EmailsContract;
+import ru.droogcompanii.application.data.db_util.contracts.PartnerPointsContract;
+import ru.droogcompanii.application.data.db_util.contracts.PartnersContract;
+import ru.droogcompanii.application.data.db_util.contracts.WebSitesContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerCategory;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerImpl;
 import ru.droogcompanii.application.util.Holder;
-import ru.droogcompanii.application.util.SerializationUtils;
 
 /**
  * Created by Leonid on 17.12.13.
  */
 public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
-
-    private static final PartnerHierarchyContracts.PartnersContract
-            COLUMNS = new PartnerHierarchyContracts.PartnersContract();
 
     private static class ColumnIndices {
         int idColumnIndex;
@@ -55,19 +55,17 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
     public void handleCursorByCondition(String condition, CursorHandler cursorHandler) {
         String where = Where.byCondition(condition);
-        String sql = "SELECT * FROM " + PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " " + where + " ;";
+        String sql = "SELECT * FROM " + PartnersContract.TABLE_NAME + " " + where + " ;";
         handleCursorByQuery(sql, cursorHandler);
     }
 
     public List<Partner> getPartnersOf(PartnerCategory category) {
-        String where = " WHERE " +
-                PartnerHierarchyContracts.PartnersContract.COLUMN_CATEGORY_ID + " = " + category.getId();
+        String where = " WHERE " + PartnersContract.COLUMN_CATEGORY_ID + " = " + category.getId();
         return getPartnersByWhere(where);
     }
 
     List<Partner> getPartnersByWhere(String where) {
-        String sql = "SELECT * FROM " +
-                PartnerHierarchyContracts.PartnersContract.TABLE_NAME + " " + where + " ;";
+        String sql = "SELECT * FROM " + PartnersContract.TABLE_NAME + " " + where + " ;";
 
         initDatabase();
 
@@ -93,17 +91,17 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
 
     private static ColumnIndices calculateColumnIndices(Cursor cursor) {
         ColumnIndices columnIndices = new ColumnIndices();
-        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_ID);
-        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_TITLE);
-        columnIndices.fullTitleColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_FULL_TITLE);
-        columnIndices.discountTypeColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_DISCOUNT_TYPE);
-        columnIndices.discountSizeColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_DISCOUNT_SIZE);
-        columnIndices.categoryIdColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_CATEGORY_ID);
-        columnIndices.imageUrlColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_IMAGE_URL);
-        columnIndices.descriptionColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_DESCRIPTION);
-        columnIndices.webSitesColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_WEB_SITES);
-        columnIndices.emailsColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_EMAILS);
-        columnIndices.isFavoriteColumnIndex = cursor.getColumnIndexOrThrow(COLUMNS.COLUMN_IS_FAVORITE);
+        columnIndices.idColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_ID);
+        columnIndices.titleColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_TITLE);
+        columnIndices.fullTitleColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_FULL_TITLE);
+        columnIndices.discountTypeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_DISCOUNT_TYPE);
+        columnIndices.discountSizeColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_DISCOUNT_SIZE);
+        columnIndices.categoryIdColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_CATEGORY_ID);
+        columnIndices.imageUrlColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_IMAGE_URL);
+        columnIndices.descriptionColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_DESCRIPTION);
+        columnIndices.webSitesColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_WEB_SITES);
+        columnIndices.emailsColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_EMAILS);
+        columnIndices.isFavoriteColumnIndex = cursor.getColumnIndexOrThrow(PartnersContract.COLUMN_IS_FAVORITE);
         return columnIndices;
     }
 
@@ -118,23 +116,51 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
         partner.categoryId = cursor.getInt(columnIndices.categoryIdColumnIndex);
         partner.imageUrl = cursor.getString(columnIndices.imageUrlColumnIndex);
         partner.description = cursor.getString(columnIndices.descriptionColumnIndex);
-        byte[] webSitesBlob = cursor.getBlob(columnIndices.webSitesColumnIndex);
-        partner.webSites = (List<String>) SerializationUtils.deserialize(webSitesBlob);
-        byte[] emailsBlob = cursor.getBlob(columnIndices.emailsColumnIndex);
-        partner.emails = (List<String>) SerializationUtils.deserialize(emailsBlob);
+        partner.webSites = getWebSitesOfPartner(partner.getId());
+        partner.emails = getEmailsOfPartner(partner.getId());
         return partner;
     }
 
+    private static List<String> getWebSitesOfPartner(int partnerId) {
+        return ListOfStringsReader.readByOwnerId(partnerId, new ListOfStringsReader.Arguments() {
+            @Override
+            public String getTableName() {
+                return WebSitesContract.TABLE_NAME;
+            }
+            @Override
+            public String getOwnerIdColumnName() {
+                return WebSitesContract.COLUMN_OWNER_ID;
+            }
+            @Override
+            public String getRequiredColumnName() {
+                return WebSitesContract.COLUMN_URL;
+            }
+        });
+    }
+
+    private static List<String> getEmailsOfPartner(int partnerId) {
+        return ListOfStringsReader.readByOwnerId(partnerId, new ListOfStringsReader.Arguments() {
+            @Override
+            public String getTableName() {
+                return EmailsContract.TABLE_NAME;
+            }
+            @Override
+            public String getOwnerIdColumnName() {
+                return EmailsContract.COLUMN_OWNER_ID;
+            }
+            @Override
+            public String getRequiredColumnName() {
+                return EmailsContract.COLUMN_ADDRESS;
+            }
+        });
+    }
+
     public Partner getPartnerByPointId(int partnerPointId) {
-        final PartnerHierarchyContracts.PartnersContract
-                PARTNERS = new PartnerHierarchyContracts.PartnersContract();
-        final PartnerHierarchyContracts.PartnerPointsContract
-                PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
         List<Partner> partners = getPartnersByWhere(
-            "WHERE " + PARTNERS.TABLE_NAME + "." + PARTNERS.COLUMN_ID + " IN (" +
-                "SELECT " + PARTNER_POINTS.TABLE_NAME + "." + PARTNER_POINTS.COLUMN_PARTNER_ID +
-                " FROM " + PARTNER_POINTS.TABLE_NAME +
-                " WHERE " + PARTNER_POINTS.TABLE_NAME + "." + PARTNER_POINTS.COLUMN_ID + "=" + partnerPointId +
+            "WHERE " + PartnersContract.TABLE_NAME + "." + PartnersContract.COLUMN_ID + " IN (" +
+                "SELECT " + PartnerPointsContract.TABLE_NAME + "." + PartnerPointsContract.COLUMN_PARTNER_ID +
+                " FROM " + PartnerPointsContract.TABLE_NAME +
+                " WHERE " + PartnerPointsContract.TABLE_NAME + "." + PartnerPointsContract.COLUMN_ID + "=" + partnerPointId +
             ")"
         );
         if (partners.size() != 1) {
@@ -144,8 +170,7 @@ public class PartnersReader extends PartnersHierarchyReaderFromDatabase {
     }
 
     public Partner getPartnerById(int partnerId) {
-        String where = " WHERE " +
-                PartnerHierarchyContracts.PartnersContract.COLUMN_ID + " = " + partnerId;
+        String where = " WHERE " + PartnersContract.COLUMN_ID + " = " + partnerId;
         List<Partner> partners = getPartnersByWhere(where);
         if (partners.isEmpty()) {
             throw new IllegalArgumentException("There is no partners with id: " + partnerId);

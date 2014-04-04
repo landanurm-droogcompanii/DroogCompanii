@@ -39,34 +39,32 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
     }
 
     public static enum Mode {
-        DEFAULT(
+
+        NORMAL(
             Arrays.asList(
                 ListItemHelperBuilder.getAllPartnersListItemHelper(),
                 ListItemHelperBuilder.getFavoriteListItemHelper()
-            )
+            ),
+            true
         ),
 
-        WITHOUT_ALL_PARTNERS(
+        WITHOUT_ALL_PARTNERS_AND_WITHOUT_SELECTION(
             Arrays.asList(
                 ListItemHelperBuilder.getFavoriteListItemHelper()
-            )
+            ),
+            false
         );
 
         private final List<ListItemHelper> helpers;
-        private boolean showSelection;
+        private final boolean showSelection;
 
-        Mode(List<ListItemHelper> helpers) {
+        Mode(List<ListItemHelper> helpers, boolean showSelection) {
             this.helpers = helpers;
-            this.showSelection = true;
+            this.showSelection = showSelection;
         }
 
         List<ListItemHelper> getHelpers() {
             return helpers;
-        }
-
-        public Mode doNotShowSelection() {
-            showSelection = false;
-            return this;
         }
 
         boolean isShowSelection() {
@@ -145,12 +143,9 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
         }
     };
 
-    public static CategoryListFragment newDefaultInstance() {
-        return newInstance(Mode.DEFAULT);
-    }
 
-    public static CategoryListFragment newInstanceWithoutAllPartners() {
-        return newInstance(Mode.WITHOUT_ALL_PARTNERS);
+    public static CategoryListFragment newInstance() {
+        return newInstance(Mode.NORMAL);
     }
 
     public static CategoryListFragment newInstance(Mode mode) {
@@ -188,10 +183,11 @@ public class CategoryListFragment extends FragmentAbleToStartTask implements Ada
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        listView = (ListView) inflater.inflate(R.layout.fragment_category_list, null);
+        View rootView = inflater.inflate(R.layout.fragment_category_list, null);
+        listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(this);
-        return listView;
+        return rootView;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class WeekWorkingHours implements Serializable {
 
     public boolean includes(Calendar someDay) {
         WorkingHours workingHours = workingHoursOfCalendar(someDay);
-        return workingHours.includes(TimeOfDay.from(someDay));
+        return workingHours.isInclude(TimeOfDay.fromCalendar(someDay));
     }
 
     private WorkingHours workingHoursOfCalendar(Calendar calendar) {

@@ -5,7 +5,6 @@ import android.content.Context;
 import java.io.Serializable;
 
 import ru.droogcompanii.application.util.ui.able_to_start_task.TaskNotBeInterruptedDuringConfigurationChange;
-import ru.droogcompanii.application.util.Snorlax;
 
 /**
  * Created by ls on 26.12.13.
@@ -19,7 +18,6 @@ public class SynchronizationTask extends TaskNotBeInterruptedDuringConfiguration
 
     @Override
     protected Serializable doInBackground(Void... params) {
-        worker.execute();
-        return null;
+        return worker.doWork();
     }
 }

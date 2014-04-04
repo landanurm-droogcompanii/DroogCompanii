@@ -1,6 +1,7 @@
 package ru.droogcompanii.application.ui.screens.main.filters_dialog.filters;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.Collection;
 
@@ -17,9 +18,9 @@ class CombinedFilter implements Filter {
     }
 
     @Override
-    public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor) {
+    public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db) {
         for (Filter each : filters) {
-            if (!each.isPassedThroughFilter(partnerPoint, cursor)) {
+            if (!each.isPassedThroughFilter(partnerPoint, cursor, db)) {
                 return false;
             }
         }

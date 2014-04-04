@@ -77,7 +77,7 @@ public class MainScreen extends ActivityWithNavigationDrawer
                 PartnerPointsMapFragment.newInstance(true),
                 Tag.MAP);
         transaction.add(R.id.leftPanel,
-                        CategoryListFragment.newDefaultInstance(),
+                        CategoryListFragment.newInstance(),
                         Tag.CATEGORY_LIST);
         transaction.add(R.id.partnerPointDetailsFragment,
                         PartnerPointDetailsFragment.newInstance(),
@@ -199,13 +199,15 @@ public class MainScreen extends ActivityWithNavigationDrawer
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SynchronizationActivity.REQUEST_CODE && resultCode == RESULT_OK) {
-            onSynchronizationCompleted();
+        if (requestCode == SynchronizationActivity.REQUEST_CODE) {
+            onReturnFromSynchronization(resultCode);
         }
     }
 
-    private void onSynchronizationCompleted() {
-        refresh();
+    private void onReturnFromSynchronization(int resultCode) {
+        if (resultCode == RESULT_OK) {
+            refresh();
+        }
     }
 
     @Override

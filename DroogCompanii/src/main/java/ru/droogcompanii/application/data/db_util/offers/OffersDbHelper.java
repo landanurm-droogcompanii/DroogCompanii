@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import ru.droogcompanii.application.data.db_util.contracts.OffersContract;
+
 /**
  * Created by ls on 11.02.14.
  */

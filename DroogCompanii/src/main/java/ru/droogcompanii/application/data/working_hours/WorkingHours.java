@@ -6,5 +6,5 @@ import ru.droogcompanii.application.data.time.TimeOfDay;
  * Created by Leonid on 19.12.13.
  */
 public interface WorkingHours {
-    boolean includes(TimeOfDay time);
+    boolean isInclude(TimeOfDay time);
 }

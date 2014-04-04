@@ -3,6 +3,7 @@ package ru.droogcompanii.application.ui.screens.main.filters_dialog.filters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
@@ -18,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
+import ru.droogcompanii.application.data.db_util.contracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
 import ru.droogcompanii.application.util.location.ActualBaseLocationProvider;
 import ru.droogcompanii.application.util.ui.view.RadioGroupMaker;
@@ -99,8 +101,8 @@ public class DistanceFilterHelper implements FilterHelper, Serializable {
 
     public Collection<String> getColumnsOfPartnerPoint() {
         return Arrays.asList(
-                PARTNER_POINTS.COLUMN_LATITUDE,
-                PARTNER_POINTS.COLUMN_LONGITUDE
+                PartnerPointsContract.COLUMN_LATITUDE,
+                PartnerPointsContract.COLUMN_LONGITUDE
         );
     }
 
@@ -119,7 +121,7 @@ public class DistanceFilterHelper implements FilterHelper, Serializable {
         }
 
         @Override
-        public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor) {
+        public boolean isPassedThroughFilter(PartnerPoint partnerPoint, Cursor cursor, SQLiteDatabase db) {
             double distance = SphericalUtil.computeDistanceBetween(
                     actualPosition, partnerPoint.getPosition()
             );

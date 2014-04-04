@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteStatement;
 
 import java.util.List;
 
+import ru.droogcompanii.application.data.db_util.contracts.OffersContract;
 import ru.droogcompanii.application.data.offers.CalendarRange;
 import ru.droogcompanii.application.data.offers.Offer;
 

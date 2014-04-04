@@ -9,22 +9,36 @@ import java.util.Calendar;
 public class TimeOfDay implements Time, Serializable {
     private static final int HOURS_PER_DAY = 24;
     private static final int MINUTES_PER_HOUR = 60;
+    private static final int MINUTES_PER_DAY = MINUTES_PER_HOUR * HOURS_PER_DAY;
 
-    //private final int hours;
-    private final int minutes;
+    private final int minutesOfDay;
 
-    public static TimeOfDay from(Calendar calendar) {
+    public static TimeOfDay fromCalendar(Calendar calendar) {
         int hoursIn24HourFormat = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         return new TimeOfDay(hoursIn24HourFormat, minutes);
     }
 
+    public static TimeOfDay fromMinutesOfDay(int minutesOfDay) {
+        return new TimeOfDay(minutesOfDay);
+    }
+
+    private TimeOfDay(int minutesOfDay) {
+        checkArgumentMinutesOfDay(minutesOfDay);
+        this.minutesOfDay = minutesOfDay;
+    }
+
+    private void checkArgumentMinutesOfDay(int minutesOfDay) {
+        if (minutesOfDay < 0 || minutesOfDay >= MINUTES_PER_DAY) {
+            throw new IllegalArgumentException(
+                    "Illegal minutesOfDay: <" + minutesOfDay + ">"
+            );
+        }
+    }
+
     public TimeOfDay(int hours, int minutes) {
         checkArguments(hours, minutes);
-        //this.hours = hours;
-        //this.minutes = minutes;
-        /* + */
-        this.minutes = hours * MINUTES_PER_HOUR + minutes;
+        this.minutesOfDay = hours * MINUTES_PER_HOUR + minutes;
     }
 
     private void checkArguments(int hours, int minutes) {
@@ -35,16 +49,12 @@ public class TimeOfDay implements Time, Serializable {
 
     @Override
     public int getHours() {
-        //return hours;
-        /* + */
-        return minutes / MINUTES_PER_HOUR;
+        return minutesOfDay / MINUTES_PER_HOUR;
     }
 
     @Override
     public int getMinutes() {
-        //return minutes;
-        /* + */
-        return minutes % MINUTES_PER_HOUR;
+        return minutesOfDay % MINUTES_PER_HOUR;
     }
 
     @Override
@@ -69,10 +79,8 @@ public class TimeOfDay implements Time, Serializable {
         return toMinutesOfDay();
     }
 
-    private int toMinutesOfDay() {
-        //return hours * 60 + minutes;
-        /* + */
-        return minutes;
+    public int toMinutesOfDay() {
+        return minutesOfDay;
     }
 
     @Override

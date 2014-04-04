@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/categoryListHorizontalPadding"
-    android:paddingRight="@dimen/categoryListHorizontalPadding"
-    android:paddingTop="@dimen/categoryListTopPadding"
-    android:paddingBottom="@dimen/categoryListBottomPadding"
-    android:listSelector="@null"
-    android:background="@color/backgroundColorOfCategoryList" />
+    android:background="@color/backgroundColorOfCategoryList" >
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/categoryListHorizontalPadding"
+        android:paddingRight="@dimen/categoryListHorizontalPadding"
+        android:paddingTop="@dimen/categoryListTopPadding"
+        android:paddingBottom="@dimen/categoryListBottomPadding"
+        android:listSelector="@null"
+        android:id="@+id/listView" />
+
+</RelativeLayout>
+

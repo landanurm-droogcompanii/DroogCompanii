@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import ru.droogcompanii.application.R;
-import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnerHierarchyContracts;
+import ru.droogcompanii.application.data.db_util.contracts.PartnerPointsContract;
 import ru.droogcompanii.application.data.db_util.hierarchy_of_partners.PartnersReader;
 import ru.droogcompanii.application.data.hierarchy_of_partners.Partner;
 import ru.droogcompanii.application.data.hierarchy_of_partners.PartnerPoint;
@@ -73,7 +73,7 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
 
         @Override
         public String getConditionToReceivePartnerPoints() {
-            String columnPartnerId = PartnerHierarchyContracts.PartnerPointsContract.COLUMN_PARTNER_ID;
+            String columnPartnerId = PartnerPointsContract.COLUMN_PARTNER_ID;
             return columnPartnerId + " = " + partnerId;
         }
 
@@ -98,12 +98,10 @@ public class PartnerDetailsActivity extends ActionBarActivityWithUpButton
 
         @Override
         public String getConditionToReceivePartnerPoints() {
-            final PartnerHierarchyContracts.PartnerPointsContract
-                    PARTNER_POINTS = new PartnerHierarchyContracts.PartnerPointsContract();
-            return PARTNER_POINTS.COLUMN_PARTNER_ID + " IN ( " +
-                    "SELECT " + PARTNER_POINTS.COLUMN_PARTNER_ID +
-                    " FROM " + PARTNER_POINTS.TABLE_NAME +
-                    " WHERE " + PARTNER_POINTS.COLUMN_ID + "=" + partnerPoint.getId() +
+            return PartnerPointsContract.COLUMN_PARTNER_ID + " IN ( " +
+                    "SELECT " + PartnerPointsContract.COLUMN_PARTNER_ID +
+                    " FROM " + PartnerPointsContract.TABLE_NAME +
+                    " WHERE " + PartnerPointsContract.COLUMN_ID + "=" + partnerPoint.getId() +
             ")";
         }
 

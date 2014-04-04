@@ -16,7 +16,7 @@ public class DayAndNightWorkingHours implements WorkingHours, Serializable {
     }
 
     @Override
-    public boolean includes(TimeOfDay time) {
+    public boolean isInclude(TimeOfDay time) {
         return true;
     }
 

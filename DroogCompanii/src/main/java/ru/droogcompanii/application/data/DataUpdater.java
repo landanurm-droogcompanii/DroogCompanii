@@ -25,12 +25,9 @@ public class DataUpdater {
     }
 
     public void update() throws Exception {
-        PartnersXmlParser.ParsedData parsedData = downloadAndParseXml();
+        PartnersXmlParser parser = new PartnersXmlParser();
+        PartnersXmlParser.ParsedData parsedData = parser.parse(xmlProvider.getXml());
         writerToDatabase.write(parsedData);
     }
-
-    private PartnersXmlParser.ParsedData downloadAndParseXml() throws Exception {
-        PartnersXmlParser parser = new PartnersXmlParser();
-        return parser.parse(xmlProvider.getXml());
-    }
+    
 }

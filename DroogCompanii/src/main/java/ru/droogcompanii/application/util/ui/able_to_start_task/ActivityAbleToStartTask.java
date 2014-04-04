@@ -86,7 +86,7 @@ public class ActivityAbleToStartTask extends DroogCompaniiBaseActivity
     }
 
     protected int getIdOfTaskFragmentContainer() {
-        return R.id.taskFragmentContainer;
+        return R.id.fragmentContainer;
     }
 
     @Override
